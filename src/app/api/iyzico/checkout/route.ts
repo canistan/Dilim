@@ -61,7 +61,7 @@ export async function POST(req: Request) {
       ],
     };
 
-    return new Promise((resolve) => {
+    return new Promise<Response>((resolve) => {
       iyzipay.checkoutFormInitialize.create(requestData, (err: any, result: any) => {
         if (err || result.status === 'failure') {
           resolve(NextResponse.json({ error: err || result.errorMessage }, { status: 400 }));
