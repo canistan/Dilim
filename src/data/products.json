@@ -1,0 +1,298 @@
+[
+  {
+    "id": 1,
+    "name": "FISTIK ÇİKOLATALI TEK PASTA",
+    "category": "tek-pastalar",
+    "originalCategory": "DİLİM",
+    "image": "/products/1606763886__mg_9873.jpg",
+    "price": "₺180"
+  },
+  {
+    "id": 2,
+    "name": "MUZ ÇİKOLATALI TEK PASTA",
+    "category": "tek-pastalar",
+    "originalCategory": "DİLİM",
+    "image": "/products/1606763832__mg_7723.jpg",
+    "price": "₺180"
+  },
+  {
+    "id": 3,
+    "name": "DUSTY CROPHOPPER",
+    "category": "ozel-gun",
+    "originalCategory": "ÖZEL GÜN PASTASI",
+    "image": "/products/1546028487_ucak.jpg",
+    "price": "Özel Fiyat"
+  },
+  {
+    "id": 4,
+    "name": "FOREST ANIMALS",
+    "category": "ozel-gun",
+    "originalCategory": "ÖZEL GÜN PASTASI",
+    "image": "/products/1546028217_runforestrun.jpg",
+    "price": "Özel Fiyat"
+  },
+  {
+    "id": 5,
+    "name": "DİLBER DUDAĞI",
+    "category": "tatlilar",
+    "originalCategory": "TATLILAR",
+    "image": "/products/1546012314_dilber-dudagi.jpg",
+    "price": "₺450/kg"
+  },
+  {
+    "id": 6,
+    "name": "SÜTLÜ NURİYE",
+    "category": "tatlilar",
+    "originalCategory": "TATLILAR",
+    "image": "/products/1546011646_sutlu-nuriye.jpg",
+    "price": "₺450/kg"
+  },
+  {
+    "id": 7,
+    "name": "FISTIKLI DÜRÜM",
+    "category": "tatlilar",
+    "originalCategory": "TATLILAR",
+    "image": "/products/1546004155_fistikli-durum.jpg",
+    "price": "₺450/kg"
+  },
+  {
+    "id": 8,
+    "name": "TEL KADAYIF",
+    "category": "tatlilar",
+    "originalCategory": "TATLILAR",
+    "image": "/products/1546003442_kadayif.jpg",
+    "price": "₺450/kg"
+  },
+  {
+    "id": 9,
+    "name": "ŞEKERPARE",
+    "category": "tatlilar",
+    "originalCategory": "TATLILAR",
+    "image": "/products/1546002097_sekerpare.jpg",
+    "price": "₺450/kg"
+  },
+  {
+    "id": 10,
+    "name": "FISTIKLI BAKLAVA",
+    "category": "tatlilar",
+    "originalCategory": "TATLILAR",
+    "image": "/products/1546001618_fistikli-baklava.jpg",
+    "price": "₺450/kg"
+  },
+  {
+    "id": 11,
+    "name": "ŞÖBİYET",
+    "category": "tatlilar",
+    "originalCategory": "TATLILAR",
+    "image": "/products/1546001031_sobiyet.jpg",
+    "price": "₺450/kg"
+  },
+  {
+    "id": 12,
+    "name": "NİŞAN PASTASI-04",
+    "category": "ozel-gun",
+    "originalCategory": "ÖZEL GÜN PASTASI",
+    "image": "/products/1545992036__mg_7283.jpg",
+    "price": "Özel Fiyat"
+  },
+  {
+    "id": 13,
+    "name": "NİŞAN PASTASI-03",
+    "category": "ozel-gun",
+    "originalCategory": "ÖZEL GÜN PASTASI",
+    "image": "/products/1545991710__mg_7267.jpg",
+    "price": "Özel Fiyat"
+  },
+  {
+    "id": 14,
+    "name": "NİŞAN PASTASI-02",
+    "category": "ozel-gun",
+    "originalCategory": "ÖZEL GÜN PASTASI",
+    "image": "/products/1545991585__mg_7264.jpg",
+    "price": "Özel Fiyat"
+  },
+  {
+    "id": 15,
+    "name": "NİŞAN PASTASI-01",
+    "category": "ozel-gun",
+    "originalCategory": "ÖZEL GÜN PASTASI",
+    "image": "/products/1545991435__mg_7262.jpg",
+    "price": "Özel Fiyat"
+  },
+  {
+    "id": 16,
+    "name": "CAMELOT",
+    "category": "ozel-gun",
+    "originalCategory": "ÖZEL GÜN PASTASI",
+    "image": "/products/1545991300_dsc_1438.jpg",
+    "price": "Özel Fiyat"
+  },
+  {
+    "id": 17,
+    "name": "KUNG FU PANDA",
+    "category": "ozel-gun",
+    "originalCategory": "ÖZEL GÜN PASTASI",
+    "image": "/products/1545989361_dsc_1449.jpg",
+    "price": "Özel Fiyat"
+  },
+  {
+    "id": 18,
+    "name": "KAPTAN YUNUS",
+    "category": "ozel-gun",
+    "originalCategory": "ÖZEL GÜN PASTASI",
+    "image": "/products/1545989261_dsc_1422.jpg",
+    "price": "Özel Fiyat"
+  },
+  {
+    "id": 19,
+    "name": "DENİZ KIZI",
+    "category": "ozel-gun",
+    "originalCategory": "ÖZEL GÜN PASTASI",
+    "image": "/products/1545989165_dsc_1420.jpg",
+    "price": "Özel Fiyat"
+  },
+  {
+    "id": 20,
+    "name": "PUPPY PUG",
+    "category": "ozel-gun",
+    "originalCategory": "ÖZEL GÜN PASTASI",
+    "image": "/products/1545989080_dsc_1417.jpg",
+    "price": "Özel Fiyat"
+  },
+  {
+    "id": 21,
+    "name": "M&M PASTA",
+    "category": "ozel-gun",
+    "originalCategory": "ÖZEL GÜN PASTASI",
+    "image": "/products/1545988998_dsc_1416.jpg",
+    "price": "Özel Fiyat"
+  },
+  {
+    "id": 22,
+    "name": "LEGO MAN",
+    "category": "ozel-gun",
+    "originalCategory": "ÖZEL GÜN PASTASI",
+    "image": "/products/1545988937_dsc_1412.jpg",
+    "price": "Özel Fiyat"
+  },
+  {
+    "id": 23,
+    "name": "101 DALMAÇYALI",
+    "category": "ozel-gun",
+    "originalCategory": "ÖZEL GÜN PASTASI",
+    "image": "/products/1545988542_dsc_1409.jpg",
+    "price": "Özel Fiyat"
+  },
+  {
+    "id": 24,
+    "name": "VİŞNE MUZ FINDIK",
+    "category": "yas-pastalar",
+    "originalCategory": "YAŞ PASTA",
+    "image": "/products/1545988228__mg_9759.jpg",
+    "price": "₺750"
+  },
+  {
+    "id": 25,
+    "name": "LİMONLU CHEESECAKE",
+    "category": "yas-pastalar",
+    "originalCategory": "YAŞ PASTA",
+    "image": "/products/1545988162__mg_7719.jpg",
+    "price": "₺750"
+  },
+  {
+    "id": 26,
+    "name": "BÖĞÜRTLEN ÇİKOLATA",
+    "category": "yas-pastalar",
+    "originalCategory": "YAŞ PASTA",
+    "image": "/products/1545988057__mg_9734.jpg",
+    "price": "₺750"
+  },
+  {
+    "id": 27,
+    "name": "FRAMBUAZLI CHEESECAKE",
+    "category": "yas-pastalar",
+    "originalCategory": "YAŞ PASTA",
+    "image": "/products/1545987575__mg_7718.jpg",
+    "price": "₺750"
+  },
+  {
+    "id": 28,
+    "name": "MUZLU",
+    "category": "yas-pastalar",
+    "originalCategory": "YAŞ PASTA",
+    "image": "/products/1545987494__mg_7716.jpg",
+    "price": "₺750"
+  },
+  {
+    "id": 29,
+    "name": "KARAMEL KRONKANLI",
+    "category": "yas-pastalar",
+    "originalCategory": "YAŞ PASTA",
+    "image": "/products/1545987414__mg_7701.jpg",
+    "price": "₺750"
+  },
+  {
+    "id": 30,
+    "name": "ÇİLEKLİ",
+    "category": "yas-pastalar",
+    "originalCategory": "YAŞ PASTA",
+    "image": "/products/1545986842__mg_9729.jpg",
+    "price": "₺750"
+  },
+  {
+    "id": 31,
+    "name": "ÇİLEKLİ MUZLU",
+    "category": "yas-pastalar",
+    "originalCategory": "YAŞ PASTA",
+    "image": "/products/1545986723__mg_7702.jpg",
+    "price": "₺750"
+  },
+  {
+    "id": 32,
+    "name": "SPESİYAL FISTIK ÇİKOLATA",
+    "category": "yas-pastalar",
+    "originalCategory": "YAŞ PASTA",
+    "image": "/products/1545986633__mg_9753.jpg",
+    "price": "₺750"
+  },
+  {
+    "id": 33,
+    "name": "DİLİM FİSTORİA",
+    "category": "yas-pastalar",
+    "originalCategory": "YAŞ PASTA",
+    "image": "/products/1545986540__mg_9755.jpg",
+    "price": "₺750"
+  },
+  {
+    "id": 34,
+    "name": "PROFİTEROLLÜ PASTA",
+    "category": "yas-pastalar",
+    "originalCategory": "YAŞ PASTA",
+    "image": "/products/1545986382__mg_7704.jpg",
+    "price": "₺750"
+  },
+  {
+    "id": 35,
+    "name": "KARIŞIK MEYVELİ",
+    "category": "yas-pastalar",
+    "originalCategory": "YAŞ PASTA",
+    "image": "/products/1545986191__mg_7696.jpg",
+    "price": "₺750"
+  },
+  {
+    "id": 36,
+    "name": "FRAMBUAZ ÇİKOLATA",
+    "category": "yas-pastalar",
+    "originalCategory": "YAŞ PASTA",
+    "image": "/products/1545985752__mg_9741.jpg",
+    "price": "₺750"
+  },
+  {
+    "id": 37,
+    "name": "MUZ ÇİKOLATA",
+    "category": "yas-pastalar",
+    "originalCategory": "YAŞ PASTA",
+    "image": "/products/1545985670__mg_7705.jpg",
+    "price": "₺750"
+  }
+]

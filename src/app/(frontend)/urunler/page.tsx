@@ -13,26 +13,8 @@ const CATEGORIES = [
   { id: 'tek-pastalar', name: 'TEK PASTALAR' }
 ]
 
-const PRODUCTS = [
-  { id: 1, name: 'FISTIK ÇİKOLATALI TEK PASTA', category: 'tek-pastalar', price: '₺180', image: '/urunler_yas_pasta.png' },
-  { id: 2, name: 'MUZ ÇİKOLATALI TEK PASTA', category: 'tek-pastalar', price: '₺170', image: '/urunler_yas_pasta.png' },
-  { id: 3, name: 'DUSTY CROPHOPPER', category: 'ozel-gun', price: 'Özel Fiyat', image: '/urunler_yas_pasta.png' },
-  { id: 4, name: 'FOREST ANIMALS', category: 'ozel-gun', price: 'Özel Fiyat', image: '/urunler_yas_pasta.png' },
-  { id: 5, name: 'DİLBER DUDAĞI', category: 'tatlilar', price: '₺450/kg', image: '/urunler_yas_pasta.png' },
-  { id: 6, name: 'SÜTLÜ NURİYE', category: 'tatlilar', price: '₺420/kg', image: '/urunler_yas_pasta.png' },
-  { id: 7, name: 'FISTIKLI DÜRÜM', category: 'tatlilar', price: '₺550/kg', image: '/urunler_yas_pasta.png' },
-  { id: 8, name: 'TEL KADAYIF', category: 'tatlilar', price: '₺380/kg', image: '/urunler_yas_pasta.png' },
-  { id: 9, name: 'ŞEKERPARE', category: 'tatlilar', price: '₺350/kg', image: '/urunler_yas_pasta.png' },
-  { id: 10, name: 'FISTIKLI BAKLAVA', category: 'tatlilar', price: '₺480/kg', image: '/urunler_yas_pasta.png' },
-  { id: 11, name: 'NİŞAN PASTASI', category: 'ozel-gun', price: 'Özel Fiyat', image: '/urunler_yas_pasta.png' },
-  { id: 12, name: 'DENİZ KIZI', category: 'ozel-gun', price: 'Özel Fiyat', image: '/urunler_yas_pasta.png' },
-  { id: 13, name: 'VİŞNE MUZ FINDIK', category: 'yas-pastalar', price: '₺750', image: '/urunler_yas_pasta.png' },
-  { id: 14, name: 'LİMONLU CHEESECAKE', category: 'yas-pastalar', price: '₺680', image: '/urunler_yas_pasta.png' },
-  { id: 15, name: 'BÖĞÜRTLEN ÇİKOLATA', category: 'yas-pastalar', price: '₺720', image: '/urunler_yas_pasta.png' },
-  { id: 16, name: 'KARAMEL KROKANLI', category: 'yas-pastalar', price: '₺700', image: '/urunler_yas_pasta.png' },
-  { id: 17, name: 'SPESİYAL FISTIK ÇİKOLATA', category: 'yas-pastalar', price: '₺850', image: '/urunler_yas_pasta.png' },
-  { id: 18, name: 'PROFİTEROLLÜ PASTA', category: 'yas-pastalar', price: '₺780', image: '/urunler_yas_pasta.png' },
-]
+import PRODUCTS from '@/data/products.json'
+
 
 export default function ProductsPage() {
   const [activeCategory, setActiveCategory] = useState('all')
@@ -112,12 +94,12 @@ export default function ProductsPage() {
                   className="group bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 border border-gray-100 flex flex-col"
                 >
                   {/* Product Image */}
-                  <div className="relative aspect-square overflow-hidden bg-gray-100">
+                  <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-white to-orange-50/50 p-4">
                     <Image 
                       src={product.image} 
                       alt={product.name} 
                       fill 
-                      className="object-cover transform group-hover:scale-110 transition-transform duration-700" 
+                      className="object-contain p-4 transform group-hover:scale-110 transition-transform duration-700 mix-blend-multiply" 
                     />
                     <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 z-10" />
                     
