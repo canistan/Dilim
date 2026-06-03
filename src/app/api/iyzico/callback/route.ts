@@ -10,7 +10,7 @@ export async function POST(req: Request) {
       return NextResponse.redirect(`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/odeme/basarisiz?reason=MissingToken`);
     }
 
-    return new Promise((resolve) => {
+    return new Promise<Response>((resolve) => {
       iyzipay.checkoutForm.retrieve({
         locale: 'tr',
         conversationId: 'fallback-id', // Ideally this comes from the token mapping or your DB

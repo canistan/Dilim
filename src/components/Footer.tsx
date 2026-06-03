@@ -5,9 +5,13 @@ export const Footer = () => {
     <footer className="bg-dilim-bordo text-white py-16">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-10">
         <div>
-          <span className="text-4xl font-extrabold tracking-tighter text-white mb-6 block">
-            <span className="text-dilim-portakal">D</span>ilim
-          </span>
+          <div className="relative w-40 h-16 mb-6">
+            <img 
+              src="/logo-beyaz.png" 
+              alt="Dilim Pastaneleri Logo" 
+              className="w-full h-full object-contain object-left brightness-0 invert"
+            />
+          </div>
           <p className="text-sm text-gray-200 mt-4 leading-relaxed">
             Özel anlarınıza lezzet katıyoruz. Her gün yenilenen ve daimi olmasını talep ettiğimiz müşterilerimizin özel ve mutlu günlerine ortak olduğumuz anlardan ibaret olan kocaman bir birikimden oluşmaktayız.
           </p>

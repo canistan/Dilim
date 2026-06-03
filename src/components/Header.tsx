@@ -22,9 +22,13 @@ export const Header = () => {
         <div className="container mx-auto flex h-24 items-center justify-between px-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-10">
             <Link href="/" className="flex items-center gap-2" onClick={() => setIsMobileMenuOpen(false)}>
-              <span className="text-4xl font-extrabold tracking-tighter text-dilim-siyah" style={{ fontFamily: 'var(--font-montserrat)' }}>
-                <span className="text-dilim-portakal">D</span>ilim
-              </span>
+              <div className="relative w-32 h-12">
+                <img 
+                  src="/logo.png" 
+                  alt="Dilim Pastaneleri Logo" 
+                  className="w-full h-full object-contain object-left"
+                />
+              </div>
             </Link>
             <nav className="hidden lg:flex gap-8 font-medium text-dilim-siyah">
               {navLinks.map((link) => (
@@ -69,9 +73,13 @@ export const Header = () => {
               className="fixed right-0 top-0 bottom-0 w-[80%] max-w-sm bg-white z-[70] flex flex-col shadow-2xl lg:hidden"
             >
               <div className="flex justify-between items-center p-6 border-b border-gray-100">
-                <span className="text-2xl font-extrabold tracking-tighter text-dilim-siyah">
-                  <span className="text-dilim-portakal">D</span>ilim
-                </span>
+                <div className="relative w-24 h-10">
+                  <img 
+                    src="/logo.png" 
+                    alt="Dilim Pastaneleri Logo" 
+                    className="w-full h-full object-contain object-left"
+                  />
+                </div>
                 <button 
                   onClick={() => setIsMobileMenuOpen(false)}
                   className="p-2 bg-gray-100 rounded-full text-dilim-siyah hover:bg-gray-200 transition-colors"
