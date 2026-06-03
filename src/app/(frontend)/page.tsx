@@ -1,96 +1,167 @@
+"use client"
+
 import Link from 'next/link'
 import Image from 'next/image'
-import { ArrowRight, Cake, ShoppingBag } from 'lucide-react'
+import { ArrowRight, Cake, ShoppingBag, Star } from 'lucide-react'
+import { motion } from 'framer-motion'
 
 export default function HomePage() {
+  const fadeUp = {
+    hidden: { opacity: 0, y: 30 },
+    visible: { opacity: 1, y: 0 }
+  }
+
   return (
-    <div className="flex flex-col w-full">
+    <div className="flex flex-col w-full bg-background overflow-hidden">
       {/* Hero Section */}
-      <section className="relative w-full h-[80vh] min-h-[600px] flex items-center bg-dilim-siyah overflow-hidden">
-        {/* Placeholder for an amazing background image of a premium cake */}
-        <div className="absolute inset-0 opacity-40 bg-gradient-to-r from-black/80 to-transparent z-10" />
-        <Image 
-          src="https://images.unsplash.com/photo-1621303837174-89787a7d4729?q=80&w=2000&auto=format&fit=crop" 
-          alt="Dilim Pastaneleri Premium Yaş Pasta" 
-          fill
-          priority
-          className="absolute inset-0 object-cover"
-        />
+      <section className="relative w-full h-[85vh] min-h-[650px] flex items-center bg-dilim-siyah overflow-hidden">
+        {/* Animated Background Overlay */}
+        <div className="absolute inset-0 opacity-60 bg-gradient-to-r from-black via-black/80 to-transparent z-10" />
+        
+        {/* Subtle pattern or noise could go here */}
+        <div className="absolute inset-0 opacity-20 mix-blend-overlay bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] z-10"></div>
+        
+        <motion.div 
+          initial={{ scale: 1.1 }}
+          animate={{ scale: 1 }}
+          transition={{ duration: 10, ease: "easeOut" }}
+          className="absolute inset-0"
+        >
+          <Image 
+            src="https://images.unsplash.com/photo-1621303837174-89787a7d4729?q=80&w=2000&auto=format&fit=crop" 
+            alt="Dilim Pastaneleri Premium Yaş Pasta" 
+            fill
+            priority
+            className="object-cover"
+          />
+        </motion.div>
         
         <div className="container relative z-20 mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-2xl">
-            <span className="inline-block py-1 px-3 rounded-full bg-dilim-turuncu/20 text-dilim-portakal font-semibold text-sm mb-4 border border-dilim-portakal/30">
-              Gerçek Lezzet, Eşsiz Anlar
-            </span>
-            <h1 className="text-5xl md:text-7xl font-extrabold text-white tracking-tight mb-6 leading-tight">
-              Hayalinizdeki <br/>
-              <span className="text-dilim-portakal">Pastayı</span> Tasarlayın
-            </h1>
-            <p className="text-lg md:text-xl text-gray-200 mb-10 max-w-lg leading-relaxed">
-              2000 yılından beri en taze malzemelerle, en özel günleriniz için sanat eseri tadında pastalar üretiyoruz.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4">
-              <Link href="/tasarla" className="inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-white bg-dilim-portakal hover:bg-dilim-turuncu transition-all rounded-full shadow-lg shadow-dilim-portakal/30">
-                <Cake className="mr-2 h-5 w-5" />
-                Hemen Tasarla
-              </Link>
-              <Link href="/urunler" className="inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-white bg-white/10 hover:bg-white/20 backdrop-blur-md transition-all rounded-full border border-white/20">
-                <ShoppingBag className="mr-2 h-5 w-5" />
-                Ürünleri İncele
-              </Link>
-            </div>
+            <motion.div
+              initial="hidden"
+              animate="visible"
+              transition={{ staggerChildren: 0.2 }}
+            >
+              <motion.div variants={fadeUp} className="flex items-center gap-2 mb-6">
+                <Star className="h-4 w-4 text-dilim-yaldiz fill-dilim-yaldiz" />
+                <span className="text-dilim-yaldiz font-semibold tracking-widest text-sm uppercase">
+                  Gerçek Lezzet, Eşsiz Anlar
+                </span>
+              </motion.div>
+              
+              <motion.h1 variants={fadeUp} className="text-5xl md:text-7xl font-bold text-white tracking-tight mb-6 leading-tight">
+                Hayalinizdeki <br/>
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-dilim-yaldiz to-dilim-portakal font-serif italic pr-4">
+                  Pastayı
+                </span> 
+                Tasarlayın
+              </motion.h1>
+              
+              <motion.p variants={fadeUp} className="text-lg md:text-xl text-gray-300 mb-10 max-w-lg leading-relaxed font-light">
+                2000 yılından beri en taze malzemelerle, en özel günleriniz için sanat eseri tadında lüks pastalar üretiyoruz.
+              </motion.p>
+              
+              <motion.div variants={fadeUp} className="flex flex-col sm:flex-row gap-5">
+                <Link href="/tasarla" className="relative group inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-white bg-dilim-portakal overflow-hidden rounded-full transition-all">
+                  <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-dilim-turuncu to-dilim-portakal opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  {/* Glow Effect */}
+                  <div className="absolute -inset-1 bg-gradient-to-r from-dilim-portakal to-dilim-yaldiz rounded-full blur opacity-40 group-hover:opacity-75 transition duration-500 animate-pulse"></div>
+                  <span className="relative flex items-center">
+                    <Cake className="mr-2 h-5 w-5" />
+                    Hemen Tasarla
+                  </span>
+                </Link>
+                
+                <Link href="/urunler" className="inline-flex items-center justify-center px-8 py-4 text-lg font-semibold text-white bg-white/5 hover:bg-white/10 backdrop-blur-md transition-all rounded-full border border-white/20 hover:border-white/40">
+                  <ShoppingBag className="mr-2 h-5 w-5" />
+                  Ürünleri İncele
+                </Link>
+              </motion.div>
+            </motion.div>
           </div>
         </div>
       </section>
 
       {/* Categories / Highlights */}
-      <section className="py-24 bg-white">
+      <section className="py-32 bg-white relative">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-sm font-bold text-dilim-turuncu tracking-widest uppercase mb-2">Seçimlerimiz</h2>
-            <h3 className="text-3xl md:text-5xl font-extrabold text-dilim-siyah">Sizin İçin Önerilenler</h3>
-            <div className="w-24 h-1 bg-dilim-portakal mx-auto mt-6 rounded-full"></div>
-          </div>
+          <motion.div 
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={fadeUp}
+            className="text-center mb-20"
+          >
+            <div className="flex items-center justify-center gap-4 mb-4">
+              <div className="h-[1px] w-12 bg-dilim-yaldiz"></div>
+              <h2 className="text-sm font-bold text-dilim-yaldiz tracking-[0.2em] uppercase">Seçimlerimiz</h2>
+              <div className="h-[1px] w-12 bg-dilim-yaldiz"></div>
+            </div>
+            <h3 className="text-4xl md:text-5xl font-serif text-dilim-siyah">Sizin İçin Önerilenler</h3>
+          </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
             {/* Category Card 1 */}
-            <Link href="/urunler?kategori=yas-pasta" className="group relative overflow-hidden rounded-2xl aspect-[4/5] bg-gray-100 flex items-end">
-              <Image src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=800&auto=format&fit=crop" alt="Yaş Pastalar" fill className="absolute inset-0 object-cover transition-transform duration-700 group-hover:scale-105" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-              <div className="relative z-10 p-8 w-full">
-                <h4 className="text-2xl font-bold text-white mb-2">Yaş Pastalar</h4>
-                <div className="flex items-center text-dilim-portakal font-semibold group-hover:text-white transition-colors">
-                  İncele <ArrowRight className="ml-2 h-4 w-4" />
+            <motion.div 
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1 }}
+            >
+              <Link href="/urunler?kategori=yas-pasta" className="group relative overflow-hidden rounded-[2rem] aspect-[4/5] bg-gray-100 flex items-end shadow-xl hover:shadow-2xl transition-shadow duration-500 block">
+                <Image src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=800&auto=format&fit=crop" alt="Yaş Pastalar" fill className="absolute inset-0 object-cover transition-transform duration-1000 group-hover:scale-110" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-500" />
+                <div className="relative z-10 p-10 w-full transform transition-transform duration-500 group-hover:-translate-y-2">
+                  <h4 className="text-3xl font-serif text-white mb-3">Yaş Pastalar</h4>
+                  <div className="flex items-center text-dilim-yaldiz font-medium group-hover:text-white transition-colors">
+                    Koleksiyonu İncele <ArrowRight className="ml-2 h-5 w-5 transform transition-transform group-hover:translate-x-2" />
+                  </div>
                 </div>
-              </div>
-            </Link>
+              </Link>
+            </motion.div>
 
             {/* Category Card 2 */}
-            <Link href="/urunler?kategori=ozel-gun" className="group relative overflow-hidden rounded-2xl aspect-[4/5] bg-gray-100 flex items-end">
-              <Image src="https://images.unsplash.com/photo-1535141192574-5d4897c12636?q=80&w=800&auto=format&fit=crop" alt="Özel Gün Pastaları" fill className="absolute inset-0 object-cover transition-transform duration-700 group-hover:scale-105" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-              <div className="relative z-10 p-8 w-full">
-                <h4 className="text-2xl font-bold text-white mb-2">Özel Gün Pastaları</h4>
-                <div className="flex items-center text-dilim-portakal font-semibold group-hover:text-white transition-colors">
-                  İncele <ArrowRight className="ml-2 h-4 w-4" />
+            <motion.div 
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2 }}
+            >
+              <Link href="/urunler?kategori=ozel-gun" className="group relative overflow-hidden rounded-[2rem] aspect-[4/5] bg-gray-100 flex items-end shadow-xl hover:shadow-2xl transition-shadow duration-500 block md:-translate-y-8">
+                <Image src="https://images.unsplash.com/photo-1535141192574-5d4897c12636?q=80&w=800&auto=format&fit=crop" alt="Özel Gün Pastaları" fill className="absolute inset-0 object-cover transition-transform duration-1000 group-hover:scale-110" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-500" />
+                <div className="relative z-10 p-10 w-full transform transition-transform duration-500 group-hover:-translate-y-2">
+                  <h4 className="text-3xl font-serif text-white mb-3">Özel Günler</h4>
+                  <div className="flex items-center text-dilim-yaldiz font-medium group-hover:text-white transition-colors">
+                    Koleksiyonu İncele <ArrowRight className="ml-2 h-5 w-5 transform transition-transform group-hover:translate-x-2" />
+                  </div>
                 </div>
-              </div>
-            </Link>
+              </Link>
+            </motion.div>
 
             {/* Category Card 3 */}
-            <Link href="/urunler?kategori=tatlilar" className="group relative overflow-hidden rounded-2xl aspect-[4/5] bg-gray-100 flex items-end">
-              <Image src="https://images.unsplash.com/photo-1551024601-bec78aea704b?q=80&w=800&auto=format&fit=crop" alt="Tatlılar" fill className="absolute inset-0 object-cover transition-transform duration-700 group-hover:scale-105" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-              <div className="relative z-10 p-8 w-full">
-                <h4 className="text-2xl font-bold text-white mb-2">Tatlılar & Ekler</h4>
-                <div className="flex items-center text-dilim-portakal font-semibold group-hover:text-white transition-colors">
-                  İncele <ArrowRight className="ml-2 h-4 w-4" />
+            <motion.div 
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.3 }}
+            >
+              <Link href="/urunler?kategori=tatlilar" className="group relative overflow-hidden rounded-[2rem] aspect-[4/5] bg-gray-100 flex items-end shadow-xl hover:shadow-2xl transition-shadow duration-500 block">
+                <Image src="https://images.unsplash.com/photo-1551024601-bec78aea704b?q=80&w=800&auto=format&fit=crop" alt="Tatlılar" fill className="absolute inset-0 object-cover transition-transform duration-1000 group-hover:scale-110" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-500" />
+                <div className="relative z-10 p-10 w-full transform transition-transform duration-500 group-hover:-translate-y-2">
+                  <h4 className="text-3xl font-serif text-white mb-3">Tatlılar & Ekler</h4>
+                  <div className="flex items-center text-dilim-yaldiz font-medium group-hover:text-white transition-colors">
+                    Koleksiyonu İncele <ArrowRight className="ml-2 h-5 w-5 transform transition-transform group-hover:translate-x-2" />
+                  </div>
                 </div>
-              </div>
-            </Link>
+              </Link>
+            </motion.div>
           </div>
         </div>
       </section>
     </div>
   )
 }
+
