@@ -4,6 +4,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { ArrowRight, Cake, ShoppingBag, Star } from 'lucide-react'
 import { motion } from 'framer-motion'
+import { ReferencesMarquee } from '@/components/ReferencesMarquee'
 
 export default function HomePage() {
   const fadeUp = {
@@ -161,6 +162,8 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+      
+      <ReferencesMarquee />
     </div>
   )
 }

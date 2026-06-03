@@ -53,7 +53,7 @@ export default function IletisimPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              className="bg-white rounded-3xl p-8 sm:p-12 shadow-xl border border-gray-100"
+              className="bg-white rounded-3xl p-8 sm:p-12 shadow-xl border border-gray-100 lg:sticky lg:top-28 self-start"
             >
               <h2 className="text-3xl font-serif font-bold text-dilim-siyah mb-8">Mesaj Gönderin</h2>
               
@@ -156,22 +156,29 @@ export default function IletisimPage() {
                   {/* Ümraniye */}
                   <div className="relative pl-8 border-l-2 border-dilim-portakal">
                     <div className="absolute -left-[11px] top-0 w-5 h-5 rounded-full bg-white border-4 border-dilim-portakal"></div>
-                    <h3 className="text-xl font-bold text-dilim-siyah mb-3">Ümraniye Şubesi</h3>
-                    <ul className="space-y-3 text-gray-600">
-                      <li className="flex items-start gap-3">
-                        <MapPin className="w-5 h-5 text-dilim-yaldiz shrink-0 mt-0.5" />
-                        <span>Alemdağ Cad. No:123<br/>Ümraniye / İstanbul</span>
-                      </li>
-                      <li className="flex items-center gap-3">
-                        <Phone className="w-5 h-5 text-dilim-yaldiz shrink-0" />
-                        <a href="tel:02164256114" className="hover:text-dilim-portakal transition-colors">0216 425 61 14</a>
-                      </li>
-                      <li className="flex items-center gap-3">
-                        <Clock className="w-5 h-5 text-dilim-yaldiz shrink-0" />
-                        <span>08:00 - 22:00 (Haftanın Her Günü)</span>
-                      </li>
-                    </ul>
-                    <div className="mt-6 h-48 w-full rounded-2xl overflow-hidden border border-gray-100 shadow-sm">
+                    <div className="flex flex-col sm:flex-row gap-6 mb-6">
+                      <div className="flex-1">
+                        <h3 className="text-xl font-bold text-dilim-siyah mb-3">Ümraniye Şubesi</h3>
+                        <ul className="space-y-3 text-gray-600">
+                          <li className="flex items-start gap-3">
+                            <MapPin className="w-5 h-5 text-dilim-yaldiz shrink-0 mt-0.5" />
+                            <span>İnkilap Mahallesi Adem Yavuz Caddesi<br/>Numara: 1/4 Ümraniye / İstanbul</span>
+                          </li>
+                          <li className="flex items-center gap-3">
+                            <Phone className="w-5 h-5 text-dilim-yaldiz shrink-0" />
+                            <a href="tel:+902166325731" className="hover:text-dilim-portakal transition-colors">+90 216 632 57 31</a>
+                          </li>
+                          <li className="flex items-center gap-3">
+                            <Clock className="w-5 h-5 text-dilim-yaldiz shrink-0" />
+                            <span>08:00 - 22:00 (Haftanın Her Günü)</span>
+                          </li>
+                        </ul>
+                      </div>
+                      <div className="w-full sm:w-32 h-32 relative rounded-2xl overflow-hidden shrink-0 shadow-sm">
+                        <Image src="/dilim-umraniye-sube.jpg" fill className="object-cover" alt="Ümraniye Şubesi" />
+                      </div>
+                    </div>
+                    <div className="mt-2 h-48 w-full rounded-2xl overflow-hidden border border-gray-100 shadow-sm">
                       <iframe 
                         src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3009.6658909905864!2d29.100954314818352!3d41.032565025879876!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDHCsDAxJzU3LjIiTiAyOcKwMDYnMTEuMyJF!5e0!3m2!1str!2str!4v1506351314913"
                         width="100%" 
@@ -186,24 +193,68 @@ export default function IletisimPage() {
                   {/* Kavacık */}
                   <div className="relative pl-8 border-l-2 border-dilim-portakal">
                     <div className="absolute -left-[11px] top-0 w-5 h-5 rounded-full bg-white border-4 border-dilim-portakal"></div>
-                    <h3 className="text-xl font-bold text-dilim-siyah mb-3">Kavacık Şubesi</h3>
-                    <ul className="space-y-3 text-gray-600">
-                      <li className="flex items-start gap-3">
-                        <MapPin className="w-5 h-5 text-dilim-yaldiz shrink-0 mt-0.5" />
-                        <span>Rüzgarlıbahçe Mah. Cumhuriyet Cad. No: 10<br/>Acarlar İş Merkezi, Kavacık, Beykoz / İstanbul</span>
-                      </li>
-                      <li className="flex items-center gap-3">
-                        <Phone className="w-5 h-5 text-dilim-yaldiz shrink-0" />
-                        <a href="tel:02164256114" className="hover:text-dilim-portakal transition-colors">0216 425 61 14</a>
-                      </li>
-                      <li className="flex items-center gap-3">
-                        <Clock className="w-5 h-5 text-dilim-yaldiz shrink-0" />
-                        <span>08:00 - 22:00 (Haftanın Her Günü)</span>
-                      </li>
-                    </ul>
-                    <div className="mt-6 h-48 w-full rounded-2xl overflow-hidden border border-gray-100 shadow-sm">
+                    <div className="flex flex-col sm:flex-row gap-6 mb-6">
+                      <div className="flex-1">
+                        <h3 className="text-xl font-bold text-dilim-siyah mb-3">Kavacık Şubesi</h3>
+                        <ul className="space-y-3 text-gray-600">
+                          <li className="flex items-start gap-3">
+                            <MapPin className="w-5 h-5 text-dilim-yaldiz shrink-0 mt-0.5" />
+                            <span>Rüzgarlıbahçe Mah. Cumhuriyet Cad. No: 10<br/>Acarlar İş Merkezi, Kavacık, Beykoz / İstanbul</span>
+                          </li>
+                          <li className="flex items-center gap-3">
+                            <Phone className="w-5 h-5 text-dilim-yaldiz shrink-0" />
+                            <a href="tel:+902164256114" className="hover:text-dilim-portakal transition-colors">+90 216 425 61 14</a>
+                          </li>
+                          <li className="flex items-center gap-3">
+                            <Clock className="w-5 h-5 text-dilim-yaldiz shrink-0" />
+                            <span>08:00 - 22:00 (Haftanın Her Günü)</span>
+                          </li>
+                        </ul>
+                      </div>
+                      <div className="w-full sm:w-32 h-32 relative rounded-2xl overflow-hidden shrink-0 shadow-sm">
+                        <Image src="/dilim-kavacik-sube.jpg" fill className="object-cover" alt="Kavacık Şubesi" />
+                      </div>
+                    </div>
+                    <div className="mt-2 h-48 w-full rounded-2xl overflow-hidden border border-gray-100 shadow-sm">
                       <iframe 
                         src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3006.841344028522!2d29.09568331482048!3d41.094313022076044!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDHCsDA1JzM5LjUiTiAyOcKwMDUnNTIuMyJF!5e0!3m2!1str!2str!4v1506350216306"
+                        width="100%" 
+                        height="100%" 
+                        style={{ border: 0 }} 
+                        allowFullScreen={true} 
+                        loading="lazy" 
+                      ></iframe>
+                    </div>
+                  </div>
+
+                  {/* Beykoz */}
+                  <div className="relative pl-8 border-l-2 border-dilim-portakal">
+                    <div className="absolute -left-[11px] top-0 w-5 h-5 rounded-full bg-white border-4 border-dilim-portakal"></div>
+                    <div className="flex flex-col sm:flex-row gap-6 mb-6">
+                      <div className="flex-1">
+                        <h3 className="text-xl font-bold text-dilim-siyah mb-3 flex items-center gap-2">Beykoz Şubesi <span className="text-xs font-semibold px-2 py-1 bg-dilim-portakal/10 text-dilim-portakal rounded-full">FRANCHISE</span></h3>
+                        <ul className="space-y-3 text-gray-600">
+                          <li className="flex items-start gap-3">
+                            <MapPin className="w-5 h-5 text-dilim-yaldiz shrink-0 mt-0.5" />
+                            <span>Fevzipaşa Caddesi Numara: 10/A<br/>Beykoz / İstanbul</span>
+                          </li>
+                          <li className="flex items-center gap-3">
+                            <Phone className="w-5 h-5 text-dilim-yaldiz shrink-0" />
+                            <a href="tel:+902163232430" className="hover:text-dilim-portakal transition-colors">+90 216 323 24 30</a>
+                          </li>
+                          <li className="flex items-center gap-3">
+                            <Clock className="w-5 h-5 text-dilim-yaldiz shrink-0" />
+                            <span>08:00 - 22:00 (Haftanın Her Günü)</span>
+                          </li>
+                        </ul>
+                      </div>
+                      <div className="w-full sm:w-32 h-32 relative rounded-2xl overflow-hidden shrink-0 shadow-sm">
+                        <Image src="/dilim-beykoz-sube.jpg" fill className="object-cover" alt="Beykoz Şubesi" />
+                      </div>
+                    </div>
+                    <div className="mt-2 h-48 w-full rounded-2xl overflow-hidden border border-gray-100 shadow-sm">
+                      <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3005.0042118386923!2d29.089701314821873!3d41.134434019602054!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDHCsDA4JzA0LjAiTiAyOcKwMDUnMzAuOCJF!5e0!3m2!1str!2str!4v1506351581686"
                         width="100%" 
                         height="100%" 
                         style={{ border: 0 }} 

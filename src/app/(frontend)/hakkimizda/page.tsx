@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import { Star, Award, Heart, Coffee } from 'lucide-react'
+import { ReferencesMarquee } from '@/components/ReferencesMarquee'
 
 export const metadata = {
   title: 'Hakkımızda | Dilim Pastaneleri',
@@ -147,6 +148,7 @@ export default function AboutPage() {
         </div>
       </section>
 
+      <ReferencesMarquee />
     </div>
   )
 }

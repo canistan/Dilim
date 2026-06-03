@@ -1,6 +1,5 @@
 import { Header } from '@/components/Header'
 import { Footer } from '@/components/Footer'
-import { ReferencesMarquee } from '@/components/ReferencesMarquee'
 
 export default function FrontendLayout({
   children,
@@ -13,7 +12,6 @@ export default function FrontendLayout({
       <main className="flex-1 flex flex-col">
         {children}
       </main>
-      <ReferencesMarquee />
       <Footer />
     </>
   )
