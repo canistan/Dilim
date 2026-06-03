@@ -23,6 +23,7 @@ export const Header = () => {
     { name: 'Hakkımızda', href: '/hakkimizda' },
     { name: 'Ürünlerimiz', href: '/urunler' },
     { name: 'Kendi Pastanı Tasarla', href: '/tasarla', highlight: true },
+    { name: 'Blog', href: '/blog' },
     { name: 'İletişim', href: '/iletisim' },
   ]
 

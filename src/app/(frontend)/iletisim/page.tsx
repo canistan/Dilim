@@ -171,6 +171,16 @@ export default function IletisimPage() {
                         <span>08:00 - 22:00 (Haftanın Her Günü)</span>
                       </li>
                     </ul>
+                    <div className="mt-6 h-48 w-full rounded-2xl overflow-hidden border border-gray-100 shadow-sm">
+                      <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3009.6658909905864!2d29.100954314818352!3d41.032565025879876!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDHCsDAxJzU3LjIiTiAyOcKwMDYnMTEuMyJF!5e0!3m2!1str!2str!4v1506351314913"
+                        width="100%" 
+                        height="100%" 
+                        style={{ border: 0 }} 
+                        allowFullScreen={true} 
+                        loading="lazy" 
+                      ></iframe>
+                    </div>
                   </div>
 
                   {/* Kavacık */}
@@ -191,22 +201,18 @@ export default function IletisimPage() {
                         <span>08:00 - 22:00 (Haftanın Her Günü)</span>
                       </li>
                     </ul>
+                    <div className="mt-6 h-48 w-full rounded-2xl overflow-hidden border border-gray-100 shadow-sm">
+                      <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3006.841344028522!2d29.09568331482048!3d41.094313022076044!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDHCsDA1JzM5LjUiTiAyOcKwMDUnNTIuMyJF!5e0!3m2!1str!2str!4v1506350216306"
+                        width="100%" 
+                        height="100%" 
+                        style={{ border: 0 }} 
+                        allowFullScreen={true} 
+                        loading="lazy" 
+                      ></iframe>
+                    </div>
                   </div>
                 </div>
-              </div>
-
-              {/* Map */}
-              <div className="bg-white rounded-3xl p-4 shadow-xl border border-gray-100 h-[400px] overflow-hidden relative">
-                <iframe 
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3008.2045610015525!2d29.091176215383563!3d41.09633897929112!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14cacb001db166a9%3A0xc39f992a95c9a40!2sDilim%20Pastaneleri%20Kavac%C4%B1k!5e0!3m2!1str!2str!4v1684323214561!5m2!1str!2str" 
-                  width="100%" 
-                  height="100%" 
-                  style={{ border: 0, borderRadius: '1rem' }} 
-                  allowFullScreen={true} 
-                  loading="lazy" 
-                  referrerPolicy="no-referrer-when-downgrade"
-                  className="absolute inset-0 p-4"
-                ></iframe>
               </div>
 
             </motion.div>

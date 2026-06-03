@@ -82,6 +82,27 @@ export default function AboutPage() {
         </div>
       </section>
 
+      {/* Founder Section */}
+      <section className="py-20 bg-white">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-4xl mx-auto flex flex-col md:flex-row items-center gap-10 bg-gray-50 rounded-[3rem] p-8 md:p-12 shadow-sm border border-gray-100">
+            <div className="w-48 h-48 md:w-56 md:h-56 relative rounded-[2rem] overflow-hidden shadow-xl border-4 border-white shrink-0 rotate-[-2deg] hover:rotate-0 transition-transform duration-500">
+              <Image src="/mehmet_sahin.jpg" alt="Mehmet Şahin - Dilim Pastaneleri Kurucusu" fill className="object-cover" />
+            </div>
+            <div className="text-center md:text-left">
+              <div className="mb-4">
+                <svg className="w-10 h-10 text-dilim-yaldiz/30 mx-auto md:mx-0 mb-2" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/></svg>
+                <p className="text-gray-600 leading-relaxed italic text-lg">
+                  "1977'den bu yana tek bir gayemiz var: En özel günlerinizde masanızda yer almak ve sizlere yalnızca en taze lezzetleri sunmak. Çeyrek asrı aşan bu yolculukta bizi aileden biri olarak gören tüm müşterilerimize sonsuz teşekkürler."
+                </p>
+              </div>
+              <h3 className="text-2xl font-serif font-bold text-dilim-siyah mb-1">Mehmet Şahin</h3>
+              <p className="text-dilim-portakal font-bold uppercase tracking-wider text-xs">Dilim Pastaneleri Kurucusu</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Values Section */}
       <section className="py-24 bg-gray-50 border-t border-gray-100">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
