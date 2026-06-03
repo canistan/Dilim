@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { ArrowRight, Cake, ShoppingBag } from 'lucide-react'
 
 export default function HomePage() {
@@ -8,10 +9,12 @@ export default function HomePage() {
       <section className="relative w-full h-[80vh] min-h-[600px] flex items-center bg-dilim-siyah overflow-hidden">
         {/* Placeholder for an amazing background image of a premium cake */}
         <div className="absolute inset-0 opacity-40 bg-gradient-to-r from-black/80 to-transparent z-10" />
-        <img 
+        <Image 
           src="https://images.unsplash.com/photo-1621303837174-89787a7d4729?q=80&w=2000&auto=format&fit=crop" 
           alt="Dilim Pastaneleri Premium Yaş Pasta" 
-          className="absolute inset-0 w-full h-full object-cover"
+          fill
+          priority
+          className="absolute inset-0 object-cover"
         />
         
         <div className="container relative z-20 mx-auto px-4 sm:px-6 lg:px-8">
@@ -52,7 +55,7 @@ export default function HomePage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Category Card 1 */}
             <Link href="/urunler?kategori=yas-pasta" className="group relative overflow-hidden rounded-2xl aspect-[4/5] bg-gray-100 flex items-end">
-              <img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=800&auto=format&fit=crop" alt="Yaş Pastalar" className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+              <Image src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=800&auto=format&fit=crop" alt="Yaş Pastalar" fill className="absolute inset-0 object-cover transition-transform duration-700 group-hover:scale-105" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
               <div className="relative z-10 p-8 w-full">
                 <h4 className="text-2xl font-bold text-white mb-2">Yaş Pastalar</h4>
@@ -64,7 +67,7 @@ export default function HomePage() {
 
             {/* Category Card 2 */}
             <Link href="/urunler?kategori=ozel-gun" className="group relative overflow-hidden rounded-2xl aspect-[4/5] bg-gray-100 flex items-end">
-              <img src="https://images.unsplash.com/photo-1535141192574-5d4897c12636?q=80&w=800&auto=format&fit=crop" alt="Özel Gün Pastaları" className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+              <Image src="https://images.unsplash.com/photo-1535141192574-5d4897c12636?q=80&w=800&auto=format&fit=crop" alt="Özel Gün Pastaları" fill className="absolute inset-0 object-cover transition-transform duration-700 group-hover:scale-105" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
               <div className="relative z-10 p-8 w-full">
                 <h4 className="text-2xl font-bold text-white mb-2">Özel Gün Pastaları</h4>
@@ -76,7 +79,7 @@ export default function HomePage() {
 
             {/* Category Card 3 */}
             <Link href="/urunler?kategori=tatlilar" className="group relative overflow-hidden rounded-2xl aspect-[4/5] bg-gray-100 flex items-end">
-              <img src="https://images.unsplash.com/photo-1551024601-bec78aea704b?q=80&w=800&auto=format&fit=crop" alt="Tatlılar" className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+              <Image src="https://images.unsplash.com/photo-1551024601-bec78aea704b?q=80&w=800&auto=format&fit=crop" alt="Tatlılar" fill className="absolute inset-0 object-cover transition-transform duration-700 group-hover:scale-105" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
               <div className="relative z-10 p-8 w-full">
                 <h4 className="text-2xl font-bold text-white mb-2">Tatlılar & Ekler</h4>
