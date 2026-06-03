@@ -11,6 +11,10 @@ const montserrat = Montserrat({
 export const metadata: Metadata = {
   title: "Dilim Pastaneleri | Lezzetin Adresi",
   description: "Özel anlarınıza eşlik eden eşsiz tatlar. Yaş pasta, figür pasta ve daha fazlası için Dilim Pastaneleri.",
+  robots: {
+    index: false,
+    follow: false,
+  },
 };
 
 export default function RootLayout({
