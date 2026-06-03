@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { useState, useEffect } from 'react'
 import { Menu, X, ShoppingBag, User } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
+import Image from 'next/image'
 
 export const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
@@ -33,11 +34,14 @@ export const Header = () => {
             <Link href="/" className="flex items-center gap-2 group" onClick={() => setIsMobileMenuOpen(false)}>
               {/* Premium Typographic SVG Logo */}
               <div className="relative flex items-center justify-center">
-                <svg width="120" height="40" viewBox="0 0 120 40" fill="none" xmlns="http://www.w3.org/2000/svg" className="transform transition-transform group-hover:scale-105">
-                  <text x="0" y="32" fontFamily="Playfair Display, serif" fontSize="32" fontWeight="700" fill="var(--dilim-siyah)" letterSpacing="-1">
-                    Dilim<tspan fill="var(--dilim-portakal)">.</tspan>
-                  </text>
-                </svg>
+                <Image 
+                  src="/DilimLogo-transparent.png" 
+                  alt="Dilim Logo" 
+                  width={150} 
+                  height={50} 
+                  className="h-12 w-auto object-contain transform transition-transform group-hover:scale-105"
+                  priority
+                />
               </div>
             </Link>
             <nav className="hidden lg:flex gap-8 font-medium text-dilim-gri-koyu">
@@ -87,11 +91,13 @@ export const Header = () => {
               className="fixed right-0 top-0 bottom-0 w-[85%] max-w-sm bg-white/95 backdrop-blur-xl z-[70] flex flex-col shadow-2xl lg:hidden border-l border-white/20"
             >
               <div className="flex justify-between items-center p-6 border-b border-gray-100/50">
-                <svg width="90" height="30" viewBox="0 0 120 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <text x="0" y="32" fontFamily="Playfair Display, serif" fontSize="32" fontWeight="700" fill="var(--dilim-siyah)" letterSpacing="-1">
-                    Dilim<tspan fill="var(--dilim-portakal)">.</tspan>
-                  </text>
-                </svg>
+                <Image 
+                  src="/DilimLogo-transparent.png" 
+                  alt="Dilim Logo" 
+                  width={120} 
+                  height={40} 
+                  className="h-10 w-auto object-contain"
+                />
                 <button 
                   onClick={() => setIsMobileMenuOpen(false)}
                   className="p-2.5 bg-gray-50 rounded-full text-dilim-siyah hover:bg-gray-200 transition-colors"

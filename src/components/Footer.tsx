@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 
 export const Footer = () => {
   return (
@@ -10,11 +11,13 @@ export const Footer = () => {
         <div className="md:col-span-1 pr-4">
           <div className="mb-8 inline-block">
             {/* Premium Typographic SVG Logo (White variation) */}
-            <svg width="120" height="40" viewBox="0 0 120 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <text x="0" y="32" fontFamily="Playfair Display, serif" fontSize="32" fontWeight="700" fill="#ffffff" letterSpacing="-1">
-                Dilim<tspan fill="var(--dilim-portakal)">.</tspan>
-              </text>
-            </svg>
+            <Image 
+              src="/DilimLogo-transparent.png" 
+              alt="Dilim Logo" 
+              width={120} 
+              height={40} 
+              className="h-10 w-auto object-contain brightness-0 invert opacity-90"
+            />
           </div>
           <p className="text-sm text-gray-400 leading-relaxed font-light mb-8">
             Özel anlarınıza lezzet katıyoruz. Her gün yenilenen ve daimi olmasını talep ettiğimiz müşterilerimizin özel ve mutlu günlerine ortak olduğumuz anlardan ibaret olan kocaman bir birikimden oluşmaktayız.
