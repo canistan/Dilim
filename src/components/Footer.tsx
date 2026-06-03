@@ -12,11 +12,11 @@ export const Footer = () => {
           <div className="mb-8 inline-block">
             {/* Premium Typographic SVG Logo (White variation) */}
             <Image 
-              src="/DilimLogo-transparent.png" 
+              src="/DilimPastLogo-final.png" 
               alt="Dilim Logo" 
-              width={120} 
-              height={40} 
-              className="h-10 w-auto object-contain brightness-0 invert opacity-90"
+              width={200} 
+              height={54} 
+              className="h-12 w-auto object-contain brightness-0 invert opacity-90"
             />
           </div>
           <p className="text-sm text-gray-400 leading-relaxed font-light mb-8">

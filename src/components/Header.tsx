@@ -35,11 +35,11 @@ export const Header = () => {
               {/* Premium Typographic SVG Logo */}
               <div className="relative flex items-center justify-center">
                 <Image 
-                  src="/DilimLogo-transparent.png" 
+                  src="/DilimPastLogo-final.png" 
                   alt="Dilim Logo" 
-                  width={150} 
-                  height={50} 
-                  className="h-12 w-auto object-contain transform transition-transform group-hover:scale-105"
+                  width={200} 
+                  height={54} 
+                  className="h-10 sm:h-12 w-auto object-contain transform transition-transform group-hover:scale-105"
                   priority
                 />
               </div>
@@ -92,10 +92,10 @@ export const Header = () => {
             >
               <div className="flex justify-between items-center p-6 border-b border-gray-100/50">
                 <Image 
-                  src="/DilimLogo-transparent.png" 
+                  src="/DilimPastLogo-final.png" 
                   alt="Dilim Logo" 
-                  width={120} 
-                  height={40} 
+                  width={200} 
+                  height={54} 
                   className="h-10 w-auto object-contain"
                 />
                 <button 
