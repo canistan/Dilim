@@ -38,7 +38,7 @@ export const Footer = () => {
         <div>
           <h4 className="text-lg font-serif mb-8 text-dilim-yaldiz tracking-wide">Hızlı Linkler</h4>
           <ul className="space-y-4 text-sm text-gray-300 font-light">
-            <li><Link href="/kurumsal" className="hover:text-dilim-portakal hover:pl-2 transition-all duration-300 flex items-center"><span className="w-1 h-1 rounded-full bg-dilim-yaldiz mr-2"></span>Kurumsal</Link></li>
+            <li><Link href="/hakkimizda" className="hover:text-dilim-portakal hover:pl-2 transition-all duration-300 flex items-center"><span className="w-1 h-1 rounded-full bg-dilim-yaldiz mr-2"></span>Hakkımızda</Link></li>
             <li><Link href="/urunler" className="hover:text-dilim-portakal hover:pl-2 transition-all duration-300 flex items-center"><span className="w-1 h-1 rounded-full bg-dilim-yaldiz mr-2"></span>Ürünlerimiz</Link></li>
             <li><Link href="/tasarla" className="hover:text-dilim-portakal hover:pl-2 transition-all duration-300 flex items-center"><span className="w-1 h-1 rounded-full bg-dilim-yaldiz mr-2"></span>Kendi Pastanı Tasarla</Link></li>
             <li><Link href="/iletisim" className="hover:text-dilim-portakal hover:pl-2 transition-all duration-300 flex items-center"><span className="w-1 h-1 rounded-full bg-dilim-yaldiz mr-2"></span>İletişim</Link></li>
@@ -50,8 +50,6 @@ export const Footer = () => {
           <ul className="space-y-4 text-sm text-gray-300 font-light">
             <li className="flex items-center"><span className="w-1 h-1 rounded-full bg-dilim-gri-koyu mr-2"></span>Kavacık Merkez</li>
             <li className="flex items-center"><span className="w-1 h-1 rounded-full bg-dilim-gri-koyu mr-2"></span>Ümraniye Şubesi</li>
-            <li className="flex items-center"><span className="w-1 h-1 rounded-full bg-dilim-gri-koyu mr-2"></span>Alemdağ Şubesi</li>
-            <li className="flex items-center"><span className="w-1 h-1 rounded-full bg-dilim-gri-koyu mr-2"></span>Beykoz Şubesi</li>
           </ul>
         </div>
         

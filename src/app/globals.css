@@ -42,6 +42,7 @@
   --color-secondary-foreground: var(--secondary-foreground);
   
   --animate-glow: glow 2s ease-in-out infinite alternate;
+  --animate-marquee: marquee 30s linear infinite;
 }
 
 @keyframes glow {
@@ -51,6 +52,11 @@
   to {
     box-shadow: 0 0 20px 5px rgba(245, 138, 31, 0.6);
   }
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-100%); }
 }
 
 body {
