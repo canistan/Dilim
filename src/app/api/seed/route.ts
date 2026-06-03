@@ -56,13 +56,13 @@ export async function GET(req: Request) {
     const categoryDocs: Record<string, string> = {};
     for (const cat of categories) {
       const existing = await payload.find({
-        collection: 'categories',
+        collection: 'categories' as any,
         where: { slug: { equals: cat.slug } },
       });
 
       if (existing.totalDocs === 0) {
         const created = await payload.create({
-          collection: 'categories',
+          collection: 'categories' as any,
           data: { title: cat.title, slug: cat.slug },
         });
         categoryDocs[cat.slug] = created.id;
@@ -74,13 +74,13 @@ export async function GET(req: Request) {
     // 2. Ürünleri Ekle
     for (const prod of products) {
       const existing = await payload.find({
-        collection: 'products',
+        collection: 'products' as any,
         where: { slug: { equals: prod.slug } },
       });
 
       if (existing.totalDocs === 0) {
         await payload.create({
-          collection: 'products',
+          collection: 'products' as any,
           data: {
             title: prod.title,
             slug: prod.slug,
