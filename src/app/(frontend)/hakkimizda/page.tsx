@@ -62,10 +62,10 @@ export default function AboutPage() {
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-4 pt-12">
                 <div className="relative aspect-[4/5] rounded-3xl overflow-hidden shadow-xl">
-                  <Image src="https://images.unsplash.com/photo-1556217688-9189c47eb5ce?q=80&w=1000&auto=format&fit=crop" alt="Usta Şefimiz" fill className="object-cover" />
+                  <Image src="https://images.unsplash.com/photo-1577106263724-2c8e03bfe9bc?q=80&w=1000&auto=format&fit=crop" alt="Usta Şefimiz" fill className="object-cover" />
                 </div>
                 <div className="relative aspect-square rounded-3xl overflow-hidden shadow-xl">
-                  <Image src="https://images.unsplash.com/photo-1483695028939-5bb13f8648b0?q=80&w=1000&auto=format&fit=crop" alt="Taze Ürünler" fill className="object-cover" />
+                  <Image src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=1000&auto=format&fit=crop" alt="Özel Tasarım Pastalarımız" fill className="object-cover" />
                 </div>
               </div>
               <div className="space-y-4">

@@ -20,7 +20,7 @@ export const Header = () => {
   }, [])
 
   const navLinks = [
-    { name: 'Kurumsal', href: '/kurumsal' },
+    { name: 'Hakkımızda', href: '/hakkimizda' },
     { name: 'Ürünlerimiz', href: '/urunler' },
     { name: 'Kendi Pastanı Tasarla', href: '/tasarla', highlight: true },
     { name: 'İletişim', href: '/iletisim' },
