@@ -28,7 +28,7 @@ export default function HomePage() {
           className="absolute inset-0"
         >
           <Image 
-            src="https://images.unsplash.com/photo-1621303837174-89787a7d4729?q=80&w=2000&auto=format&fit=crop" 
+            src="https://images.unsplash.com/photo-1535141192574-5d4897c12636?q=100&w=3840&auto=format&fit=crop" 
             alt="Dilim Pastaneleri Premium Yaş Pasta" 
             fill
             priority
