@@ -12,9 +12,9 @@ export default function AboutPage() {
       
       {/* Page Hero */}
       <section className="relative w-full h-[50vh] min-h-[400px] flex items-center justify-center bg-dilim-siyah overflow-hidden">
-        <div className="absolute inset-0 opacity-50 bg-gradient-to-t from-black via-black/40 to-black/80 z-10" />
+        <div className="absolute inset-0 opacity-80 bg-gradient-to-t from-black via-black/60 to-black/90 z-10" />
         <Image 
-          src="https://images.unsplash.com/photo-1555507036-ab1f40ce88cb?q=100&w=3840&auto=format&fit=crop" 
+          src="/hakkimizda_hero.png" 
           alt="Dilim Pastaneleri Hikayemiz" 
           fill
           priority
@@ -26,7 +26,7 @@ export default function AboutPage() {
             <span className="text-dilim-yaldiz font-semibold tracking-widest text-sm uppercase">1977'den Beri</span>
             <div className="h-[1px] w-8 bg-dilim-yaldiz"></div>
           </div>
-          <h1 className="text-5xl md:text-7xl font-serif font-bold text-white tracking-tight">Hakkımızda</h1>
+          <h1 className="text-5xl md:text-7xl font-serif font-bold text-white tracking-tight drop-shadow-2xl shadow-black">Hakkımızda</h1>
         </div>
       </section>
 
@@ -62,7 +62,7 @@ export default function AboutPage() {
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-4 pt-12">
                 <div className="relative aspect-[4/5] rounded-3xl overflow-hidden shadow-xl">
-                  <Image src="https://images.unsplash.com/photo-1577106263724-2c8e03bfe9bc?q=80&w=1000&auto=format&fit=crop" alt="Usta Şefimiz" fill className="object-cover" />
+                  <Image src="/detay_pasta_3.png" alt="Lüks Orman Meyveli Tart" fill className="object-cover" />
                 </div>
                 <div className="relative aspect-square rounded-3xl overflow-hidden shadow-xl">
                   <Image src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=1000&auto=format&fit=crop" alt="Özel Tasarım Pastalarımız" fill className="object-cover" />
@@ -70,10 +70,10 @@ export default function AboutPage() {
               </div>
               <div className="space-y-4">
                 <div className="relative aspect-square rounded-3xl overflow-hidden shadow-xl">
-                  <Image src="https://images.unsplash.com/photo-1517433670267-08bbd4be890f?q=80&w=1000&auto=format&fit=crop" alt="Lüks Pastane İç Mekan" fill className="object-cover" />
+                  <Image src="/detay_pasta_1.png" alt="Lüks Çikolatalı Yaş Pasta" fill className="object-cover" />
                 </div>
                 <div className="relative aspect-[4/5] rounded-3xl overflow-hidden shadow-xl">
-                  <Image src="https://images.unsplash.com/photo-1605807646983-377bc5a76493?q=80&w=1000&auto=format&fit=crop" alt="El Yapımı Çikolatalar" fill className="object-cover" />
+                  <Image src="/detay_pasta_2.png" alt="Taze Çilekli Pasta" fill className="object-cover" />
                 </div>
               </div>
             </div>
