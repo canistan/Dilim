@@ -94,12 +94,12 @@ export default function ProductsPage() {
                   className="group bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 border border-gray-100 flex flex-col"
                 >
                   {/* Product Image */}
-                  <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-white to-orange-50/50 p-4">
+                  <div className="relative aspect-square overflow-hidden bg-gray-50 border-b border-gray-100">
                     <Image 
                       src={product.image} 
                       alt={product.name} 
                       fill 
-                      className="object-contain p-4 transform group-hover:scale-110 transition-transform duration-700 mix-blend-multiply" 
+                      className="object-cover transform group-hover:scale-110 transition-transform duration-700" 
                     />
                     <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 z-10" />
                     
