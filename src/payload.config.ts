@@ -62,6 +62,7 @@ export default buildConfig({
         if (doc.content) return String(doc.content).substring(0, 150) + '...';
         return 'Dilim Pastaneleri - Özel günlerinizi tatlandırın.';
       },
+      tabbedUI: false,
     }),
   ],
 })
