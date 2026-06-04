@@ -63,9 +63,6 @@ export const Header = () => {
             </nav>
           </div>
           <div className="flex items-center gap-2 sm:gap-4">
-            <button className="p-2.5 rounded-full text-dilim-siyah hover:bg-gray-100/80 transition-colors hidden sm:block">
-              <User className="h-5 w-5" />
-            </button>
             <button 
               onClick={() => setIsCartOpen(true)}
               className="p-2.5 rounded-full text-dilim-siyah hover:bg-gray-100/80 transition-colors relative group"
@@ -140,9 +137,6 @@ export const Header = () => {
               </div>
 
               <div className="p-6 border-t border-gray-100/50 bg-gray-50/50">
-                <button className="w-full flex items-center justify-center gap-3 py-4 bg-dilim-siyah rounded-2xl font-semibold text-white hover:bg-black transition-all mb-4 shadow-lg shadow-black/10">
-                  <User className="h-5 w-5" /> Hesabım
-                </button>
               </div>
             </motion.div>
           </>
