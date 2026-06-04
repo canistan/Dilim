@@ -33,9 +33,11 @@ export default buildConfig({
       },
     },
     components: {
+      beforeNavLinks: [
+        '/components/payload/PayloadLogo#Logo'
+      ],
       graphics: {
         Logo: '/components/payload/PayloadLogo#Logo',
-        Icon: '/components/payload/PayloadLogo#Icon',
       },
     },
   },
