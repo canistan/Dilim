@@ -9,17 +9,19 @@ type Args = {
   children: React.ReactNode
 }
 
+import { importMap } from './admin/importMap.js'
+
 const serverFunction = async (args: any) => {
   'use server'
   return handleServerFunctions({
     ...args,
     config: configPromise,
-    importMap: {},
+    importMap,
   })
 }
 
 const Layout = ({ children }: Args) => (
-  <RootLayout config={configPromise} importMap={{}} serverFunction={serverFunction}>
+  <RootLayout config={configPromise} importMap={importMap} serverFunction={serverFunction}>
     {children}
   </RootLayout>
 )

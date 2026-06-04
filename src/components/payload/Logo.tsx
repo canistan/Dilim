@@ -1,10 +1,12 @@
+'use client'
+
 import React from 'react'
 
 export const Logo = () => {
   return (
     <div style={{ 
       padding: '12px 24px', 
-      backgroundColor: '#1a1a1a', 
+      backgroundColor: '#ffffff', 
       borderRadius: '8px', 
       display: 'inline-flex', 
       alignItems: 'center', 
@@ -24,7 +26,7 @@ export const Icon = () => {
   return (
     <div style={{ 
       padding: '8px', 
-      backgroundColor: '#1a1a1a', 
+      backgroundColor: '#ffffff', 
       borderRadius: '6px', 
       display: 'inline-flex', 
       alignItems: 'center', 

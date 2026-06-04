@@ -17,7 +17,9 @@ type Args = {
 export const generateMetadata = ({ params, searchParams }: Args): Promise<Metadata> =>
   generatePageMetadata({ config: configPromise, params, searchParams })
 
+import { importMap } from '../importMap.js'
+
 const Page = ({ params, searchParams }: Args) =>
-  RootPage({ config: configPromise, importMap: {}, params, searchParams })
+  RootPage({ config: configPromise, importMap, params, searchParams })
 
 export default Page
