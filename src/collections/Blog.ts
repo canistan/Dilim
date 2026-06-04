@@ -25,7 +25,7 @@ export const Blog: CollectionConfig = {
     },
     {
       name: 'content',
-      type: 'richText',
+      type: 'textarea',
       label: 'İçerik',
     },
     {

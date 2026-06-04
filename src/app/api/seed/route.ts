@@ -1,51 +1,14 @@
 import { NextResponse } from 'next/server';
 import { getPayload } from 'payload';
 import configPromise from '@payload-config';
+import productsData from '@/data/products.json';
+import blogsData from '@/data/blog.json';
 
-const categories = [
-  { title: 'Adet Pastalar', slug: 'adet-pastalar' },
-  { title: 'Bütün Pastalar', slug: 'butun-pastalar' },
-  { title: 'Sütlü Tatlılar', slug: 'sutlu-tatlilar' },
-  { title: 'Şerbetli Tatlılar', slug: 'serbetli-tatlilar' },
-  { title: 'Çikolatalar', slug: 'cikolatalar' },
-  { title: 'Tuzlu Kurabiyeler', slug: 'tuzlu-kurabiyeler' },
-  { title: 'Tatlı Kurabiyeler', slug: 'tatli-kurabiyeler' },
-  { title: 'Börekler', slug: 'borekler' },
-];
-
-const products = [
-  {
-    title: 'Çilekli Adet Pasta',
-    slug: 'cilekli-adet-pasta',
-    description: 'Taze çilekler ve enfes krema ile hazırlanan tek kişilik rüya.',
-    price: 120,
-    categorySlug: 'adet-pastalar',
-    imageUrl: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=800&auto=format&fit=crop',
-  },
-  {
-    title: 'Çikolatalı Bütün Pasta',
-    slug: 'cikolatali-butun-pasta',
-    description: 'Yoğun Belçika çikolatası ve fıstık parçacıkları.',
-    price: 650,
-    categorySlug: 'butun-pastalar',
-    imageUrl: 'https://images.unsplash.com/photo-1551024601-bec78aea704b?q=80&w=800&auto=format&fit=crop',
-  },
-  {
-    title: 'Profiterol',
-    slug: 'profiterol',
-    description: 'Özel sosu ve taze şu hamuru ile klasikleşen lezzet.',
-    price: 110,
-    categorySlug: 'sutlu-tatlilar',
-    imageUrl: 'https://images.unsplash.com/photo-1535141192574-5d4897c12636?q=80&w=800&auto=format&fit=crop',
-  },
-  {
-    title: 'Fıstıklı Baklava',
-    slug: 'fistikli-baklava',
-    description: 'Boz iç fıstık ile hazırlanan bol tereyağlı geleneksel tat.',
-    price: 450,
-    categorySlug: 'serbetli-tatlilar',
-    imageUrl: 'https://images.unsplash.com/photo-1535141192574-5d4897c12636?q=80&w=800&auto=format&fit=crop', // Fallback image
-  },
+const CATEGORIES = [
+  { slug: 'yas-pastalar', title: 'YAŞ PASTALAR' },
+  { slug: 'ozel-gun', title: 'ÖZEL GÜN PASTALARI' },
+  { slug: 'tatlilar', title: 'TATLILAR' },
+  { slug: 'tek-pastalar', title: 'TEK PASTALAR' }
 ];
 
 export async function GET(req: Request) {
@@ -54,7 +17,7 @@ export async function GET(req: Request) {
 
     // 1. Kategorileri Ekle
     const categoryDocs: Record<string, string> = {};
-    for (const cat of categories) {
+    for (const cat of CATEGORIES) {
       const existing = await payload.find({
         collection: 'categories' as any,
         where: { slug: { equals: cat.slug } },
@@ -72,27 +35,55 @@ export async function GET(req: Request) {
     }
 
     // 2. Ürünleri Ekle
-    for (const prod of products) {
+    for (const prod of productsData) {
+      const slug = prod.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
       const existing = await payload.find({
         collection: 'products' as any,
-        where: { slug: { equals: prod.slug } },
+        where: { slug: { equals: slug } },
       });
 
       if (existing.totalDocs === 0) {
+        // Parse price (₺180 -> 180, Özel Fiyat -> 0)
+        let numPrice = 0;
+        if (prod.price !== "Özel Fiyat") {
+          numPrice = parseInt(prod.price.replace(/[^0-9]/g, ''), 10) || 0;
+        }
+
         await payload.create({
           collection: 'products' as any,
           data: {
-            title: prod.title,
-            slug: prod.slug,
-            description: prod.description,
-            price: prod.price,
-            category: categoryDocs[prod.categorySlug], // İlişkili Kategori ID
+            title: prod.name,
+            slug: slug,
+            description: prod.originalCategory, // using this as a short description for now
+            price: numPrice,
+            category: categoryDocs[prod.category], // İlişkili Kategori ID
           },
         });
       }
     }
 
-    return NextResponse.json({ success: true, message: 'Veritabanı (Seed) başarıyla dolduruldu!' });
+    // 3. Blogları Ekle
+    for (const blog of blogsData) {
+      const existing = await payload.find({
+        collection: 'blog' as any,
+        where: { slug: { equals: blog.slug } },
+      });
+
+      if (existing.totalDocs === 0) {
+        await payload.create({
+          collection: 'blog' as any,
+          data: {
+            title: blog.title,
+            slug: blog.slug,
+            content: blog.content,
+            // image would be a media ID if we uploaded it, skipping image mapping for now or map it if it's string.
+            // but our payload collection expects a media relationship. We'll leave it empty for now since we haven't seeded media.
+          },
+        });
+      }
+    }
+
+    return NextResponse.json({ success: true, message: 'Gerçek menü ve bloglar veritabanına başarıyla aktarıldı!' });
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
