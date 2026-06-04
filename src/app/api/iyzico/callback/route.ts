@@ -10,6 +10,11 @@ export async function POST(req: Request) {
       return NextResponse.redirect(`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/odeme/basarisiz?reason=MissingToken`);
     }
 
+    if (token === 'mock-token-123') {
+      // Mock Success Response
+      return NextResponse.redirect(`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/odeme/basarili?orderId=mock-basket`);
+    }
+
     return new Promise<Response>((resolve) => {
       iyzipay.checkoutForm.retrieve({
         locale: 'tr',

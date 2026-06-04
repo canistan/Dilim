@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect, useRef } from 'react'
+import { useCart } from '@/context/CartContext'
 
 export default function OdemePage() {
   const [formData, setFormData] = useState({
@@ -10,9 +11,11 @@ export default function OdemePage() {
     address: 'Kavacık Mah. Beykoz / İstanbul'
   })
   
+  const { cartTotal } = useCart()
   const [loading, setLoading] = useState(false)
   const [checkoutHtml, setCheckoutHtml] = useState('')
   const iframeContainerRef = useRef<HTMLDivElement>(null)
+  const [legalConsent, setLegalConsent] = useState(false)
 
   const handleCheckout = async () => {
     setLoading(true)
@@ -22,7 +25,7 @@ export default function OdemePage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           customerInfo: formData,
-          amount: 500.0
+          amount: cartTotal > 0 ? cartTotal : 500.0
         })
       })
       
@@ -79,10 +82,24 @@ export default function OdemePage() {
             </div>
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-1">Açık Adres</label>
-              <textarea value={formData.address} onChange={e => setFormData({...formData, address: e.target.value})} className="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-dilim-portakal focus:border-transparent outline-none transition-all" rows={3}></textarea>
+              <textarea value={formData.address} onChange={e => setFormData({...formData, address: e.target.value})} className="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-dilim-portakal focus:border-transparent outline-none transition-all" rows={3} placeholder="Siparişinizin teslim edileceği tam adresinizi giriniz."></textarea>
             </div>
-            <button onClick={handleCheckout} disabled={loading} className="w-full py-4 mt-6 bg-dilim-portakal hover:bg-dilim-turuncu text-white text-lg font-bold rounded-xl transition-all shadow-lg shadow-dilim-portakal/30">
-              {loading ? 'Yükleniyor...' : 'Güvenli Ödemeye Geç (500 TL)'}
+
+            <div className="mt-6 p-4 bg-gray-50 rounded-xl border border-gray-200">
+              <label className="flex items-start gap-3 cursor-pointer">
+                <input 
+                  type="checkbox" 
+                  checked={legalConsent} 
+                  onChange={(e) => setLegalConsent(e.target.checked)}
+                  className="mt-1 w-5 h-5 text-dilim-portakal rounded border-gray-300 focus:ring-dilim-portakal"
+                />
+                <span className="text-sm text-gray-600 leading-relaxed">
+                  <a href="/mesafeli-satis" target="_blank" className="text-dilim-portakal hover:underline font-semibold">Mesafeli Satış Sözleşmesi</a>'ni ve <a href="/iptal-iade" target="_blank" className="text-dilim-portakal hover:underline font-semibold">İptal/İade Koşulları</a>'nı okudum ve onaylıyorum.
+                </span>
+              </label>
+            </div>
+            <button onClick={handleCheckout} disabled={loading || cartTotal === 0 || !legalConsent} className={`w-full py-4 mt-6 text-white text-lg font-bold rounded-xl transition-all shadow-lg ${loading || cartTotal === 0 || !legalConsent ? 'bg-gray-400 cursor-not-allowed shadow-none' : 'bg-dilim-portakal hover:bg-[#e06c00] shadow-dilim-portakal/30'}`}>
+              {loading ? 'Yükleniyor...' : `Güvenli Ödemeye Geç (${cartTotal} ₺)`}
             </button>
           </div>
         </div>

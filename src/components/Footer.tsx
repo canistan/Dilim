@@ -46,6 +46,7 @@ export const Footer = () => {
             <li><Link href="/blog" className="hover:text-dilim-portakal hover:pl-2 transition-all duration-300 flex items-center"><span className="w-1 h-1 rounded-full bg-dilim-yaldiz mr-2"></span>Blog</Link></li>
             <li><Link href="/iletisim" className="hover:text-dilim-portakal hover:pl-2 transition-all duration-300 flex items-center"><span className="w-1 h-1 rounded-full bg-dilim-yaldiz mr-2"></span>İletişim</Link></li>
             <li><Link href="/blog#faq" className="hover:text-dilim-portakal hover:pl-2 transition-all duration-300 flex items-center"><span className="w-1 h-1 rounded-full bg-dilim-yaldiz mr-2"></span>Sıkça Sorulan Sorular</Link></li>
+            <li><Link href="/franchise" className="hover:text-dilim-portakal hover:pl-2 transition-all duration-300 flex items-center"><span className="w-1 h-1 rounded-full bg-dilim-yaldiz mr-2"></span>Franchise Başvurusu</Link></li>
           </ul>
         </div>
         
@@ -62,6 +63,8 @@ export const Footer = () => {
           <h4 className="text-lg font-serif mb-8 text-dilim-yaldiz tracking-wide">Yasal</h4>
           <ul className="space-y-4 text-sm text-gray-300 font-light">
             <li><Link href="/kvkk" className="hover:text-dilim-portakal hover:pl-2 transition-all duration-300 flex items-center"><span className="w-1 h-1 rounded-full bg-dilim-gri-koyu mr-2"></span>Gizlilik ve KVKK</Link></li>
+            <li><Link href="/aydinlatma-metni" className="hover:text-dilim-portakal hover:pl-2 transition-all duration-300 flex items-center"><span className="w-1 h-1 rounded-full bg-dilim-gri-koyu mr-2"></span>Aydınlatma Metni</Link></li>
+            <li><Link href="/kullanim-kosullari" className="hover:text-dilim-portakal hover:pl-2 transition-all duration-300 flex items-center"><span className="w-1 h-1 rounded-full bg-dilim-gri-koyu mr-2"></span>Kullanım Koşulları</Link></li>
             <li><Link href="/mesafeli-satis" className="hover:text-dilim-portakal hover:pl-2 transition-all duration-300 flex items-center"><span className="w-1 h-1 rounded-full bg-dilim-gri-koyu mr-2"></span>Mesafeli Satış Sözleşmesi</Link></li>
             <li><Link href="/iptal-iade" className="hover:text-dilim-portakal hover:pl-2 transition-all duration-300 flex items-center"><span className="w-1 h-1 rounded-full bg-dilim-gri-koyu mr-2"></span>İptal ve İade Koşulları</Link></li>
             <li>
