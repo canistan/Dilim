@@ -34,8 +34,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   if (!product) return { title: 'Ürün Bulunamadı' }
 
   return {
-    title: product.metaTitle || `${product.title} | Dilim Pastaneleri`,
-    description: product.metaDescription || product.description || `${product.title} siparişi verin. Günlük taze malzemelerle hazırlanan lüks lezzetler.`,
+    title: product.meta?.title || `${product.title} | Dilim Pastaneleri`,
+    description: product.meta?.description || product.description || `${product.title} siparişi verin. Günlük taze malzemelerle hazırlanan lüks lezzetler.`,
   }
 }
 

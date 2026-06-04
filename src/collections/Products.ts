@@ -23,10 +23,12 @@ export const Products: CollectionConfig = {
       unique: true,
       admin: {
         position: 'sidebar',
+        readOnly: true,
       },
       hooks: {
         beforeValidate: [formatSlug('title')],
       },
+      index: true,
     },
     {
       name: 'price',
@@ -47,18 +49,6 @@ export const Products: CollectionConfig = {
       name: 'category',
       type: 'relationship',
       relationTo: 'categories' as any,
-    },
-    {
-      name: 'metaTitle',
-      type: 'text',
-    },
-    {
-      name: 'metaDescription',
-      type: 'textarea',
-    },
-    {
-      name: 'canonicalURL',
-      type: 'text',
     },
   ],
 }

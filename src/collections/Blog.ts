@@ -24,6 +24,7 @@ export const Blog: CollectionConfig = {
       unique: true,
       admin: {
         position: 'sidebar',
+        readOnly: true,
       },
       hooks: {
         beforeValidate: [formatSlug('title')],

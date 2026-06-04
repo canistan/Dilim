@@ -25,11 +25,11 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const generatedExcerpt = rawContent.length > 150 ? rawContent.substring(0, 150) + '...' : rawContent
   
   return {
-    title: `${post.title} | Dilim Blog`,
-    description: generatedExcerpt,
+    title: post.meta?.title || `${post.title} | Dilim Blog`,
+    description: post.meta?.description || generatedExcerpt,
     openGraph: {
-      title: post.title,
-      description: generatedExcerpt,
+      title: post.meta?.title || post.title,
+      description: post.meta?.description || generatedExcerpt,
     }
   }
 }

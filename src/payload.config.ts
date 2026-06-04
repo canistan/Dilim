@@ -4,6 +4,7 @@ import path from 'path'
 import { buildConfig } from 'payload'
 import { fileURLToPath } from 'url'
 import sharp from 'sharp'
+import { seoPlugin } from '@payloadcms/plugin-seo'
 
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
@@ -51,5 +52,16 @@ export default buildConfig({
     },
   }),
   sharp,
-  plugins: [],
+  plugins: [
+    seoPlugin({
+      collections: ['products', 'categories', 'blog'],
+      uploadsCollection: 'media',
+      generateTitle: ({ doc }) => `${doc.title} | Dilim Pastaneleri`,
+      generateDescription: ({ doc }) => {
+        if (doc.description) return doc.description;
+        if (doc.content) return String(doc.content).substring(0, 150) + '...';
+        return 'Dilim Pastaneleri - Özel günlerinizi tatlandırın.';
+      },
+    }),
+  ],
 })

@@ -23,24 +23,12 @@ export const Categories: CollectionConfig = {
       unique: true,
       admin: {
         position: 'sidebar',
+        readOnly: true,
       },
       hooks: {
         beforeValidate: [formatSlug('title')],
       },
-    },
-    {
-      name: 'seoData',
-      type: 'group',
-      fields: [
-        {
-          name: 'metaTitle',
-          type: 'text',
-        },
-        {
-          name: 'metaDescription',
-          type: 'textarea',
-        },
-      ],
+      index: true,
     },
   ],
 }
