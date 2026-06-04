@@ -7,10 +7,49 @@ export const CustomCakes: CollectionConfig = {
     plural: 'Kendi Pastanı Tasarla',
   },
   admin: {
-    useAsTitle: 'id',
+    useAsTitle: 'customerName',
     group: 'Site Yönetimi',
+    defaultColumns: ['customerName', 'status', 'createdAt'],
   },
   fields: [
+    {
+      name: 'status',
+      type: 'select',
+      defaultValue: 'pending',
+      label: 'Durum',
+      options: [
+        { label: 'Beklemede', value: 'pending' },
+        { label: 'Fiyat Verildi', value: 'quoted' },
+        { label: 'Onaylandı', value: 'accepted' },
+        { label: 'Reddedildi', value: 'rejected' },
+      ],
+      admin: {
+        position: 'sidebar',
+      },
+    },
+    {
+      name: 'customerName',
+      type: 'text',
+      required: true,
+      label: 'Müşteri Ad Soyad',
+    },
+    {
+      name: 'customerPhone',
+      type: 'text',
+      required: true,
+      label: 'Telefon',
+    },
+    {
+      name: 'customerEmail',
+      type: 'text',
+      label: 'E-posta',
+    },
+    {
+      name: 'customerAddress',
+      type: 'textarea',
+      required: true,
+      label: 'Adres',
+    },
     {
       name: 'cakeSize',
       type: 'number',

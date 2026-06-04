@@ -11,54 +11,35 @@ export default function OdemePage() {
     address: 'Kavacık Mah. Beykoz / İstanbul'
   })
   
-  const { cartTotal } = useCart()
+  const { cartTotal, items, clearCart } = useCart()
   const [loading, setLoading] = useState(false)
-  const [checkoutHtml, setCheckoutHtml] = useState('')
-  const iframeContainerRef = useRef<HTMLDivElement>(null)
   const [legalConsent, setLegalConsent] = useState(false)
-
   const handleCheckout = async () => {
     setLoading(true)
     try {
-      const res = await fetch('/api/iyzico/checkout', {
+      const res = await fetch('/api/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           customerInfo: formData,
-          amount: cartTotal > 0 ? cartTotal : 500.0
+          items: items,
+          totalAmount: cartTotal
         })
       })
       
       const data = await res.json()
       
-      if (data.pageUrl) {
-        // Redirect to iyzico hosted payment page (Safest for Next.js)
-        window.location.href = data.pageUrl + '&iframe=true'
-      } else if (data.checkoutFormContent) {
-        // Fallback to HTML content injection
-        setCheckoutHtml(data.checkoutFormContent)
+      if (res.ok && data.success) {
+        // Sepeti temizle ve başarı sayfasına git
+        window.location.href = `/odeme/basarili?orderNumber=${data.orderNumber}`
       } else {
-        alert("Ödeme başlatılamadı: " + data.error)
+        alert("Sipariş oluşturulamadı: " + data.error)
       }
     } catch (err) {
-      alert("Bir hata oluştu")
+      alert("Bir hata oluştu. Lütfen tekrar deneyin.")
     }
     setLoading(false)
   }
-
-  // Effect to handle script injection if using raw HTML form content
-  useEffect(() => {
-    if (checkoutHtml && iframeContainerRef.current) {
-      iframeContainerRef.current.innerHTML = checkoutHtml;
-      // Extract script and execute it
-      const scripts = iframeContainerRef.current.getElementsByTagName('script');
-      for (let i = 0; i < scripts.length; i++) {
-        const newScript = document.createElement('script');
-        newScript.text = scripts[i].text;
-        document.body.appendChild(newScript);
-      }
-    }
-  }, [checkoutHtml])
 
   return (
     <div className="container mx-auto px-4 py-20 max-w-4xl min-h-screen">
@@ -99,15 +80,10 @@ export default function OdemePage() {
               </label>
             </div>
             <button onClick={handleCheckout} disabled={loading || cartTotal === 0 || !legalConsent} className={`w-full py-4 mt-6 text-white text-lg font-bold rounded-xl transition-all shadow-lg ${loading || cartTotal === 0 || !legalConsent ? 'bg-gray-400 cursor-not-allowed shadow-none' : 'bg-dilim-portakal hover:bg-[#e06c00] shadow-dilim-portakal/30'}`}>
-              {loading ? 'Yükleniyor...' : `Güvenli Ödemeye Geç (${cartTotal} ₺)`}
+              {loading ? 'Yükleniyor...' : `Siparişi Tamamla (${cartTotal} ₺)`}
             </button>
           </div>
         </div>
-      ) : (
-        <div className="bg-white p-4 sm:p-8 rounded-3xl shadow-xl border border-gray-100 flex justify-center items-center min-h-[400px]">
-           <div ref={iframeContainerRef} className="w-full max-w-[600px] mx-auto" />
-        </div>
-      )}
     </div>
   )
 }
