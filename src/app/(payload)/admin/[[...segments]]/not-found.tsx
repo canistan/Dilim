@@ -17,7 +17,9 @@ type Args = {
 export const generateMetadata = ({ params, searchParams }: Args): Promise<Metadata> =>
   generatePageMetadata({ config: configPromise, params, searchParams })
 
+import { importMap } from '../importMap.js'
+
 const NotFound = ({ params, searchParams }: Args) =>
-  NotFoundPage({ config: configPromise, importMap: {}, params, searchParams })
+  NotFoundPage({ config: configPromise, importMap, params, searchParams })
 
 export default NotFound

@@ -3,8 +3,8 @@ import { MetaTitleComponent as MetaTitleComponent_a8a977ebc872c5d5ea7ee689724c08
 import { MetaDescriptionComponent as MetaDescriptionComponent_a8a977ebc872c5d5ea7ee689724c0860 } from '@payloadcms/plugin-seo/client'
 import { MetaImageComponent as MetaImageComponent_a8a977ebc872c5d5ea7ee689724c0860 } from '@payloadcms/plugin-seo/client'
 import { PreviewComponent as PreviewComponent_a8a977ebc872c5d5ea7ee689724c0860 } from '@payloadcms/plugin-seo/client'
-import { Icon as Icon_c6fe5946efe4ec376b0411c30a8f0d79 } from '../../../components/payload/Logo'
-import { Logo as Logo_c6fe5946efe4ec376b0411c30a8f0d79 } from '../../../components/payload/Logo'
+import { Icon as Icon_4289dc47c2feb516126a5ec25d9f7e0e } from '../../../components/payload/PayloadLogo'
+import { Logo as Logo_4289dc47c2feb516126a5ec25d9f7e0e } from '../../../components/payload/PayloadLogo'
 import { CollectionCards as CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1 } from '@payloadcms/next/rsc'
 
 /** @type import('payload').ImportMap */
@@ -14,7 +14,7 @@ export const importMap = {
   "@payloadcms/plugin-seo/client#MetaDescriptionComponent": MetaDescriptionComponent_a8a977ebc872c5d5ea7ee689724c0860,
   "@payloadcms/plugin-seo/client#MetaImageComponent": MetaImageComponent_a8a977ebc872c5d5ea7ee689724c0860,
   "@payloadcms/plugin-seo/client#PreviewComponent": PreviewComponent_a8a977ebc872c5d5ea7ee689724c0860,
-  "/components/payload/Logo#Icon": Icon_c6fe5946efe4ec376b0411c30a8f0d79,
-  "/components/payload/Logo#Logo": Logo_c6fe5946efe4ec376b0411c30a8f0d79,
+  "/components/payload/PayloadLogo#Icon": Icon_4289dc47c2feb516126a5ec25d9f7e0e,
+  "/components/payload/PayloadLogo#Logo": Logo_4289dc47c2feb516126a5ec25d9f7e0e,
   "@payloadcms/next/rsc#CollectionCards": CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1
 }
