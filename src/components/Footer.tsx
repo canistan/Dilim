@@ -24,7 +24,7 @@ export const Footer = () => {
           <p className="text-sm text-gray-400 leading-relaxed font-light mb-8">
             Özel anlarınıza lezzet katıyoruz. Her gün yenilenen ve daimi olmasını talep ettiğimiz müşterilerimizin özel ve mutlu günlerine ortak olduğumuz anlardan ibaret olan kocaman bir birikimden oluşmaktayız.
           </p>
-          <div className="flex gap-4">
+          <div className="flex gap-4 mb-8">
             <a href="https://www.instagram.com/bi_dilimpasta/" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white hover:bg-dilim-portakal hover:text-white transition-all duration-300">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
             </a>
@@ -35,6 +35,21 @@ export const Footer = () => {
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
             </a>
           </div>
+
+          <form className="relative max-w-sm" onSubmit={(e) => { e.preventDefault(); alert('Bültene başarıyla abone oldunuz! Teşekkürler.'); }}>
+            <input 
+              type="email" 
+              placeholder="E-posta adresiniz" 
+              required
+              className="w-full bg-white/5 text-white placeholder-gray-500 border border-white/10 rounded-full px-6 py-4 pr-[130px] focus:outline-none focus:border-dilim-yaldiz focus:bg-white/10 transition-all"
+            />
+            <button 
+              type="submit" 
+              className="absolute right-1.5 top-1.5 bottom-1.5 bg-[#e2aa45] hover:bg-dilim-portakal text-dilim-siyah hover:text-white font-bold px-6 rounded-full transition-all duration-300 shadow-lg"
+            >
+              Abone Ol
+            </button>
+          </form>
         </div>
         
         <div>

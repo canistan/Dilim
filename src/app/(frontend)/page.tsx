@@ -129,13 +129,13 @@ export default function HomePage() {
               viewport={{ once: true }}
               transition={{ delay: 0.2 }}
             >
-              <Link href="/urunler?kategori=ozel-gun" className="group relative overflow-hidden rounded-[2rem] aspect-[4/5] bg-gray-100 flex items-end shadow-xl hover:shadow-2xl transition-shadow duration-500 block md:-translate-y-8">
+              <Link href="/tasarla" className="group relative overflow-hidden rounded-[2rem] aspect-[4/5] bg-gray-100 flex items-end shadow-xl hover:shadow-2xl transition-shadow duration-500 block md:-translate-y-8">
                 <Image src="https://images.unsplash.com/photo-1535141192574-5d4897c12636?q=80&w=800&auto=format&fit=crop" alt="Özel Gün Pastaları" fill className="absolute inset-0 object-cover transition-transform duration-1000 group-hover:scale-110" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-500" />
                 <div className="relative z-10 p-10 w-full transform transition-transform duration-500 group-hover:-translate-y-2">
-                  <h4 className="text-3xl font-serif text-white mb-3">Özel Günler</h4>
+                  <h4 className="text-3xl font-serif text-white mb-3">Kendi Pastanı Tasarla</h4>
                   <div className="flex items-center text-dilim-yaldiz font-medium group-hover:text-white transition-colors">
-                    Koleksiyonu İncele <ArrowRight className="ml-2 h-5 w-5 transform transition-transform group-hover:translate-x-2" />
+                    Hemen Tasarla <ArrowRight className="ml-2 h-5 w-5 transform transition-transform group-hover:translate-x-2" />
                   </div>
                 </div>
               </Link>
