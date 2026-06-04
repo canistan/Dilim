@@ -48,8 +48,8 @@ export default async function BlogPage() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {blogs.map((post: any) => {
-              const staticBlog = STATIC_BLOGS.find((b) => b.slug === post.slug)
-              const imageToUse = (post.image && post.image.url) 
+              const staticBlog = STATIC_BLOGS.find((b) => b.title === post.title)
+              const imageToUse = (post.image && typeof post.image === 'object' && post.image.url) 
                 ? post.image.url 
                 : (staticBlog?.image || '/placeholder.png')
               

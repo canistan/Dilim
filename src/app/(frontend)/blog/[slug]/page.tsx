@@ -60,8 +60,8 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
     notFound()
   }
 
-  const staticBlog = STATIC_BLOGS.find((b) => b.slug === slug)
-  const imageToUse = (post.image && post.image.url) 
+  const staticBlog = STATIC_BLOGS.find((b) => b.title === post.title)
+  const imageToUse = (post.image && typeof post.image === 'object' && post.image.url) 
     ? post.image.url 
     : (staticBlog?.image || '/placeholder.png')
 
