@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { formatSlug } from '../utilities/formatSlug'
 
 export const Products: CollectionConfig = {
   slug: 'products',
@@ -19,8 +20,13 @@ export const Products: CollectionConfig = {
     {
       name: 'slug',
       type: 'text',
-      required: true,
       unique: true,
+      admin: {
+        position: 'sidebar',
+      },
+      hooks: {
+        beforeValidate: [formatSlug('title')],
+      },
     },
     {
       name: 'price',
