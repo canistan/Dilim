@@ -110,7 +110,7 @@ export default function HomePage() {
               viewport={{ once: true }}
               transition={{ delay: 0.1 }}
             >
-              <Link href="/urunler?kategori=yas-pasta" className="group relative overflow-hidden rounded-[2rem] aspect-[4/5] bg-gray-100 flex items-end shadow-xl hover:shadow-2xl transition-shadow duration-500 block">
+              <Link href="/urunler?kategori=yas-pastalar" className="group relative overflow-hidden rounded-[2rem] aspect-[4/5] bg-gray-100 flex items-end shadow-xl hover:shadow-2xl transition-shadow duration-500 block">
                 <Image src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=800&auto=format&fit=crop" alt="Yaş Pastalar" fill className="absolute inset-0 object-cover transition-transform duration-1000 group-hover:scale-110" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-500" />
                 <div className="relative z-10 p-10 w-full transform transition-transform duration-500 group-hover:-translate-y-2">

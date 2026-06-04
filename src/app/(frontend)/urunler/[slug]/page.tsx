@@ -2,47 +2,74 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { ChevronRight, Star, Truck, ShieldCheck, Check } from 'lucide-react'
-import PRODUCTS from '@/data/products.json'
 import { AddToCartButton } from '@/components/AddToCartButton'
+import { getPayload } from 'payload'
+import configPromise from '@payload-config'
+import STATIC_PRODUCTS from '@/data/products.json'
 
-// Statik Olarak Üretilecek Sayfalar (SSG) - MÜKEMMEL PERFORMANS
-export function generateStaticParams() {
-  return PRODUCTS.map((product) => ({
-    id: product.id.toString(),
+// ISR - Generate Static Params (1 saatte bir güncellenir)
+export const revalidate = 3600
+
+export async function generateStaticParams() {
+  const payload = await getPayload({ config: configPromise })
+  const products = await payload.find({
+    collection: 'products' as any,
+    limit: 1000,
+  })
+
+  return products.docs.map((product: any) => ({
+    slug: product.slug,
   }))
 }
 
-export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params;
-  const product = PRODUCTS.find(p => p.id.toString() === id)
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params
+  const payload = await getPayload({ config: configPromise })
+  const { docs } = await payload.find({
+    collection: 'products' as any,
+    where: { slug: { equals: slug } },
+  })
+
+  const product = docs[0] as any
   if (!product) return { title: 'Ürün Bulunamadı' }
-  
+
   return {
-    title: `${product.name} | Dilim Pastaneleri`,
-    description: `${product.name} siparişi verin. Günlük taze malzemelerle hazırlanan lüks lezzetler.`,
+    title: product.metaTitle || `${product.title} | Dilim Pastaneleri`,
+    description: product.metaDescription || product.description || `${product.title} siparişi verin. Günlük taze malzemelerle hazırlanan lüks lezzetler.`,
   }
 }
 
-export default async function ProductDetailPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params;
-  const product = PRODUCTS.find(p => p.id.toString() === id)
+export default async function ProductDetailPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params
+  const payload = await getPayload({ config: configPromise })
   
+  const { docs } = await payload.find({
+    collection: 'products' as any,
+    where: { slug: { equals: slug } },
+  })
+
+  const product = docs[0] as any
   if (!product) {
     notFound()
   }
 
   // Aynı kategorideki benzer ürünleri bul
-  const relatedProducts = PRODUCTS
-    .filter(p => p.category === product.category && p.id.toString() !== id)
-    .slice(0, 4)
+  const categoryId = typeof product.category === 'object' ? product.category.id : product.category
+  const { docs: relatedDocs } = await payload.find({
+    collection: 'products' as any,
+    where: { 
+      category: { equals: categoryId },
+      id: { not_equals: product.id }
+    },
+    limit: 4,
+  })
 
-  const CATEGORIES = [
-    { id: 'yas-pastalar', name: 'YAŞ PASTALAR' },
-    { id: 'ozel-gun', name: 'ÖZEL GÜN PASTALARI' },
-    { id: 'tatlilar', name: 'TATLILAR' },
-    { id: 'tek-pastalar', name: 'TEK PASTALAR' }
-  ]
-  const categoryName = CATEGORIES.find(c => c.id === product.category)?.name || product.originalCategory
+  const categoryName = typeof product.category === 'object' ? product.category.title : 'Kategori'
+
+  const staticProd = STATIC_PRODUCTS.find(p => p.name === product.title)
+  const imageToUse = (product.images && product.images.length > 0 && product.images[0].url) 
+    ? product.images[0].url 
+    : (staticProd?.image || '/placeholder.png')
 
   return (
     <div className="flex flex-col w-full bg-white min-h-screen">
@@ -54,9 +81,9 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
             <ChevronRight className="w-4 h-4 mx-2" />
             <Link href="/urunler" className="hover:text-dilim-portakal transition-colors">Ürünler</Link>
             <ChevronRight className="w-4 h-4 mx-2" />
-            <Link href={`/urunler?kategori=${product.category}`} className="hover:text-dilim-portakal transition-colors whitespace-nowrap">{categoryName}</Link>
+            <Link href="/urunler" className="hover:text-dilim-portakal transition-colors whitespace-nowrap">{categoryName}</Link>
             <ChevronRight className="w-4 h-4 mx-2" />
-            <span className="text-dilim-siyah font-bold truncate max-w-[200px] sm:max-w-none">{product.name}</span>
+            <span className="text-dilim-siyah font-bold truncate max-w-[200px] sm:max-w-none">{product.title}</span>
           </div>
         </div>
       </div>
@@ -69,8 +96,8 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
             {/* Left: Image Gallery */}
             <div className="relative aspect-square md:aspect-[4/5] rounded-[2rem] overflow-hidden bg-gray-50 shadow-2xl border border-gray-100 group">
               <Image 
-                src={product.image} 
-                alt={product.name} 
+                src={imageToUse} 
+                alt={product.title} 
                 fill 
                 priority
                 sizes="(max-width: 768px) 100vw, 50vw"
@@ -87,7 +114,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
               </div>
               
               <h1 className="text-4xl md:text-5xl font-serif font-bold text-dilim-siyah mb-6 leading-tight">
-                {product.name}
+                {product.title}
               </h1>
 
               <div className="flex items-center gap-4 mb-8">
@@ -102,24 +129,23 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
               </div>
               
               <div className="text-3xl font-serif font-bold text-dilim-siyah mb-8">
-                {product.price}
+                {product.price > 0 ? `₺${product.price}` : 'Özel Fiyat'}
               </div>
 
-              <p className="text-gray-600 text-lg leading-relaxed mb-10 font-light">
-                Günlük taze malzemelerle hazırlanan, Dilim Pastaneleri ustalarının özel tarifi olan {product.name.toLowerCase()}. 
-                Her diliminde hissedeceğiniz lüks doku ve yoğun lezzet profili ile özel günlerinize ve tatlı krizlerinize eşsiz bir dokunuş katar.
+              <p className="text-gray-600 text-lg leading-relaxed mb-10 font-light whitespace-pre-wrap">
+                {product.description || `Günlük taze malzemelerle hazırlanan, Dilim Pastaneleri ustalarının özel tarifi olan ${product.title.toLowerCase()}. Her diliminde hissedeceğiniz lüks doku ve yoğun lezzet profili ile özel günlerinize ve tatlı krizlerinize eşsiz bir dokunuş katar.`}
               </p>
 
               {/* Add to Cart Actions (Client Component for interactivity) */}
               <AddToCartButton product={{
                 id: product.id.toString(),
-                name: product.name,
-                price: product.price,
-                image: product.image
+                name: product.title,
+                price: product.price > 0 ? `₺${product.price}` : 'Özel Fiyat',
+                image: imageToUse
               }} />
 
               {/* Features List */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-8 border-t border-gray-100">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-8 border-t border-gray-100 mt-10">
                 <div className="flex items-center gap-3 text-gray-700">
                   <div className="w-10 h-10 rounded-full bg-orange-50 flex items-center justify-center text-dilim-portakal shrink-0">
                     <Truck className="w-5 h-5" />
@@ -146,7 +172,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
       </section>
 
       {/* Related Products */}
-      {relatedProducts.length > 0 && (
+      {relatedDocs.length > 0 && (
         <section className="py-24 bg-gray-50 border-t border-gray-100">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col items-center mb-16 text-center">
@@ -155,28 +181,35 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-              {relatedProducts.map(rel => (
-                <Link key={rel.id} href={`/urunler/${rel.id}`} className="group bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 border border-gray-100 flex flex-col">
-                  <div className="relative aspect-square overflow-hidden bg-gray-50 border-b border-gray-100">
-                    <Image 
-                      src={rel.image} 
-                      alt={rel.name} 
-                      fill 
-                      sizes="(max-width: 768px) 100vw, 25vw"
-                      className="object-cover transform group-hover:scale-110 transition-transform duration-700" 
-                    />
-                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 z-10" />
-                  </div>
-                  <div className="p-6 flex-1 flex flex-col items-center text-center">
-                    <h3 className="text-lg font-bold text-dilim-siyah leading-tight mb-2 flex-1 group-hover:text-dilim-portakal transition-colors">
-                      {rel.name}
-                    </h3>
-                    <span className="text-lg font-serif font-bold text-dilim-siyah">
-                      {rel.price}
-                    </span>
-                  </div>
-                </Link>
-              ))}
+              {relatedDocs.map((rel: any) => {
+                const relStaticProd = STATIC_PRODUCTS.find(p => p.name === rel.title)
+                const relImageToUse = (rel.images && rel.images.length > 0 && rel.images[0].url) 
+                  ? rel.images[0].url 
+                  : (relStaticProd?.image || '/placeholder.png')
+
+                return (
+                  <Link key={rel.id} href={`/urunler/${rel.slug}`} className="group bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 border border-gray-100 flex flex-col">
+                    <div className="relative aspect-square overflow-hidden bg-gray-50 border-b border-gray-100">
+                      <Image 
+                        src={relImageToUse} 
+                        alt={rel.title} 
+                        fill 
+                        sizes="(max-width: 768px) 100vw, 25vw"
+                        className="object-cover transform group-hover:scale-110 transition-transform duration-700" 
+                      />
+                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 z-10" />
+                    </div>
+                    <div className="p-6 flex-1 flex flex-col items-center text-center">
+                      <h3 className="text-lg font-bold text-dilim-siyah leading-tight mb-2 flex-1 group-hover:text-dilim-portakal transition-colors">
+                        {rel.title}
+                      </h3>
+                      <span className="text-lg font-serif font-bold text-dilim-siyah">
+                        {rel.price > 0 ? `₺${rel.price}` : 'Özel Fiyat'}
+                      </span>
+                    </div>
+                  </Link>
+                )
+              })}
             </div>
           </div>
         </section>

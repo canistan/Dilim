@@ -2,39 +2,70 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { Calendar, Clock, User, ArrowLeft, Share2 } from 'lucide-react'
-import blogData from '@/data/blog.json'
+import { getPayload } from 'payload'
+import configPromise from '@payload-config'
+import STATIC_BLOGS from '@/data/blog.json'
+
+// ISR
+export const revalidate = 3600
 
 // Sayfa için dinamik SEO Metadata üretimi
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params;
-  const post = blogData.find(p => p.slug === slug)
+  const { slug } = await params
+  const payload = await getPayload({ config: configPromise })
+  const { docs } = await payload.find({
+    collection: 'blog' as any,
+    where: { slug: { equals: slug } },
+  })
+
+  const post = docs[0] as any
   if (!post) return { title: 'Yazı Bulunamadı' }
+  
+  const rawContent = post.content || ''
+  const generatedExcerpt = rawContent.length > 150 ? rawContent.substring(0, 150) + '...' : rawContent
   
   return {
     title: `${post.title} | Dilim Blog`,
-    description: post.excerpt,
+    description: generatedExcerpt,
     openGraph: {
       title: post.title,
-      description: post.excerpt,
-      images: [post.image]
+      description: generatedExcerpt,
     }
   }
 }
 
 // Next.js static generation için statik yolları belirtme
 export async function generateStaticParams() {
-  return blogData.map((post) => ({
+  const payload = await getPayload({ config: configPromise })
+  const { docs } = await payload.find({
+    collection: 'blog' as any,
+    limit: 100,
+  })
+
+  return docs.map((post: any) => ({
     slug: post.slug,
   }))
 }
 
 export default async function BlogPost({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params;
-  const post = blogData.find(p => p.slug === slug)
-  
+  const { slug } = await params
+  const payload = await getPayload({ config: configPromise })
+  const { docs } = await payload.find({
+    collection: 'blog' as any,
+    where: { slug: { equals: slug } },
+  })
+
+  const post = docs[0] as any
   if (!post) {
     notFound()
   }
+
+  const staticBlog = STATIC_BLOGS.find((b) => b.slug === slug)
+  const imageToUse = (post.image && post.image.url) 
+    ? post.image.url 
+    : (staticBlog?.image || '/placeholder.png')
+
+  const rawContent = post.content || ''
 
   return (
     <div className="flex flex-col w-full bg-background min-h-screen pt-24">
@@ -51,13 +82,13 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
         
         <div className="flex flex-wrap items-center gap-6 text-sm text-gray-500 font-medium pb-8 border-b border-gray-100">
           <div className="flex items-center gap-2">
-            <User className="w-4 h-4" /> {post.author}
+            <User className="w-4 h-4" /> {staticBlog?.author || 'Dilim Pastaneleri'}
           </div>
           <div className="flex items-center gap-2">
-            <Calendar className="w-4 h-4" /> {new Date(post.date).toLocaleDateString('tr-TR', { year: 'numeric', month: 'long', day: 'numeric' })}
+            <Calendar className="w-4 h-4" /> {new Date(post.createdAt).toLocaleDateString('tr-TR', { year: 'numeric', month: 'long', day: 'numeric' })}
           </div>
           <div className="flex items-center gap-2">
-            <Clock className="w-4 h-4" /> {post.readTime}
+            <Clock className="w-4 h-4" /> {staticBlog?.readTime || '3 dk okuma'}
           </div>
           <button className="ml-auto flex items-center gap-2 text-dilim-portakal hover:text-dilim-turuncu transition-colors bg-orange-50 px-4 py-2 rounded-full">
             <Share2 className="w-4 h-4" /> Paylaş
@@ -69,7 +100,7 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl mb-16">
         <div className="relative w-full aspect-[21/9] rounded-3xl overflow-hidden shadow-2xl bg-gray-100">
           <Image 
-            src={post.image} 
+            src={imageToUse} 
             alt={post.title} 
             fill 
             className="object-cover"
@@ -82,14 +113,16 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-3xl pb-24">
         <article className="prose prose-lg prose-gray max-w-none prose-headings:font-serif prose-headings:text-dilim-siyah prose-p:text-gray-600 prose-p:leading-relaxed prose-a:text-dilim-portakal hover:prose-a:text-dilim-turuncu">
           {/* 
-            Basit markdown çevirici:
-            Gerçek bir projede react-markdown kullanılabilir, şimdilik metni pragmatik olarak parse ediyoruz.
+            Basit markdown çevirici (Payload CMS textarea string'ini satır satır render eder)
           */}
-          {post.content.split('\n\n').map((paragraph, idx) => {
+          {rawContent.split('\n\n').map((paragraph: string, idx: number) => {
             if (paragraph.startsWith('## ')) {
               return <h2 key={idx} className="text-3xl font-bold mt-12 mb-6 text-dilim-siyah">{paragraph.replace('## ', '')}</h2>
             }
-            return <p key={idx} className="mb-6">{paragraph}</p>
+            if (paragraph.startsWith('# ')) {
+              return <h1 key={idx} className="text-4xl font-bold mt-12 mb-6 text-dilim-siyah">{paragraph.replace('# ', '')}</h1>
+            }
+            return <p key={idx} className="mb-6 whitespace-pre-wrap">{paragraph}</p>
           })}
         </article>
         
@@ -99,7 +132,7 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
             <User className="w-8 h-8" />
           </div>
           <div>
-            <h4 className="text-lg font-bold text-dilim-siyah mb-1">{post.author}</h4>
+            <h4 className="text-lg font-bold text-dilim-siyah mb-1">{staticBlog?.author || 'Dilim Pastaneleri'}</h4>
             <p className="text-gray-500 text-sm">Dilim Pastaneleri bünyesinde özel gün pastaları ve geleneksel tatlılar konusunda uzman içerik üreticisi.</p>
           </div>
         </div>
