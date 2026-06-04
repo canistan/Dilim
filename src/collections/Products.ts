@@ -10,6 +10,7 @@ export const Products: CollectionConfig = {
   admin: {
     useAsTitle: 'title',
     group: 'Site Yönetimi',
+    defaultColumns: ['title', 'images', 'price', 'category'],
   },
   fields: [
     {

@@ -10,6 +10,7 @@ export const Blog: CollectionConfig = {
   admin: {
     useAsTitle: 'title',
     group: 'Site Yönetimi',
+    defaultColumns: ['title', 'image'],
   },
   fields: [
     {
