@@ -1,3 +1,5 @@
+"use client"
+
 import Link from 'next/link'
 import Image from 'next/image'
 
@@ -7,8 +9,8 @@ export const Footer = () => {
       {/* Decorative background element */}
       <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-dilim-bordo/20 blur-[120px] rounded-full pointer-events-none transform translate-x-1/2 -translate-y-1/2"></div>
       
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-12 relative z-10">
-        <div className="md:col-span-1 pr-4">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-8 lg:gap-12 relative z-10">
+        <div className="md:col-span-3 lg:col-span-2 pr-0 lg:pr-4">
           <div className="mb-8 inline-block">
             {/* Premium Typographic SVG Logo (White variation) */}
             <Image 
@@ -43,6 +45,7 @@ export const Footer = () => {
             <li><Link href="/tasarla" className="hover:text-dilim-portakal hover:pl-2 transition-all duration-300 flex items-center"><span className="w-1 h-1 rounded-full bg-dilim-yaldiz mr-2"></span>Kendi Pastanı Tasarla</Link></li>
             <li><Link href="/blog" className="hover:text-dilim-portakal hover:pl-2 transition-all duration-300 flex items-center"><span className="w-1 h-1 rounded-full bg-dilim-yaldiz mr-2"></span>Blog</Link></li>
             <li><Link href="/iletisim" className="hover:text-dilim-portakal hover:pl-2 transition-all duration-300 flex items-center"><span className="w-1 h-1 rounded-full bg-dilim-yaldiz mr-2"></span>İletişim</Link></li>
+            <li><Link href="/blog#faq" className="hover:text-dilim-portakal hover:pl-2 transition-all duration-300 flex items-center"><span className="w-1 h-1 rounded-full bg-dilim-yaldiz mr-2"></span>Sıkça Sorulan Sorular</Link></li>
           </ul>
         </div>
         
@@ -51,9 +54,27 @@ export const Footer = () => {
           <ul className="space-y-4 text-sm text-gray-300 font-light">
             <li className="flex items-center"><span className="w-1 h-1 rounded-full bg-dilim-gri-koyu mr-2"></span>Kavacık Merkez</li>
             <li className="flex items-center"><span className="w-1 h-1 rounded-full bg-dilim-gri-koyu mr-2"></span>Ümraniye Şubesi</li>
+            <li className="flex items-center"><span className="w-1 h-1 rounded-full bg-dilim-gri-koyu mr-2"></span>Beykoz Şubesi (Franchise)</li>
           </ul>
         </div>
-        
+
+        <div>
+          <h4 className="text-lg font-serif mb-8 text-dilim-yaldiz tracking-wide">Yasal</h4>
+          <ul className="space-y-4 text-sm text-gray-300 font-light">
+            <li><Link href="/kvkk" className="hover:text-dilim-portakal hover:pl-2 transition-all duration-300 flex items-center"><span className="w-1 h-1 rounded-full bg-dilim-gri-koyu mr-2"></span>Gizlilik ve KVKK</Link></li>
+            <li><Link href="/mesafeli-satis" className="hover:text-dilim-portakal hover:pl-2 transition-all duration-300 flex items-center"><span className="w-1 h-1 rounded-full bg-dilim-gri-koyu mr-2"></span>Mesafeli Satış Sözleşmesi</Link></li>
+            <li><Link href="/iptal-iade" className="hover:text-dilim-portakal hover:pl-2 transition-all duration-300 flex items-center"><span className="w-1 h-1 rounded-full bg-dilim-gri-koyu mr-2"></span>İptal ve İade Koşulları</Link></li>
+            <li>
+              <button 
+                onClick={() => window.dispatchEvent(new Event('openCookieSettings'))}
+                className="hover:text-dilim-portakal hover:pl-2 transition-all duration-300 flex items-center cursor-pointer text-left w-full"
+              >
+                <span className="w-1 h-1 rounded-full bg-dilim-gri-koyu mr-2"></span>Çerez Ayarları
+              </button>
+            </li>
+          </ul>
+        </div>
+
         <div>
           <h4 className="text-lg font-serif mb-8 text-dilim-yaldiz tracking-wide">İletişim</h4>
           <ul className="space-y-4 text-sm text-gray-300 font-light">

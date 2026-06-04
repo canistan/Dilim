@@ -5,10 +5,18 @@ import { useState, useEffect } from 'react'
 import { Menu, X, ShoppingBag, User } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
+import { useCart } from '@/context/CartContext'
+import { CartDrawer } from '@/components/CartDrawer'
 
 export const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const [mounted, setMounted] = useState(false)
+  const { items, setIsCartOpen } = useCart()
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   // Sayfa kaydırıldığında header'ın daha transparan/sıkı hale gelmesi için
   useEffect(() => {
@@ -58,9 +66,14 @@ export const Header = () => {
             <button className="p-2.5 rounded-full text-dilim-siyah hover:bg-gray-100/80 transition-colors hidden sm:block">
               <User className="h-5 w-5" />
             </button>
-            <button className="p-2.5 rounded-full text-dilim-siyah hover:bg-gray-100/80 transition-colors relative group">
+            <button 
+              onClick={() => setIsCartOpen(true)}
+              className="p-2.5 rounded-full text-dilim-siyah hover:bg-gray-100/80 transition-colors relative group"
+            >
               <ShoppingBag className="h-5 w-5 transform transition-transform group-hover:scale-110" />
-              <span className="absolute top-1 right-1 h-4 w-4 rounded-full bg-gradient-to-r from-dilim-portakal to-dilim-turuncu text-[10px] font-bold text-white flex items-center justify-center shadow-md border-2 border-white">0</span>
+              {mounted && items.length > 0 && (
+                <span className="absolute top-1 right-1 h-4 w-4 rounded-full bg-gradient-to-r from-dilim-portakal to-dilim-turuncu text-[10px] font-bold text-white flex items-center justify-center shadow-md border-2 border-white">{items.length}</span>
+              )}
             </button>
             <button className="p-2.5 rounded-full lg:hidden text-dilim-siyah hover:bg-gray-100/80 transition-colors" onClick={() => setIsMobileMenuOpen(true)}>
               <Menu className="h-6 w-6" />
@@ -135,6 +148,9 @@ export const Header = () => {
           </>
         )}
       </AnimatePresence>
+
+      {/* Cart Drawer Component */}
+      <CartDrawer />
     </>
   )
 }

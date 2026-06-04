@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { Calendar, Clock, ChevronRight } from 'lucide-react'
+import { Calendar, Clock, ChevronRight, HelpCircle } from 'lucide-react'
 import blogData from '@/data/blog.json'
 
 export const metadata = {
@@ -69,6 +69,58 @@ export default function BlogPage() {
                   </Link>
                 </div>
               </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Sıkça Sorulan Sorular (FAQ) Section */}
+      <section id="faq" className="py-24 bg-white scroll-mt-20">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl">
+          <div className="text-center mb-16">
+            <div className="flex items-center justify-center gap-3 mb-4">
+              <HelpCircle className="w-6 h-6 text-dilim-portakal" />
+            </div>
+            <h2 className="text-3xl md:text-4xl font-serif font-bold text-dilim-siyah mb-4">
+              Sıkça Sorulan Sorular
+            </h2>
+            <div className="h-1 w-20 bg-dilim-yaldiz mx-auto rounded-full"></div>
+            <p className="mt-6 text-gray-500 font-light text-lg">
+              Aklınıza takılan soruların cevaplarını burada bulabilirsiniz.
+            </p>
+          </div>
+
+          <div className="space-y-4">
+            {[
+              {
+                q: "Siparişim ne zaman teslim edilir?",
+                a: "Siparişleriniz, seçtiğiniz tarihte ve saat diliminde özel soğutmalı araçlarımızla tazeliğini koruyarak teslim edilir. Aynı gün teslimat seçeneklerimiz için müşteri hizmetlerimizle iletişime geçebilirsiniz."
+              },
+              {
+                q: "Özel tasarım (3D, figürlü, resimli) pasta yapıyor musunuz?",
+                a: "Evet, hayalinizdeki her türlü pastayı gerçeğe dönüştürüyoruz. Dilediğiniz konsept, figür veya fotoğrafı pastanıza uygulayabiliriz. Detaylar için menüdeki 'Kendi Pastanı Tasarla' bölümünü kullanabilirsiniz."
+              },
+              {
+                q: "Hangi bölgelere teslimatınız var?",
+                a: "Şu an için öncelikli olarak Kavacık, Beykoz ve Ümraniye çevrelerine kendi özel araçlarımızla kusursuz teslimat sağlıyoruz. Diğer bölgeler için bizimle iletişime geçerek anında bilgi alabilirsiniz."
+              },
+              {
+                q: "Ürünlerinizde katkı maddesi kullanılıyor mu?",
+                a: "Kesinlikle hayır. 1977'den gelen kalite mirasımız gereği tüm pastalarımızda ve tatlılarımızda en taze, 1. sınıf ve doğal malzemeler kullanıyoruz. Fabrikasyon değil, butik ve günlük üretim yapıyoruz."
+              }
+            ].map((faq, index) => (
+              <details key={index} className="group bg-gray-50 rounded-2xl border border-gray-100 [&_summary::-webkit-details-marker]:hidden">
+                <summary className="flex items-center justify-between p-6 cursor-pointer font-bold text-dilim-siyah group-hover:text-dilim-portakal transition-colors">
+                  <span className="text-lg">{faq.q}</span>
+                  <span className="relative flex-shrink-0 ml-4 w-6 h-6 flex items-center justify-center">
+                    <span className="absolute w-4 h-[2px] bg-current transition-transform duration-300 group-open:rotate-180"></span>
+                    <span className="absolute w-[2px] h-4 bg-current transition-transform duration-300 group-open:rotate-90"></span>
+                  </span>
+                </summary>
+                <div className="px-6 pb-6 text-gray-600 font-light leading-relaxed animate-in slide-in-from-top-2 fade-in duration-300">
+                  {faq.a}
+                </div>
+              </details>
             ))}
           </div>
         </div>

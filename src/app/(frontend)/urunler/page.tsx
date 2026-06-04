@@ -2,8 +2,10 @@
 
 import { useState } from 'react'
 import Image from 'next/image'
-import { Filter, ShoppingBag } from 'lucide-react'
+import Link from 'next/link'
+import { Filter, ShoppingBag, Eye } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useCart } from '@/context/CartContext'
 
 const CATEGORIES = [
   { id: 'all', name: 'TÜMÜ' },
@@ -18,6 +20,7 @@ import PRODUCTS from '@/data/products.json'
 
 export default function ProductsPage() {
   const [activeCategory, setActiveCategory] = useState('all')
+  const { addToCart } = useCart()
 
   const filteredProducts = activeCategory === 'all' 
     ? PRODUCTS 
@@ -95,17 +98,30 @@ export default function ProductsPage() {
                 >
                   {/* Product Image */}
                   <div className="relative aspect-square overflow-hidden bg-gray-50 border-b border-gray-100">
-                    <Image 
-                      src={product.image} 
-                      alt={product.name} 
-                      fill 
-                      className="object-cover transform group-hover:scale-110 transition-transform duration-700" 
-                    />
-                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 z-10" />
+                    <Link href={`/urunler/${product.id}`} className="absolute inset-0 z-0">
+                      <Image 
+                        src={product.image} 
+                        alt={product.name} 
+                        fill 
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        className="object-cover transform group-hover:scale-110 transition-transform duration-700" 
+                      />
+                    </Link>
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 z-10 pointer-events-none" />
                     
-                    {/* Hover Action */}
-                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20">
-                      <button className="bg-white/95 backdrop-blur-sm text-dilim-siyah px-6 py-3 rounded-full font-semibold text-sm flex items-center gap-2 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 hover:bg-dilim-portakal hover:text-white">
+                    {/* Hover Actions */}
+                    <div className="absolute inset-0 flex items-center justify-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20 pointer-events-none">
+                      <Link 
+                        href={`/urunler/${product.id}`}
+                        className="pointer-events-auto bg-white/95 backdrop-blur-sm text-dilim-siyah px-5 py-3 rounded-full font-semibold text-sm flex items-center gap-2 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 hover:bg-gray-100"
+                      >
+                        <Eye className="w-4 h-4" />
+                        İncele
+                      </Link>
+                      <button 
+                        onClick={() => addToCart({ id: product.id.toString(), name: product.name, price: product.price, image: product.image, quantity: 1 })}
+                        className="pointer-events-auto bg-dilim-portakal text-white px-5 py-3 rounded-full font-semibold text-sm flex items-center gap-2 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 hover:bg-dilim-turuncu shadow-lg"
+                      >
                         <ShoppingBag className="w-4 h-4" />
                         Sepete Ekle
                       </button>
@@ -117,9 +133,9 @@ export default function ProductsPage() {
                     <div className="text-xs font-bold text-dilim-portakal mb-2 uppercase tracking-wider">
                       {CATEGORIES.find(c => c.id === product.category)?.name}
                     </div>
-                    <h3 className="text-lg font-bold text-dilim-siyah leading-tight mb-4 flex-1">
+                    <Link href={`/urunler/${product.id}`} className="text-lg font-bold text-dilim-siyah leading-tight mb-4 flex-1 hover:text-dilim-portakal transition-colors">
                       {product.name}
-                    </h3>
+                    </Link>
                     <div className="flex items-center justify-between mt-auto">
                       <span className="text-xl font-serif font-bold text-dilim-siyah">
                         {product.price}
