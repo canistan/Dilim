@@ -14,9 +14,9 @@ const STEPS = [
 
 const OPTIONS = {
   size: [
-    { id: '6-8', name: '6-8 Kişilik', desc: 'Küçük Kutlamalar İçin (Tek Katlı)', price: '₺850' },
-    { id: '10-12', name: '10-12 Kişilik', desc: 'Orta Boy Kutlamalar (Geniş Tek Kat)', price: '₺1200' },
-    { id: '15-20', name: '15-20 Kişilik', desc: 'Kalabalık Partiler (İki Katlı)', price: '₺1850' },
+    { id: '6-8', name: '6-8 Kişilik', desc: 'Küçük Kutlamalar İçin (Tek Katlı)', price: '₺850', image: '/images/builder/cake_size_small_1780532313283.png' },
+    { id: '10-12', name: '10-12 Kişilik', desc: 'Orta Boy Kutlamalar (Geniş Tek Kat)', price: '₺1200', image: '/images/builder/cake_size_medium_1780532323926.png' },
+    { id: '15-20+', name: '15-20+ Kişilik', desc: 'Kalabalık Partiler (İki Katlı)', price: '₺1850', image: '/images/builder/cake_size_large_1780532334670.png' },
   ],
   base: [
     { id: 'vanilla', name: 'Sade Vanilyalı Sünger', desc: 'Hafif ve klasik lezzet' },
@@ -27,6 +27,10 @@ const OPTIONS = {
     { id: 'choco-banana', name: 'Çikolata & Muz', desc: 'Klasikleşmiş efsane uyum' },
     { id: 'raspberry-white', name: 'Frambuaz & Beyaz Çikolata', desc: 'Hafif ekşi ve tatlı dengesi' },
     { id: 'pistachio', name: 'Antep Fıstığı & Krokan', desc: 'Geleneksel lüks lezzet' },
+    { id: 'strawberry-choco', name: 'Çilek & Çikolata', desc: 'Taze çilekler ve enfes çikolata uyumu' },
+    { id: 'lotus-caramel', name: 'Lotus & Karamel', desc: 'Kıtır Lotus bisküvisi ve akışkan karamel' },
+    { id: 'black-forest', name: 'Kara Orman (Black Forest)', desc: 'Vişne, kakao ve çikolata parçacıkları' },
+    { id: 'banoffee', name: 'Muz & Karamel (Banoffee tarzı)', desc: 'Taze muz ve karamelin baş döndüren tadı' },
   ],
   frosting: [
     { id: 'fondant', name: 'Şeker Hamuru', desc: 'Kusursuz pürüzsüzlük ve özel figürler için' },
@@ -42,7 +46,8 @@ export default function CakeBuilder() {
     base: '',
     filling: '',
     frosting: '',
-    note: ''
+    note: '',
+    referenceImage: ''
   })
 
   const handleSelect = (category: string, value: string) => {
@@ -72,7 +77,7 @@ export default function CakeBuilder() {
     const fillingName = OPTIONS.filling.find(o => o.id === selections.filling)?.name
     const frostingName = OPTIONS.frosting.find(o => o.id === selections.frosting)?.name
     
-    const message = `Merhaba, özel bir pasta tasarladım ve sipariş vermek istiyorum:%0A%0A🎂 *Pasta Detayları*%0A- *Boyut:* ${sizeName}%0A- *Kek Tipi:* ${baseName}%0A- *İç Krema:* ${fillingName}%0A- *Dış Kaplama:* ${frostingName}%0A- *Özel Not/Yazı:* ${selections.note || 'Yok'}%0A%0ADetayları görüşebilir miyiz?`
+    const message = `Merhaba, özel bir pasta tasarladım ve sipariş vermek istiyorum:%0A%0A🎂 *Pasta Detayları*%0A- *Boyut:* ${sizeName}%0A- *Kek Tipi:* ${baseName}%0A- *İç Krema:* ${fillingName}%0A- *Dış Kaplama:* ${frostingName}%0A- *Özel Not/Yazı:* ${selections.note || 'Yok'}%0A- *Referans Görsel:* ${selections.referenceImage || 'Yok'}%0A%0ADetayları görüşebilir miyiz?`
     
     window.open(`https://wa.me/902164256114?text=${message}`, '_blank')
   }
@@ -134,15 +139,18 @@ export default function CakeBuilder() {
                   <button
                     key={opt.id}
                     onClick={() => handleSelect('size', opt.id)}
-                    className={`p-6 rounded-2xl border-2 text-left transition-all duration-300 ${
+                    className={`p-6 rounded-2xl border-2 text-center flex flex-col items-center transition-all duration-300 ${
                       selections.size === opt.id 
                         ? 'border-dilim-portakal bg-orange-50 shadow-md transform scale-[1.02]' 
                         : 'border-gray-100 hover:border-dilim-portakal/30 hover:bg-gray-50'
                     }`}
                   >
+                    <div className="relative w-full aspect-square mb-4 rounded-xl overflow-hidden bg-white border border-gray-100 shadow-sm">
+                      <img src={opt.image} alt={opt.name} className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
+                    </div>
                     <h4 className="text-lg font-bold text-dilim-siyah mb-1">{opt.name}</h4>
                     <p className="text-sm text-gray-500 mb-4">{opt.desc}</p>
-                    <span className="inline-block px-3 py-1 bg-white rounded-full text-sm font-semibold text-dilim-yaldiz border border-gray-100">
+                    <span className="inline-block px-3 py-1 mt-auto bg-white rounded-full text-sm font-semibold text-dilim-yaldiz border border-gray-100">
                       Başlangıç: {opt.price}
                     </span>
                   </button>
@@ -284,6 +292,31 @@ export default function CakeBuilder() {
                   placeholder="Örn: İyi ki doğdun Ayşe! Üzerinde prenses figürü olsun..."
                   className="w-full p-4 border border-gray-200 rounded-xl focus:ring-2 focus:ring-dilim-portakal focus:border-transparent outline-none transition-all resize-none h-32"
                 ></textarea>
+              </div>
+
+              <div className="mt-2 border-t border-gray-100 pt-6">
+                <label className="block text-sm font-medium text-gray-700 mb-1">Örnek Görsel Yükle (İsteğe Bağlı)</label>
+                <p className="text-xs text-gray-500 mb-4">Pastanızın benzemesini istediğiniz bir tasarım varsa referans olarak ekleyebilirsiniz.</p>
+                <div className="flex items-center justify-center w-full">
+                  <label htmlFor="dropzone-file" className={`flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-xl cursor-pointer transition-all ${selections.referenceImage ? 'border-dilim-portakal bg-orange-50' : 'border-gray-300 bg-gray-50 hover:bg-gray-100 hover:border-dilim-portakal'}`}>
+                    <div className="flex flex-col items-center justify-center pt-5 pb-6 text-center px-4">
+                      <svg className={`w-8 h-8 mb-3 ${selections.referenceImage ? 'text-dilim-portakal' : 'text-gray-400'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
+                      {selections.referenceImage ? (
+                        <>
+                          <p className="text-sm font-bold text-dilim-siyah mb-1">Görsel Eklendi</p>
+                          <p className="text-xs text-dilim-portakal truncate max-w-[250px]">{selections.referenceImage}</p>
+                        </>
+                      ) : (
+                        <p className="mb-2 text-sm text-gray-500"><span className="font-semibold">Görsel seçmek için tıklayın</span> veya sürükleyin</p>
+                      )}
+                    </div>
+                    <input id="dropzone-file" type="file" className="hidden" accept="image/*" onChange={(e) => {
+                      if(e.target.files && e.target.files[0]) {
+                        handleSelect('referenceImage', e.target.files[0].name)
+                      }
+                    }} />
+                  </label>
+                </div>
               </div>
 
             </motion.div>

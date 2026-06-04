@@ -89,6 +89,11 @@ export function CartDrawer() {
                             <Trash2 className="w-4 h-4" />
                           </button>
                         </div>
+                        {item.options && (
+                          <p className="text-xs text-gray-500 mb-2 leading-relaxed">
+                            {item.options}
+                          </p>
+                        )}
                         <div className="text-dilim-portakal font-bold text-sm mb-3">
                           {item.price}
                         </div>

@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import Image from 'next/image'
-import { MapPin, Phone, Mail, Send, Clock, ChevronRight } from 'lucide-react'
+import { MapPin, Phone, Mail, Send, Clock, ChevronRight, Navigation } from 'lucide-react'
 import { motion } from 'framer-motion'
 
 export default function IletisimPage() {
@@ -178,7 +178,17 @@ export default function IletisimPage() {
                         <Image src="/dilim-umraniye-sube.jpg" fill className="object-cover" alt="Ümraniye Şubesi" />
                       </div>
                     </div>
-                    <div className="mt-2 h-48 w-full rounded-2xl overflow-hidden border border-gray-100 shadow-sm">
+                    <div className="mt-4 flex justify-between items-center mb-2">
+                      <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider flex items-center gap-2">
+                        <span className="w-2 h-2 rounded-full bg-dilim-portakal animate-pulse"></span>
+                        Harita
+                      </span>
+                      <a href="https://www.google.com/maps/dir/?api=1&destination=Dilim+Pastanesi+Ümraniye" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 bg-white border border-dilim-portakal text-dilim-portakal px-5 py-2 rounded-full text-xs font-bold hover:bg-dilim-portakal hover:text-white transition-all duration-300 shadow-sm hover:shadow-md hover:-translate-y-0.5 group">
+                        <Navigation className="w-4 h-4 group-hover:scale-110 transition-transform" />
+                        Yol Tarifi Al
+                      </a>
+                    </div>
+                    <div className="h-48 w-full rounded-2xl overflow-hidden border border-gray-100 shadow-sm">
                       <iframe 
                         src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3009.6658909905864!2d29.100954314818352!3d41.032565025879876!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDHCsDAxJzU3LjIiTiAyOcKwMDYnMTEuMyJF!5e0!3m2!1str!2str!4v1506351314913"
                         width="100%" 
@@ -215,7 +225,17 @@ export default function IletisimPage() {
                         <Image src="/dilim-kavacik-sube.jpg" fill className="object-cover" alt="Kavacık Şubesi" />
                       </div>
                     </div>
-                    <div className="mt-2 h-48 w-full rounded-2xl overflow-hidden border border-gray-100 shadow-sm">
+                    <div className="mt-4 flex justify-between items-center mb-2">
+                      <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider flex items-center gap-2">
+                        <span className="w-2 h-2 rounded-full bg-dilim-portakal animate-pulse"></span>
+                        Harita
+                      </span>
+                      <a href="https://www.google.com/maps/dir/?api=1&destination=Dilim+Pastanesi+Kavacık" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 bg-white border border-dilim-portakal text-dilim-portakal px-5 py-2 rounded-full text-xs font-bold hover:bg-dilim-portakal hover:text-white transition-all duration-300 shadow-sm hover:shadow-md hover:-translate-y-0.5 group">
+                        <Navigation className="w-4 h-4 group-hover:scale-110 transition-transform" />
+                        Yol Tarifi Al
+                      </a>
+                    </div>
+                    <div className="h-48 w-full rounded-2xl overflow-hidden border border-gray-100 shadow-sm">
                       <iframe 
                         src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3006.841344028522!2d29.09568331482048!3d41.094313022076044!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDHCsDA1JzM5LjUiTiAyOcKwMDUnNTIuMyJF!5e0!3m2!1str!2str!4v1506350216306"
                         width="100%" 
@@ -252,7 +272,17 @@ export default function IletisimPage() {
                         <Image src="/dilim-beykoz-sube.jpg" fill className="object-cover" alt="Beykoz Şubesi" />
                       </div>
                     </div>
-                    <div className="mt-2 h-48 w-full rounded-2xl overflow-hidden border border-gray-100 shadow-sm">
+                    <div className="mt-4 flex justify-between items-center mb-2">
+                      <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider flex items-center gap-2">
+                        <span className="w-2 h-2 rounded-full bg-dilim-portakal animate-pulse"></span>
+                        Harita
+                      </span>
+                      <a href="https://www.google.com/maps/dir/?api=1&destination=Dilim+Pastanesi+Beykoz" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 bg-white border border-dilim-portakal text-dilim-portakal px-5 py-2 rounded-full text-xs font-bold hover:bg-dilim-portakal hover:text-white transition-all duration-300 shadow-sm hover:shadow-md hover:-translate-y-0.5 group">
+                        <Navigation className="w-4 h-4 group-hover:scale-110 transition-transform" />
+                        Yol Tarifi Al
+                      </a>
+                    </div>
+                    <div className="h-48 w-full rounded-2xl overflow-hidden border border-gray-100 shadow-sm">
                       <iframe 
                         src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3005.0042118386923!2d29.089701314821873!3d41.134434019602054!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDHCsDA4JzA0LjAiTiAyOcKwMDUnMzAuOCJF!5e0!3m2!1str!2str!4v1506351581686"
                         width="100%" 
