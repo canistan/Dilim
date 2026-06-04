@@ -2,8 +2,13 @@ import type { CollectionConfig } from 'payload'
 
 export const Products: CollectionConfig = {
   slug: 'products',
+  labels: {
+    singular: 'Ürün',
+    plural: 'Ürünlerimiz',
+  },
   admin: {
     useAsTitle: 'title',
+    group: 'Site Yönetimi',
   },
   fields: [
     {

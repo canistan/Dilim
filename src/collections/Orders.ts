@@ -2,10 +2,34 @@ import type { CollectionConfig } from 'payload'
 
 export const Orders: CollectionConfig = {
   slug: 'orders',
+  labels: {
+    singular: 'Sipariş',
+    plural: 'Siparişler',
+  },
   admin: {
-    useAsTitle: 'id',
+    useAsTitle: 'orderNumber',
+    group: 'Siparişler',
+    defaultColumns: ['orderNumber', 'status', 'totalAmount', 'createdAt'],
   },
   fields: [
+    {
+      name: 'orderNumber',
+      type: 'text',
+      admin: {
+        position: 'sidebar',
+        readOnly: true,
+      },
+      hooks: {
+        beforeValidate: [
+          ({ value, operation }) => {
+            if (operation === 'create' && !value) {
+              return `DILIM-${Math.floor(1000 + Math.random() * 9000)}`
+            }
+            return value
+          },
+        ],
+      },
+    },
     {
       name: 'customerInfo',
       type: 'group',

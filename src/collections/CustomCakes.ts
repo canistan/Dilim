@@ -2,8 +2,13 @@ import type { CollectionConfig } from 'payload'
 
 export const CustomCakes: CollectionConfig = {
   slug: 'custom-cakes',
+  labels: {
+    singular: 'Tasarım Seçeneği',
+    plural: 'Kendi Pastanı Tasarla',
+  },
   admin: {
     useAsTitle: 'id',
+    group: 'Site Yönetimi',
   },
   fields: [
     {

@@ -11,6 +11,9 @@ import { Products } from './collections/Products'
 import { Categories } from './collections/Categories'
 import { CustomCakes } from './collections/CustomCakes'
 import { Orders } from './collections/Orders'
+import { Blog } from './collections/Blog'
+import { ContactMessages } from './collections/ContactMessages'
+import { Homepage } from './globals/Homepage'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -21,8 +24,20 @@ export default buildConfig({
     importMap: {
       baseDir: path.resolve(dirname),
     },
+    meta: {
+      titleSuffix: '- Dilim Pastaneleri Yönetim',
+      favicon: '/favicon.ico',
+      ogImage: '/DilimPastLogo-final.png',
+    },
+    components: {
+      graphics: {
+        Logo: '@/components/payload/Logo#Logo',
+        Icon: '@/components/payload/Logo#Icon',
+      },
+    },
   },
-  collections: [Users, Media, Categories, Products, CustomCakes, Orders],
+  collections: [Users, Media, Categories, Products, CustomCakes, Orders, Blog, ContactMessages],
+  globals: [Homepage],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {

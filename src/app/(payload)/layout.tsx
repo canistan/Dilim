@@ -9,11 +9,14 @@ type Args = {
   children: React.ReactNode
 }
 
-const serverFunction = async (args: any) => handleServerFunctions({
-  ...args,
-  config: configPromise,
-  importMap: {},
-})
+const serverFunction = async (args: any) => {
+  'use server'
+  return handleServerFunctions({
+    ...args,
+    config: configPromise,
+    importMap: {},
+  })
+}
 
 const Layout = ({ children }: Args) => (
   <RootLayout config={configPromise} importMap={{}} serverFunction={serverFunction}>
