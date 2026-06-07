@@ -47,6 +47,17 @@ export const Products: CollectionConfig = {
       hasMany: true,
     },
     {
+      name: 'stock',
+      type: 'number',
+      label: 'Stok Adedi',
+      defaultValue: 0,
+      min: 0,
+      admin: {
+        position: 'sidebar',
+        description: 'Stok 0 olduğunda ürün "Tükenmiş" olarak gösterilir.',
+      },
+    },
+    {
       name: 'category',
       type: 'relationship',
       relationTo: 'categories' as any,

@@ -6,6 +6,7 @@ import { Header } from '@/components/Header'
 import { Footer } from '@/components/Footer'
 import { CartProvider } from '@/context/CartContext'
 import { CookiePopup } from '@/components/CookiePopup'
+import { AuthProvider } from '@/components/AuthProvider'
 
 const montserrat = Montserrat({
   variable: "--font-montserrat",
@@ -59,14 +60,16 @@ export default function FrontendLayout({
       className={`${montserrat.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <CartProvider>
-          <Header />
-          <main className="flex-1 flex flex-col">
-            {children}
-          </main>
-          <Footer />
-          <CookiePopup />
-        </CartProvider>
+        <AuthProvider>
+          <CartProvider>
+            <Header />
+            <main className="flex-1 flex flex-col">
+              {children}
+            </main>
+            <Footer />
+            <CookiePopup />
+          </CartProvider>
+        </AuthProvider>
       </body>
     </html>
   )

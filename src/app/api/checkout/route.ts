@@ -1,6 +1,16 @@
 import { NextResponse } from 'next/server'
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
+import { iyzipay } from '@/lib/iyzico'
+
+const initializeCheckoutForm = (request: any): Promise<any> => {
+  return new Promise((resolve, reject) => {
+    iyzipay.checkoutFormInitialize.create(request, (err: any, result: any) => {
+      if (err) return reject(err);
+      resolve(result);
+    });
+  });
+};
 
 export async function POST(req: Request) {
   try {
@@ -25,7 +35,7 @@ export async function POST(req: Request) {
           address: customerInfo.address,
         },
         orderItems: items.map((item: any) => ({
-          product: typeof item.id === 'string' && item.id.includes('-') ? null : item.id, // Handles non-db products if any
+          product: typeof item.id === 'string' && item.id.includes('-') ? null : item.id,
           quantity: item.quantity,
           price: parseInt(String(item.price).replace(/[^0-9]/g, '')) || 0,
         })),
@@ -35,43 +45,75 @@ export async function POST(req: Request) {
       },
     })
 
-    try {
-      await payload.sendEmail({
-        to: 'siparis@dilim.com', // Değiştirilebilir
-        from: 'sistem@dilim.com', // Değiştirilebilir
-        subject: `Yeni Sipariş: ${order.orderNumber} - ${customerInfo.name}`,
-        html: `
-          <div style="font-family: sans-serif; line-height: 1.5; color: #333;">
-            <h2 style="color: #FF8A00;">Yeni Sipariş Alındı (Sipariş No: ${order.orderNumber})</h2>
-            <p>Sistem üzerinden yeni bir sipariş oluşturuldu.</p>
-            
-            <h3 style="border-bottom: 1px solid #eee; padding-bottom: 5px;">Müşteri Bilgileri</h3>
-            <p><strong>Ad Soyad:</strong> ${customerInfo.name}</p>
-            <p><strong>Telefon:</strong> ${customerInfo.phone}</p>
-            <p><strong>E-posta:</strong> ${customerInfo.email || 'Belirtilmedi'}</p>
-            <p><strong>Teslimat Adresi:</strong> ${customerInfo.address}</p>
-            
-            <h3 style="border-bottom: 1px solid #eee; padding-bottom: 5px;">Sipariş Detayları</h3>
-            <ul>
-              ${items.map((item: any) => `<li>${item.quantity}x ${item.name} - ${item.price}</li>`).join('')}
-            </ul>
-            <p style="font-size: 18px;"><strong>Toplam Tutar:</strong> ${totalAmount} ₺</p>
-            
-            <p style="margin-top: 20px;">
-              <a href="http://localhost:3000/admin/collections/orders/${order.id}" style="background-color: #000; color: #fff; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Yönetim Panelinde Görüntüle</a>
-            </p>
-          </div>
-        `
-      })
-    } catch (emailErr) {
-      console.log('E-posta gönderimi başarısız:', emailErr)
-    }
+    // Prepare Iyzico Request
+    const host = req.headers.get('origin') || process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+    
+    // Create buyer info
+    const names = customerInfo.name.split(' ');
+    const surname = names.length > 1 ? names.pop() : 'Bilinmiyor';
+    const name = names.join(' ') || 'Bilinmiyor';
 
-    return NextResponse.json({ 
-      success: true, 
-      orderNumber: order.orderNumber,
-      message: 'Sipariş başarıyla oluşturuldu'
-    })
+    const request = {
+      locale: 'tr',
+      conversationId: order.orderNumber, // hook tarafından oluşturulan numara
+      price: totalAmount.toString(),
+      paidPrice: totalAmount.toString(),
+      currency: 'TRY',
+      basketId: order.id.toString(),
+      paymentGroup: 'PRODUCT',
+      callbackUrl: `${host}/api/checkout/callback`,
+      enabledInstallments: [2, 3, 6, 9],
+      buyer: {
+        id: 'BY789',
+        name: name,
+        surname: surname,
+        gsmNumber: customerInfo.phone,
+        email: customerInfo.email,
+        identityNumber: '74300864791', // Sandbox dummy
+        lastLoginDate: '2023-10-05 12:43:35',
+        registrationDate: '2023-04-21 15:12:09',
+        registrationAddress: customerInfo.address,
+        ip: '85.34.78.112',
+        city: 'Istanbul',
+        country: 'Turkey',
+        zipCode: '34732'
+      },
+      shippingAddress: {
+        contactName: customerInfo.name,
+        city: 'Istanbul',
+        country: 'Turkey',
+        address: customerInfo.address,
+        zipCode: '34742'
+      },
+      billingAddress: {
+        contactName: customerInfo.name,
+        city: 'Istanbul',
+        country: 'Turkey',
+        address: customerInfo.address,
+        zipCode: '34742'
+      },
+      basketItems: items.map((item: any) => ({
+        id: item.id.toString(),
+        name: item.name,
+        category1: 'Pastane',
+        itemType: 'PHYSICAL',
+        price: (parseInt(String(item.price).replace(/[^0-9]/g, '')) || 0).toString()
+      }))
+    };
+
+    const result = await initializeCheckoutForm(request);
+
+    if (result.status === 'success') {
+      return NextResponse.json({ 
+        success: true, 
+        orderNumber: order.orderNumber,
+        checkoutFormContent: result.checkoutFormContent,
+        paymentPageUrl: result.paymentPageUrl
+      })
+    } else {
+      console.error("Iyzico Error:", result);
+      return NextResponse.json({ success: false, error: result.errorMessage }, { status: 400 })
+    }
 
   } catch (error: any) {
     console.error('Checkout error:', error)

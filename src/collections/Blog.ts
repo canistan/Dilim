@@ -33,7 +33,7 @@ export const Blog: CollectionConfig = {
     },
     {
       name: 'content',
-      type: 'textarea',
+      type: 'richText',
       label: 'İçerik',
     },
     {

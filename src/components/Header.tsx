@@ -7,12 +7,14 @@ import { motion, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
 import { useCart } from '@/context/CartContext'
 import { CartDrawer } from '@/components/CartDrawer'
+import { useSession } from 'next-auth/react'
 
 export const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const [mounted, setMounted] = useState(false)
   const { items, setIsCartOpen } = useCart()
+  const { data: session, status } = useSession()
 
   useEffect(() => {
     setMounted(true)
@@ -63,6 +65,17 @@ export const Header = () => {
             </nav>
           </div>
           <div className="flex items-center gap-2 sm:gap-4">
+            {mounted && status !== 'loading' && (
+              session ? (
+                <Link href="/hesabim" className="hidden lg:flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold text-dilim-siyah bg-gray-100 hover:bg-gray-200 transition-colors">
+                  <User className="w-4 h-4" /> Hesabım
+                </Link>
+              ) : (
+                <Link href="/giris" className="hidden lg:flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold text-dilim-siyah bg-gray-100 hover:bg-gray-200 transition-colors">
+                  <User className="w-4 h-4" /> Giriş Yap
+                </Link>
+              )
+            )}
             <button 
               onClick={() => setIsCartOpen(true)}
               className="p-2.5 rounded-full text-dilim-siyah hover:bg-gray-100/80 transition-colors relative group"
@@ -137,6 +150,17 @@ export const Header = () => {
               </div>
 
               <div className="p-6 border-t border-gray-100/50 bg-gray-50/50">
+                {mounted && status !== 'loading' && (
+                  session ? (
+                    <Link href="/hesabim" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-3 w-full p-4 rounded-xl bg-white border border-gray-200 text-dilim-siyah font-bold shadow-sm">
+                      <User className="w-5 h-5 text-dilim-portakal" /> Hesabım
+                    </Link>
+                  ) : (
+                    <Link href="/giris" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-3 w-full p-4 rounded-xl bg-white border border-gray-200 text-dilim-siyah font-bold shadow-sm">
+                      <User className="w-5 h-5 text-dilim-portakal" /> Giriş Yap / Kayıt Ol
+                    </Link>
+                  )
+                )}
               </div>
             </motion.div>
           </>

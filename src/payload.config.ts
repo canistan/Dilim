@@ -5,6 +5,7 @@ import { buildConfig } from 'payload'
 import { fileURLToPath } from 'url'
 import sharp from 'sharp'
 import { seoPlugin } from '@payloadcms/plugin-seo'
+import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
 
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
@@ -14,7 +15,9 @@ import { CustomCakes } from './collections/CustomCakes'
 import { Orders } from './collections/Orders'
 import { Blog } from './collections/Blog'
 import { ContactMessages } from './collections/ContactMessages'
+import { Customers } from './collections/Customers'
 import { Homepage } from './globals/Homepage'
+import { BirthdayCampaign } from './globals/BirthdayCampaign'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -41,8 +44,18 @@ export default buildConfig({
       },
     },
   },
-  collections: [Users, Media, Categories, Products, CustomCakes, Orders, Blog, ContactMessages],
-  globals: [Homepage],
+  collections: [
+    Users, 
+    Customers,
+    Products, 
+    Categories, 
+    Orders, 
+    CustomCakes, 
+    Blog, 
+    ContactMessages, 
+    Media
+  ],
+  globals: [Homepage, BirthdayCampaign],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
@@ -55,6 +68,14 @@ export default buildConfig({
   }),
   sharp,
   plugins: [
+    vercelBlobStorage({
+      enabled: true,
+      collections: {
+        media: true,
+      },
+      token: process.env.BLOB_READ_WRITE_TOKEN || '',
+      clientUploads: true, // 4.5MB üzeri görseller için client-side upload
+    }),
     seoPlugin({
       collections: ['products', 'categories', 'blog'],
       uploadsCollection: 'media',

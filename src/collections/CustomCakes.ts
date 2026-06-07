@@ -16,15 +16,18 @@ export const CustomCakes: CollectionConfig = {
       name: 'status',
       type: 'select',
       defaultValue: 'pending',
-      label: 'Durum',
+      label: 'Talep Durumu',
       options: [
-        { label: 'Beklemede', value: 'pending' },
-        { label: 'Fiyat Verildi', value: 'quoted' },
-        { label: 'Onaylandı', value: 'accepted' },
-        { label: 'Reddedildi', value: 'rejected' },
+        { label: 'Bekliyor', value: 'pending' },
+        { label: 'Fiyat Verildi', value: 'fiyat_verildi' },
+        { label: 'Onaylandı', value: 'onaylandi' },
+        { label: 'Reddedildi', value: 'reddedildi' },
       ],
       admin: {
         position: 'sidebar',
+        components: {
+          Cell: '@/components/Admin/StatusCell#StatusCell',
+        },
       },
     },
     {

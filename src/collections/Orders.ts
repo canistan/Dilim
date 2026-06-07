@@ -11,6 +11,94 @@ export const Orders: CollectionConfig = {
     group: 'Siparişler',
     defaultColumns: ['orderNumber', 'status', 'totalAmount', 'createdAt'],
   },
+  hooks: {
+    afterChange: [
+      async ({ doc, previousDoc, operation, req }) => {
+        if (operation === 'update' && previousDoc) {
+          // 1. STOK DÜŞÜRME OTOMASYONU
+          // Eğer ödeme durumu 'unpaid' den 'paid' e geçmişse, stokları düşür.
+          if (doc.paymentStatus === 'paid' && previousDoc.paymentStatus !== 'paid') {
+            if (Array.isArray(doc.orderItems)) {
+              for (const item of doc.orderItems) {
+                if (item.product) {
+                  try {
+                    const productId = typeof item.product === 'object' ? item.product.id : item.product;
+                    const productDoc = await req.payload.findByID({
+                      collection: 'products',
+                      id: productId,
+                    });
+                    if (productDoc && typeof productDoc.stock === 'number') {
+                      const newStock = Math.max(0, productDoc.stock - (item.quantity || 1));
+                      await req.payload.update({
+                        collection: 'products',
+                        id: productDoc.id,
+                        data: {
+                          stock: newStock,
+                        },
+                      });
+                    }
+                  } catch (e) {
+                    req.payload.logger.error(`Stok düşürme hatası: Ürün ID ${item.product}`);
+                  }
+                }
+              }
+            }
+            
+            // Ödeme başarılı maili gönder
+            try {
+              if (doc.customerInfo?.email) {
+                await req.payload.sendEmail({
+                  to: doc.customerInfo.email,
+                  from: 'sistem@dilim.com',
+                  subject: `Ödemeniz Alındı - Sipariş No: ${doc.orderNumber}`,
+                  html: `<div style="font-family: sans-serif; padding: 20px; line-height: 1.6;">
+                          <h2 style="color: #333;">Merhaba ${doc.customerInfo.name},</h2>
+                          <p>${doc.orderNumber} numaralı siparişinizin ödemesi başarıyla alınmıştır.</p>
+                          <p>Siparişiniz şu an <strong>hazırlanıyor</strong> durumundadır. Kargoya verildiğinde size tekrar bilgi vereceğiz.</p>
+                          <p>Bizi tercih ettiğiniz için teşekkür ederiz.</p>
+                        </div>`
+                });
+              }
+            } catch (e) {}
+          }
+
+          // 2. SİPARİŞ DURUMU OTOMASYONU (Müşteriye bilgi maili)
+          if (doc.status !== previousDoc.status) {
+            let subject = '';
+            let message = '';
+            
+            if (doc.status === 'shipped') {
+              subject = `Siparişiniz Kargoya Verildi - Sipariş No: ${doc.orderNumber}`;
+              message = `<p>Siparişiniz kargoya teslim edilmiştir. En kısa sürede size ulaşacaktır.</p>`;
+            } else if (doc.status === 'delivered') {
+              subject = `Siparişiniz Teslim Edildi - Sipariş No: ${doc.orderNumber}`;
+              message = `<p>Siparişiniz başarıyla teslim edilmiştir. Afiyet olsun!</p>
+                         <p style="margin-top:20px; padding:15px; background:#f9f9f9; border-left:4px solid #FF8A00;">
+                           <strong>Bizi Değerlendirin:</strong><br/>
+                           Deneyiminizi Google Haritalar'da paylaşarak bize destek olabilirsiniz.
+                         </p>`;
+            }
+
+            if (subject && message && doc.customerInfo?.email) {
+              try {
+                await req.payload.sendEmail({
+                  to: doc.customerInfo.email,
+                  from: 'sistem@dilim.com',
+                  subject: subject,
+                  html: `<div style="font-family: sans-serif; padding: 20px; line-height: 1.6;">
+                          <h2 style="color: #333;">Merhaba ${doc.customerInfo.name},</h2>
+                          ${message}
+                        </div>`
+                });
+              } catch (e) {
+                req.payload.logger.error(`Durum maili gönderilemedi: ${doc.orderNumber}`);
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
   fields: [
     {
       name: 'orderNumber',
@@ -68,6 +156,11 @@ export const Orders: CollectionConfig = {
       name: 'status',
       type: 'select',
       defaultValue: 'pending',
+      admin: {
+        components: {
+          Cell: '@/components/Admin/StatusCell#StatusCell',
+        },
+      },
       options: [
         { label: 'Pending', value: 'pending' },
         { label: 'Preparing', value: 'preparing' },
@@ -79,6 +172,11 @@ export const Orders: CollectionConfig = {
       name: 'paymentStatus',
       type: 'select',
       defaultValue: 'unpaid',
+      admin: {
+        components: {
+          Cell: '@/components/Admin/StatusCell#StatusCell',
+        },
+      },
       options: [
         { label: 'Unpaid', value: 'unpaid' },
         { label: 'Paid', value: 'paid' },

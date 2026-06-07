@@ -14,6 +14,17 @@ export default function OdemePage() {
   const { cartTotal, items, clearCart } = useCart()
   const [loading, setLoading] = useState(false)
   const [legalConsent, setLegalConsent] = useState(false)
+  const [checkoutHtml, setCheckoutHtml] = useState('')
+  const formRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (checkoutHtml && formRef.current) {
+      // Scriptlerin çalışması için createContextualFragment kullanıyoruz
+      formRef.current.innerHTML = ''
+      const fragment = document.createRange().createContextualFragment(checkoutHtml)
+      formRef.current.appendChild(fragment)
+    }
+  }, [checkoutHtml])
   const handleCheckout = async () => {
     setLoading(true)
     try {
@@ -30,8 +41,14 @@ export default function OdemePage() {
       const data = await res.json()
       
       if (res.ok && data.success) {
-        // Sepeti temizle ve başarı sayfasına git
-        window.location.href = `/odeme/basarili?orderNumber=${data.orderNumber}`
+        if (data.paymentPageUrl) {
+          window.location.href = data.paymentPageUrl + '&iframe=true'
+        } else if (data.checkoutFormContent) {
+          setCheckoutHtml(data.checkoutFormContent)
+        } else {
+          // Fallback if no payment form generated
+          window.location.href = `/odeme/basarili?orderNumber=${data.orderNumber}`
+        }
       } else {
         alert("Sipariş oluşturulamadı: " + data.error)
       }
@@ -84,6 +101,13 @@ export default function OdemePage() {
             </button>
           </div>
         </div>
+      ) : (
+        <div className="bg-white p-8 rounded-3xl shadow-xl shadow-dilim-siyah/5 border border-gray-100 min-h-[500px]">
+          <h2 className="text-2xl font-bold mb-6 text-dilim-siyah text-center">Ödeme Ekranı</h2>
+          {/* Iyzico Form Container */}
+          <div ref={formRef} id="iyzi-payment-container"></div>
+        </div>
+      )}
     </div>
   )
 }
