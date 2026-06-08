@@ -119,13 +119,13 @@ export default function IletisimPage() {
               <div className="pt-8 border-t border-gray-100">
                 <h3 className="text-lg font-bold text-dilim-siyah mb-6">Daha Hızlı İletişim İçin</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <a href="tel:02164256114" className="flex items-center gap-4 p-4 rounded-2xl bg-orange-50 hover:bg-orange-100 border border-orange-100 transition-colors group">
+                  <a href="tel:05059638021" className="flex items-center gap-4 p-4 rounded-2xl bg-orange-50 hover:bg-orange-100 border border-orange-100 transition-colors group">
                     <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center shadow-sm text-dilim-portakal group-hover:scale-110 transition-transform">
                       <Phone className="w-5 h-5" />
                     </div>
                     <div>
                       <div className="text-xs text-gray-500 font-medium">Hemen Arayın</div>
-                      <div className="font-bold text-dilim-siyah">0216 425 61 14</div>
+                      <div className="font-bold text-dilim-siyah">0505 963 80 21</div>
                     </div>
                   </a>
                   <a href="https://ig.me/m/bi_dilimpasta" target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 p-4 rounded-2xl bg-pink-50 hover:bg-pink-100 border border-pink-100 transition-colors group">
@@ -166,7 +166,7 @@ export default function IletisimPage() {
                           </li>
                           <li className="flex items-center gap-3">
                             <Phone className="w-5 h-5 text-dilim-yaldiz shrink-0" />
-                            <a href="tel:+902166325731" className="hover:text-dilim-portakal transition-colors">+90 216 632 57 31</a>
+                            <a href="tel:+905059638024" className="hover:text-dilim-portakal transition-colors">+90 505 963 80 24</a>
                           </li>
                           <li className="flex items-center gap-3">
                             <Clock className="w-5 h-5 text-dilim-yaldiz shrink-0" />
@@ -213,7 +213,7 @@ export default function IletisimPage() {
                           </li>
                           <li className="flex items-center gap-3">
                             <Phone className="w-5 h-5 text-dilim-yaldiz shrink-0" />
-                            <a href="tel:+902164256114" className="hover:text-dilim-portakal transition-colors">+90 216 425 61 14</a>
+                            <a href="tel:+905059638021" className="hover:text-dilim-portakal transition-colors">+90 505 963 80 21</a>
                           </li>
                           <li className="flex items-center gap-3">
                             <Clock className="w-5 h-5 text-dilim-yaldiz shrink-0" />

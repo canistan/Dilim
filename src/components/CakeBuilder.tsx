@@ -118,7 +118,7 @@ export default function CakeBuilder() {
         const message = `Merhaba, web siteniz üzerinden özel bir pasta tasarımı gönderdim (Talep No: ${data.id}). %0A%0A🎂 *Tasarım Özeti*%0A- *Ad Soyad:* ${selections.customerName}%0A- *Boyut:* ${sizeName}%0A- *Kek:* ${baseName}%0A- *Krema:* ${fillingName}%0A- *Kaplama:* ${frostingName}%0A%0AFiyat teklifinizi ve onayınızı bekliyorum.`
         
         // Yeni sekmede WhatsApp'ı aç (Popup engelleyiciye takılabilir, o yüzden butonu da sunacağız)
-        window.open(`https://wa.me/905320000000?text=${message}`, '_blank')
+        window.open(`https://wa.me/905059638021?text=${message}`, '_blank')
       } else {
         alert("Talebiniz gönderilirken bir hata oluştu: " + data.error)
         setIsSubmitting(false)
@@ -203,7 +203,7 @@ export default function CakeBuilder() {
 
             <div className="mt-8 flex flex-col items-center gap-4">
               <a 
-                href={`https://wa.me/905320000000?text=Merhaba, web siteniz üzerinden özel bir pasta tasarımı gönderdim (Talep No: ${orderId}).`}
+                href={`https://wa.me/905059638021?text=Merhaba, web siteniz üzerinden özel bir pasta tasarımı gönderdim (Talep No: ${orderId}).`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center justify-center gap-3 w-full sm:w-auto px-10 py-4 rounded-2xl text-lg font-bold bg-[#25D366] text-white hover:bg-[#1EBE56] shadow-xl hover:shadow-2xl transform hover:-translate-y-1 transition-all"
