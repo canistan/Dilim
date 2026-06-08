@@ -6,6 +6,7 @@ import { Header } from '@/components/Header'
 import { Footer } from '@/components/Footer'
 import { CartProvider } from '@/context/CartContext'
 import { CookiePopup } from '@/components/CookiePopup'
+import { PromoPopup } from '@/components/PromoPopup'
 import { AuthProvider } from '@/components/AuthProvider'
 
 const montserrat = Montserrat({
@@ -68,6 +69,7 @@ export default function FrontendLayout({
             </main>
             <Footer />
             <CookiePopup />
+            <PromoPopup />
           </CartProvider>
         </AuthProvider>
       </body>
