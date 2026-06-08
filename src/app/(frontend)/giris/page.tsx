@@ -121,7 +121,7 @@ export default function GirisPage() {
             </div>
             
             <div className="mt-4 text-center">
-              <a href="#" className="text-sm font-medium text-dilim-portakal hover:text-dilim-turuncu transition-colors">
+              <a href="/sifremi-unuttum" className="text-sm font-medium text-dilim-portakal hover:text-dilim-turuncu transition-colors">
                 Şifreni mi unuttun?
               </a>
             </div>
