@@ -11,13 +11,19 @@ import { Users } from './collections/Users'
 import { Media } from './collections/Media'
 import { Products } from './collections/Products'
 import { Categories } from './collections/Categories'
-import { CustomCakes } from './collections/CustomCakes'
 import { Orders } from './collections/Orders'
 import { Blog } from './collections/Blog'
 import { ContactMessages } from './collections/ContactMessages'
 import { Customers } from './collections/Customers'
+import { Subscribers } from './collections/Subscribers'
+import { AuditLogs } from './collections/AuditLogs'
+import { Coupons } from './collections/Coupons'
+import { Returns } from './collections/Returns'
 import { Homepage } from './globals/Homepage'
 import { BirthdayCampaign } from './globals/BirthdayCampaign'
+import { About } from './globals/About'
+import { CustomCakeOptions } from './globals/CustomCakeOptions'
+import { ContactSettings } from './globals/ContactSettings'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -49,13 +55,16 @@ export default buildConfig({
     Customers,
     Products, 
     Categories, 
-    Orders, 
-    CustomCakes, 
+    Orders,
     Blog, 
     ContactMessages, 
-    Media
+    Media,
+    Subscribers,
+    AuditLogs,
+    Coupons,
+    Returns
   ],
-  globals: [Homepage, BirthdayCampaign],
+  globals: [Homepage, BirthdayCampaign, About, CustomCakeOptions, ContactSettings],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {

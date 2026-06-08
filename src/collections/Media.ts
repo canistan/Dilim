@@ -2,6 +2,9 @@ import type { CollectionConfig } from 'payload'
 
 export const Media: CollectionConfig = {
   slug: 'media',
+  admin: {
+    group: 'Yönetim',
+  },
   upload: {
     staticDir: 'public/media',
     adminThumbnail: 'thumbnail',

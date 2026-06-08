@@ -8,8 +8,8 @@ export const Orders: CollectionConfig = {
   },
   admin: {
     useAsTitle: 'orderNumber',
-    group: 'Siparişler',
-    defaultColumns: ['orderNumber', 'status', 'totalAmount', 'createdAt'],
+    group: 'Kullanıcı Bilgi Deposu',
+    defaultColumns: ['orderNumber', 'orderType', 'status', 'totalAmount', 'createdAt'],
   },
   hooks: {
     afterChange: [
@@ -146,6 +146,26 @@ export const Orders: CollectionConfig = {
           type: 'number',
         },
       ],
+    },
+    {
+      name: 'orderType',
+      type: 'select',
+      defaultValue: 'standard',
+      options: [
+        { label: 'Standart Sepet Siparişi', value: 'standard' },
+        { label: 'Özel Tasarım Pasta Talebi', value: 'custom' },
+      ],
+      admin: {
+        position: 'sidebar',
+      },
+    },
+    {
+      name: 'customCakeDetails',
+      type: 'json',
+      admin: {
+        condition: (data) => data.orderType === 'custom',
+        description: 'Müşterinin özel pasta talebine ait detaylar (katman, krema, porsiyon vs.)',
+      },
     },
     {
       name: 'totalAmount',

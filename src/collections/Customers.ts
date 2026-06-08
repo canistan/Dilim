@@ -8,7 +8,7 @@ export const Customers: CollectionConfig = {
   },
   admin: {
     useAsTitle: 'name', // email is default for auth collections but let's use name or email
-    group: 'Müşteriler',
+    group: 'Kullanıcı Bilgi Deposu',
     defaultColumns: ['name', 'email', 'birthDate', 'provider', 'createdAt'],
   },
   auth: {
@@ -21,7 +21,23 @@ export const Customers: CollectionConfig = {
       name: 'name',
       type: 'text',
       required: true,
-      label: 'Ad Soyad',
+      label: 'Ad',
+    },
+    {
+      name: 'surname',
+      type: 'text',
+      required: true,
+      label: 'Soyad',
+    },
+    {
+      name: 'gender',
+      type: 'select',
+      options: [
+        { label: 'Kadın', value: 'female' },
+        { label: 'Erkek', value: 'male' },
+        { label: 'Belirtmek İstemiyorum', value: 'other' },
+      ],
+      label: 'Cinsiyet',
     },
     {
       name: 'birthDate',

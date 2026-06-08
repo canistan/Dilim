@@ -51,20 +51,27 @@ export async function POST(req: Request) {
     const sizeMatch = size ? size.match(/\d+/g) : null;
     const cakeSizeNum = sizeMatch ? parseInt(sizeMatch[sizeMatch.length - 1], 10) : 10;
 
-    // CustomCakes koleksiyonuna kaydet
+    // orders koleksiyonuna kaydet
     const customCake = await payload.create({
-      collection: 'custom-cakes',
+      collection: 'orders' as any,
       data: {
-        customerName,
-        customerPhone,
-        customerEmail: customerEmail || '',
-        customerAddress,
+        orderType: 'custom',
         status: 'pending',
-        cakeSize: cakeSizeNum,
-        spongeType: base.includes('cacao') ? 'kakaolu' : 'sade',
-        creamFlavor: filling.includes('choco') ? 'cikolata' : (filling.includes('raspberry') ? 'meyveli' : 'vanilya'),
-        // extraIngredients: [], // Opsiyonel, eğer formdan ekstra malzeme dizisi gelseydi eklenebilirdi
-        referenceImage: uploadedMediaId,
+        paymentStatus: 'unpaid',
+        totalAmount: 0, // Fiyat admin tarafından girilecek
+        customerInfo: {
+          name: customerName,
+          email: customerEmail || '',
+          phone: customerPhone,
+          address: customerAddress || 'Belirtilmedi',
+        },
+        customCakeDetails: {
+          cakeSize: cakeSizeNum,
+          spongeType: base.includes('cacao') ? 'kakaolu' : 'sade',
+          creamFlavor: filling.includes('choco') ? 'cikolata' : (filling.includes('raspberry') ? 'meyveli' : 'vanilya'),
+          referenceImage: uploadedMediaId,
+          note: note || '',
+        }
       }
     })
 
@@ -92,7 +99,7 @@ export async function POST(req: Request) {
             <p><strong>Not:</strong> ${note || 'Yok'}</p>
             
             <p style="margin-top: 20px;">
-              <a href="http://localhost:3000/admin/collections/custom-cakes/${customCake.id}" style="background-color: #000; color: #fff; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Yönetim Panelinde Görüntüle</a>
+              <a href="http://localhost:3000/admin/collections/orders/${customCake.id}" style="background-color: #000; color: #fff; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Siparişlerde Görüntüle</a>
             </p>
           </div>
         `

@@ -77,17 +77,17 @@ export default function GirisPage() {
                 <div className="w-full border-t border-gray-300" />
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-white text-gray-500">veya e-posta ile</span>
+                <span className="px-2 bg-white text-gray-500">veya e-posta / telefon ile</span>
               </div>
             </div>
           </div>
 
           <form className="space-y-4 mt-6" onSubmit={handleCredentialsLogin}>
             <div>
-              <label className="block text-sm font-medium text-gray-700">E-Posta Adresi</label>
+              <label className="block text-sm font-medium text-gray-700">E-posta adresi veya cep telefonu numarası</label>
               <div className="mt-1">
                 <input
-                  type="email"
+                  type="text"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -115,8 +115,23 @@ export default function GirisPage() {
                 disabled={loading}
                 className="w-full flex justify-center py-3 px-4 border border-transparent rounded-xl shadow-sm text-sm font-bold text-white bg-dilim-portakal hover:bg-dilim-turuncu focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-dilim-portakal disabled:opacity-70 transition-colors"
               >
-                {loading ? 'Giriş Yapılıyor...' : 'Giriş Yap / Üye Ol'}
+                {loading ? 'Giriş Yapılıyor...' : 'Giriş Yap'}
               </button>
+            </div>
+            
+            <div className="mt-4 text-center">
+              <a href="#" className="text-sm font-medium text-dilim-portakal hover:text-dilim-turuncu transition-colors">
+                Şifreni mi unuttun?
+              </a>
+            </div>
+
+            <div className="mt-6 pt-6 border-t border-gray-200">
+              <a 
+                href="/kayit" 
+                className="w-full flex justify-center py-3 px-4 border border-dilim-portakal rounded-xl shadow-sm text-sm font-bold text-dilim-portakal bg-white hover:bg-orange-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-dilim-portakal transition-colors"
+              >
+                Yeni hesap oluştur
+              </a>
             </div>
           </form>
           
