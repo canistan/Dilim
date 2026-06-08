@@ -90,6 +90,8 @@ export const Footer = () => {
           <div>
             <h4 className="text-lg font-medium mb-6 text-white tracking-wide">Kurumsal</h4>
             <ul className="space-y-3 text-sm text-gray-400 font-light">
+              <li><Link href="/franchise" className="hover:text-white transition-all duration-300">Franchise / Bayilik</Link></li>
+              <li><Link href="/kariyer" className="hover:text-white transition-all duration-300">Kariyer / İK</Link></li>
               <li><Link href="/mesafeli-satis" className="hover:text-white transition-all duration-300">Mesafeli Satış Sözleşmesi</Link></li>
               <li><Link href="/kullanim-kosullari" className="hover:text-white transition-all duration-300">Kullanım Koşulları</Link></li>
               <li><Link href="/iptal-iade" className="hover:text-white transition-all duration-300">Teslimat ve İade</Link></li>
