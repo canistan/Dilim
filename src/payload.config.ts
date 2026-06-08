@@ -10,6 +10,7 @@ import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
 import { Products } from './collections/Products'
+import { CustomCakes } from './collections/CustomCakes'
 import { Categories } from './collections/Categories'
 import { Orders } from './collections/Orders'
 import { Blog } from './collections/Blog'
@@ -55,6 +56,7 @@ export default buildConfig({
     Users, 
     Customers,
     Products, 
+    CustomCakes,
     Categories, 
     Orders,
     Blog, 

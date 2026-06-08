@@ -1,12 +1,21 @@
 import Image from 'next/image'
 import CakeBuilder from '@/components/CakeBuilder'
+import { CustomCakesGallery } from '@/components/CustomCakesGallery'
+import { getPayload } from 'payload'
+import configPromise from '@/payload.config'
 
 export const metadata = {
   title: 'Kendi Pastanı Tasarla | Dilim Pastaneleri',
   description: 'Hayalinizdeki pastayı adım adım tasarlayın. Dilim kalitesiyle en özel günlerinizi taçlandırın.',
 }
 
-export default function TasarlaPage() {
+export default async function TasarlaPage() {
+  const payload = await getPayload({ config: configPromise })
+  const customCakes = await payload.find({
+    collection: 'custom-cakes',
+    limit: 50,
+  })
+
   return (
     <div className="flex flex-col w-full bg-background min-h-screen">
       
@@ -39,6 +48,9 @@ export default function TasarlaPage() {
           <CakeBuilder />
         </div>
       </section>
+
+      {/* İlham Alabileceğiniz Örnekler - Marquee Gallery */}
+      <CustomCakesGallery cakes={customCakes.docs as any} />
 
     </div>
   )
