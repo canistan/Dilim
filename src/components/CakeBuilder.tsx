@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronRight, ChevronLeft, Check, Layers, CakeSlice, PaintBucket, ChefHat, MessageCircle, User } from 'lucide-react'
 import toast from 'react-hot-toast'
@@ -42,6 +42,7 @@ const OPTIONS = {
 }
 
 export default function CakeBuilder() {
+  const containerRef = useRef<HTMLDivElement>(null)
   const [currentStep, setCurrentStep] = useState(1)
   const [selections, setSelections] = useState({
     size: '',
@@ -64,12 +65,25 @@ export default function CakeBuilder() {
     setSelections(prev => ({ ...prev, [category]: value }))
   }
 
+  const scrollToTop = () => {
+    if (containerRef.current) {
+      const y = containerRef.current.getBoundingClientRect().top + window.scrollY - 100
+      window.scrollTo({ top: y, behavior: 'smooth' })
+    }
+  }
+
   const nextStep = () => {
-    if (currentStep < 5) setCurrentStep(prev => prev + 1)
+    if (currentStep < 5) {
+      setCurrentStep(prev => prev + 1)
+      setTimeout(scrollToTop, 100)
+    }
   }
 
   const prevStep = () => {
-    if (currentStep > 1) setCurrentStep(prev => prev - 1)
+    if (currentStep > 1) {
+      setCurrentStep(prev => prev - 1)
+      setTimeout(scrollToTop, 100)
+    }
   }
 
   const isStepValid = () => {
@@ -132,7 +146,7 @@ export default function CakeBuilder() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100">
+    <div ref={containerRef} className="max-w-4xl mx-auto bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100">
       
       {/* Progress Header */}
       <div className="bg-gray-50 border-b border-gray-100 p-6 sm:p-8">

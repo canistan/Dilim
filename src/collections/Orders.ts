@@ -52,7 +52,7 @@ export const Orders: CollectionConfig = {
                   from: 'sistem@dilim.com',
                   subject: `Ödemeniz Alındı - Sipariş No: ${doc.orderNumber}`,
                   html: `<div style="font-family: sans-serif; padding: 20px; line-height: 1.6;">
-                          <h2 style="color: #333;">Merhaba ${doc.customerInfo.name},</h2>
+                          <h2 style="color: #333;">Merhaba ${doc.customerInfo.firstName},</h2>
                           <p>${doc.orderNumber} numaralı siparişinizin ödemesi başarıyla alınmıştır.</p>
                           <p>Siparişiniz şu an <strong>hazırlanıyor</strong> durumundadır. Kargoya verildiğinde size tekrar bilgi vereceğiz.</p>
                           <p>Bizi tercih ettiğiniz için teşekkür ederiz.</p>
@@ -86,7 +86,7 @@ export const Orders: CollectionConfig = {
                   from: 'sistem@dilim.com',
                   subject: subject,
                   html: `<div style="font-family: sans-serif; padding: 20px; line-height: 1.6;">
-                          <h2 style="color: #333;">Merhaba ${doc.customerInfo.name},</h2>
+                          <h2 style="color: #333;">Merhaba ${doc.customerInfo.firstName},</h2>
                           ${message}
                         </div>`
                 });
@@ -122,10 +122,31 @@ export const Orders: CollectionConfig = {
       name: 'customerInfo',
       type: 'group',
       fields: [
-        { name: 'name', type: 'text', required: true },
-        { name: 'email', type: 'text', required: true },
-        { name: 'phone', type: 'text', required: true },
-        { name: 'address', type: 'textarea', required: true },
+        { name: 'firstName', type: 'text', required: true, label: 'Ad' },
+        { name: 'lastName', type: 'text', required: true, label: 'Soyad' },
+        { name: 'email', type: 'text', required: true, label: 'E-Posta' },
+        { name: 'phone', type: 'text', required: true, label: 'Telefon' },
+        { name: 'district', type: 'text', required: true, label: 'İlçe' },
+        { name: 'address', type: 'textarea', required: true, label: 'Açık Adres' },
+        { name: 'isCorporate', type: 'checkbox', defaultValue: false, label: 'Kurumsal Müşteri' },
+        { 
+          name: 'companyName', 
+          type: 'text', 
+          label: 'Firma Adı',
+          admin: { condition: (data, siblingData) => siblingData.isCorporate }
+        },
+        { 
+          name: 'taxOffice', 
+          type: 'text', 
+          label: 'Vergi Dairesi',
+          admin: { condition: (data, siblingData) => siblingData.isCorporate }
+        },
+        { 
+          name: 'taxNumber', 
+          type: 'text', 
+          label: 'Vergi Numarası',
+          admin: { condition: (data, siblingData) => siblingData.isCorporate }
+        },
       ],
     },
     {
