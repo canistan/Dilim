@@ -40,6 +40,11 @@ export default function HesabimPage() {
   const [deleteInput, setDeleteInput] = useState('')
   const [deletingAccount, setDeletingAccount] = useState(false)
 
+  // Birth Date State
+  const [birthDate, setBirthDate] = useState('')
+  const [savingBirth, setSavingBirth] = useState(false)
+  const [hasExistingBirthDate, setHasExistingBirthDate] = useState(false)
+
   // Orders State
   const [orders, setOrders] = useState<any[]>([])
   const [loadingOrders, setLoadingOrders] = useState(true)
@@ -78,6 +83,7 @@ export default function HesabimPage() {
             if (data.user.birthDate) {
               const date = new Date(data.user.birthDate)
               setBirthDate(date.toISOString().split('T')[0])
+              setHasExistingBirthDate(true)
             }
             if (data.user.addresses) {
               setAddresses(data.user.addresses)
@@ -141,6 +147,7 @@ export default function HesabimPage() {
       })
       if (res.ok) {
         toast.success("Doğum tarihi kaydedildi.")
+        setHasExistingBirthDate(true)
       } else {
         toast.error("Kaydedilemedi.")
       }
@@ -378,30 +385,44 @@ export default function HesabimPage() {
                     </div>
                   </div>
 
-                  <div className="p-5 bg-[#FFF8F3] border border-[#FFE8D6] rounded-2xl relative overflow-hidden mt-8">
-                    <div className="absolute top-0 right-0 w-32 h-32 bg-dilim-portakal/5 rounded-full -translate-y-1/2 translate-x-1/2"></div>
-                    <h4 className="font-bold text-dilim-portakal text-lg mb-2 relative z-10">🎂 Doğum Günü Hediyenizi Kaçırmayın!</h4>
-                    <p className="text-sm text-gray-600 mb-4 relative z-10">Doğum tarihinizi kaydedin, size özel sürpriz indirim ve hediyelerden faydalanın.</p>
-                    
-                    <div className="flex gap-4 items-end relative z-10">
-                      <div className="flex-1">
-                        <label className="block text-xs font-semibold text-gray-700 mb-1">Doğum Tarihiniz</label>
-                        <input 
-                          type="date" 
-                          value={birthDate}
-                          onChange={(e) => setBirthDate(e.target.value)}
-                          className="w-full p-3 border border-gray-200 rounded-xl bg-white focus:ring-2 focus:ring-dilim-portakal outline-none" 
-                        />
+                  {hasExistingBirthDate ? (
+                    <div className="p-5 bg-[#F6FBF7] border border-[#E6F4EA] rounded-2xl flex items-center gap-4 mt-8">
+                      <div className="w-12 h-12 shrink-0 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-xl shadow-sm">
+                        🎂
                       </div>
-                      <button 
-                        onClick={handleSaveBirthDate}
-                        disabled={!birthDate || savingBirth}
-                        className="px-6 py-3 bg-dilim-siyah text-white font-semibold rounded-xl hover:bg-gray-800 disabled:bg-gray-400 transition-colors"
-                      >
-                        {savingBirth ? 'Kaydediliyor...' : 'Kaydet'}
-                      </button>
+                      <div>
+                        <h4 className="font-bold text-green-800 text-lg mb-1">Doğum Gününüz Kayıtlı</h4>
+                        <p className="text-sm text-green-700 leading-relaxed">
+                          Doğum tarihiniz <strong>{new Date(birthDate).toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' })}</strong> olarak kaydedilmiştir. O güne özel sürprizlerimizi bekleyin!
+                        </p>
+                      </div>
                     </div>
-                  </div>
+                  ) : (
+                    <div className="p-5 bg-[#FFF8F3] border border-[#FFE8D6] rounded-2xl relative overflow-hidden mt-8">
+                      <div className="absolute top-0 right-0 w-32 h-32 bg-dilim-portakal/5 rounded-full -translate-y-1/2 translate-x-1/2"></div>
+                      <h4 className="font-bold text-dilim-portakal text-lg mb-2 relative z-10">🎂 Doğum Günü Hediyenizi Kaçırmayın!</h4>
+                      <p className="text-sm text-gray-600 mb-4 relative z-10">Doğum tarihinizi kaydedin, size özel sürpriz indirim ve hediyelerden faydalanın.</p>
+                      
+                      <div className="flex gap-4 items-end relative z-10">
+                        <div className="flex-1">
+                          <label className="block text-xs font-semibold text-gray-700 mb-1">Doğum Tarihiniz</label>
+                          <input 
+                            type="date" 
+                            value={birthDate}
+                            onChange={(e) => setBirthDate(e.target.value)}
+                            className="w-full p-3 border border-gray-200 rounded-xl bg-white focus:ring-2 focus:ring-dilim-portakal outline-none" 
+                          />
+                        </div>
+                        <button 
+                          onClick={handleSaveBirthDate}
+                          disabled={!birthDate || savingBirth}
+                          className="px-6 py-3 bg-dilim-siyah text-white font-semibold rounded-xl hover:bg-gray-800 disabled:bg-gray-400 transition-colors"
+                        >
+                          {savingBirth ? 'Kaydediliyor...' : 'Kaydet'}
+                        </button>
+                      </div>
+                    </div>
+                  )}
 
                   {/* Hesabımı Sil Bölümü */}
                   <div className="mt-12 pt-8 border-t border-gray-100">
