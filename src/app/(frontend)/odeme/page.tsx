@@ -18,12 +18,12 @@ export default function OdemePage() {
   const { cartTotal, items, clearCart } = useCart()
   
   const [formData, setFormData] = useState({
-    firstName: 'Can',
-    lastName: 'Albayrak',
-    email: 'can@example.com',
-    phone: '+905554443322',
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
     district: '',
-    address: 'Kavacık Mah. Beykoz / İstanbul',
+    address: '',
     isCorporate: false,
     companyName: '',
     taxOffice: '',
