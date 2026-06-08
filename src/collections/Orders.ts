@@ -133,19 +133,19 @@ export const Orders: CollectionConfig = {
           name: 'companyName', 
           type: 'text', 
           label: 'Firma Adı',
-          admin: { condition: (data, siblingData) => siblingData.isCorporate }
+          admin: { condition: (data, siblingData) => Boolean(siblingData?.isCorporate) }
         },
         { 
           name: 'taxOffice', 
           type: 'text', 
           label: 'Vergi Dairesi',
-          admin: { condition: (data, siblingData) => siblingData.isCorporate }
+          admin: { condition: (data, siblingData) => Boolean(siblingData?.isCorporate) }
         },
         { 
           name: 'taxNumber', 
           type: 'text', 
           label: 'Vergi Numarası',
-          admin: { condition: (data, siblingData) => siblingData.isCorporate }
+          admin: { condition: (data, siblingData) => Boolean(siblingData?.isCorporate) }
         },
       ],
     },
@@ -184,7 +184,7 @@ export const Orders: CollectionConfig = {
       name: 'customCakeDetails',
       type: 'json',
       admin: {
-        condition: (data) => data.orderType === 'custom',
+        condition: (data) => Boolean(data?.orderType === 'custom'),
         description: 'Müşterinin özel pasta talebine ait detaylar (katman, krema, porsiyon vs.)',
       },
     },

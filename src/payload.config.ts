@@ -91,7 +91,7 @@ export default buildConfig({
       enabled: true,
       collections: {
         media: true,
-        resumes: true,
+        // resumes: true,
       },
       token: process.env.BLOB_READ_WRITE_TOKEN || '',
       clientUploads: true, // 4.5MB üzeri görseller için client-side upload
