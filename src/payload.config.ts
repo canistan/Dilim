@@ -20,6 +20,9 @@ import { Subscribers } from './collections/Subscribers'
 import { AuditLogs } from './collections/AuditLogs'
 import { Coupons } from './collections/Coupons'
 import { Returns } from './collections/Returns'
+import { Resumes } from './collections/Resumes'
+import { FranchiseApplications } from './collections/FranchiseApplications'
+import { JobApplications } from './collections/JobApplications'
 import { Homepage } from './globals/Homepage'
 import { BirthdayCampaign } from './globals/BirthdayCampaign'
 import { About } from './globals/About'
@@ -65,7 +68,10 @@ export default buildConfig({
     Subscribers,
     AuditLogs,
     Coupons,
-    Returns
+    Returns,
+    Resumes,
+    FranchiseApplications,
+    JobApplications
   ],
   globals: [Homepage, BirthdayCampaign, About, CustomCakeOptions, ContactSettings, InstagramFeedConfig],
   editor: lexicalEditor(),
@@ -85,6 +91,7 @@ export default buildConfig({
       enabled: true,
       collections: {
         media: true,
+        resumes: true,
       },
       token: process.env.BLOB_READ_WRITE_TOKEN || '',
       clientUploads: true, // 4.5MB üzeri görseller için client-side upload

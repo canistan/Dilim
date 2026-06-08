@@ -7,10 +7,39 @@ import { Store, TrendingUp, Users, CheckCircle2 } from 'lucide-react'
 export default function FranchisePage() {
   const [submitted, setSubmitted] = useState(false)
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [isLoading, setIsLoading] = useState(false)
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    // Simulated form submission
-    setSubmitted(true)
+    setIsLoading(true)
+
+    try {
+      const formData = new FormData(e.currentTarget)
+      const data = {
+        name: formData.get('name'),
+        phone: formData.get('phone'),
+        email: formData.get('email'),
+        location: formData.get('location'),
+        background: formData.get('background'),
+      }
+
+      const res = await fetch('/api/franchise-applications', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      })
+
+      if (res.ok) {
+        setSubmitted(true)
+      } else {
+        alert('Bir hata oluştu, lütfen daha sonra tekrar deneyin.')
+      }
+    } catch (error) {
+      console.error(error)
+      alert('Beklenmeyen bir hata oluştu.')
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -97,27 +126,27 @@ export default function FranchisePage() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                     <div>
                       <label className="block text-sm font-semibold text-gray-700 mb-1">Adınız Soyadınız</label>
-                      <input required type="text" className="w-full p-3.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-dilim-portakal focus:border-transparent outline-none transition-all" />
+                      <input name="name" required type="text" className="w-full p-3.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-dilim-portakal focus:border-transparent outline-none transition-all" />
                     </div>
                     <div>
                       <label className="block text-sm font-semibold text-gray-700 mb-1">Telefon Numaranız</label>
-                      <input required type="tel" className="w-full p-3.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-dilim-portakal focus:border-transparent outline-none transition-all" />
+                      <input name="phone" required type="tel" className="w-full p-3.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-dilim-portakal focus:border-transparent outline-none transition-all" />
                     </div>
                   </div>
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-1">E-Posta Adresiniz</label>
-                    <input required type="email" className="w-full p-3.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-dilim-portakal focus:border-transparent outline-none transition-all" />
+                    <input name="email" required type="email" className="w-full p-3.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-dilim-portakal focus:border-transparent outline-none transition-all" />
                   </div>
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-1">Düşündüğünüz Lokasyon (İlçe/Semt)</label>
-                    <input required type="text" className="w-full p-3.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-dilim-portakal focus:border-transparent outline-none transition-all" placeholder="Örn: Kadıköy / Moda" />
+                    <input name="location" required type="text" className="w-full p-3.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-dilim-portakal focus:border-transparent outline-none transition-all" placeholder="Örn: Kadıköy / Moda" />
                   </div>
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-1">Ticari Geçmişiniz / Yatırım Bütçeniz</label>
-                    <textarea required className="w-full p-3.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-dilim-portakal focus:border-transparent outline-none transition-all resize-none" rows={4} placeholder="Kısaca kendinizden ve yatırım planınızdan bahsedin..."></textarea>
+                    <textarea name="background" required className="w-full p-3.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-dilim-portakal focus:border-transparent outline-none transition-all resize-none" rows={4} placeholder="Kısaca kendinizden ve yatırım planınızdan bahsedin..."></textarea>
                   </div>
-                  <button type="submit" className="w-full bg-dilim-siyah text-white font-bold py-4 rounded-xl hover:bg-dilim-portakal transition-all duration-300 shadow-lg mt-4">
-                    Başvuruyu Gönder
+                  <button type="submit" disabled={isLoading} className="w-full bg-dilim-siyah text-white font-bold py-4 rounded-xl hover:bg-dilim-portakal transition-all duration-300 shadow-lg mt-4 disabled:opacity-50">
+                    {isLoading ? 'Gönderiliyor...' : 'Başvuruyu Gönder'}
                   </button>
                   <p className="text-xs text-center text-gray-500 mt-4">
                     Gönder butonuna basarak <a href="/kvkk" className="text-dilim-portakal underline">KVKK Politikamızı</a> kabul etmiş sayılırsınız.

@@ -8,10 +8,59 @@ export default function KariyerPage() {
   const [submitted, setSubmitted] = useState(false)
   const [file, setFile] = useState<File | null>(null)
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [isLoading, setIsLoading] = useState(false)
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    // Simulated form submission
-    setSubmitted(true)
+    setIsLoading(true)
+
+    try {
+      const formData = new FormData(e.currentTarget)
+      
+      let resumeId = null
+
+      if (file) {
+        const fileFormData = new FormData()
+        fileFormData.append('file', file)
+        
+        const uploadRes = await fetch('/api/resumes', {
+          method: 'POST',
+          body: fileFormData,
+        })
+
+        if (!uploadRes.ok) {
+          throw new Error('Dosya yüklenemedi.')
+        }
+
+        const uploadData = await uploadRes.json()
+        resumeId = uploadData.doc.id
+      }
+
+      const data = {
+        name: formData.get('name'),
+        phone: formData.get('phone'),
+        position: formData.get('position'),
+        experience: formData.get('experience'),
+        ...(resumeId && { resume: resumeId }),
+      }
+
+      const res = await fetch('/api/job-applications', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      })
+
+      if (res.ok) {
+        setSubmitted(true)
+      } else {
+        alert('Bir hata oluştu, lütfen daha sonra tekrar deneyin.')
+      }
+    } catch (error) {
+      console.error(error)
+      alert(error instanceof Error ? error.message : 'Beklenmeyen bir hata oluştu.')
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -103,16 +152,16 @@ export default function KariyerPage() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                     <div>
                       <label className="block text-sm font-semibold text-gray-700 mb-1">Adınız Soyadınız</label>
-                      <input required type="text" className="w-full p-3.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-dilim-portakal focus:border-transparent outline-none transition-all" />
+                      <input name="name" required type="text" className="w-full p-3.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-dilim-portakal focus:border-transparent outline-none transition-all" />
                     </div>
                     <div>
                       <label className="block text-sm font-semibold text-gray-700 mb-1">Telefon Numaranız</label>
-                      <input required type="tel" className="w-full p-3.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-dilim-portakal focus:border-transparent outline-none transition-all" />
+                      <input name="phone" required type="tel" className="w-full p-3.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-dilim-portakal focus:border-transparent outline-none transition-all" />
                     </div>
                   </div>
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-1">Başvurulan Pozisyon</label>
-                    <select required className="w-full p-3.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-dilim-portakal focus:border-transparent outline-none transition-all bg-white">
+                    <select name="position" required className="w-full p-3.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-dilim-portakal focus:border-transparent outline-none transition-all bg-white">
                       <option value="">Lütfen seçiniz</option>
                       <option value="garson">Servis Elemanı (Garson)</option>
                       <option value="barista">Barista</option>
@@ -124,7 +173,7 @@ export default function KariyerPage() {
                   </div>
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-1">İş Tecrübeniz</label>
-                    <textarea required className="w-full p-3.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-dilim-portakal focus:border-transparent outline-none transition-all resize-none" rows={3} placeholder="Daha önceki çalıştığınız yerler ve süreleri..."></textarea>
+                    <textarea name="experience" required className="w-full p-3.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-dilim-portakal focus:border-transparent outline-none transition-all resize-none" rows={3} placeholder="Daha önceki çalıştığınız yerler ve süreleri..."></textarea>
                   </div>
                   
                   <div>
@@ -141,8 +190,8 @@ export default function KariyerPage() {
                     </div>
                   </div>
 
-                  <button type="submit" className="w-full bg-dilim-siyah text-white font-bold py-4 rounded-xl hover:bg-dilim-portakal transition-all duration-300 shadow-lg mt-4">
-                    Başvuruyu Tamamla
+                  <button type="submit" disabled={isLoading} className="w-full bg-dilim-siyah text-white font-bold py-4 rounded-xl hover:bg-dilim-portakal transition-all duration-300 shadow-lg mt-4 disabled:opacity-50">
+                    {isLoading ? 'Gönderiliyor...' : 'Başvuruyu Tamamla'}
                   </button>
                   <p className="text-xs text-center text-gray-500 mt-4">
                     Başvuru yaparak <a href="/kvkk" className="text-dilim-portakal underline">KVKK Politikamızı</a> kabul etmiş sayılırsınız.
