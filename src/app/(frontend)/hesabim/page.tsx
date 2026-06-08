@@ -56,16 +56,24 @@ export default function HesabimPage() {
     if (status === 'unauthenticated') {
       router.push('/giris')
     } else if (status === 'authenticated') {
+      
+      // Hemen session verilerini forma koyalım (beklerken boş durmasın)
+      setProfileForm(prev => ({
+        ...prev,
+        name: prev.name || session.user?.name || '',
+        email: prev.email || session.user?.email || '',
+      }))
+
       // Fetch Customer Data
       fetch('/api/customer/me')
         .then(res => res.json())
         .then(data => {
           if (data.user) {
             setProfileForm({
-              name: data.user.name || '',
+              name: data.user.name || session.user?.name || '',
               surname: data.user.surname || '',
               phone: data.user.phone || '',
-              email: data.user.email || '',
+              email: data.user.email || session.user?.email || '',
             })
             if (data.user.birthDate) {
               const date = new Date(data.user.birthDate)
