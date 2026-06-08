@@ -78,5 +78,34 @@ export const Customers: CollectionConfig = {
       },
       label: 'Sosyal ID',
     },
+    {
+      name: 'addresses',
+      type: 'array',
+      label: 'Kayıtlı Adresler',
+      fields: [
+        { name: 'title', type: 'text', required: true, label: 'Adres Başlığı (Ev, İş vb.)' },
+        { name: 'district', type: 'text', required: true, label: 'İlçe' },
+        { name: 'address', type: 'textarea', required: true, label: 'Açık Adres' },
+        { name: 'isCorporate', type: 'checkbox', defaultValue: false, label: 'Kurumsal Fatura' },
+        { 
+          name: 'companyName', 
+          type: 'text', 
+          label: 'Firma Adı',
+          admin: { condition: (data, siblingData) => siblingData.isCorporate }
+        },
+        { 
+          name: 'taxOffice', 
+          type: 'text', 
+          label: 'Vergi Dairesi',
+          admin: { condition: (data, siblingData) => siblingData.isCorporate }
+        },
+        { 
+          name: 'taxNumber', 
+          type: 'text', 
+          label: 'Vergi Numarası',
+          admin: { condition: (data, siblingData) => siblingData.isCorporate }
+        },
+      ],
+    },
   ],
 }

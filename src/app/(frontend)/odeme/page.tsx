@@ -4,6 +4,8 @@ import { useState, useEffect, useRef } from 'react'
 import { useCart } from '@/context/CartContext'
 import toast from 'react-hot-toast'
 import Image from 'next/image'
+import { useSession } from 'next-auth/react'
+import { MapPin, Building2, CheckCircle2 } from 'lucide-react'
 
 const ALLOWED_DISTRICTS = [
   "Beykoz",
@@ -15,6 +17,7 @@ const ALLOWED_DISTRICTS = [
 ]
 
 export default function OdemePage() {
+  const { data: session, status } = useSession()
   const { cartTotal, items, clearCart } = useCart()
   
   const [formData, setFormData] = useState({
@@ -30,10 +33,34 @@ export default function OdemePage() {
     taxNumber: ''
   })
   
+  const [savedAddresses, setSavedAddresses] = useState<any[]>([])
+  const [selectedAddressId, setSelectedAddressId] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const [legalConsent, setLegalConsent] = useState(false)
   const [checkoutHtml, setCheckoutHtml] = useState('')
   const formRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (status === 'authenticated') {
+      fetch('/api/customer/me')
+        .then(res => res.json())
+        .then(data => {
+          if (data.user) {
+            setFormData(prev => ({
+              ...prev,
+              firstName: data.user.name || prev.firstName,
+              lastName: data.user.surname || prev.lastName,
+              email: data.user.email || prev.email,
+              phone: data.user.phone || prev.phone,
+            }))
+            if (data.user.addresses && data.user.addresses.length > 0) {
+              setSavedAddresses(data.user.addresses)
+            }
+          }
+        })
+        .catch(console.error)
+    }
+  }, [status])
 
   useEffect(() => {
     if (checkoutHtml && formRef.current) {
@@ -43,6 +70,19 @@ export default function OdemePage() {
       formRef.current.appendChild(fragment)
     }
   }, [checkoutHtml])
+
+  const handleSelectAddress = (addr: any) => {
+    setSelectedAddressId(addr.id)
+    setFormData(prev => ({
+      ...prev,
+      district: addr.district,
+      address: addr.address,
+      isCorporate: addr.isCorporate,
+      companyName: addr.companyName || '',
+      taxOffice: addr.taxOffice || '',
+      taxNumber: addr.taxNumber || ''
+    }))
+  }
 
   const handleCheckout = async () => {
     if (!formData.district) {
@@ -123,9 +163,35 @@ export default function OdemePage() {
 
               {/* Teslimat ve Fatura Adresi */}
               <div className="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-gray-100">
-                <div className="flex justify-between items-center border-b pb-4 mb-6">
-                  <h2 className="text-xl font-bold text-dilim-siyah">Teslimat Adresi</h2>
-                  <label className="flex items-center gap-2 cursor-pointer text-sm text-gray-600">
+                <h2 className="text-xl font-bold text-dilim-siyah mb-6 border-b pb-4">Teslimat Adresi</h2>
+                
+                {savedAddresses.length > 0 && (
+                  <div className="mb-8">
+                    <h3 className="text-sm font-semibold text-gray-500 mb-3 uppercase tracking-wider">Kayıtlı Adreslerimden Seç</h3>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      {savedAddresses.map(addr => (
+                        <button
+                          key={addr.id}
+                          onClick={() => handleSelectAddress(addr)}
+                          className={`p-4 text-left rounded-2xl border-2 transition-all relative ${selectedAddressId === addr.id ? 'border-dilim-portakal bg-orange-50 shadow-sm' : 'border-gray-100 bg-gray-50 hover:border-gray-300'}`}
+                        >
+                          {selectedAddressId === addr.id && (
+                            <CheckCircle2 className="w-5 h-5 text-dilim-portakal absolute top-4 right-4" />
+                          )}
+                          <div className="flex items-center gap-2 mb-1">
+                            {addr.isCorporate ? <Building2 className="w-4 h-4 text-dilim-siyah" /> : <MapPin className="w-4 h-4 text-dilim-siyah" />}
+                            <h4 className="font-bold text-dilim-siyah">{addr.title}</h4>
+                          </div>
+                          <p className="text-xs text-gray-600 mb-1">{addr.district} / İstanbul</p>
+                          <p className="text-xs text-gray-500 line-clamp-1">{addr.address}</p>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                <div className="flex justify-end items-center mb-6">
+                  <label className="flex items-center gap-2 cursor-pointer text-sm text-gray-600 bg-gray-50 px-4 py-2 rounded-xl border border-gray-100 hover:bg-gray-100 transition-colors">
                     <input 
                       type="checkbox" 
                       checked={formData.isCorporate} 
@@ -165,7 +231,10 @@ export default function OdemePage() {
                       <label className="block text-sm font-medium text-gray-700 mb-1">İlçe Seçiniz <span className="text-red-500">*</span></label>
                       <select 
                         value={formData.district} 
-                        onChange={e => setFormData({...formData, district: e.target.value})} 
+                        onChange={e => {
+                          setFormData({...formData, district: e.target.value})
+                          setSelectedAddressId(null) // Form manipule edilirse secili adres isaretini kaldir
+                        }} 
                         className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-dilim-portakal outline-none"
                       >
                         <option value="">İlçe Seçin...</option>
@@ -178,7 +247,16 @@ export default function OdemePage() {
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Açık Adres (Mahalle, Sokak vb.)</label>
-                    <textarea value={formData.address} onChange={e => setFormData({...formData, address: e.target.value})} className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-dilim-portakal outline-none" rows={3} placeholder="Siparişinizin teslim edileceği tam adresinizi giriniz."></textarea>
+                    <textarea 
+                      value={formData.address} 
+                      onChange={e => {
+                        setFormData({...formData, address: e.target.value})
+                        setSelectedAddressId(null)
+                      }} 
+                      className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-dilim-portakal outline-none" 
+                      rows={3} 
+                      placeholder="Siparişinizin teslim edileceği tam adresinizi giriniz."
+                    ></textarea>
                   </div>
                 </div>
               </div>
