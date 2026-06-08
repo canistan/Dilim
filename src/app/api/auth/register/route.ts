@@ -52,6 +52,6 @@ export async function POST(req: Request) {
 
   } catch (error: any) {
     console.error('Kayıt hatası:', error)
-    return NextResponse.json({ success: false, error: 'Kayıt sırasında bir hata oluştu.' }, { status: 500 })
+    return NextResponse.json({ success: false, error: 'Kayıt sırasında bir hata oluştu.', details: error?.message || String(error) }, { status: 500 })
   }
 }

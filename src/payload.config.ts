@@ -96,7 +96,7 @@ export default buildConfig({
     pool: {
       connectionString: process.env.DATABASE_URI || process.env.POSTGRES_URL || '',
     },
-    push: false,
+    push: true, // Şema değişikliklerini veritabanına yansıtması için true yapıldı
   }),
   sharp,
   plugins: [
