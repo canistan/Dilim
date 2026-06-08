@@ -397,7 +397,7 @@ export default function HesabimPage() {
 
                   {/* Hesabımı Sil Bölümü */}
                   <div className="mt-12 pt-8 border-t border-gray-100">
-                    <h4 className="font-bold text-red-600 mb-2">Hesabı Sil (Tehlikeli Bölge)</h4>
+                    <h4 className="font-bold text-red-600 mb-2">Hesap İşlemleri</h4>
                     <p className="text-sm text-gray-500 mb-4">
                       Hesabınızı silmek geri alınamaz bir işlemdir. Kişisel verileriniz sistemden tamamen kaldırılır, ancak sipariş geçmişiniz veri bütünlüğü nedeniyle anonim olarak tutulur.
                     </p>
