@@ -91,19 +91,19 @@ export const Customers: CollectionConfig = {
           name: 'companyName', 
           type: 'text', 
           label: 'Firma Adı',
-          admin: { condition: (data, siblingData) => siblingData.isCorporate }
+          admin: { condition: (data, siblingData) => Boolean(siblingData?.isCorporate) }
         },
         { 
           name: 'taxOffice', 
           type: 'text', 
           label: 'Vergi Dairesi',
-          admin: { condition: (data, siblingData) => siblingData.isCorporate }
+          admin: { condition: (data, siblingData) => Boolean(siblingData?.isCorporate) }
         },
         { 
           name: 'taxNumber', 
           type: 'text', 
           label: 'Vergi Numarası',
-          admin: { condition: (data, siblingData) => siblingData.isCorporate }
+          admin: { condition: (data, siblingData) => Boolean(siblingData?.isCorporate) }
         },
       ],
     },
