@@ -15,20 +15,28 @@ export default async function HomePage() {
   const payload = await getPayload({ config: configPromise })
   
   let homepageData = null
+  let instagramData = null
   try {
     homepageData = await payload.findGlobal({ 
       // @ts-ignore
       slug: 'homepage',
       depth: 2 
     })
+    
+    instagramData = await payload.findGlobal({
+      // @ts-ignore
+      slug: 'instagram-feed',
+      depth: 1
+    })
   } catch (error) {
-    console.error('Error fetching homepage data:', error)
+    console.error('Error fetching global data:', error)
   }
 
   // Serialize the data for client component (Next.js requires plain objects)
   const serializedData = homepageData ? JSON.parse(JSON.stringify(homepageData)) : null
+  const serializedInstagramData = instagramData ? JSON.parse(JSON.stringify(instagramData)) : null
 
   return (
-    <HomePageClient homepageData={serializedData} />
+    <HomePageClient homepageData={serializedData} instagramData={serializedInstagramData} />
   )
 }

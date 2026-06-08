@@ -5,8 +5,9 @@ import Image from 'next/image'
 import { ArrowRight, Cake, ShoppingBag, Star } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { ReferencesMarquee } from '@/components/ReferencesMarquee'
+import { InstagramFeed } from '@/components/InstagramFeed'
 
-export default function HomePageClient({ homepageData }: { homepageData?: any }) {
+export default function HomePageClient({ homepageData, instagramData }: { homepageData?: any, instagramData?: any }) {
   const fadeUp = {
     hidden: { opacity: 0, y: 30 },
     visible: { opacity: 1, y: 0 }
@@ -196,7 +197,7 @@ export default function HomePageClient({ homepageData }: { homepageData?: any })
           </div>
         </div>
       </section>
-      
+      <InstagramFeed data={instagramData} />
       <ReferencesMarquee />
     </div>
   )

@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { useCart } from '@/context/CartContext'
+import toast from 'react-hot-toast'
 
 export default function OdemePage() {
   const [formData, setFormData] = useState({
@@ -50,10 +51,10 @@ export default function OdemePage() {
           window.location.href = `/odeme/basarili?orderNumber=${data.orderNumber}`
         }
       } else {
-        alert("Sipariş oluşturulamadı: " + data.error)
+        toast.error("Sipariş oluşturulamadı: " + data.error)
       }
     } catch (err) {
-      alert("Bir hata oluştu. Lütfen tekrar deneyin.")
+      toast.error("Bir hata oluştu. Lütfen tekrar deneyin.")
     }
     setLoading(false)
   }

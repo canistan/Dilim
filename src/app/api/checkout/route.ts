@@ -35,7 +35,7 @@ export async function POST(req: Request) {
           address: customerInfo.address,
         },
         orderItems: items.map((item: any) => ({
-          product: typeof item.id === 'string' && item.id.includes('-') ? null : item.id,
+          product: typeof item.id === 'number' || (typeof item.id === 'string' && !isNaN(Number(item.id))) ? Number(item.id) : null,
           quantity: item.quantity,
           price: parseInt(String(item.price).replace(/[^0-9]/g, '')) || 0,
         })),

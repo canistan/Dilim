@@ -8,6 +8,7 @@ import { CartProvider } from '@/context/CartContext'
 import { CookiePopup } from '@/components/CookiePopup'
 import { PromoPopup } from '@/components/PromoPopup'
 import { AuthProvider } from '@/components/AuthProvider'
+import { Toaster } from 'react-hot-toast'
 
 const montserrat = Montserrat({
   variable: "--font-montserrat",
@@ -70,6 +71,7 @@ export default function FrontendLayout({
             <Footer />
             <CookiePopup />
             <PromoPopup />
+            <Toaster position="top-center" toastOptions={{ duration: 4000, style: { background: '#1c1c1c', color: '#fff', borderRadius: '12px', padding: '16px' } }} />
           </CartProvider>
         </AuthProvider>
       </body>

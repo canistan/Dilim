@@ -24,6 +24,7 @@ import { BirthdayCampaign } from './globals/BirthdayCampaign'
 import { About } from './globals/About'
 import { CustomCakeOptions } from './globals/CustomCakeOptions'
 import { ContactSettings } from './globals/ContactSettings'
+import { InstagramFeedConfig } from './globals/InstagramFeed'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -64,7 +65,7 @@ export default buildConfig({
     Coupons,
     Returns
   ],
-  globals: [Homepage, BirthdayCampaign, About, CustomCakeOptions, ContactSettings],
+  globals: [Homepage, BirthdayCampaign, About, CustomCakeOptions, ContactSettings, InstagramFeedConfig],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {

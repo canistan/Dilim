@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronRight, ChevronLeft, Check, Layers, CakeSlice, PaintBucket, ChefHat, MessageCircle, User } from 'lucide-react'
+import toast from 'react-hot-toast'
 
 // Sipariş Adımları Verileri
 const STEPS = [
@@ -120,12 +121,12 @@ export default function CakeBuilder() {
         // Yeni sekmede WhatsApp'ı aç (Popup engelleyiciye takılabilir, o yüzden butonu da sunacağız)
         window.open(`https://wa.me/905059638021?text=${message}`, '_blank')
       } else {
-        alert("Talebiniz gönderilirken bir hata oluştu: " + data.error)
+        toast.error("Talebiniz gönderilirken bir hata oluştu: " + data.error)
         setIsSubmitting(false)
       }
     } catch (err: unknown) {
       console.error(err)
-      alert("Sistemsel bir hata oluştu. Lütfen tekrar deneyin.")
+      toast.error("Sistemsel bir hata oluştu. Lütfen tekrar deneyin.")
       setIsSubmitting(false)
     }
   }
