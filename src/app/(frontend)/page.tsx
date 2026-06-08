@@ -17,6 +17,7 @@ export default async function HomePage() {
   let homepageData = null
   try {
     homepageData = await payload.findGlobal({ 
+      // @ts-ignore
       slug: 'homepage',
       depth: 2 
     })
