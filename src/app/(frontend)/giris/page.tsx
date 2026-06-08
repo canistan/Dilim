@@ -3,6 +3,7 @@
 import { signIn, useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
+import toast from 'react-hot-toast'
 
 export default function GirisPage() {
   const { data: session, status } = useSession()
@@ -31,7 +32,7 @@ export default function GirisPage() {
     })
     
     if (res?.error) {
-      alert("Giriş başarısız. Lütfen bilgilerinizi kontrol edin.")
+      toast.error("Giriş başarısız. Lütfen bilgilerinizi kontrol edin.")
     } else {
       router.push('/hesabim')
     }

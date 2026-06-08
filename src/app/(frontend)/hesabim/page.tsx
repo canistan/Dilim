@@ -3,6 +3,7 @@
 import { useSession, signOut } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
+import toast from 'react-hot-toast'
 
 export default function HesabimPage() {
   const { data: session, status } = useSession()
@@ -30,7 +31,7 @@ export default function HesabimPage() {
       setSaved(true)
       setTimeout(() => setSaved(false), 3000)
     } catch (e) {
-      alert("Kaydedilemedi.")
+      toast.error("Kaydedilemedi.")
     }
     setSaving(false)
   }

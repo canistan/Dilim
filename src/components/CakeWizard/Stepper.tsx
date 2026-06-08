@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Check, ChevronLeft, ChevronRight, Upload } from 'lucide-react'
+import toast from 'react-hot-toast'
 
 type WizardData = {
   cakeSize: string
@@ -218,7 +219,7 @@ export const CakeWizard = () => {
           </button>
           
           <button
-            onClick={currentStep === steps.length ? () => alert('Sipariş Onayına Gidiliyor!') : handleNext}
+            onClick={currentStep === steps.length ? () => toast.success('Sipariş Onayına Gidiliyor!') : handleNext}
             className="flex items-center px-8 py-3 font-bold rounded-full bg-dilim-portakal hover:bg-dilim-turuncu text-white shadow-lg shadow-dilim-portakal/30 transition-all"
           >
             {currentStep === steps.length ? 'Sepete Ekle' : 'Devam Et'}

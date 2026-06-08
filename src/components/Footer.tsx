@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
+import toast from 'react-hot-toast'
 
 export const Footer = () => {
   return (
@@ -21,7 +22,7 @@ export const Footer = () => {
             </div>
             
             <div className="flex justify-start lg:justify-end">
-              <form className="relative w-full max-w-md" onSubmit={(e) => { e.preventDefault(); alert('Bültene başarıyla abone oldunuz! Teşekkürler.'); }}>
+              <form className="relative w-full max-w-md" onSubmit={(e) => { e.preventDefault(); toast.success('Bültene başarıyla abone oldunuz! Teşekkürler.'); }}>
                 <input 
                   type="email" 
                   placeholder="E-posta adresiniz" 
