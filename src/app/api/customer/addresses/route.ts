@@ -45,12 +45,16 @@ export async function POST(req: Request) {
     const updatedUser = await payload.update({
       collection: 'customers' as any,
       id: user.id,
-      data: { addresses }
+      data: { 
+        addresses,
+        name: user.name || 'Belirtilmedi',
+        surname: user.surname || 'Belirtilmedi'
+      }
     })
     
     return NextResponse.json({ success: true, addresses: updatedUser.addresses || [] })
-  } catch (error) {
-    console.error('Adres kaydetme hatası:', error)
+  } catch (error: any) {
+    console.error('Adres kaydetme hatası:', error?.data?.errors || error)
     return NextResponse.json({ error: 'Server error' }, { status: 500 })
   }
 }
