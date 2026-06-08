@@ -14,6 +14,7 @@ export default async function TasarlaPage() {
   const customCakes = await payload.find({
     collection: 'custom-cakes',
     limit: 50,
+    depth: 2,
   })
 
   return (

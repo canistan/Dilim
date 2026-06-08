@@ -60,9 +60,11 @@ export async function POST(req: Request) {
         paymentStatus: 'unpaid',
         totalAmount: 0, // Fiyat admin tarafından girilecek
         customerInfo: {
-          name: customerName,
-          email: customerEmail || '',
+          firstName: customerName.split(' ')[0] || customerName,
+          lastName: customerName.split(' ').slice(1).join(' ') || 'Belirtilmedi',
+          email: customerEmail || 'belirtilmedi@dilim.com',
           phone: customerPhone,
+          district: 'Belirtilmedi',
           address: customerAddress || 'Belirtilmedi',
         },
         customCakeDetails: {
