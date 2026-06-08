@@ -4,12 +4,10 @@ import configPromise from '@payload-config'
 import { getServerSession } from "next-auth/next"
 import { authOptions } from "@/lib/auth"
 
-export async function POST(req: Request) {
+export async function DELETE(req: Request) {
   try {
     const session = await getServerSession(authOptions)
     if (!session?.user?.email) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    
-    const { birthDate, name, surname, phone } = await req.json()
     
     const payload = await getPayload({ config: configPromise })
     const users = await payload.find({
@@ -18,21 +16,16 @@ export async function POST(req: Request) {
     })
     
     if (users.docs.length > 0) {
-      const updateData: any = {}
-      if (birthDate !== undefined) updateData.birthDate = birthDate ? new Date(birthDate).toISOString() : null
-      if (name !== undefined) updateData.name = name
-      if (surname !== undefined) updateData.surname = surname
-      if (phone !== undefined) updateData.phone = phone
-
-      await payload.update({
+      await payload.delete({
         collection: 'customers' as any,
-        id: users.docs[0].id,
-        data: updateData
+        id: users.docs[0].id
       })
       return NextResponse.json({ success: true })
     }
+    
     return NextResponse.json({ error: 'Not found' }, { status: 404 })
   } catch (error) {
+    console.error('Kullanıcı hesabı silinirken hata:', error)
     return NextResponse.json({ error: 'Server error' }, { status: 500 })
   }
 }

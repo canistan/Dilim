@@ -4,7 +4,8 @@ import { useSession, signOut } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
-import { Plus, Trash2, MapPin, Building2 } from 'lucide-react'
+import { Plus, Trash2, MapPin, Building2, Package, Calendar, CreditCard, CheckCircle2, XCircle, Clock } from 'lucide-react'
+import Image from 'next/image'
 
 const ALLOWED_DISTRICTS = [
   "Beykoz",
@@ -16,26 +17,38 @@ const ALLOWED_DISTRICTS = [
 ]
 
 export default function HesabimPage() {
-  const { data: session, status } = useSession()
+  const { data: session, status, update } = useSession()
   const router = useRouter()
   
-  const [activeTab, setActiveTab] = useState('profil')
-  const [birthDate, setBirthDate] = useState('')
-  const [saving, setSaving] = useState(false)
-  const [saved, setSaved] = useState(false)
+  // Default tab is 'siparisler'
+  const [activeTab, setActiveTab] = useState('siparisler')
   
+  // Profile State
+  const [profileForm, setProfileForm] = useState({
+    name: '',
+    surname: '',
+    phone: '',
+    email: '', // read-only
+  })
+  const [birthDate, setBirthDate] = useState('')
+  const [savingProfile, setSavingProfile] = useState(false)
+  const [savedProfile, setSavedProfile] = useState(false)
+  const [savingBirth, setSavingBirth] = useState(false)
+  
+  // Delete Account State
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+  const [deleteInput, setDeleteInput] = useState('')
+  const [deletingAccount, setDeletingAccount] = useState(false)
+
+  // Orders State
+  const [orders, setOrders] = useState<any[]>([])
+  const [loadingOrders, setLoadingOrders] = useState(true)
+
   // Addresses State
   const [addresses, setAddresses] = useState<any[]>([])
   const [showAddressForm, setShowAddressForm] = useState(false)
   const [addressForm, setAddressForm] = useState({
-    id: '',
-    title: '',
-    district: '',
-    address: '',
-    isCorporate: false,
-    companyName: '',
-    taxOffice: '',
-    taxNumber: ''
+    id: '', title: '', district: '', address: '', isCorporate: false, companyName: '', taxOffice: '', taxNumber: ''
   })
   const [savingAddress, setSavingAddress] = useState(false)
 
@@ -43,18 +56,38 @@ export default function HesabimPage() {
     if (status === 'unauthenticated') {
       router.push('/giris')
     } else if (status === 'authenticated') {
+      // Fetch Customer Data
       fetch('/api/customer/me')
         .then(res => res.json())
         .then(data => {
-          if (data.user?.birthDate) {
-            const date = new Date(data.user.birthDate)
-            setBirthDate(date.toISOString().split('T')[0])
-          }
-          if (data.user?.addresses) {
-            setAddresses(data.user.addresses)
+          if (data.user) {
+            setProfileForm({
+              name: data.user.name || '',
+              surname: data.user.surname || '',
+              phone: data.user.phone || '',
+              email: data.user.email || '',
+            })
+            if (data.user.birthDate) {
+              const date = new Date(data.user.birthDate)
+              setBirthDate(date.toISOString().split('T')[0])
+            }
+            if (data.user.addresses) {
+              setAddresses(data.user.addresses)
+            }
           }
         })
         .catch(console.error)
+
+      // Fetch Orders
+      fetch('/api/customer/orders')
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            setOrders(data.orders)
+          }
+        })
+        .catch(console.error)
+        .finally(() => setLoadingOrders(false))
     }
   }, [status, router])
 
@@ -62,8 +95,36 @@ export default function HesabimPage() {
     return <div className="min-h-screen flex items-center justify-center">Yükleniyor...</div>
   }
 
+  // --- Profile Handlers ---
+  const handleSaveProfile = async () => {
+    setSavingProfile(true)
+    try {
+      const res = await fetch('/api/customer/update', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          name: profileForm.name,
+          surname: profileForm.surname,
+          phone: profileForm.phone
+        })
+      })
+      if (res.ok) {
+        setSavedProfile(true)
+        toast.success("Profiliniz güncellendi.")
+        setTimeout(() => setSavedProfile(false), 3000)
+        // Update session client-side to reflect new name
+        update()
+      } else {
+        toast.error("Kaydedilemedi.")
+      }
+    } catch (e) {
+      toast.error("Kaydedilemedi.")
+    }
+    setSavingProfile(false)
+  }
+
   const handleSaveBirthDate = async () => {
-    setSaving(true)
+    setSavingBirth(true)
     try {
       const res = await fetch('/api/customer/update', {
         method: 'POST',
@@ -71,17 +132,38 @@ export default function HesabimPage() {
         body: JSON.stringify({ birthDate })
       })
       if (res.ok) {
-        setSaved(true)
-        setTimeout(() => setSaved(false), 3000)
+        toast.success("Doğum tarihi kaydedildi.")
       } else {
         toast.error("Kaydedilemedi.")
       }
     } catch (e) {
       toast.error("Kaydedilemedi.")
     }
-    setSaving(false)
+    setSavingBirth(false)
   }
 
+  const handleDeleteAccount = async () => {
+    if (deleteInput !== 'HESABIMI SİL') {
+      toast.error('Lütfen kutucuğa tam olarak HESABIMI SİL yazın.')
+      return
+    }
+    setDeletingAccount(true)
+    try {
+      const res = await fetch('/api/customer/delete', { method: 'DELETE' })
+      if (res.ok) {
+        toast.success("Hesabınız silindi.")
+        signOut({ callbackUrl: '/' })
+      } else {
+        toast.error("Hesap silinemedi.")
+        setDeletingAccount(false)
+      }
+    } catch (e) {
+      toast.error("Bir hata oluştu.")
+      setDeletingAccount(false)
+    }
+  }
+
+  // --- Address Handlers ---
   const handleSaveAddress = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!addressForm.title || !addressForm.district || !addressForm.address) {
@@ -135,6 +217,16 @@ export default function HesabimPage() {
     }
   }
 
+  const getStatusInfo = (status: string) => {
+    switch(status) {
+      case 'pending': return { text: 'Onay Bekliyor', icon: <Clock className="w-4 h-4 text-orange-500"/>, bg: 'bg-orange-50', color: 'text-orange-600' }
+      case 'preparing': return { text: 'Hazırlanıyor', icon: <Package className="w-4 h-4 text-blue-500"/>, bg: 'bg-blue-50', color: 'text-blue-600' }
+      case 'shipped': return { text: 'Kargoya Verildi', icon: <MapPin className="w-4 h-4 text-indigo-500"/>, bg: 'bg-indigo-50', color: 'text-indigo-600' }
+      case 'delivered': return { text: 'Teslim Edildi', icon: <CheckCircle2 className="w-4 h-4 text-green-500"/>, bg: 'bg-green-50', color: 'text-green-600' }
+      default: return { text: 'Bilinmiyor', icon: <Clock className="w-4 h-4 text-gray-500"/>, bg: 'bg-gray-50', color: 'text-gray-600' }
+    }
+  }
+
   return (
     <div className="container mx-auto px-4 py-20 max-w-5xl min-h-screen">
       <div className="flex flex-col md:flex-row gap-8">
@@ -144,15 +236,21 @@ export default function HesabimPage() {
           <div className="bg-white p-6 rounded-3xl shadow-xl shadow-gray-200/50 border border-gray-100">
             <div className="flex items-center gap-4 mb-8">
               <div className="w-16 h-16 bg-dilim-portakal/10 text-dilim-portakal rounded-full flex items-center justify-center text-2xl font-bold">
-                {session?.user?.name?.charAt(0) || 'U'}
+                {profileForm.name?.charAt(0) || session?.user?.name?.charAt(0) || 'U'}
               </div>
               <div className="overflow-hidden">
-                <h2 className="font-bold text-dilim-siyah text-lg truncate">{session?.user?.name}</h2>
-                <p className="text-gray-500 text-sm truncate">{session?.user?.email}</p>
+                <h2 className="font-bold text-dilim-siyah text-lg truncate">{profileForm.name || session?.user?.name}</h2>
+                <p className="text-gray-500 text-sm truncate">{profileForm.email || session?.user?.email}</p>
               </div>
             </div>
 
             <nav className="space-y-2">
+              <button 
+                onClick={() => setActiveTab('siparisler')}
+                className={`w-full text-left px-4 py-3 rounded-xl font-semibold transition-colors ${activeTab === 'siparisler' ? 'bg-orange-50 text-dilim-portakal' : 'hover:bg-gray-50 text-gray-600'}`}
+              >
+                Siparişlerim
+              </button>
               <button 
                 onClick={() => setActiveTab('profil')}
                 className={`w-full text-left px-4 py-3 rounded-xl font-semibold transition-colors ${activeTab === 'profil' ? 'bg-orange-50 text-dilim-portakal' : 'hover:bg-gray-50 text-gray-600'}`}
@@ -165,12 +263,6 @@ export default function HesabimPage() {
               >
                 Adreslerim
               </button>
-              <button 
-                onClick={() => setActiveTab('siparisler')}
-                className={`w-full text-left px-4 py-3 rounded-xl font-semibold transition-colors ${activeTab === 'siparisler' ? 'bg-orange-50 text-dilim-portakal' : 'hover:bg-gray-50 text-gray-600'}`}
-              >
-                Siparişlerim
-              </button>
               <button onClick={() => signOut({ callbackUrl: '/' })} className="w-full text-left px-4 py-3 rounded-xl hover:bg-red-50 font-medium text-red-600 transition-colors mt-4">
                 Çıkış Yap
               </button>
@@ -182,19 +274,99 @@ export default function HesabimPage() {
         <div className="w-full md:w-2/3 lg:w-3/4">
           <div className="bg-white p-8 rounded-3xl shadow-xl shadow-gray-200/50 border border-gray-100 min-h-[500px]">
             
+            {/* Siparisler Tab */}
+            {activeTab === 'siparisler' && (
+              <div className="animate-in fade-in duration-300">
+                <h3 className="text-2xl font-bold text-dilim-siyah mb-6">Siparişlerim</h3>
+                
+                {loadingOrders ? (
+                  <div className="py-12 text-center text-gray-500">Siparişleriniz yükleniyor...</div>
+                ) : orders.length === 0 ? (
+                  <div className="py-12 text-center bg-gray-50 rounded-2xl border border-dashed border-gray-200">
+                    <Package className="w-12 h-12 text-gray-300 mx-auto mb-3" />
+                    <p className="text-gray-500 font-medium">Henüz bir siparişiniz bulunmuyor.</p>
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    {orders.map(order => {
+                      const statusInfo = getStatusInfo(order.status)
+                      return (
+                        <div key={order.id} className="bg-white border border-gray-200 rounded-2xl p-5 hover:border-gray-300 transition-colors shadow-sm">
+                          <div className="flex flex-col md:flex-row justify-between md:items-center gap-4 mb-4 border-b border-gray-100 pb-4">
+                            <div>
+                              <p className="text-xs text-gray-500 font-medium mb-1 flex items-center gap-2">
+                                <Calendar className="w-3.5 h-3.5" /> 
+                                {new Date(order.createdAt).toLocaleDateString('tr-TR')}
+                              </p>
+                              <h4 className="font-bold text-dilim-siyah">Sipariş No: {order.orderNumber}</h4>
+                            </div>
+                            <div className="flex flex-col items-start md:items-end gap-2">
+                              <span className={`px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1.5 ${statusInfo.bg} ${statusInfo.color}`}>
+                                {statusInfo.icon}
+                                {statusInfo.text}
+                              </span>
+                              <span className="font-bold text-dilim-portakal">{order.totalAmount} ₺</span>
+                            </div>
+                          </div>
+                          
+                          <div className="space-y-3">
+                            {order.orderItems?.map((item: any, index: number) => {
+                              const prod = typeof item.product === 'object' ? item.product : null;
+                              return (
+                                <div key={index} className="flex items-center gap-4">
+                                  <div className="w-12 h-12 bg-gray-100 rounded-xl relative overflow-hidden flex-shrink-0 border border-gray-200">
+                                    <Image src={prod?.images?.[0]?.url || '/generated/hero_cake.png'} alt={prod?.name || 'Ürün'} fill className="object-cover" />
+                                  </div>
+                                  <div>
+                                    <p className="text-sm font-bold text-gray-800">{prod?.name || 'Özel Ürün'}</p>
+                                    <p className="text-xs text-gray-500">{item.quantity} Adet x {item.price} ₺</p>
+                                  </div>
+                                </div>
+                              )
+                            })}
+                          </div>
+                        </div>
+                      )
+                    })}
+                  </div>
+                )}
+              </div>
+            )}
+
             {/* Profil Tab */}
             {activeTab === 'profil' && (
               <div className="animate-in fade-in duration-300">
                 <h3 className="text-2xl font-bold text-dilim-siyah mb-6">Profil Bilgilerim</h3>
                 <div className="space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-1">Ad Soyad</label>
-                      <input type="text" disabled value={session?.user?.name || ''} className="w-full p-3 border border-gray-200 rounded-xl bg-gray-50 text-gray-600 cursor-not-allowed" />
+                  
+                  {/* Güncellenebilir Profil Alanı */}
+                  <div className="bg-gray-50 p-6 rounded-2xl border border-gray-100">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                      <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-1">Adınız</label>
+                        <input type="text" value={profileForm.name} onChange={e => setProfileForm({...profileForm, name: e.target.value})} className="w-full p-3 border border-gray-200 rounded-xl bg-white focus:ring-2 focus:ring-dilim-portakal outline-none" />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-1">Soyadınız</label>
+                        <input type="text" value={profileForm.surname} onChange={e => setProfileForm({...profileForm, surname: e.target.value})} className="w-full p-3 border border-gray-200 rounded-xl bg-white focus:ring-2 focus:ring-dilim-portakal outline-none" />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-1">Telefon Numarası</label>
+                        <input type="tel" value={profileForm.phone} onChange={e => setProfileForm({...profileForm, phone: e.target.value})} className="w-full p-3 border border-gray-200 rounded-xl bg-white focus:ring-2 focus:ring-dilim-portakal outline-none" />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-semibold text-gray-500 mb-1">E-Posta Adresi <span className="text-xs text-red-500 font-normal">(Değiştirilemez)</span></label>
+                        <input type="email" disabled value={profileForm.email} className="w-full p-3 border border-gray-200 rounded-xl bg-gray-100 text-gray-500 cursor-not-allowed" />
+                      </div>
                     </div>
-                    <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-1">E-Posta Adresi</label>
-                      <input type="email" disabled value={session?.user?.email || ''} className="w-full p-3 border border-gray-200 rounded-xl bg-gray-50 text-gray-600 cursor-not-allowed" />
+                    <div className="flex justify-end">
+                      <button 
+                        onClick={handleSaveProfile}
+                        disabled={savingProfile}
+                        className="px-6 py-2.5 bg-dilim-portakal text-white font-bold rounded-xl hover:bg-dilim-turuncu disabled:opacity-70 transition-colors"
+                      >
+                        {savingProfile ? 'Kaydediliyor...' : savedProfile ? 'Kaydedildi!' : 'Bilgileri Güncelle'}
+                      </button>
                     </div>
                   </div>
 
@@ -210,18 +382,64 @@ export default function HesabimPage() {
                           type="date" 
                           value={birthDate}
                           onChange={(e) => setBirthDate(e.target.value)}
-                          className="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-dilim-portakal outline-none" 
+                          className="w-full p-3 border border-gray-200 rounded-xl bg-white focus:ring-2 focus:ring-dilim-portakal outline-none" 
                         />
                       </div>
                       <button 
                         onClick={handleSaveBirthDate}
-                        disabled={!birthDate || saving}
+                        disabled={!birthDate || savingBirth}
                         className="px-6 py-3 bg-dilim-siyah text-white font-semibold rounded-xl hover:bg-gray-800 disabled:bg-gray-400 transition-colors"
                       >
-                        {saving ? 'Kaydediliyor...' : saved ? 'Kaydedildi!' : 'Kaydet'}
+                        {savingBirth ? 'Kaydediliyor...' : 'Kaydet'}
                       </button>
                     </div>
                   </div>
+
+                  {/* Hesabımı Sil Bölümü */}
+                  <div className="mt-12 pt-8 border-t border-gray-100">
+                    <h4 className="font-bold text-red-600 mb-2">Hesabı Sil (Tehlikeli Bölge)</h4>
+                    <p className="text-sm text-gray-500 mb-4">
+                      Hesabınızı silmek geri alınamaz bir işlemdir. Kişisel verileriniz sistemden tamamen kaldırılır, ancak sipariş geçmişiniz veri bütünlüğü nedeniyle anonim olarak tutulur.
+                    </p>
+                    
+                    {!showDeleteConfirm ? (
+                      <button 
+                        onClick={() => setShowDeleteConfirm(true)}
+                        className="px-5 py-2.5 border border-red-200 text-red-600 font-semibold rounded-xl hover:bg-red-50 hover:border-red-300 transition-colors text-sm"
+                      >
+                        Hesabımı Sil
+                      </button>
+                    ) : (
+                      <div className="bg-red-50 p-5 rounded-2xl border border-red-200 animate-in slide-in-from-top-2 duration-200">
+                        <p className="text-sm font-semibold text-red-800 mb-3">
+                          Onaylamak için aşağıdaki kutucuğa <strong>HESABIMI SİL</strong> yazın:
+                        </p>
+                        <div className="flex gap-3 max-w-sm">
+                          <input 
+                            type="text" 
+                            placeholder="HESABIMI SİL" 
+                            value={deleteInput}
+                            onChange={(e) => setDeleteInput(e.target.value)}
+                            className="flex-1 p-2.5 border border-red-200 rounded-lg focus:ring-2 focus:ring-red-500 outline-none uppercase"
+                          />
+                          <button 
+                            onClick={handleDeleteAccount}
+                            disabled={deletingAccount || deleteInput !== 'HESABIMI SİL'}
+                            className="px-4 py-2.5 bg-red-600 text-white font-bold rounded-lg hover:bg-red-700 disabled:opacity-50 transition-colors"
+                          >
+                            Sil
+                          </button>
+                        </div>
+                        <button 
+                          onClick={() => {setShowDeleteConfirm(false); setDeleteInput('');}}
+                          className="text-xs text-gray-500 hover:text-gray-800 mt-3 font-semibold"
+                        >
+                          İptal Et
+                        </button>
+                      </div>
+                    )}
+                  </div>
+
                 </div>
               </div>
             )}
@@ -248,11 +466,11 @@ export default function HesabimPage() {
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                           <label className="block text-sm font-semibold text-gray-700 mb-1">Adres Başlığı (Örn: Ev, İş)</label>
-                          <input type="text" value={addressForm.title} onChange={e => setAddressForm({...addressForm, title: e.target.value})} required className="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-dilim-portakal outline-none" placeholder="Ev Adresim" />
+                          <input type="text" value={addressForm.title} onChange={e => setAddressForm({...addressForm, title: e.target.value})} required className="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-dilim-portakal outline-none bg-white" placeholder="Ev Adresim" />
                         </div>
                         <div>
                           <label className="block text-sm font-semibold text-gray-700 mb-1">İlçe</label>
-                          <select value={addressForm.district} onChange={e => setAddressForm({...addressForm, district: e.target.value})} required className="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-dilim-portakal outline-none">
+                          <select value={addressForm.district} onChange={e => setAddressForm({...addressForm, district: e.target.value})} required className="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-dilim-portakal outline-none bg-white">
                             <option value="">İlçe Seçiniz</option>
                             {ALLOWED_DISTRICTS.map(d => (
                               <option key={d} value={d}>{d}</option>
@@ -263,7 +481,7 @@ export default function HesabimPage() {
                       
                       <div>
                         <label className="block text-sm font-semibold text-gray-700 mb-1">Açık Adres</label>
-                        <textarea value={addressForm.address} onChange={e => setAddressForm({...addressForm, address: e.target.value})} required rows={3} className="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-dilim-portakal outline-none resize-none" placeholder="Mahalle, sokak, bina no..."></textarea>
+                        <textarea value={addressForm.address} onChange={e => setAddressForm({...addressForm, address: e.target.value})} required rows={3} className="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-dilim-portakal outline-none resize-none bg-white" placeholder="Mahalle, sokak, bina no..."></textarea>
                       </div>
 
                       <div className="bg-white p-4 rounded-xl border border-gray-200">
@@ -330,16 +548,6 @@ export default function HesabimPage() {
                     )}
                   </div>
                 )}
-              </div>
-            )}
-
-            {/* Siparisler Tab */}
-            {activeTab === 'siparisler' && (
-              <div className="animate-in fade-in duration-300">
-                <h3 className="text-2xl font-bold text-dilim-siyah mb-6">Siparişlerim</h3>
-                <div className="py-12 text-center bg-gray-50 rounded-2xl border border-dashed border-gray-200">
-                  <p className="text-gray-500 font-medium">Henüz bir siparişiniz bulunmuyor.</p>
-                </div>
               </div>
             )}
 

@@ -25,22 +25,32 @@ export async function POST(req: Request) {
     const user = users.docs[0]
     let addresses = user.addresses || []
 
+    // Payload CMS boş string ID veya gereksiz alanları sevmez, temizleyelim:
+    let cleanAddress = { ...address }
+    if (!cleanAddress.id) delete cleanAddress.id
+    if (!cleanAddress.isCorporate) {
+      cleanAddress.companyName = null
+      cleanAddress.taxOffice = null
+      cleanAddress.taxNumber = null
+    }
+
     if (action === 'add') {
-      addresses.push(address)
+      addresses.push(cleanAddress)
     } else if (action === 'delete') {
       addresses = addresses.filter((a: any) => a.id !== addressId)
     } else if (action === 'update') {
-      addresses = addresses.map((a: any) => a.id === addressId ? { ...a, ...address, id: a.id } : a)
+      addresses = addresses.map((a: any) => a.id === addressId ? { ...a, ...cleanAddress, id: a.id } : a)
     }
 
-    await payload.update({
+    const updatedUser = await payload.update({
       collection: 'customers' as any,
       id: user.id,
       data: { addresses }
     })
     
-    return NextResponse.json({ success: true, addresses })
+    return NextResponse.json({ success: true, addresses: updatedUser.addresses || [] })
   } catch (error) {
+    console.error('Adres kaydetme hatası:', error)
     return NextResponse.json({ error: 'Server error' }, { status: 500 })
   }
 }
