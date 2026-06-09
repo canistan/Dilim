@@ -8,6 +8,7 @@ const statusColors: Record<string, string> = {
   paid: '#22c55e', // green
   unpaid: '#ef4444', // red
   failed: '#ef4444', // red
+  cancelled: '#64748b', // slate
   
   // Custom Cakes statuses
   fiyat_verildi: '#3b82f6',
@@ -23,6 +24,7 @@ const statusLabels: Record<string, string> = {
   paid: 'Ödendi',
   unpaid: 'Ödenmedi',
   failed: 'Başarısız',
+  cancelled: 'İptal Edildi',
   
   fiyat_verildi: 'Fiyat Verildi',
   onaylandi: 'Onaylandı',

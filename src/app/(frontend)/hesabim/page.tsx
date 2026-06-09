@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import { Plus, Trash2, MapPin, Building2, Package, Calendar, CreditCard, CheckCircle2, XCircle, Clock } from 'lucide-react'
+import { taxOffices } from '@/data/taxOffices'
 import Image from 'next/image'
 
 const ALLOWED_DISTRICTS = [
@@ -506,7 +507,20 @@ export default function HesabimPage() {
                             </div>
                             <div>
                               <label className="block text-xs font-semibold text-gray-700 mb-1">Vergi Dairesi</label>
-                              <input type="text" value={addressForm.taxOffice} onChange={e => setAddressForm({...addressForm, taxOffice: e.target.value})} required={addressForm.isCorporate} className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-dilim-portakal outline-none" />
+                              <input 
+                                list="tax-offices-list-hesabim"
+                                type="text" 
+                                value={addressForm.taxOffice} 
+                                onChange={e => setAddressForm({...addressForm, taxOffice: e.target.value})} 
+                                required={addressForm.isCorporate} 
+                                className="w-full p-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-dilim-portakal outline-none" 
+                                placeholder="Yazın veya seçin"
+                              />
+                              <datalist id="tax-offices-list-hesabim">
+                                {taxOffices.map((office, idx) => (
+                                  <option key={idx} value={office} />
+                                ))}
+                              </datalist>
                             </div>
                             <div>
                               <label className="block text-xs font-semibold text-gray-700 mb-1">Vergi No</label>

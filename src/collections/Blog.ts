@@ -10,7 +10,7 @@ export const Blog: CollectionConfig = {
   admin: {
     useAsTitle: 'title',
     group: 'Site Yönetimi',
-    defaultColumns: ['title', 'image'],
+    defaultColumns: ['image', 'title'],
   },
   fields: [
     {
@@ -41,6 +41,11 @@ export const Blog: CollectionConfig = {
       type: 'upload',
       relationTo: 'media',
       label: 'Öne Çıkan Görsel',
+      admin: {
+        components: {
+          Cell: '@/components/Admin/ThumbnailCell#ThumbnailCell',
+        },
+      },
     },
   ],
 }

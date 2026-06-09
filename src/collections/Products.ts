@@ -10,7 +10,7 @@ export const Products: CollectionConfig = {
   admin: {
     useAsTitle: 'title',
     group: 'Site Yönetimi',
-    defaultColumns: ['title', 'images', 'price', 'category'],
+    defaultColumns: ['images', 'title', 'price', 'category'],
   },
   fields: [
     {
@@ -45,6 +45,11 @@ export const Products: CollectionConfig = {
       type: 'upload',
       relationTo: 'media',
       hasMany: true,
+      admin: {
+        components: {
+          Cell: '@/components/Admin/ThumbnailCell#ThumbnailCell',
+        },
+      },
     },
     {
       name: 'stock',

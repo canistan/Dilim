@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
 import "../globals.css";
+import { getPayload } from 'payload'
+import configPromise from '@payload-config'
 
 import { Header } from '@/components/Header'
 import { Footer } from '@/components/Footer'
@@ -51,11 +53,16 @@ export const metadata: Metadata = {
   },
 };
 
-export default function FrontendLayout({
+export default async function FrontendLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+  const payload = await getPayload({ config: configPromise })
+  const contactSettings = await payload.findGlobal({
+    slug: 'contact-settings',
+  })
+
   return (
     <html
       lang="tr"
@@ -68,7 +75,7 @@ export default function FrontendLayout({
             <main className="flex-1 flex flex-col">
               {children}
             </main>
-            <Footer />
+            <Footer contactSettings={contactSettings} />
             <CookiePopup />
             <PromoPopup />
             <Toaster position="top-center" toastOptions={{ duration: 4000, style: { background: '#1c1c1c', color: '#fff', borderRadius: '12px', padding: '16px' } }} />

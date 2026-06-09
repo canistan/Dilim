@@ -6,6 +6,7 @@ import toast from 'react-hot-toast'
 import Image from 'next/image'
 import { useSession } from 'next-auth/react'
 import { MapPin, Building2, CheckCircle2 } from 'lucide-react'
+import { taxOffices } from '@/data/taxOffices'
 
 const ALLOWED_DISTRICTS = [
   "Beykoz",
@@ -211,7 +212,19 @@ export default function OdemePage() {
                     </div>
                     <div className="md:col-span-1">
                       <label className="block text-sm font-medium text-gray-700 mb-1">Vergi Dairesi</label>
-                      <input type="text" value={formData.taxOffice} onChange={e => setFormData({...formData, taxOffice: e.target.value})} className="w-full p-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-dilim-portakal outline-none" />
+                      <input 
+                        list="tax-offices-list"
+                        type="text" 
+                        value={formData.taxOffice} 
+                        onChange={e => setFormData({...formData, taxOffice: e.target.value})} 
+                        className="w-full p-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-dilim-portakal outline-none" 
+                        placeholder="Yazın veya listeden seçin"
+                      />
+                      <datalist id="tax-offices-list">
+                        {taxOffices.map((office, idx) => (
+                          <option key={idx} value={office} />
+                        ))}
+                      </datalist>
                     </div>
                     <div className="md:col-span-2">
                       <label className="block text-sm font-medium text-gray-700 mb-1">Vergi Numarası</label>

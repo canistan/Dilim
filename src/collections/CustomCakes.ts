@@ -9,7 +9,7 @@ export const CustomCakes: CollectionConfig = {
   admin: {
     useAsTitle: 'title',
     group: 'Kendi Pastanı Tasarla',
-    defaultColumns: ['title', 'image'],
+    defaultColumns: ['image', 'title'],
     description: 'Fiyatı olmayan, kullanıcıların ilham alması için sergilenen özel tasarım pastalar.',
   },
   fields: [
@@ -25,6 +25,11 @@ export const CustomCakes: CollectionConfig = {
       relationTo: 'media',
       label: 'Görsel',
       required: false,
+      admin: {
+        components: {
+          Cell: '@/components/Admin/ThumbnailCell#ThumbnailCell',
+        },
+      },
     },
   ],
 }
