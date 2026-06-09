@@ -24,7 +24,7 @@ export const CustomCakes: CollectionConfig = {
       type: 'upload',
       relationTo: 'media',
       label: 'Görsel',
-      required: true,
+      required: false,
     },
   ],
 }

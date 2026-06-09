@@ -20,7 +20,8 @@ async function run() {
     await client.connect();
     console.log("Veritabanına bağlanıldı. Lock tabloları temizleniyor...");
     
-    await client.query('DROP TABLE IF EXISTS "payload_locked_documents__rels" CASCADE;');
+    // Doğru tablo isimleri! (Tek alt tire)
+    await client.query('DROP TABLE IF EXISTS "payload_locked_documents_rels" CASCADE;');
     await client.query('DROP TABLE IF EXISTS "payload_locked_documents" CASCADE;');
     
     console.log("Tablolar başarıyla silindi. Payload onları yeniden, doğru şemayla oluşturacak.");
