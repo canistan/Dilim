@@ -54,7 +54,7 @@ export default buildConfig({
     },
     meta: {
       titleSuffix: '- Dilim Pastaneleri Yönetim',
-      icons: [{ rel: 'icon', url: '/favicon.ico' }],
+      icons: [{ rel: 'icon', url: '/icon.png' }],
       openGraph: {
         images: [{ url: '/DilimPastLogo-final.png' }],
       },

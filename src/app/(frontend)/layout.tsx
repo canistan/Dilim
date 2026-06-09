@@ -20,8 +20,8 @@ export const metadata: Metadata = {
   title: "Dilim Pastaneleri | Lezzetin Adresi",
   description: "Özel anlarınıza eşlik eden eşsiz tatlar. Lüks yaş pasta, özel gün pastası ve geleneksel tatlılar için Dilim Pastaneleri.",
   icons: {
-    icon: "/DilimPastLogo-final.png",
-    apple: "/DilimPastLogo-final.png",
+    icon: "/icon.png",
+    apple: "/icon.png",
   },
   openGraph: {
     title: "Dilim Pastaneleri | Lezzetin Adresi",
