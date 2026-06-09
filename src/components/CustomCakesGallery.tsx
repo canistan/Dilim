@@ -16,7 +16,7 @@ export const CustomCakesGallery = ({ cakes }: { cakes: CustomCake[] }) => {
   if (!cakes || cakes.length === 0) return null;
 
   return (
-    <section className="bg-dilim-bej py-16 overflow-hidden">
+    <section className="bg-dilim-bej pt-4 pb-12 overflow-hidden">
       <div className="container mx-auto px-4 mb-10 text-center">
         <h3 className="text-3xl font-bold text-dilim-siyah tracking-tight">
           İlham Alabileceğiniz Bazı Örnekler
@@ -39,7 +39,7 @@ export const CustomCakesGallery = ({ cakes }: { cakes: CustomCake[] }) => {
           {cakes.map((cake, i) => {
             const imageUrl = typeof cake.image === 'object' && cake.image?.url ? cake.image.url : '/placeholder.png';
             return (
-              <div key={i} className="flex-none w-64 h-80 mx-4 relative rounded-2xl overflow-hidden shadow-lg border border-white group/card">
+              <div key={i} className="flex-none w-48 h-64 mx-3 relative rounded-2xl overflow-hidden shadow-md border border-white/50 group/card">
                 <Image 
                   src={imageUrl} 
                   alt={cake.title || `Cake ${i}`} 
@@ -48,8 +48,8 @@ export const CustomCakesGallery = ({ cakes }: { cakes: CustomCake[] }) => {
                   sizes="(max-width: 768px) 100vw, 256px"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80"></div>
-                <div className="absolute bottom-0 left-0 w-full p-4 text-center">
-                  <h4 className="text-white font-bold text-lg drop-shadow-md whitespace-normal leading-tight">
+                <div className="absolute bottom-0 left-0 w-full p-3 text-center">
+                  <h4 className="text-white font-bold text-base drop-shadow-md whitespace-normal leading-tight">
                     {cake.title}
                   </h4>
                 </div>
@@ -63,7 +63,7 @@ export const CustomCakesGallery = ({ cakes }: { cakes: CustomCake[] }) => {
           {cakes.map((cake, i) => {
             const imageUrl = typeof cake.image === 'object' && cake.image?.url ? cake.image.url : '/placeholder.png';
             return (
-              <div key={`dup-${i}`} className="flex-none w-64 h-80 mx-4 relative rounded-2xl overflow-hidden shadow-lg border border-white group/card">
+              <div key={`dup-${i}`} className="flex-none w-48 h-64 mx-3 relative rounded-2xl overflow-hidden shadow-md border border-white/50 group/card">
                 <Image 
                   src={imageUrl} 
                   alt={cake.title || `Cake ${i}`} 
@@ -72,8 +72,8 @@ export const CustomCakesGallery = ({ cakes }: { cakes: CustomCake[] }) => {
                   sizes="(max-width: 768px) 100vw, 256px"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80"></div>
-                <div className="absolute bottom-0 left-0 w-full p-4 text-center">
-                  <h4 className="text-white font-bold text-lg drop-shadow-md whitespace-normal leading-tight">
+                <div className="absolute bottom-0 left-0 w-full p-3 text-center">
+                  <h4 className="text-white font-bold text-base drop-shadow-md whitespace-normal leading-tight">
                     {cake.title}
                   </h4>
                 </div>

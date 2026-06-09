@@ -41,7 +41,7 @@ export default async function TasarlaPage() {
       </section>
 
       {/* Builder Section */}
-      <section className="py-20 bg-gray-50 relative">
+      <section className="pt-20 pb-8 bg-gray-50 relative">
         {/* Decorative elements */}
         <div className="absolute top-0 left-0 w-full h-64 bg-gradient-to-b from-black to-transparent opacity-5 pointer-events-none"></div>
         
