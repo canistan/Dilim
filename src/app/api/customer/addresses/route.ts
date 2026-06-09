@@ -29,9 +29,10 @@ export async function POST(req: Request) {
     let cleanAddress = { ...address }
     if (!cleanAddress.id) delete cleanAddress.id
     if (!cleanAddress.isCorporate) {
-      cleanAddress.companyName = null
-      cleanAddress.taxOffice = null
-      cleanAddress.taxNumber = null
+      delete cleanAddress.companyName
+      delete cleanAddress.taxOffice
+      delete cleanAddress.taxNumber
+      cleanAddress.isCorporate = false
     }
 
     if (action === 'add') {
@@ -42,13 +43,23 @@ export async function POST(req: Request) {
       addresses = addresses.map((a: any) => a.id === addressId ? { ...a, ...cleanAddress, id: a.id } : a)
     }
 
+    // Mevcut adreslerden de boş ID'leri temizle
+    addresses = addresses.map((a: any) => {
+      const cleaned = { ...a }
+      if (!cleaned.id) delete cleaned.id
+      if (!cleaned.isCorporate) {
+        delete cleaned.companyName
+        delete cleaned.taxOffice
+        delete cleaned.taxNumber
+      }
+      return cleaned
+    })
+
     const updatedUser = await payload.update({
       collection: 'customers' as any,
       id: user.id,
       data: { 
-        addresses,
-        name: user.name || 'Belirtilmedi',
-        surname: user.surname || 'Belirtilmedi'
+        addresses
       }
     })
     
