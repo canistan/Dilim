@@ -30,11 +30,8 @@ export default function HesabimPage() {
     phone: '',
     email: '', // read-only
   })
-  const [birthDate, setBirthDate] = useState('')
   const [savingProfile, setSavingProfile] = useState(false)
   const [savedProfile, setSavedProfile] = useState(false)
-  const [savingBirth, setSavingBirth] = useState(false)
-  
   // Delete Account State
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const [deleteInput, setDeleteInput] = useState('')
