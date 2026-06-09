@@ -24,7 +24,7 @@ export const Customers: CollectionConfig = {
           label: 'Profil Bilgileri',
           fields: [
             { name: 'name', type: 'text', required: true, label: 'Ad' },
-            { name: 'surname', type: 'text', required: true, label: 'Soyad' },
+            { name: 'surname', type: 'text', required: false, label: 'Soyad' },
             { 
               name: 'gender', 
               type: 'select', 
