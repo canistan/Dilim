@@ -2,6 +2,7 @@
 
 import React from 'react'
 import Image from 'next/image'
+import STATIC_PRODUCTS from '@/data/products.json'
 
 type CustomCake = {
   id: number;
@@ -37,7 +38,10 @@ export const CustomCakesGallery = ({ cakes }: { cakes: CustomCake[] }) => {
 
         <div className="flex animate-marquee group-hover:[animation-play-state:paused] whitespace-nowrap min-w-full shrink-0">
           {cakes.map((cake, i) => {
-            const imageUrl = typeof cake.image === 'object' && cake.image?.url ? cake.image.url : '/placeholder.png';
+            const staticProd = STATIC_PRODUCTS.find(p => p.name === cake.title);
+            const imageUrl = typeof cake.image === 'object' && cake.image?.url 
+                ? cake.image.url 
+                : (staticProd?.image || '/placeholder.png');
             return (
               <div key={i} className="flex-none w-48 h-64 mx-3 relative rounded-2xl overflow-hidden shadow-md border border-white/50 group/card">
                 <Image 
@@ -61,7 +65,10 @@ export const CustomCakesGallery = ({ cakes }: { cakes: CustomCake[] }) => {
         {/* Duplicate for seamless infinite loop */}
         <div className="flex animate-marquee group-hover:[animation-play-state:paused] whitespace-nowrap min-w-full shrink-0" aria-hidden="true">
           {cakes.map((cake, i) => {
-            const imageUrl = typeof cake.image === 'object' && cake.image?.url ? cake.image.url : '/placeholder.png';
+            const staticProd = STATIC_PRODUCTS.find(p => p.name === cake.title);
+            const imageUrl = typeof cake.image === 'object' && cake.image?.url 
+                ? cake.image.url 
+                : (staticProd?.image || '/placeholder.png');
             return (
               <div key={`dup-${i}`} className="flex-none w-48 h-64 mx-3 relative rounded-2xl overflow-hidden shadow-md border border-white/50 group/card">
                 <Image 

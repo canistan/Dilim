@@ -12,15 +12,10 @@ async function run() {
   const products = await payload.find({
     collection: 'products',
     limit: 5,
-    where: {
-      title: {
-        equals: customCakes.docs[0]?.title
-      }
-    }
   })
 
-  console.log('Custom Cake 0:', JSON.stringify(customCakes.docs[0], null, 2))
-  console.log('Product matched:', JSON.stringify(products.docs[0], null, 2))
+  console.log('Custom Cakes Titles: ', customCakes.docs.map(c => c.title))
+  console.log('Products Sample: ', products.docs.map(p => ({ title: p.title, images: p.images })))
   
   process.exit(0)
 }
