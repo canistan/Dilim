@@ -382,18 +382,10 @@ export default function HesabimPage() {
                     </div>
                   </div>
 
-                  <div className="p-5 bg-[#FFF8F3] border border-[#FFE8D6] rounded-2xl relative overflow-hidden mt-8">
-                    <div className="absolute top-0 right-0 w-32 h-32 bg-dilim-portakal/5 rounded-full -translate-y-1/2 translate-x-1/2"></div>
-                    <h4 className="font-bold text-dilim-portakal text-lg mb-2 relative z-10">🎂 {hasExistingBirthDate ? 'Doğum Tarihiniz' : 'Doğum Günü Hediyenizi Kaçırmayın!'}</h4>
-                    <p className="text-sm text-gray-600 mb-4 relative z-10">
-                      {hasExistingBirthDate 
-                        ? 'Doğum tarihinizi aşağıdan görebilir veya güncelleyebilirsiniz.'
-                        : 'Doğum tarihinizi kaydedin, size özel sürpriz indirim ve hediyelerden faydalanın.'}
-                    </p>
-                    
-                    <div className="flex gap-4 items-end relative z-10">
+                  <div className="bg-gray-50 p-6 rounded-2xl border border-gray-100 mt-6">
+                    <div className="flex gap-4 items-end">
                       <div className="flex-1">
-                        <label className="block text-xs font-semibold text-gray-700 mb-1">Doğum Tarihiniz</label>
+                        <label className="block text-sm font-semibold text-gray-700 mb-1">Doğum Tarihi</label>
                         <input 
                           type="date" 
                           value={birthDate}
@@ -404,7 +396,7 @@ export default function HesabimPage() {
                       <button 
                         onClick={handleSaveBirthDate}
                         disabled={!birthDate || savingBirth}
-                        className="px-6 py-3 bg-dilim-siyah text-white font-semibold rounded-xl hover:bg-gray-800 disabled:bg-gray-400 transition-colors"
+                        className="px-6 py-3 bg-dilim-portakal text-white font-semibold rounded-xl hover:bg-dilim-turuncu disabled:bg-gray-400 transition-colors"
                       >
                         {savingBirth ? 'Kaydediliyor...' : hasExistingBirthDate ? 'Güncelle' : 'Kaydet'}
                       </button>
