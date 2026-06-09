@@ -4,6 +4,7 @@ import { useSession, signOut } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
+import Link from 'next/link'
 import { Plus, Trash2, MapPin, Building2, Package, Calendar, CreditCard, CheckCircle2, XCircle, Clock } from 'lucide-react'
 import { taxOffices } from '@/data/taxOffices'
 import Image from 'next/image'
@@ -295,9 +296,17 @@ export default function HesabimPage() {
                 {loadingOrders ? (
                   <div className="py-12 text-center text-gray-500">Siparişleriniz yükleniyor...</div>
                 ) : orders.length === 0 ? (
-                  <div className="py-12 text-center bg-gray-50 rounded-2xl border border-dashed border-gray-200">
+                  <div className="py-12 px-4 text-center bg-gray-50 rounded-2xl border border-dashed border-gray-200">
                     <Package className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-                    <p className="text-gray-500 font-medium">Henüz bir siparişiniz bulunmuyor.</p>
+                    <p className="text-gray-500 font-medium mb-6">Henüz bir siparişiniz bulunmuyor.</p>
+                    <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                      <Link href="/urunler" className="bg-dilim-siyah text-white px-6 py-2.5 rounded-xl text-sm font-semibold hover:bg-gray-800 transition-colors w-full sm:w-auto inline-block">
+                        Hemen Sipariş Ver
+                      </Link>
+                      <Link href="/tasarla" className="bg-dilim-portakal text-white px-6 py-2.5 rounded-xl text-sm font-semibold hover:bg-orange-500 transition-colors w-full sm:w-auto inline-block">
+                        Kendi Pastanı Tasarla
+                      </Link>
+                    </div>
                   </div>
                 ) : (
                   <div className="space-y-4">
