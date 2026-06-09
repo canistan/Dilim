@@ -12,13 +12,15 @@ export async function DELETE(req: Request) {
     const payload = await getPayload({ config: configPromise })
     const users = await payload.find({
       collection: 'customers' as any,
-      where: { email: { equals: session.user.email } }
+      where: { email: { equals: session.user.email } },
+      overrideAccess: true,
     })
     
     if (users.docs.length > 0) {
       await payload.delete({
         collection: 'customers' as any,
-        id: users.docs[0].id
+        id: users.docs[0].id,
+        overrideAccess: true,
       })
       return NextResponse.json({ success: true })
     }

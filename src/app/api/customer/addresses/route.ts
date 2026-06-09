@@ -15,7 +15,8 @@ export async function POST(req: Request) {
     const payload = await getPayload({ config: configPromise })
     const users = await payload.find({
       collection: 'customers' as any,
-      where: { email: { equals: session.user.email } }
+      where: { email: { equals: session.user.email } },
+      overrideAccess: true,
     })
     
     if (users.docs.length === 0) {
@@ -60,12 +61,13 @@ export async function POST(req: Request) {
       id: user.id,
       data: { 
         addresses
-      }
+      },
+      overrideAccess: true,
     })
     
     return NextResponse.json({ success: true, addresses: updatedUser.addresses || [] })
   } catch (error: any) {
-    console.error('Adres kaydetme hatası:', error?.data?.errors || error)
-    return NextResponse.json({ error: 'Server error' }, { status: 500 })
+    console.error('Adres kaydetme hatası:', error?.data?.errors || error?.message || error)
+    return NextResponse.json({ error: 'Server error', details: error?.message }, { status: 500 })
   }
 }

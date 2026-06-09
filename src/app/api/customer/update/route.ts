@@ -14,7 +14,8 @@ export async function POST(req: Request) {
     const payload = await getPayload({ config: configPromise })
     const users = await payload.find({
       collection: 'customers' as any,
-      where: { email: { equals: session.user.email } }
+      where: { email: { equals: session.user.email } },
+      overrideAccess: true,
     })
     
     if (users.docs.length > 0) {
@@ -27,12 +28,14 @@ export async function POST(req: Request) {
       await payload.update({
         collection: 'customers' as any,
         id: users.docs[0].id,
-        data: updateData
+        data: updateData,
+        overrideAccess: true,
       })
       return NextResponse.json({ success: true })
     }
     return NextResponse.json({ error: 'Not found' }, { status: 404 })
-  } catch (error) {
-    return NextResponse.json({ error: 'Server error' }, { status: 500 })
+  } catch (error: any) {
+    console.error('Profil güncelleme hatası:', error?.data?.errors || error?.message || error)
+    return NextResponse.json({ error: 'Server error', details: error?.message }, { status: 500 })
   }
 }

@@ -12,14 +12,16 @@ export async function GET() {
     const payload = await getPayload({ config: configPromise })
     const users = await payload.find({
       collection: 'customers' as any,
-      where: { email: { equals: session.user.email } }
+      where: { email: { equals: session.user.email } },
+      overrideAccess: true,
     })
     
     if (users.docs.length > 0) {
       return NextResponse.json({ user: users.docs[0] })
     }
     return NextResponse.json({ error: 'Not found' }, { status: 404 })
-  } catch (error) {
+  } catch (error: any) {
+    console.error('Müşteri bilgi hatası:', error?.message || error)
     return NextResponse.json({ error: 'Server error' }, { status: 500 })
   }
 }

@@ -19,7 +19,8 @@ export async function GET() {
         } 
       },
       sort: '-createdAt', // En yeniler en üstte
-      limit: 50
+      limit: 50,
+      overrideAccess: true,
     })
     
     return NextResponse.json({ success: true, orders: orders.docs })

@@ -19,7 +19,8 @@ export async function POST(req: Request) {
         email: {
           equals: email
         }
-      }
+      },
+      overrideAccess: true,
     });
 
     if (existingCustomers.docs.length === 0) {
@@ -31,7 +32,8 @@ export async function POST(req: Request) {
           email: email,
           provider: provider || 'credentials',
           providerAccountId: providerAccountId || '',
-        }
+        },
+        overrideAccess: true,
       })
     } else {
       // Mevcut müşteriyi güncelle (eğer sosyal giriş ise ID'sini kaydet)
@@ -42,7 +44,8 @@ export async function POST(req: Request) {
           data: {
             provider: provider,
             providerAccountId: providerAccountId
-          }
+          },
+          overrideAccess: true,
         })
       }
     }
