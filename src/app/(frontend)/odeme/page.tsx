@@ -98,7 +98,7 @@ export default function OdemePage() {
 
     setLoading(true)
     try {
-      const res = await fetch('/api/checkout', {
+      const res = await fetch('/api/odeme-baslat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -120,10 +120,12 @@ export default function OdemePage() {
           window.location.href = `/odeme/basarili?orderNumber=${data.orderNumber}`
         }
       } else {
-        toast.error("Sipariş oluşturulamadı: " + data.error)
+        console.error("Checkout failed API response:", data);
+        toast.error("Sipariş oluşturulamadı: " + (data.error || "Bilinmeyen hata"))
       }
-    } catch (err) {
-      toast.error("Bir hata oluştu. Lütfen tekrar deneyin.")
+    } catch (err: any) {
+      console.error("Checkout network or parse error:", err);
+      toast.error("Bir hata oluştu: " + err.message)
     }
     setLoading(false)
   }

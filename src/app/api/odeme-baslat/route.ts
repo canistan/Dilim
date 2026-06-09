@@ -62,7 +62,7 @@ export async function POST(req: Request) {
       currency: 'TRY',
       basketId: order.id.toString(),
       paymentGroup: 'PRODUCT',
-      callbackUrl: `${host}/api/checkout/callback`,
+      callbackUrl: `${host}/api/iyzico/callback`,
       enabledInstallments: [2, 3, 6, 9],
       buyer: {
         id: 'BY789',
