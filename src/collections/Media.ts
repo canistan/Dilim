@@ -6,7 +6,7 @@ export const Media: CollectionConfig = {
     group: 'Yönetim',
   },
   upload: {
-    staticDir: 'public/media',
+    staticDir: process.env.NODE_ENV === 'production' ? '/tmp/media' : 'public/media',
     adminThumbnail: 'thumbnail',
     mimeTypes: ['image/*'],
     formatOptions: {
