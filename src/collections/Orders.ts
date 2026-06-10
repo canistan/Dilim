@@ -11,6 +11,14 @@ export const Orders: CollectionConfig = {
     group: 'Kullanıcı Bilgi Deposu',
     defaultColumns: ['orderNumber', 'orderType', 'status', 'totalAmount', 'createdAt'],
   },
+  access: {
+    // Sadece adminler (Users) doğrudan Payload API üzerinden siparişlere erişebilir.
+    // Müşteriler (NextAuth) site üzerinden Server Component'ler (Local API) aracılığıyla veriye ulaşır.
+    read: ({ req: { user } }) => Boolean(user?.collection === 'users'),
+    create: ({ req: { user } }) => Boolean(user?.collection === 'users'),
+    update: ({ req: { user } }) => Boolean(user?.collection === 'users'),
+    delete: ({ req: { user } }) => Boolean(user?.collection === 'users'),
+  },
   hooks: {
     afterChange: [
       async ({ doc, previousDoc, operation, req }) => {
@@ -116,6 +124,15 @@ export const Orders: CollectionConfig = {
             return value
           },
         ],
+      },
+    },
+    {
+      name: 'customer',
+      type: 'relationship',
+      relationTo: 'customers',
+      admin: {
+        position: 'sidebar',
+        description: 'Eğer siparişi veren kişi sisteme kayıtlı bir müşteri ise, profili buraya bağlanır.',
       },
     },
     {

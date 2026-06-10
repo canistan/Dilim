@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server'
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
+import { getServerSession } from "next-auth/next"
+import { authOptions } from "@/lib/auth"
 
 export async function POST(req: Request) {
   try {
@@ -62,6 +64,20 @@ export async function POST(req: Request) {
     const sizeMatch = size ? size.match(/\d+/g) : null;
     const cakeSizeNum = sizeMatch ? parseInt(sizeMatch[sizeMatch.length - 1], 10) : 10;
 
+    // Müşteri oturumu var mı kontrol et
+    const session = await getServerSession(authOptions);
+    let customerId = null;
+
+    if (session?.user?.email) {
+      const users = await payload.find({
+        collection: 'customers',
+        where: { email: { equals: session.user.email } }
+      });
+      if (users.docs.length > 0) {
+        customerId = users.docs[0].id;
+      }
+    }
+
     // orders koleksiyonuna kaydet
     const customCake = await payload.create({
       collection: 'orders' as any,
@@ -70,6 +86,7 @@ export async function POST(req: Request) {
         status: 'pending',
         paymentStatus: 'unpaid',
         totalAmount: 0, // Fiyat admin tarafından girilecek
+        customer: customerId ? customerId : undefined,
         customerInfo: {
           firstName: customerName.split(' ')[0] || customerName,
           lastName: customerName.split(' ').slice(1).join(' ') || 'Belirtilmedi',
