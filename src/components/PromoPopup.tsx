@@ -5,14 +5,22 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { X, Gift } from 'lucide-react'
 import Link from 'next/link'
 import { useSession } from 'next-auth/react'
+import { usePathname } from 'next/navigation'
 
 export function PromoPopup() {
   const [showPopup, setShowPopup] = useState(false)
   const { status } = useSession()
+  const pathname = usePathname()
 
   useEffect(() => {
     // Sadece giriş yapmamış kullanıcılara ve oturum bilgisi yüklendiğinde göster.
     if (status === 'loading' || status === 'authenticated') return
+    
+    // Giris, kayit, hesabim gibi sayfalardaysa pop-up gosterme
+    if (pathname === '/giris' || pathname === '/kayit' || pathname === '/hesabim') {
+      setShowPopup(false)
+      return
+    }
 
     // Sadece ilk girişte veya 24 saatte bir göster (localStorage ile kontrol)
     const lastSeen = localStorage.getItem('dilim_promo_last_seen')
@@ -28,7 +36,7 @@ export function PromoPopup() {
       
       return () => clearTimeout(timer)
     }
-  }, [status])
+  }, [status, pathname])
 
   if (!showPopup) return null
 
