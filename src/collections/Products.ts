@@ -67,5 +67,15 @@ export const Products: CollectionConfig = {
       type: 'relationship',
       relationTo: 'categories' as any,
     },
+    {
+      name: 'showInMenu',
+      type: 'checkbox',
+      label: 'Kafé Menüsünde Göster',
+      defaultValue: true,
+      admin: {
+        position: 'sidebar',
+        description: 'Eğer işaretliyse, bu ürün site içindeki Native Menü sayfasında listelenir.',
+      },
+    },
   ],
 }

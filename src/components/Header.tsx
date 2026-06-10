@@ -31,6 +31,7 @@ export const Header = () => {
 
   const navLinks = [
     { name: 'Hakkımızda', href: '/hakkimizda' },
+    { name: 'Kafé Menüsü', href: '/menu', highlight: false },
     { name: 'Ürünlerimiz', href: '/urunler' },
     { name: 'Kendi Pastanı Tasarla', href: '/tasarla', highlight: true },
     { name: 'Blog', href: '/blog' },

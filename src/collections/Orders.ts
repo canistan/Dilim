@@ -199,11 +199,18 @@ export const Orders: CollectionConfig = {
     },
     {
       name: 'customCakeDetails',
-      type: 'json',
+      type: 'group',
       admin: {
         condition: (data) => Boolean(data?.orderType === 'custom'),
-        description: 'Müşterinin özel pasta talebine ait detaylar (katman, krema, porsiyon vs.)',
+        description: 'Müşterinin özel pasta talebine ait detaylar',
       },
+      fields: [
+        { name: 'cakeSize', type: 'number', label: 'Kişi Sayısı (Porsiyon)' },
+        { name: 'spongeType', type: 'text', label: 'Kek Tipi' },
+        { name: 'creamFlavor', type: 'text', label: 'Krema Aroması' },
+        { name: 'note', type: 'textarea', label: 'Müşteri Notu' },
+        { name: 'referenceImage', type: 'relationship', relationTo: 'media', label: 'Referans Görseli' },
+      ]
     },
     {
       name: 'totalAmount',
@@ -220,11 +227,11 @@ export const Orders: CollectionConfig = {
         },
       },
       options: [
-        { label: 'Pending', value: 'pending' },
-        { label: 'Preparing', value: 'preparing' },
-        { label: 'Shipped', value: 'shipped' },
-        { label: 'Delivered', value: 'delivered' },
-        { label: 'Cancelled', value: 'cancelled' },
+        { label: 'Yeni Sipariş', value: 'pending' },
+        { label: 'Hazırlanıyor', value: 'preparing' },
+        { label: 'Kargoya Verildi', value: 'shipped' },
+        { label: 'Teslim Edildi', value: 'delivered' },
+        { label: 'İptal Edildi', value: 'cancelled' },
       ],
     },
     {
@@ -237,9 +244,9 @@ export const Orders: CollectionConfig = {
         },
       },
       options: [
-        { label: 'Unpaid', value: 'unpaid' },
-        { label: 'Paid', value: 'paid' },
-        { label: 'Failed', value: 'failed' },
+        { label: 'Ödenmedi', value: 'unpaid' },
+        { label: 'Ödendi', value: 'paid' },
+        { label: 'Hatalı İşlem', value: 'failed' },
       ],
     },
     {
