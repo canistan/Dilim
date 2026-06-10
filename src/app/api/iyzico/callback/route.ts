@@ -9,42 +9,51 @@ export async function POST(req: Request) {
     const hostHeader = req.headers.get('x-forwarded-host') || req.headers.get('host') || 'localhost:3000';
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || `${protocol}://${hostHeader}`;
 
+    const redirectHtml = (url: string) => `
+      <!DOCTYPE html>
+      <html>
+        <head><title>Yönlendiriliyor...</title></head>
+        <body>
+          <script>
+            window.top.location.href = "${url}";
+          </script>
+        </body>
+      </html>
+    `;
+
     const formData = await req.formData();
     const token = formData.get('token') as string;
 
     if (!token) {
-      return NextResponse.redirect(`${siteUrl}/odeme/basarisiz?reason=MissingToken`);
+      return new NextResponse(redirectHtml(`${siteUrl}/odeme/basarisiz?reason=MissingToken`), { headers: { 'Content-Type': 'text/html' } });
     }
 
     if (token === 'mock-token-123') {
-      // Mock Success Response
-      return NextResponse.redirect(`${siteUrl}/odeme/basarili?orderId=mock-basket`);
+      return new NextResponse(redirectHtml(`${siteUrl}/odeme/basarili?orderId=mock-basket`), { headers: { 'Content-Type': 'text/html' } });
     }
 
     return new Promise<Response>((resolve) => {
       iyzipay.checkoutForm.retrieve({
         locale: 'tr',
-        conversationId: 'fallback-id', // Ideally this comes from the token mapping or your DB
+        conversationId: 'fallback-id', 
         token: token
       }, async (err: any, result: any) => {
         if (err || result.status === 'failure' || result.paymentStatus !== 'SUCCESS') {
-          resolve(NextResponse.redirect(`${siteUrl}/odeme/basarisiz?reason=${encodeURIComponent(result?.errorMessage || 'PaymentFailed')}`));
+          resolve(new NextResponse(redirectHtml(`${siteUrl}/odeme/basarisiz?reason=${encodeURIComponent(result?.errorMessage || 'PaymentFailed')}`), { headers: { 'Content-Type': 'text/html' } }));
         } else {
-          // Payment successful! Update DB order status here.
           try {
             const payload = await getPayload({ config: configPromise });
             await payload.update({
               collection: 'orders',
-              id: result.basketId, // Ensure basketId matches order ID format
+              id: result.basketId, 
               data: {
                 paymentStatus: 'paid',
-                // Use a proper existing field if you have it. Let's assume just updating paymentStatus is enough.
               }
             });
           } catch (updateErr) {
             console.error("Ödeme başarılı oldu ancak sipariş güncellenirken hata oluştu:", updateErr);
           }
-          resolve(NextResponse.redirect(`${siteUrl}/odeme/basarili?orderId=${result.basketId}`));
+          resolve(new NextResponse(redirectHtml(`${siteUrl}/odeme/basarili?orderId=${result.basketId}`), { headers: { 'Content-Type': 'text/html' } }));
         }
       });
     });
@@ -52,6 +61,7 @@ export async function POST(req: Request) {
     const protocol = req.headers.get('x-forwarded-proto') || 'https';
     const hostHeader = req.headers.get('x-forwarded-host') || req.headers.get('host') || 'localhost:3000';
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || `${protocol}://${hostHeader}`;
-    return NextResponse.redirect(`${siteUrl}/odeme/basarisiz?reason=InternalError`);
+    const fallbackHtml = `<html><body><script>window.top.location.href = "${siteUrl}/odeme/basarisiz?reason=InternalError";</script></body></html>`;
+    return new NextResponse(fallbackHtml, { headers: { 'Content-Type': 'text/html' } });
   }
 }
