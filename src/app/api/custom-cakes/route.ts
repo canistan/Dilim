@@ -101,7 +101,7 @@ export async function POST(req: Request) {
             <p><strong>Not:</strong> ${note || 'Yok'}</p>
             
             <p style="margin-top: 20px;">
-              <a href="http://localhost:3000/admin/collections/orders/${customCake.id}" style="background-color: #000; color: #fff; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Siparişlerde Görüntüle</a>
+              <a href="${req.headers.get('origin') || process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/admin/collections/orders/${customCake.id}" style="background-color: #000; color: #fff; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Siparişlerde Görüntüle</a>
             </p>
           </div>
         `
