@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ChevronRight, ChevronLeft, Check, Layers, CakeSlice, PaintBucket, ChefHat, MessageCircle, User } from 'lucide-react'
+import { ChevronRight, ChevronLeft, Check, Layers, CakeSlice, PaintBucket, ChefHat, MessageCircle, User, MapPin } from 'lucide-react'
 import toast from 'react-hot-toast'
 
 // Sipariş Adımları Verileri
@@ -61,6 +61,7 @@ export default function CakeBuilder() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
   const [orderId, setOrderId] = useState<string | null>(null)
+  const [userAddresses, setUserAddresses] = useState<any[]>([])
 
   const { status } = useSession()
 
@@ -78,6 +79,9 @@ export default function CakeBuilder() {
               // Sadece ilk adresi otomatik dolduralım varsa
               customerAddress: prev.customerAddress || (data.user.addresses && data.user.addresses.length > 0 ? data.user.addresses[0].address : '')
             }))
+            if (data.user.addresses) {
+              setUserAddresses(data.user.addresses)
+            }
           }
         })
         .catch(console.error)
@@ -410,8 +414,38 @@ export default function CakeBuilder() {
                   <label className="block text-sm font-medium text-gray-700 mb-1">E-Posta</label>
                   <input type="email" value={selections.customerEmail} onChange={(e) => handleSelect('customerEmail', e.target.value)} className="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-dilim-portakal focus:border-transparent outline-none transition-all" placeholder="ornek@email.com" />
                 </div>
+                
+                {status === 'authenticated' && userAddresses.length > 0 && (
+                  <div className="md:col-span-2 mt-2">
+                    <label className="block text-sm font-medium text-gray-700 mb-3">Kayıtlı Adresleriniz</label>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      {userAddresses.map(addr => (
+                        <div 
+                          key={addr.id}
+                          onClick={() => handleSelect('customerAddress', addr.address)}
+                          className={`p-4 rounded-xl border-2 cursor-pointer transition-all flex items-start gap-3 ${
+                            selections.customerAddress === addr.address 
+                              ? 'border-dilim-portakal bg-orange-50' 
+                              : 'border-gray-100 hover:border-dilim-portakal/50 bg-white'
+                          }`}
+                        >
+                          <MapPin className={`w-5 h-5 mt-0.5 flex-shrink-0 ${selections.customerAddress === addr.address ? 'text-dilim-portakal' : 'text-gray-400'}`} />
+                          <div>
+                            <div className="font-bold text-dilim-siyah text-sm mb-1">{addr.title}</div>
+                            <div className="text-xs text-gray-500 line-clamp-2">{addr.address}</div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="mt-6 text-center relative">
+                      <span className="text-xs text-gray-400 font-semibold uppercase tracking-wider bg-white px-3 relative z-10">VEYA YENİ ADRES GİRİN</span>
+                      <div className="absolute top-1/2 left-0 w-full h-px bg-gray-100 -z-0"></div>
+                    </div>
+                  </div>
+                )}
+
                 <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Açık Adres <span className="text-red-500">*</span></label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">{status === 'authenticated' && userAddresses.length > 0 ? 'Açık Adres' : 'Açık Adres'} <span className="text-red-500">*</span></label>
                   <textarea value={selections.customerAddress} onChange={(e) => handleSelect('customerAddress', e.target.value)} rows={3} className="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-dilim-portakal focus:border-transparent outline-none transition-all resize-none" placeholder="Teslimat adresinizi giriniz..."></textarea>
                 </div>
               </div>
