@@ -44,6 +44,9 @@ const OPTIONS = {
 
 export default function CakeBuilder() {
   const containerRef = useRef<HTMLDivElement>(null)
+  const fillingRef = useRef<HTMLDivElement>(null)
+  const footerRef = useRef<HTMLDivElement>(null)
+  
   const [currentStep, setCurrentStep] = useState(1)
   const [selections, setSelections] = useState({
     size: '',
@@ -77,7 +80,6 @@ export default function CakeBuilder() {
               customerName: prev.customerName || (data.user.name + (data.user.surname ? ' ' + data.user.surname : '')).trim(),
               customerPhone: prev.customerPhone || data.user.phone || '',
               customerEmail: prev.customerEmail || data.user.email || '',
-              // Sadece ilk adresi otomatik dolduralım varsa
               customerAddress: prev.customerAddress || (data.user.addresses && data.user.addresses.length > 0 ? data.user.addresses[0].address : '')
             }))
             if (data.user.addresses) {
@@ -90,7 +92,26 @@ export default function CakeBuilder() {
   }, [status])
 
   const handleSelect = (category: string, value: string) => {
-    setSelections(prev => ({ ...prev, [category]: value }))
+    setSelections(prev => {
+      const next = { ...prev, [category]: value }
+      
+      // Auto-scroll logic for better mobile UX
+      setTimeout(() => {
+        if (currentStep === 1 && next.size !== '') {
+          footerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+        } else if (currentStep === 2) {
+          if (category === 'base' && next.filling === '') {
+            fillingRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+          } else if (next.base !== '' && next.filling !== '') {
+            footerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+          }
+        } else if (currentStep === 3 && next.frosting !== '') {
+          footerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+        }
+      }, 150)
+
+      return next
+    })
   }
 
   const scrollToTop = () => {
@@ -333,7 +354,7 @@ export default function CakeBuilder() {
                 </div>
               </div>
 
-              <div>
+              <div ref={fillingRef}>
                 <h4 className="font-semibold text-dilim-siyah mb-4 flex items-center gap-2">
                   <span className="w-6 h-6 rounded-full bg-dilim-siyah text-white flex items-center justify-center text-xs">2</span>
                   İç Dolgu & Krema
@@ -548,7 +569,7 @@ export default function CakeBuilder() {
 
       {/* Footer Navigation */}
       {!isSuccess && (
-        <div className="bg-gray-50 border-t border-gray-100 p-6 flex justify-between items-center">
+        <div ref={footerRef} className="bg-gray-50 border-t border-gray-100 p-6 flex justify-between items-center">
           <button
             onClick={prevStep}
             className={`flex items-center gap-2 px-6 py-3 rounded-full font-medium transition-all ${

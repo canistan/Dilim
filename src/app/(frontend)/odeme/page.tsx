@@ -112,15 +112,24 @@ export default function OdemePage() {
           body: bodyStr
         });
       } catch (fetchErr: any) {
-        throw new Error("Ağ hatası (Fetch): " + fetchErr.message);
+        throw new Error("Adım 1 (Fetch) Hatası: " + fetchErr.message);
       }
       
-      const data = await res.json()
+      let data;
+      try {
+        data = await res.json()
+      } catch (jsonErr: any) {
+        throw new Error("Adım 2 (JSON) Hatası: " + jsonErr.message);
+      }
       
       if (res.ok && data.success) {
         if (data.paymentPageUrl) {
-          const cleanUrl = data.paymentPageUrl.toString().trim().replace(/[\n\r]/g, '');
-          window.location.href = cleanUrl + '&iframe=true'
+          try {
+            const cleanUrl = data.paymentPageUrl.toString().trim().replace(/[\n\r]/g, '');
+            window.location.href = cleanUrl + '&iframe=true'
+          } catch (urlErr: any) {
+            throw new Error("Adım 3 (URL) Hatası: " + urlErr.message);
+          }
         } else if (data.checkoutFormContent) {
           setCheckoutHtml(data.checkoutFormContent)
         } else {
@@ -132,7 +141,7 @@ export default function OdemePage() {
       }
     } catch (err: any) {
       console.error("Checkout network or parse error:", err);
-      toast.error("Bir hata oluştu: " + err.message)
+      toast.error("Sistem Hatası: " + err.message)
     }
     setLoading(false)
   }
