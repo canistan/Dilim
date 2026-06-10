@@ -11,7 +11,7 @@ export const Resumes: CollectionConfig = {
     description: 'Kariyer başvurularında yüklenen CV ve özgeçmiş dosyaları.',
   },
   upload: {
-    staticDir: 'public/resumes',
+    staticDir: process.env.NODE_ENV === 'production' ? '/tmp/resumes' : 'public/resumes',
     mimeTypes: ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'],
   },
   access: {
