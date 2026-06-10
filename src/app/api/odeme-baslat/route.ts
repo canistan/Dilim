@@ -115,6 +115,20 @@ export async function POST(req: Request) {
     let host = process.env.NEXT_PUBLIC_SITE_URL || `${protocol}://${hostHeader}`;
     host = host.endsWith('/') ? host.slice(0, -1) : host;
     
+    // Geliştirme ortamında (localhost) Iyzico'yu atla ve direkt başarılı say.
+    if (process.env.NODE_ENV !== 'production' || host.includes('localhost')) {
+      await payload.update({
+        collection: 'orders',
+        id: order.id,
+        data: { paymentStatus: 'paid' },
+      });
+      return NextResponse.json({ 
+        success: true, 
+        orderNumber: order.orderNumber,
+        paymentPageUrl: `/odeme/basarili?orderId=${order.id}`
+      });
+    }
+    
     let formattedPhone = customerInfo.phone.replace(/\D/g, '');
     if (formattedPhone.startsWith('0')) formattedPhone = formattedPhone.substring(1);
     if (formattedPhone.length === 10) formattedPhone = '+90' + formattedPhone;
