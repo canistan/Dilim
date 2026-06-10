@@ -47,6 +47,7 @@ export default function HesabimPage() {
   // Orders State
   const [orders, setOrders] = useState<any[]>([])
   const [loadingOrders, setLoadingOrders] = useState(true)
+  const [orderToCancel, setOrderToCancel] = useState<string | null>(null)
 
   // Addresses State
   const [addresses, setAddresses] = useState<any[]>([])
@@ -55,6 +56,7 @@ export default function HesabimPage() {
     id: '', title: '', district: '', address: '', isCorporate: false, companyName: '', taxOffice: '', taxNumber: ''
   })
   const [savingAddress, setSavingAddress] = useState(false)
+  const [addressToDelete, setAddressToDelete] = useState<string | null>(null)
 
   useEffect(() => {
     if (status === 'unauthenticated') {
@@ -213,13 +215,13 @@ export default function HesabimPage() {
     setSavingAddress(false)
   }
 
-  const handleDeleteAddress = async (id: string) => {
-    if (!confirm("Bu adresi silmek istediğinize emin misiniz?")) return
+  const confirmDeleteAddress = async () => {
+    if (!addressToDelete) return;
     try {
       const res = await fetch('/api/customer/addresses', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'delete', addressId: id })
+        body: JSON.stringify({ action: 'delete', addressId: addressToDelete })
       })
       const data = await res.json()
       if (res.ok) {
@@ -228,6 +230,8 @@ export default function HesabimPage() {
       }
     } catch (e) {
       toast.error("Adres silinemedi.")
+    } finally {
+      setAddressToDelete(null)
     }
   }
 
@@ -242,25 +246,27 @@ export default function HesabimPage() {
     }
   }
 
-  const handleCancelOrder = async (orderId: string) => {
-    if (!confirm("Siparişinizi iptal etmek istediğinize emin misiniz?")) return;
+  const confirmCancelOrder = async () => {
+    if (!orderToCancel) return;
     
     try {
       const res = await fetch('/api/customer/orders/cancel', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ orderId })
+        body: JSON.stringify({ orderId: orderToCancel })
       });
       const data = await res.json();
       if (res.ok) {
         toast.success("Siparişiniz iptal edildi.");
         // Siparişi listede güncelle
-        setOrders(orders.map(o => o.id === orderId ? { ...o, status: 'cancelled' } : o));
+        setOrders(orders.map(o => o.id === orderToCancel ? { ...o, status: 'cancelled' } : o));
       } else {
         toast.error(data.error || "Sipariş iptal edilemedi.");
       }
     } catch (error) {
       toast.error("Bir hata oluştu.");
+    } finally {
+      setOrderToCancel(null)
     }
   };
 
@@ -353,7 +359,7 @@ export default function HesabimPage() {
                                 </span>
                                 {order.status === 'pending' && (
                                   <button 
-                                    onClick={() => handleCancelOrder(order.id)}
+                                    onClick={() => setOrderToCancel(order.id)}
                                     className="px-3 py-1 rounded-full text-xs font-bold bg-white border border-red-200 text-red-500 hover:bg-red-50 transition-colors flex items-center gap-1"
                                     title="Siparişi İptal Et"
                                   >
@@ -601,7 +607,7 @@ export default function HesabimPage() {
                             </h4>
                             <div className="flex gap-2">
                               <button onClick={() => {setAddressForm(addr); setShowAddressForm(true);}} className="text-xs text-blue-500 hover:underline">Düzenle</button>
-                              <button onClick={() => handleDeleteAddress(addr.id)} className="text-xs text-red-500 hover:underline">Sil</button>
+                              <button onClick={() => setAddressToDelete(addr.id)} className="text-xs text-red-500 hover:underline">Sil</button>
                             </div>
                           </div>
                           <p className="text-sm font-semibold text-gray-700">{addr.district} / İstanbul</p>
@@ -621,6 +627,61 @@ export default function HesabimPage() {
         </div>
 
       </div>
+
+      {/* Order Cancel Modal */}
+      {orderToCancel && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="bg-white rounded-3xl p-8 max-w-sm w-full shadow-2xl animate-in zoom-in-95 duration-200">
+            <div className="w-16 h-16 bg-red-100 text-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
+              <XCircle className="w-8 h-8" />
+            </div>
+            <h3 className="text-xl font-bold text-center text-dilim-siyah mb-2">Siparişi İptal Et</h3>
+            <p className="text-gray-500 text-center mb-6 text-sm">Siparişinizi iptal etmek istediğinize emin misiniz? Bu işlem geri alınamaz.</p>
+            <div className="flex gap-3">
+              <button 
+                onClick={() => setOrderToCancel(null)}
+                className="flex-1 py-3 px-4 bg-gray-100 text-gray-700 font-semibold rounded-xl hover:bg-gray-200 transition-colors"
+              >
+                Vazgeç
+              </button>
+              <button 
+                onClick={confirmCancelOrder}
+                className="flex-1 py-3 px-4 bg-red-500 text-white font-semibold rounded-xl hover:bg-red-600 transition-colors"
+              >
+                İptal Et
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Address Delete Modal */}
+      {addressToDelete && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="bg-white rounded-3xl p-8 max-w-sm w-full shadow-2xl animate-in zoom-in-95 duration-200">
+            <div className="w-16 h-16 bg-red-100 text-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Trash2 className="w-8 h-8" />
+            </div>
+            <h3 className="text-xl font-bold text-center text-dilim-siyah mb-2">Adresi Sil</h3>
+            <p className="text-gray-500 text-center mb-6 text-sm">Bu adresi silmek istediğinize emin misiniz?</p>
+            <div className="flex gap-3">
+              <button 
+                onClick={() => setAddressToDelete(null)}
+                className="flex-1 py-3 px-4 bg-gray-100 text-gray-700 font-semibold rounded-xl hover:bg-gray-200 transition-colors"
+              >
+                Vazgeç
+              </button>
+              <button 
+                onClick={confirmDeleteAddress}
+                className="flex-1 py-3 px-4 bg-red-500 text-white font-semibold rounded-xl hover:bg-red-600 transition-colors"
+              >
+                Sil
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   )
 }
