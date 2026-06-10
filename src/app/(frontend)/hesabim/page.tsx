@@ -237,9 +237,32 @@ export default function HesabimPage() {
       case 'preparing': return { text: 'Hazırlanıyor', icon: <Package className="w-4 h-4 text-blue-500"/>, bg: 'bg-blue-50', color: 'text-blue-600' }
       case 'shipped': return { text: 'Kargoya Verildi', icon: <MapPin className="w-4 h-4 text-indigo-500"/>, bg: 'bg-indigo-50', color: 'text-indigo-600' }
       case 'delivered': return { text: 'Teslim Edildi', icon: <CheckCircle2 className="w-4 h-4 text-green-500"/>, bg: 'bg-green-50', color: 'text-green-600' }
+      case 'cancelled': return { text: 'İptal Edildi', icon: <XCircle className="w-4 h-4 text-red-500"/>, bg: 'bg-red-50', color: 'text-red-600' }
       default: return { text: 'Bilinmiyor', icon: <Clock className="w-4 h-4 text-gray-500"/>, bg: 'bg-gray-50', color: 'text-gray-600' }
     }
   }
+
+  const handleCancelOrder = async (orderId: string) => {
+    if (!confirm("Siparişinizi iptal etmek istediğinize emin misiniz?")) return;
+    
+    try {
+      const res = await fetch('/api/customer/orders/cancel', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ orderId })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        toast.success("Siparişiniz iptal edildi.");
+        // Siparişi listede güncelle
+        setOrders(orders.map(o => o.id === orderId ? { ...o, status: 'cancelled' } : o));
+      } else {
+        toast.error(data.error || "Sipariş iptal edilemedi.");
+      }
+    } catch (error) {
+      toast.error("Bir hata oluştu.");
+    }
+  };
 
   return (
     <div className="container mx-auto px-4 py-20 max-w-5xl min-h-screen">
@@ -323,10 +346,22 @@ export default function HesabimPage() {
                               <h4 className="font-bold text-dilim-siyah">Sipariş No: {order.orderNumber}</h4>
                             </div>
                             <div className="flex flex-col items-start md:items-end gap-2">
-                              <span className={`px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1.5 ${statusInfo.bg} ${statusInfo.color}`}>
-                                {statusInfo.icon}
-                                {statusInfo.text}
-                              </span>
+                              <div className="flex items-center gap-2">
+                                <span className={`px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1.5 ${statusInfo.bg} ${statusInfo.color}`}>
+                                  {statusInfo.icon}
+                                  {statusInfo.text}
+                                </span>
+                                {order.status === 'pending' && (
+                                  <button 
+                                    onClick={() => handleCancelOrder(order.id)}
+                                    className="px-3 py-1 rounded-full text-xs font-bold bg-white border border-red-200 text-red-500 hover:bg-red-50 transition-colors flex items-center gap-1"
+                                    title="Siparişi İptal Et"
+                                  >
+                                    <XCircle className="w-3.5 h-3.5" />
+                                    İptal Et
+                                  </button>
+                                )}
+                              </div>
                               <span className="font-bold text-dilim-portakal">{order.totalAmount} ₺</span>
                             </div>
                           </div>
