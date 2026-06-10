@@ -1,6 +1,7 @@
 'use client'
 
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
+import { useSession } from 'next-auth/react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronRight, ChevronLeft, Check, Layers, CakeSlice, PaintBucket, ChefHat, MessageCircle, User } from 'lucide-react'
 import toast from 'react-hot-toast'
@@ -60,6 +61,28 @@ export default function CakeBuilder() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
   const [orderId, setOrderId] = useState<string | null>(null)
+
+  const { status } = useSession()
+
+  useEffect(() => {
+    if (status === 'authenticated') {
+      fetch('/api/customer/me')
+        .then(res => res.json())
+        .then(data => {
+          if (data.user) {
+            setSelections(prev => ({
+              ...prev,
+              customerName: prev.customerName || (data.user.name + (data.user.surname ? ' ' + data.user.surname : '')).trim(),
+              customerPhone: prev.customerPhone || data.user.phone || '',
+              customerEmail: prev.customerEmail || data.user.email || '',
+              // Sadece ilk adresi otomatik dolduralım varsa
+              customerAddress: prev.customerAddress || (data.user.addresses && data.user.addresses.length > 0 ? data.user.addresses[0].address : '')
+            }))
+          }
+        })
+        .catch(console.error)
+    }
+  }, [status])
 
   const handleSelect = (category: string, value: string) => {
     setSelections(prev => ({ ...prev, [category]: value }))
