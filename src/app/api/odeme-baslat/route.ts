@@ -23,6 +23,47 @@ export async function POST(req: Request) {
 
     const payload = await getPayload({ config: configPromise })
 
+    // Verify prices from the database
+    let calculatedTotal = 0;
+    const validatedItems = [];
+
+    for (const item of items) {
+      const productId = typeof item.id === 'number' || (typeof item.id === 'string' && !isNaN(Number(item.id))) ? Number(item.id) : null;
+      if (!productId) {
+        return NextResponse.json({ success: false, error: 'Geçersiz ürün ID' }, { status: 400 });
+      }
+
+      try {
+        const product = await payload.findByID({
+          collection: 'products',
+          id: productId,
+        });
+
+        if (!product) {
+          return NextResponse.json({ success: false, error: 'Ürün bulunamadı' }, { status: 400 });
+        }
+
+        const quantity = parseInt(item.quantity) || 1;
+        const unitPrice = product.price || 0;
+        calculatedTotal += unitPrice * quantity;
+
+        validatedItems.push({
+          id: item.id.toString(),
+          name: product.title || item.name,
+          quantity: quantity,
+          productId: productId,
+          realUnitPrice: unitPrice,
+          realLineTotal: unitPrice * quantity,
+        });
+      } catch (err) {
+        return NextResponse.json({ success: false, error: 'Ürün bilgisi alınamadı' }, { status: 400 });
+      }
+    }
+
+    if (calculatedTotal !== totalAmount) {
+      return NextResponse.json({ success: false, error: 'Sepet tutarı uyuşmuyor. Lütfen sayfanızı yenileyin.' }, { status: 400 });
+    }
+
     // Create the order in Payload CMS
     const order = await payload.create({
       collection: 'orders',
@@ -40,12 +81,12 @@ export async function POST(req: Request) {
           taxOffice: customerInfo.taxOffice,
           taxNumber: customerInfo.taxNumber,
         },
-        orderItems: items.map((item: any) => ({
-          product: typeof item.id === 'number' || (typeof item.id === 'string' && !isNaN(Number(item.id))) ? Number(item.id) : null,
+        orderItems: validatedItems.map((item) => ({
+          product: item.productId,
           quantity: item.quantity,
-          price: parseInt(String(item.price).replace(/[^0-9]/g, '')) || 0,
+          price: item.realUnitPrice,
         })),
-        totalAmount: totalAmount,
+        totalAmount: calculatedTotal,
         status: 'pending',
         paymentStatus: 'unpaid',
       },
@@ -57,8 +98,8 @@ export async function POST(req: Request) {
     const request = {
       locale: 'tr',
       conversationId: order.orderNumber, // hook tarafından oluşturulan numara
-      price: totalAmount.toString(),
-      paidPrice: totalAmount.toString(),
+      price: calculatedTotal.toString(),
+      paidPrice: calculatedTotal.toString(),
       currency: 'TRY',
       basketId: order.id.toString(),
       paymentGroup: 'PRODUCT',
@@ -93,12 +134,12 @@ export async function POST(req: Request) {
         address: `${customerInfo.district} - ${customerInfo.address}`,
         zipCode: '34742'
       },
-      basketItems: items.map((item: any) => ({
-        id: item.id.toString(),
+      basketItems: validatedItems.map((item) => ({
+        id: item.id,
         name: item.name,
         category1: 'Pastane',
         itemType: 'PHYSICAL',
-        price: (parseInt(String(item.price).replace(/[^0-9]/g, '')) || 0).toString()
+        price: item.realLineTotal.toString()
       }))
     };
 

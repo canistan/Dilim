@@ -1,6 +1,7 @@
 "use client"
 
 import React, { createContext, useContext, useState, useEffect } from 'react'
+import toast from 'react-hot-toast'
 
 export type CartItem = {
   id: string;
@@ -59,7 +60,36 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       }
       return [...prev, newItem]
     })
-    setIsCartOpen(true) // Otomatik olarak sepeti aç
+    
+    toast.custom((t) => (
+      <div
+        className={`${
+          t.visible ? 'animate-in slide-in-from-bottom-5' : 'animate-out fade-out'
+        } max-w-md w-full bg-white shadow-2xl rounded-2xl pointer-events-auto flex flex-col sm:flex-row border-2 border-dilim-portakal/20 p-5 items-center gap-5`}
+      >
+        <div className="w-16 h-16 rounded-xl overflow-hidden bg-gray-100 flex-shrink-0 border border-gray-200 shadow-sm">
+          <img src={newItem.image} alt={newItem.name} className="w-full h-full object-cover" />
+        </div>
+        <div className="flex-1 text-center sm:text-left">
+          <p className="text-base font-bold text-dilim-siyah line-clamp-1">{newItem.name}</p>
+          <p className="text-sm font-medium text-green-600 flex items-center justify-center sm:justify-start gap-1 mt-1">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
+            Sepete eklendi
+          </p>
+        </div>
+        <div className="w-full sm:w-auto flex border-t sm:border-t-0 sm:border-l border-gray-100 pt-3 sm:pt-0 sm:pl-5">
+          <button
+            onClick={() => {
+              toast.dismiss(t.id);
+              setIsCartOpen(true);
+            }}
+            className="w-full sm:w-auto px-5 py-2.5 bg-dilim-siyah text-white text-sm font-bold rounded-xl hover:bg-dilim-portakal transition-colors shadow-md hover:shadow-lg whitespace-nowrap"
+          >
+            Sepete Git
+          </button>
+        </div>
+      </div>
+    ), { position: 'bottom-right', duration: 4000 })
   }
 
   const removeFromCart = (id: string) => {
@@ -78,6 +108,9 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   const clearCart = () => {
     setItems([])
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('dilim_cart')
+    }
   }
 
   // Helper to parse price string like "₺750" or "₺450/kg" to a number for calculation
