@@ -1,17 +1,30 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { MapPin, Phone, Mail, Send, Clock, ChevronRight, Navigation } from 'lucide-react'
 import { motion } from 'framer-motion'
+import { useSession } from 'next-auth/react'
 
 export default function IletisimPage() {
+  const { data: session } = useSession()
+  
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     subject: '',
     message: ''
   })
+
+  useEffect(() => {
+    if (session?.user) {
+      setFormData(prev => ({
+        ...prev,
+        name: session.user.name || '',
+        email: session.user.email || ''
+      }))
+    }
+  }, [session])
 
   const handleEmailSubmit = (e: React.FormEvent) => {
     e.preventDefault()

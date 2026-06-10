@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Store, TrendingUp, Users, CheckCircle2 } from 'lucide-react'
 
@@ -8,6 +8,12 @@ export default function FranchisePage() {
   const [submitted, setSubmitted] = useState(false)
 
   const [isLoading, setIsLoading] = useState(false)
+
+  useEffect(() => {
+    if (submitted) {
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
+  }, [submitted])
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()

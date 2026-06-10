@@ -112,6 +112,13 @@ export async function POST(req: Request) {
     // Prepare Iyzico Request
     const host = req.headers.get('origin') || process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
     
+    let formattedPhone = customerInfo.phone.replace(/\D/g, '');
+    if (formattedPhone.startsWith('0')) formattedPhone = formattedPhone.substring(1);
+    if (formattedPhone.length === 10) formattedPhone = '+90' + formattedPhone;
+    else if (!formattedPhone.startsWith('+')) formattedPhone = '+' + formattedPhone;
+
+    const safeAddress = `${customerInfo.district} - ${customerInfo.address}`.padEnd(10, ' ').substring(0, 250);
+
     const request = {
       locale: 'tr',
       conversationId: order.orderNumber, // hook tarafından oluşturulan numara
@@ -126,12 +133,12 @@ export async function POST(req: Request) {
         id: 'BY789',
         name: customerInfo.firstName || 'Bilinmiyor',
         surname: customerInfo.lastName || 'Bilinmiyor',
-        gsmNumber: customerInfo.phone,
+        gsmNumber: formattedPhone,
         email: customerInfo.email,
         identityNumber: (customerInfo.isCorporate && customerInfo.taxNumber) ? customerInfo.taxNumber : '11111111111', 
         lastLoginDate: '2023-10-05 12:43:35',
         registrationDate: '2023-04-21 15:12:09',
-        registrationAddress: `${customerInfo.district} - ${customerInfo.address}`,
+        registrationAddress: safeAddress,
         ip: '85.34.78.112',
         city: 'Istanbul',
         country: 'Turkey',
@@ -141,14 +148,14 @@ export async function POST(req: Request) {
         contactName: `${customerInfo.firstName} ${customerInfo.lastName}`,
         city: 'Istanbul',
         country: 'Turkey',
-        address: `${customerInfo.district} - ${customerInfo.address}`,
+        address: safeAddress,
         zipCode: '34742'
       },
       billingAddress: {
         contactName: customerInfo.isCorporate ? customerInfo.companyName : `${customerInfo.firstName} ${customerInfo.lastName}`,
         city: 'Istanbul',
         country: 'Turkey',
-        address: `${customerInfo.district} - ${customerInfo.address}`,
+        address: safeAddress,
         zipCode: '34742'
       },
       basketItems: validatedItems.map((item) => ({

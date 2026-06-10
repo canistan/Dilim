@@ -37,7 +37,7 @@ export async function POST(req: Request) {
     }
 
     if (action === 'add') {
-      addresses.push(cleanAddress)
+      addresses.unshift(cleanAddress)
     } else if (action === 'delete') {
       addresses = addresses.filter((a: any) => a.id !== addressId)
     } else if (action === 'update') {

@@ -98,25 +98,32 @@ export default function OdemePage() {
 
     setLoading(true)
     try {
-      const res = await fetch('/api/odeme-baslat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
+      let res;
+      try {
+        const bodyStr = JSON.stringify({
           customerInfo: formData,
           items: items,
           totalAmount: cartTotal
-        })
-      })
+        }).replace(/[\uD800-\uDBFF](?![\uDC00-\uDFFF])|([^\uD800-\uDBFF])[\uDC00-\uDFFF]/g, '');
+
+        res = await fetch('/api/odeme-baslat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: bodyStr
+        });
+      } catch (fetchErr: any) {
+        throw new Error("Ağ hatası (Fetch): " + fetchErr.message);
+      }
       
       const data = await res.json()
       
       if (res.ok && data.success) {
         if (data.paymentPageUrl) {
-          window.location.href = data.paymentPageUrl + '&iframe=true'
+          const cleanUrl = data.paymentPageUrl.toString().trim().replace(/[\n\r]/g, '');
+          window.location.href = cleanUrl + '&iframe=true'
         } else if (data.checkoutFormContent) {
           setCheckoutHtml(data.checkoutFormContent)
         } else {
-          // Fallback if no payment form generated
           window.location.href = `/odeme/basarili?orderNumber=${data.orderNumber}`
         }
       } else {
@@ -329,10 +336,15 @@ export default function OdemePage() {
                 </div>
 
                 <button 
-                  onClick={handleCheckout} 
-                  disabled={loading || cartTotal === 0 || !legalConsent || !formData.district} 
+                  onClick={() => {
+                    if (cartTotal === 0) return toast.error("Sepetiniz boş.")
+                    if (!formData.district) return toast.error("Lütfen bir teslimat adresi seçiniz (İlçe gerekli).")
+                    if (!legalConsent) return toast.error("Lütfen sözleşmeleri okuyup onay kutusunu işaretleyin.")
+                    handleCheckout()
+                  }} 
+                  disabled={loading} 
                   className={`w-full py-4 text-white text-lg font-bold rounded-2xl transition-all shadow-lg flex justify-center items-center gap-2
-                    ${loading || cartTotal === 0 || !legalConsent || !formData.district ? 'bg-gray-400 cursor-not-allowed shadow-none' : 'bg-green-600 hover:bg-green-700 shadow-green-600/30'}
+                    ${loading ? 'bg-gray-400 cursor-not-allowed shadow-none' : 'bg-green-600 hover:bg-green-700 shadow-green-600/30'}
                   `}
                 >
                   {loading ? (

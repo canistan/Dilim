@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Briefcase, Heart, Star, CheckCircle2, Upload } from 'lucide-react'
 
@@ -9,6 +9,12 @@ export default function KariyerPage() {
   const [file, setFile] = useState<File | null>(null)
 
   const [isLoading, setIsLoading] = useState(false)
+
+  useEffect(() => {
+    if (submitted) {
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
+  }, [submitted])
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()

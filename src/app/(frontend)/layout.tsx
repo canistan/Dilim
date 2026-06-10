@@ -78,7 +78,7 @@ export default async function FrontendLayout({
             <Footer contactSettings={contactSettings} />
             <CookiePopup />
             <PromoPopup />
-            <Toaster position="top-center" toastOptions={{ duration: 4000, style: { background: '#1c1c1c', color: '#fff', borderRadius: '12px', padding: '16px' } }} />
+            <Toaster position="bottom-center" toastOptions={{ duration: 3000, style: { background: '#1c1c1c', color: '#fff', borderRadius: '12px', padding: '16px', marginBottom: '80px' } }} />
           </CartProvider>
         </AuthProvider>
       </body>

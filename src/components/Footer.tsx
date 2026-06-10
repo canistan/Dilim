@@ -3,8 +3,19 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import toast from 'react-hot-toast'
+import { useSession } from 'next-auth/react'
+import { useState, useEffect } from 'react'
 
 export const Footer = ({ contactSettings }: { contactSettings?: any }) => {
+  const { data: session } = useSession()
+  const [email, setEmail] = useState('')
+
+  useEffect(() => {
+    if (session?.user?.email) {
+      setEmail(session.user.email)
+    }
+  }, [session])
+
   return (
     <footer className="bg-dilim-siyah text-white relative overflow-hidden">
       {/* Decorative background element */}
@@ -25,6 +36,8 @@ export const Footer = ({ contactSettings }: { contactSettings?: any }) => {
               <form className="relative w-full max-w-md" onSubmit={(e) => { e.preventDefault(); toast.success('Bültene başarıyla abone oldunuz! Teşekkürler.'); }}>
                 <input 
                   type="email" 
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   placeholder="E-posta adresiniz" 
                   required
                   className="w-full bg-transparent text-white placeholder-gray-500 border border-gray-600 rounded-md px-4 py-3 pr-[130px] focus:outline-none focus:border-dilim-yaldiz focus:bg-white/5 transition-all text-sm"
