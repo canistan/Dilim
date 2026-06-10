@@ -64,6 +64,7 @@ export default function CakeBuilder() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
   const [orderId, setOrderId] = useState<string | null>(null)
+  const [whatsappMessage, setWhatsappMessage] = useState<string>('')
   const [userAddresses, setUserAddresses] = useState<any[]>([])
   const [selectedAddressType, setSelectedAddressType] = useState<'saved' | 'new'>('saved')
 
@@ -172,14 +173,15 @@ export default function CakeBuilder() {
 
       if (res.ok && data.success) {
         setOrderId(data.id)
-        setIsSuccess(true)
         
         const sizeName = OPTIONS.size.find(o => o.id === selections.size)?.name
         const baseName = OPTIONS.base.find(o => o.id === selections.base)?.name
         const fillingName = OPTIONS.filling.find(o => o.id === selections.filling)?.name
         const frostingName = OPTIONS.frosting.find(o => o.id === selections.frosting)?.name
         
-        const message = `Merhaba, web siteniz üzerinden özel bir pasta tasarımı gönderdim (Talep No: ${data.id}). %0A%0A🎂 *Tasarım Özeti*%0A- *Ad Soyad:* ${selections.customerName}%0A- *Boyut:* ${sizeName}%0A- *Kek:* ${baseName}%0A- *Krema:* ${fillingName}%0A- *Kaplama:* ${frostingName}%0A%0AFiyat teklifinizi ve onayınızı bekliyorum.`
+        const message = `Merhaba, web siteniz üzerinden özel bir pasta tasarımı gönderdim (Talep No: ${data.id}). %0A%0A🎂 *Tasarım Özeti*%0A- *Ad Soyad:* ${selections.customerName}%0A- *Telefon:* ${selections.customerPhone}%0A- *Adres:* ${selections.customerAddress}%0A- *Boyut:* ${sizeName}%0A- *Kek:* ${baseName}%0A- *Krema:* ${fillingName}%0A- *Kaplama:* ${frostingName}%0A- *Not:* ${selections.note || 'Yok'}%0A%0AFiyat teklifinizi ve onayınızı bekliyorum.`
+        setWhatsappMessage(message)
+        setIsSuccess(true)
         
         // Yeni sekmede WhatsApp'ı aç (Popup engelleyiciye takılabilir, o yüzden butonu da sunacağız)
         window.open(`https://wa.me/905059638021?text=${message}`, '_blank')
@@ -267,7 +269,7 @@ export default function CakeBuilder() {
 
             <div className="mt-8 flex flex-col items-center gap-4">
               <a 
-                href={`https://wa.me/905059638021?text=Merhaba, web siteniz üzerinden özel bir pasta tasarımı gönderdim (Talep No: ${orderId}).`}
+                href={`https://wa.me/905059638021?text=${whatsappMessage}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center justify-center gap-3 w-full sm:w-auto px-10 py-4 rounded-2xl text-lg font-bold bg-[#25D366] text-white hover:bg-[#1EBE56] shadow-xl hover:shadow-2xl transform hover:-translate-y-1 transition-all"
