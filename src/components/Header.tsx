@@ -31,11 +31,11 @@ export const Header = () => {
 
   const navLinks = [
     { name: 'Hakkımızda', href: '/hakkimizda' },
-    { name: 'QR Menü', href: '/menu' },
     { name: 'Ürünlerimiz', href: '/urunler' },
     { name: 'Kendi Pastanı Tasarla', href: '/tasarla', highlight: true },
     { name: 'Blog', href: '/blog' },
     { name: 'İletişim', href: '/iletisim' },
+    { name: 'Menü', href: '/menu' },
   ]
 
   return (

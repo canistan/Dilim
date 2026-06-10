@@ -93,6 +93,7 @@ export const Footer = ({ contactSettings }: { contactSettings?: any }) => {
             <h4 className="text-lg font-medium mb-6 text-white tracking-wide">Hızlı Linkler</h4>
             <ul className="space-y-3 text-sm text-gray-400 font-light">
               <li><Link href="/" className="hover:text-white transition-all duration-300">Ana Sayfa</Link></li>
+              <li><Link href="/menu" className="hover:text-white transition-all duration-300">Menü</Link></li>
               <li><Link href="/urunler" className="hover:text-white transition-all duration-300">Ürünlerimiz</Link></li>
               <li><Link href="/hakkimizda" className="hover:text-white transition-all duration-300">Hakkımızda</Link></li>
               <li><Link href="/iletisim" className="hover:text-white transition-all duration-300">İletişim</Link></li>
