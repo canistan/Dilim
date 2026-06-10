@@ -5,16 +5,20 @@ import configPromise from '@payload-config';
 
 export async function POST(req: Request) {
   try {
+    const protocol = req.headers.get('x-forwarded-proto') || 'https';
+    const hostHeader = req.headers.get('x-forwarded-host') || req.headers.get('host') || 'localhost:3000';
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || `${protocol}://${hostHeader}`;
+
     const formData = await req.formData();
     const token = formData.get('token') as string;
 
     if (!token) {
-      return NextResponse.redirect(`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/odeme/basarisiz?reason=MissingToken`);
+      return NextResponse.redirect(`${siteUrl}/odeme/basarisiz?reason=MissingToken`);
     }
 
     if (token === 'mock-token-123') {
       // Mock Success Response
-      return NextResponse.redirect(`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/odeme/basarili?orderId=mock-basket`);
+      return NextResponse.redirect(`${siteUrl}/odeme/basarili?orderId=mock-basket`);
     }
 
     return new Promise<Response>((resolve) => {
@@ -24,7 +28,7 @@ export async function POST(req: Request) {
         token: token
       }, async (err: any, result: any) => {
         if (err || result.status === 'failure' || result.paymentStatus !== 'SUCCESS') {
-          resolve(NextResponse.redirect(`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/odeme/basarisiz?reason=${encodeURIComponent(result?.errorMessage || 'PaymentFailed')}`));
+          resolve(NextResponse.redirect(`${siteUrl}/odeme/basarisiz?reason=${encodeURIComponent(result?.errorMessage || 'PaymentFailed')}`));
         } else {
           // Payment successful! Update DB order status here.
           try {
@@ -40,11 +44,14 @@ export async function POST(req: Request) {
           } catch (updateErr) {
             console.error("Ödeme başarılı oldu ancak sipariş güncellenirken hata oluştu:", updateErr);
           }
-          resolve(NextResponse.redirect(`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/odeme/basarili?orderId=${result.basketId}`));
+          resolve(NextResponse.redirect(`${siteUrl}/odeme/basarili?orderId=${result.basketId}`));
         }
       });
     });
   } catch (error) {
-    return NextResponse.redirect(`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/odeme/basarisiz?reason=InternalError`);
+    const protocol = req.headers.get('x-forwarded-proto') || 'https';
+    const hostHeader = req.headers.get('x-forwarded-host') || req.headers.get('host') || 'localhost:3000';
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || `${protocol}://${hostHeader}`;
+    return NextResponse.redirect(`${siteUrl}/odeme/basarisiz?reason=InternalError`);
   }
 }

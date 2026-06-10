@@ -110,7 +110,9 @@ export async function POST(req: Request) {
     })
 
     // Prepare Iyzico Request
-    const host = req.headers.get('origin') || process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+    const protocol = req.headers.get('x-forwarded-proto') || 'https';
+    const hostHeader = req.headers.get('x-forwarded-host') || req.headers.get('host') || 'localhost:3000';
+    const host = process.env.NEXT_PUBLIC_SITE_URL || `${protocol}://${hostHeader}`;
     
     let formattedPhone = customerInfo.phone.replace(/\D/g, '');
     if (formattedPhone.startsWith('0')) formattedPhone = formattedPhone.substring(1);
