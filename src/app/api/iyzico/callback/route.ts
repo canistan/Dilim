@@ -21,8 +21,19 @@ export async function POST(req: Request) {
       </html>
     `;
 
-    const formData = await req.formData();
-    const token = formData.get('token') as string;
+    const bodyText = await req.text();
+    let token = '';
+    try {
+      if (bodyText.trim().startsWith('{')) {
+        const json = JSON.parse(bodyText);
+        token = json.token;
+      } else {
+        const params = new URLSearchParams(bodyText);
+        token = params.get('token') || '';
+      }
+    } catch (e) {
+      console.error("Callback body parse error", e);
+    }
 
     if (!token) {
       return new NextResponse(redirectHtml(`${siteUrl}/odeme/basarisiz?reason=MissingToken`), { headers: { 'Content-Type': 'text/html' } });
