@@ -27,12 +27,12 @@ const PlayIcon = ({ className }: { className?: string }) => (
 )
 
 const INSTAGRAM_POSTS = [
-  { id: 1, image: '/detay_pasta_1.png', link: 'https://instagram.com/bi_dilimpasta', type: 'reel', size: 'vertical' }, // 9:16 reels
-  { id: 2, image: '/detay_pasta_2.png', link: 'https://instagram.com/bi_dilimpasta', type: 'image', size: 'square' }, // 1:1
-  { id: 3, image: '/hakkimizda_ic_mekan.png', link: 'https://instagram.com/bi_dilimpasta', type: 'carousel', size: 'horizontal' }, // 16:9 yatay
-  { id: 4, image: '/urunler_yas_pasta.png', link: 'https://instagram.com/bi_dilimpasta', type: 'image', size: 'square' }, // 1:1
-  { id: 5, image: '/hakkimizda_chef.png', link: 'https://instagram.com/bi_dilimpasta', type: 'reel', size: 'vertical' }, // 9:16 reels
-  { id: 6, image: '/hakkimizda_cikolata.png', link: 'https://instagram.com/bi_dilimpasta', type: 'image', size: 'square' }, // 1:1
+  { id: 1, image: '/detay_pasta_1.png', link: 'https://instagram.com/dilimpastaneleri', type: 'reel', size: 'vertical' }, // 9:16 reels
+  { id: 2, image: '/detay_pasta_2.png', link: 'https://instagram.com/dilimpastaneleri', type: 'image', size: 'square' }, // 1:1
+  { id: 3, image: '/hakkimizda_ic_mekan.png', link: 'https://instagram.com/dilimpastaneleri', type: 'carousel', size: 'horizontal' }, // 16:9 yatay
+  { id: 4, image: '/urunler_yas_pasta.png', link: 'https://instagram.com/dilimpastaneleri', type: 'image', size: 'square' }, // 1:1
+  { id: 5, image: '/hakkimizda_chef.png', link: 'https://instagram.com/dilimpastaneleri', type: 'reel', size: 'vertical' }, // 9:16 reels
+  { id: 6, image: '/hakkimizda_cikolata.png', link: 'https://instagram.com/dilimpastaneleri', type: 'image', size: 'square' }, // 1:1
 ]
 
 export function InstagramFeed({ data }: { data?: any }) {
@@ -40,7 +40,7 @@ export function InstagramFeed({ data }: { data?: any }) {
   const feedPosts = data?.posts?.length > 0 ? data.posts.map((post: any, index: number) => ({
     id: post.id || index,
     image: post.image?.url || '/generated/hero_cake.png',
-    link: post.link || 'https://instagram.com/bi_dilimpasta',
+    link: post.link || 'https://instagram.com/dilimpastaneleri',
     type: post.isReel ? 'reel' : 'image',
   })) : INSTAGRAM_POSTS
 
@@ -62,8 +62,8 @@ export function InstagramFeed({ data }: { data?: any }) {
             Instagram'da Bizi Takip Edin
           </h2>
           <p className="text-gray-500 text-lg max-w-2xl mx-auto">
-            <a href="https://instagram.com/bi_dilimpasta" target="_blank" rel="noopener noreferrer" className="font-semibold text-dilim-portakal hover:underline">
-              @bi_dilimpasta
+            <a href="https://instagram.com/dilimpastaneleri" target="_blank" rel="noopener noreferrer" className="font-semibold text-dilim-portakal hover:underline">
+              @dilimpastaneleri
             </a>
             {' '}hesabımızdaki en tatlı anlara ortak olun.
           </p>
