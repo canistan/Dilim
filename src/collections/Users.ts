@@ -10,7 +10,10 @@ export const Users: CollectionConfig = {
     useAsTitle: 'email',
     group: 'Yönetim',
   },
-  auth: true,
+  auth: {
+    maxLoginAttempts: 5,
+    lockTime: 600000, // 10 minutes in ms
+  },
   fields: [
     // Email added by default
   ],

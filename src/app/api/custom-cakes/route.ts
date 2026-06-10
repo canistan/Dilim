@@ -29,6 +29,17 @@ export async function POST(req: Request) {
 
     // Dosya varsa Media koleksiyonuna yükle
     if (file && file.size > 0) {
+      // Güvenlik: Dosya türü ve boyutu doğrulaması
+      const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
+      if (!allowedTypes.includes(file.type)) {
+        return NextResponse.json({ success: false, error: 'Sadece görsel dosyaları (.jpg, .png, .webp) yüklenebilir.' }, { status: 400 })
+      }
+      
+      const maxSize = 5 * 1024 * 1024; // 5 MB
+      if (file.size > maxSize) {
+        return NextResponse.json({ success: false, error: 'Görsel boyutu maksimum 5MB olmalıdır.' }, { status: 400 })
+      }
+
       const arrayBuffer = await file.arrayBuffer()
       const buffer = Buffer.from(arrayBuffer)
       

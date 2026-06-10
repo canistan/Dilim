@@ -11,7 +11,12 @@ export const Customers: CollectionConfig = {
     group: 'Kullanıcı Bilgi Deposu',
     defaultColumns: ['name', 'email', 'birthDate', 'provider', 'createdAt'],
   },
+  access: {
+    admin: () => false, // Müşterilerin admin paneline girmesi kesin olarak engellendi
+  },
   auth: {
+    maxLoginAttempts: 5,
+    lockTime: 600000, // 10 minutes in ms
     // Disable password requirement for social login users if possible, or handle it by generating a random password
     // Actually Payload 3.0 auth requires password if using local strategy. 
     // We will generate a secure random password for OAuth users on creation.

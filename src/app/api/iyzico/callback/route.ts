@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server';
 import { iyzipay } from '@/lib/iyzico';
+import { getPayload } from 'payload';
+import configPromise from '@payload-config';
 
 export async function POST(req: Request) {
   try {
@@ -20,11 +22,24 @@ export async function POST(req: Request) {
         locale: 'tr',
         conversationId: 'fallback-id', // Ideally this comes from the token mapping or your DB
         token: token
-      }, (err: any, result: any) => {
+      }, async (err: any, result: any) => {
         if (err || result.status === 'failure' || result.paymentStatus !== 'SUCCESS') {
           resolve(NextResponse.redirect(`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/odeme/basarisiz?reason=${encodeURIComponent(result?.errorMessage || 'PaymentFailed')}`));
         } else {
           // Payment successful! Update DB order status here.
+          try {
+            const payload = await getPayload({ config: configPromise });
+            await payload.update({
+              collection: 'orders',
+              id: result.basketId, // Ensure basketId matches order ID format
+              data: {
+                paymentStatus: 'paid',
+                // Use a proper existing field if you have it. Let's assume just updating paymentStatus is enough.
+              }
+            });
+          } catch (updateErr) {
+            console.error("Ödeme başarılı oldu ancak sipariş güncellenirken hata oluştu:", updateErr);
+          }
           resolve(NextResponse.redirect(`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/odeme/basarili?orderId=${result.basketId}`));
         }
       });
