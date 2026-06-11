@@ -50,6 +50,13 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     }
   }, [items, isMounted])
 
+  // Dismiss all toast popups when cart sidebar is opened
+  useEffect(() => {
+    if (isCartOpen) {
+      toast.dismiss();
+    }
+  }, [isCartOpen])
+
   const addToCart = (newItem: CartItem) => {
     setItems((prev) => {
       const existing = prev.find((item) => item.id === newItem.id)
