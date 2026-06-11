@@ -179,7 +179,8 @@ export default function CakeBuilder() {
         const fillingName = OPTIONS.filling.find(o => o.id === selections.filling)?.name
         const frostingName = OPTIONS.frosting.find(o => o.id === selections.frosting)?.name
         
-        const message = `Merhaba, web siteniz üzerinden özel bir pasta tasarımı gönderdim (Talep No: ${data.id}). %0A%0A👤 *İletişim Bilgilerim*%0A- *Ad Soyad:* ${selections.customerName}%0A- *Telefon:* ${selections.customerPhone}%0A- *E-Posta:* ${selections.customerEmail}%0A- *Adres:* ${selections.customerAddress}%0A%0A🎂 *Tasarım Özeti*%0A- *Boyut:* ${sizeName}%0A- *Kek:* ${baseName}%0A- *Krema:* ${fillingName}%0A- *Kaplama:* ${frostingName}%0A- *Özel Not:* ${selections.note || 'Yok'}%0A%0A${selections.referenceImage ? '📎 Referans görselini de sisteme yükledim.%0A%0A' : ''}Fiyat teklifinizi ve onayınızı bekliyorum.`
+        const mediaUrlStr = data.mediaUrl ? `${window.location.origin}${data.mediaUrl}` : '';
+        const message = `Merhaba, web siteniz üzerinden özel bir pasta tasarımı gönderdim (Talep No: ${data.id}). %0A%0A👤 *İletişim Bilgilerim*%0A- *Ad Soyad:* ${selections.customerName}%0A- *Adres:* ${selections.customerAddress}%0A%0A🎂 *Tasarım Özeti*%0A- *Boyut:* ${sizeName}%0A- *Kek:* ${baseName}%0A- *Krema:* ${fillingName}%0A- *Kaplama:* ${frostingName}%0A- *Özel Not:* ${selections.note || 'Yok'}%0A%0A${mediaUrlStr ? `📎 *Referans Görselim:* ${mediaUrlStr}%0A%0A` : ''}Fiyat teklifinizi ve onayınızı bekliyorum.`
         setWhatsappMessage(message)
         setIsSuccess(true)
         

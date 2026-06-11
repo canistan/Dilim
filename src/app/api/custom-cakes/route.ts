@@ -28,6 +28,7 @@ export async function POST(req: Request) {
 
     const payload = await getPayload({ config: configPromise })
     let uploadedMediaId = null
+    let uploadedMediaUrl = null
 
     // Dosya varsa Media koleksiyonuna yükle
     if (file && file.size > 0) {
@@ -58,6 +59,7 @@ export async function POST(req: Request) {
         }
       })
       uploadedMediaId = media.id
+      uploadedMediaUrl = media.url
     }
 
     // Seçilen değerleri CakeSize numarasına çevir (örneğin '6-8' -> 8)
@@ -141,6 +143,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ 
       success: true, 
       id: customCake.id,
+      mediaUrl: uploadedMediaUrl,
       message: 'Tasarım başarıyla kaydedildi'
     })
 
