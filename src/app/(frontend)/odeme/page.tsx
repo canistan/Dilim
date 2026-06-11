@@ -125,12 +125,8 @@ export default function OdemePage() {
       
       if (res.ok && data.success) {
         if (data.paymentPageUrl) {
-          try {
-            const cleanUrl = data.paymentPageUrl.toString().trim().replace(/[\n\r]/g, '');
-            window.location.href = cleanUrl;
-          } catch (urlErr: any) {
-            throw new Error("Adım 3 (URL) Hatası: " + urlErr.message);
-          }
+          const cleanUrl = data.paymentPageUrl.toString().trim().replace(/[\n\r]/g, '');
+          setPaymentIframeUrl(cleanUrl + '&iframe=true');
         } else if (data.checkoutFormContent) {
           setCheckoutHtml(data.checkoutFormContent);
         } else {
