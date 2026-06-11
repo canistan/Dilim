@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import CakeBuilder from '@/components/CakeBuilder'
-import { CustomCakesGallery } from '@/components/CustomCakesGallery'
+import { VerticalCakesMarquee } from '@/components/VerticalCakesMarquee'
 import { getPayload } from 'payload'
 import configPromise from '@/payload.config'
 
@@ -41,17 +41,24 @@ export default async function TasarlaPage() {
       </section>
 
       {/* Builder Section */}
-      <section className="pt-20 pb-8 bg-gray-50 relative">
+      <section className="pt-20 pb-16 bg-gray-50 relative overflow-hidden flex justify-center min-h-[800px]">
         {/* Decorative elements */}
-        <div className="absolute top-0 left-0 w-full h-64 bg-gradient-to-b from-black to-transparent opacity-5 pointer-events-none"></div>
+        <div className="absolute top-0 left-0 w-full h-64 bg-gradient-to-b from-black to-transparent opacity-5 pointer-events-none z-0"></div>
         
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 -mt-32">
+        {/* Left Vertical Marquee */}
+        <div className="hidden lg:block absolute left-4 xl:left-12 top-0 bottom-0 w-48 xl:w-56 z-0">
+          <VerticalCakesMarquee cakes={customCakes.docs as any} direction="up" />
+        </div>
+
+        {/* Right Vertical Marquee */}
+        <div className="hidden lg:block absolute right-4 xl:right-12 top-0 bottom-0 w-48 xl:w-56 z-0">
+          <VerticalCakesMarquee cakes={customCakes.docs as any} direction="down" />
+        </div>
+
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 -mt-32 max-w-5xl">
           <CakeBuilder />
         </div>
       </section>
-
-      {/* İlham Alabileceğiniz Örnekler - Marquee Gallery */}
-      <CustomCakesGallery cakes={customCakes.docs as any} />
 
     </div>
   )
