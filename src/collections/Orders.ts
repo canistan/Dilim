@@ -26,18 +26,19 @@ export const Orders: CollectionConfig = {
           // 1. STOK DÜŞÜRME OTOMASYONU
           // Eğer ödeme durumu 'unpaid' den 'paid' e geçmişse, stokları düşür.
           if (doc.paymentStatus === 'paid' && previousDoc.paymentStatus !== 'paid') {
-            if (Array.isArray(doc.orderItems)) {
+            const currentPayload = req?.payload;
+            if (currentPayload && Array.isArray(doc.orderItems)) {
               for (const item of doc.orderItems) {
                 if (item.product) {
                   try {
                     const productId = typeof item.product === 'object' ? item.product.id : item.product;
-                    const productDoc = await req.payload.findByID({
+                    const productDoc = await currentPayload.findByID({
                       collection: 'products',
                       id: productId,
                     });
                     if (productDoc && typeof productDoc.stock === 'number') {
                       const newStock = Math.max(0, productDoc.stock - (item.quantity || 1));
-                      await req.payload.update({
+                      await currentPayload.update({
                         collection: 'products',
                         id: productDoc.id,
                         data: {
@@ -46,7 +47,7 @@ export const Orders: CollectionConfig = {
                       });
                     }
                   } catch (e) {
-                    req.payload.logger.error(`Stok düşürme hatası: Ürün ID ${item.product}`);
+                    currentPayload.logger.error(`Stok düşürme hatası: Ürün ID ${item.product}`);
                   }
                 }
               }
@@ -54,8 +55,8 @@ export const Orders: CollectionConfig = {
             
             // Ödeme başarılı maili gönder
             try {
-              if (doc.customerInfo?.email) {
-                await req.payload.sendEmail({
+              if (currentPayload && doc.customerInfo?.email) {
+                await currentPayload.sendEmail({
                   to: doc.customerInfo.email,
                   from: 'sistem@dilim.com',
                   subject: `Ödemeniz Alındı - Sipariş No: ${doc.orderNumber}`,

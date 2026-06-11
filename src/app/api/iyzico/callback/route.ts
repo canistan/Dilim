@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { iyzipay } from '@/lib/iyzico';
+// import { iyzipay } from '@/lib/iyzico';
 import { getPayload } from 'payload';
 import configPromise from '@payload-config';
 
@@ -43,7 +43,9 @@ export async function POST(req: Request) {
       return new NextResponse(redirectHtml(`${siteUrl}/odeme/basarili?orderId=mock-basket`), { headers: { 'Content-Type': 'text/html' } });
     }
 
-    return new Promise<Response>((resolve) => {
+    const { iyzipay } = await import('@/lib/iyzico');
+
+    const result = await new Promise((resolve) => {
       iyzipay.checkoutForm.retrieve({
         locale: 'tr',
         conversationId: 'fallback-id', 
@@ -68,6 +70,7 @@ export async function POST(req: Request) {
         }
       });
     });
+    return result as Response;
   } catch (error) {
     const protocol = req.headers.get('x-forwarded-proto') || 'https';
     const hostHeader = req.headers.get('x-forwarded-host') || req.headers.get('host') || 'localhost:3000';

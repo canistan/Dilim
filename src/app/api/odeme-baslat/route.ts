@@ -1,16 +1,21 @@
 import { NextResponse } from 'next/server'
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
-import { iyzipay } from '@/lib/iyzico'
+// import { iyzipay } from '@/lib/iyzico'
 import { getServerSession } from "next-auth/next"
 import { authOptions } from "@/lib/auth"
 
-const initializeCheckoutForm = (request: any): Promise<any> => {
+const initializeCheckoutForm = async (request: any): Promise<any> => {
+  const { iyzipay } = await import('@/lib/iyzico');
   return new Promise((resolve, reject) => {
-    iyzipay.checkoutFormInitialize.create(request, (err: any, result: any) => {
-      if (err) return reject(err);
-      resolve(result);
-    });
+    try {
+      iyzipay.checkoutFormInitialize.create(request, (err: any, result: any) => {
+        if (err) return reject(err);
+        resolve(result);
+      });
+    } catch (err) {
+      reject(err);
+    }
   });
 };
 

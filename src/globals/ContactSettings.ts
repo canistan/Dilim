@@ -39,13 +39,19 @@ export const ContactSettings: GlobalConfig = {
       name: 'instagram',
       type: 'text',
       label: 'Instagram Linki',
-      defaultValue: 'https://www.instagram.com/bi_dilimpasta/',
+      defaultValue: 'https://www.instagram.com/dilimpastaneleri',
+    },
+    {
+      name: 'tiktok',
+      type: 'text',
+      label: 'TikTok Linki',
+      defaultValue: 'https://www.tiktok.com/@dilimpastaneleri',
     },
     {
       name: 'facebook',
       type: 'text',
       label: 'Facebook Linki',
-      defaultValue: 'https://www.facebook.com/dilimpastaneleri/',
+      defaultValue: 'https://www.facebook.com/share/1BQ7yRqh6n/',
     },
     {
       name: 'twitter',
