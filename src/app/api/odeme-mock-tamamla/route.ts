@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
     const payload = await getPayload({ config: configPromise })
     
     await payload.update({
-      collection: 'orders',
+      collection: 'orders' as any,
       id: orderId,
       data: {
         paymentStatus: 'paid',
