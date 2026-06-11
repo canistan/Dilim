@@ -9,6 +9,9 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
   serverExternalPackages: ['iyzipay'],
+  outputFileTracingIncludes: {
+    '/api/**/*': ['./node_modules/iyzipay/**/*'],
+  },
   images: {
     remotePatterns: [
       {
