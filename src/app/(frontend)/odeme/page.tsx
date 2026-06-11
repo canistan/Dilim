@@ -39,6 +39,7 @@ export default function OdemePage() {
   const [loading, setLoading] = useState(false)
   const [legalConsent, setLegalConsent] = useState(false)
   const [checkoutHtml, setCheckoutHtml] = useState('')
+  const [paymentIframeUrl, setPaymentIframeUrl] = useState('')
   const formRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -123,15 +124,11 @@ export default function OdemePage() {
       }
       
       if (res.ok && data.success) {
-        if (data.checkoutFormContent) {
+        if (data.paymentPageUrl) {
+          const cleanUrl = data.paymentPageUrl.toString().trim().replace(/[\n\r]/g, '');
+          setPaymentIframeUrl(cleanUrl + '&iframe=true');
+        } else if (data.checkoutFormContent) {
           setCheckoutHtml(data.checkoutFormContent);
-        } else if (data.paymentPageUrl) {
-          try {
-            const cleanUrl = data.paymentPageUrl.toString().trim().replace(/[\n\r]/g, '');
-            window.location.href = cleanUrl + '&iframe=true';
-          } catch (urlErr: any) {
-            throw new Error("Adım 3 (URL) Hatası: " + urlErr.message);
-          }
         } else {
           window.location.href = `/odeme/basarili?orderNumber=${data.orderNumber}`
         }
@@ -151,7 +148,7 @@ export default function OdemePage() {
       <div className="container mx-auto px-4 max-w-6xl">
         <h1 className="text-3xl md:text-4xl font-serif font-bold text-dilim-siyah mb-10 text-center">Güvenli Ödeme</h1>
         
-        {!checkoutHtml ? (
+        {!checkoutHtml && !paymentIframeUrl ? (
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             
             {/* SOL SÜTUN: FORM */}
@@ -373,7 +370,15 @@ export default function OdemePage() {
           <div className="bg-white p-8 rounded-3xl shadow-xl border border-gray-100 max-w-2xl mx-auto min-h-[500px]">
             <h2 className="text-2xl font-bold mb-6 text-dilim-siyah text-center">Ödeme Ekranı</h2>
             {/* Iyzico Form Container */}
-            <div ref={formRef} id="iyzi-payment-container"></div>
+            {paymentIframeUrl ? (
+              <iframe 
+                src={paymentIframeUrl} 
+                style={{ width: '100%', minHeight: '600px', border: 'none' }}
+                title="Iyzico Güvenli Ödeme"
+              />
+            ) : (
+              <div ref={formRef} id="iyzi-payment-container"></div>
+            )}
           </div>
         )}
       </div>
