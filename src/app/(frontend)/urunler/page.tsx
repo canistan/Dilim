@@ -40,6 +40,8 @@ export default async function ProductsPage() {
     price: doc.price,
     category: doc.category,
     images: doc.images,
+    hasSizes: doc.hasSizes,
+    sizes: doc.sizes,
   }))
 
   return (

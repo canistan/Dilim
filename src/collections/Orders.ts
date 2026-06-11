@@ -185,6 +185,11 @@ export const Orders: CollectionConfig = {
           name: 'price',
           type: 'number',
         },
+        {
+          name: 'options',
+          type: 'text',
+          label: 'Ek Seçenekler (Örn: Boyut)',
+        },
       ],
     },
     {

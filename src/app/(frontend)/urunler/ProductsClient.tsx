@@ -7,6 +7,7 @@ import { useSearchParams } from 'next/navigation'
 import { Filter, ShoppingBag, Eye } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useCart } from '@/context/CartContext'
+import { QuickAddModal } from '@/components/QuickAddModal'
 import STATIC_PRODUCTS from '@/data/products.json'
 
 type Category = {
@@ -22,6 +23,8 @@ type Product = {
   price: number
   category: Category | string | number
   images?: any[]
+  hasSizes?: boolean
+  sizes?: { size: string; price: number }[]
 }
 
 function ProductsClientInner({
@@ -34,6 +37,7 @@ function ProductsClientInner({
   const searchParams = useSearchParams()
   const initialCategory = searchParams.get('kategori') || 'all'
   const [activeCategorySlug, setActiveCategorySlug] = useState(initialCategory)
+  const [quickAddProduct, setQuickAddProduct] = useState<any>(null)
 
   // URL değişirse state'i güncelle
   useEffect(() => {
@@ -154,21 +158,38 @@ function ProductsClientInner({
                           <Eye className="w-4 h-4" />
                           İncele
                         </Link>
-                        <button
-                          onClick={() =>
-                            addToCart({
-                              id: product.id.toString(),
-                              name: product.title,
-                              price: `₺${product.price}`,
+                        {product.hasSizes ? (
+                          <button
+                            onClick={() => setQuickAddProduct({
+                              id: product.id,
+                              title: product.title,
+                              price: product.price,
                               image: imageToUse,
-                              quantity: 1,
-                            })
-                          }
-                          className="pointer-events-auto bg-dilim-portakal text-white px-5 py-3 rounded-full font-semibold text-sm flex items-center gap-2 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 hover:bg-dilim-turuncu shadow-lg"
-                        >
-                          <ShoppingBag className="w-4 h-4" />
-                          Sepete Ekle
-                        </button>
+                              hasSizes: product.hasSizes,
+                              sizes: product.sizes
+                            })}
+                            className="pointer-events-auto bg-dilim-portakal text-white px-5 py-3 rounded-full font-semibold text-sm flex items-center gap-2 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 hover:bg-dilim-turuncu shadow-lg"
+                          >
+                            <ShoppingBag className="w-4 h-4" />
+                            Sepete Ekle
+                          </button>
+                        ) : (
+                          <button
+                            onClick={() =>
+                              addToCart({
+                                id: product.id.toString(),
+                                name: product.title,
+                                price: `₺${product.price}`,
+                                image: imageToUse,
+                                quantity: 1,
+                              })
+                            }
+                            className="pointer-events-auto bg-dilim-portakal text-white px-5 py-3 rounded-full font-semibold text-sm flex items-center gap-2 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 hover:bg-dilim-turuncu shadow-lg"
+                          >
+                            <ShoppingBag className="w-4 h-4" />
+                            Sepete Ekle
+                          </button>
+                        )}
                       </div>
                     </div>
 
@@ -185,7 +206,12 @@ function ProductsClientInner({
                       </Link>
                       <div className="flex items-center justify-between mt-auto">
                         <span className="text-xl font-serif font-bold text-dilim-siyah">
-                          {product.price > 0 ? `₺${product.price}` : 'Özel Fiyat'}
+                          {product.hasSizes && product.sizes && product.sizes.length > 0 
+                            ? <span className="text-sm font-normal text-gray-500 block -mb-1">Başlayan fiyatlarla</span> 
+                            : null}
+                          {product.hasSizes && product.sizes && product.sizes.length > 0
+                            ? `₺${Math.min(...product.sizes.map((s: any) => s.price))}`
+                            : (product.price > 0 ? `₺${product.price}` : 'Özel Fiyat')}
                         </span>
                       </div>
                     </div>
@@ -204,6 +230,12 @@ function ProductsClientInner({
           )}
         </div>
       </section>
+
+      <QuickAddModal 
+        product={quickAddProduct} 
+        isOpen={!!quickAddProduct} 
+        onClose={() => setQuickAddProduct(null)} 
+      />
     </div>
   )
 }

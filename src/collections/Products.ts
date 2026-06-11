@@ -32,9 +32,49 @@ export const Products: CollectionConfig = {
       index: true,
     },
     {
+      name: 'hasSizes',
+      type: 'checkbox',
+      label: 'Bu ürün boyutlara (0, 1, 2 Numara) sahip mi?',
+      defaultValue: false,
+      admin: {
+        position: 'sidebar',
+        description: 'İşaretlenirse tek bir fiyat yerine boyutlara göre ayrı fiyatlar girilir.',
+      },
+    },
+    {
+      name: 'sizes',
+      type: 'array',
+      label: 'Boyutlar ve Fiyatlar',
+      admin: {
+        condition: (data) => Boolean(data?.hasSizes)
+      },
+      fields: [
+        {
+          name: 'size',
+          type: 'select',
+          label: 'Boyut Seçeneği',
+          options: [
+            { label: '0 Numara (4-6 Kişilik)', value: '0 Numara' },
+            { label: '1 Numara (6-8 Kişilik)', value: '1 Numara' },
+            { label: '2 Numara (8-10 Kişilik)', value: '2 Numara' },
+          ],
+          required: true,
+        },
+        {
+          name: 'price',
+          type: 'number',
+          label: 'Bu Boyut İçin Fiyat (₺)',
+          required: true,
+        }
+      ]
+    },
+    {
       name: 'price',
       type: 'number',
-      required: true,
+      label: 'Fiyat (₺)',
+      admin: {
+        condition: (data) => !data?.hasSizes
+      }
     },
     {
       name: 'description',

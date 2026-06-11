@@ -128,21 +128,18 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
                 <span className="text-gray-500 text-sm">(Müşteri Favorisi)</span>
               </div>
               
-              <div className="text-3xl font-serif font-bold text-dilim-siyah mb-8">
-                {product.price > 0 ? `₺${product.price}` : 'Özel Fiyat'}
-              </div>
-
-              <p className="text-gray-600 text-lg leading-relaxed mb-10 font-light whitespace-pre-wrap">
-                {product.description || `Günlük taze malzemelerle hazırlanan, Dilim Pastaneleri ustalarının özel tarifi olan ${product.title.toLowerCase()}. Her diliminde hissedeceğiniz lüks doku ve yoğun lezzet profili ile özel günlerinize ve tatlı krizlerinize eşsiz bir dokunuş katar.`}
-              </p>
-
-              {/* Add to Cart Actions (Client Component for interactivity) */}
-              <AddToCartButton product={{
-                id: product.id.toString(),
-                name: product.title,
-                price: product.price > 0 ? `₺${product.price}` : 'Özel Fiyat',
-                image: imageToUse
-              }} />
+              {/* Product Actions (Dynamic Price, Description, Size Selector, Add To Cart) */}
+              <AddToCartButton 
+                product={{
+                  id: product.id.toString(),
+                  name: product.title,
+                  price: product.price > 0 ? `₺${product.price}` : 'Özel Fiyat',
+                  image: imageToUse,
+                  hasSizes: product.hasSizes,
+                  sizes: product.sizes
+                }} 
+                description={product.description || `Günlük taze malzemelerle hazırlanan, Dilim Pastaneleri ustalarının özel tarifi olan ${product.title.toLowerCase()}. Her diliminde hissedeceğiniz lüks doku ve yoğun lezzet profili ile özel günlerinize ve tatlı krizlerinize eşsiz bir dokunuş katar.`}
+              />
 
               {/* Features List */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-8 border-t border-gray-100 mt-10">
