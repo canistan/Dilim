@@ -38,12 +38,14 @@ export default function OdemePage() {
   const [selectedAddressId, setSelectedAddressId] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const [legalConsent, setLegalConsent] = useState(false)
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success'>('idle')
   const [checkoutHtml, setCheckoutHtml] = useState('')
+  const [mockData, setMockData] = useState<{ amount: number, orderId: string } | null>(null)
   const [paymentIframeUrl, setPaymentIframeUrl] = useState('')
   const formRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    if (status === 'authenticated') {
+    if (sessionStatus === 'authenticated') {
       fetch('/api/customer/me')
         .then(res => res.json())
         .then(data => {
@@ -147,7 +149,9 @@ export default function OdemePage() {
       }
       
       if (res.ok && data.success) {
-        if (data.checkoutFormContent) {
+        if (data.isMock) {
+          setMockData({ amount: data.amount, orderId: data.orderId })
+        } else if (data.checkoutFormContent) {
           setCheckoutHtml(data.checkoutFormContent);
         } else if (data.paymentPageUrl) {
           const cleanUrl = data.paymentPageUrl.toString().trim().replace(/[\n\r]/g, '');
@@ -389,13 +393,56 @@ export default function OdemePage() {
             </div>
 
           </div>
-        ) : (
+        ) : mockData ? (
+          <div className="bg-white p-8 rounded-3xl shadow-xl border border-gray-100 max-w-2xl mx-auto min-h-[500px]">
+            <h2 className="text-2xl font-bold mb-6 text-dilim-siyah text-center">Ödeme Ekranı</h2>
+            <div className="border border-gray-100 bg-gray-50 rounded-2xl p-8 text-center space-y-4">
+              <p className="text-lg text-gray-700">Iyzico Test Ödeme Ekranı (Mock)</p>
+              <p className="text-sm text-gray-500">Geçerli bir Iyzico API anahtarı girilmediği veya test modunda olduğunuz için bu ekran gösterilmektedir.</p>
+              <p className="text-xl font-bold text-green-600 py-4">Ödenecek Tutar: {mockData.amount} TL</p>
+              <button 
+                onClick={async () => {
+                  try {
+                    setLoading(true);
+                    const res = await fetch('/api/odeme-mock-tamamla', {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({ orderId: mockData.orderId })
+                    });
+                    if (res.ok) {
+                      window.location.href = `/odeme/basarili?orderNumber=${mockData.orderId}`;
+                    } else {
+                      toast.error("Mock ödeme tamamlanamadı.");
+                    }
+                  } catch (e) {
+                    toast.error("Hata oluştu");
+                  } finally {
+                    setLoading(false);
+                  }
+                }}
+                disabled={loading}
+                className="bg-green-500 hover:bg-green-600 text-white font-bold py-4 px-8 rounded-xl w-full transition-all disabled:bg-gray-400"
+              >
+                {loading ? 'Yükleniyor...' : 'Test Ödemesini Tamamla (Başarılı)'}
+              </button>
+            </div>
+          </div>
+        ) : checkoutHtml ? (
           <div className="bg-white p-8 rounded-3xl shadow-xl border border-gray-100 max-w-2xl mx-auto min-h-[500px]">
             <h2 className="text-2xl font-bold mb-6 text-dilim-siyah text-center">Ödeme Ekranı</h2>
             {/* Iyzico Form Container */}
             <div ref={formRef} id="iyzipay-checkout-form" className="responsive"></div>
           </div>
-        )}
+        ) : paymentIframeUrl ? (
+          <div className="bg-white p-8 rounded-3xl shadow-xl border border-gray-100 max-w-2xl mx-auto min-h-[600px] flex flex-col">
+            <h2 className="text-2xl font-bold mb-6 text-dilim-siyah text-center">Ödeme Ekranı</h2>
+            <iframe 
+              src={paymentIframeUrl} 
+              className="w-full flex-1 border-0 rounded-2xl"
+              title="Iyzico Güvenli Ödeme"
+            />
+          </div>
+        ) : null}
       </div>
     </div>
   )

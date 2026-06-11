@@ -144,6 +144,17 @@ export async function POST(req: Request) {
 
     const safeAddress = `${customerInfo.district} - ${customerInfo.address}`.padEnd(10, ' ').substring(0, 250);
 
+    // --- IYZICO IPTAL (MOCK EKRAN ICIN) ---
+    // Iyzico Sandbox sunucuları çok yavaş olduğu için şimdilik Mock ekran kullanıyoruz.
+    return NextResponse.json({ 
+      success: true, 
+      isMock: true,
+      amount: calculatedTotal,
+      orderId: order.id,
+      orderNumber: order.orderNumber
+    });
+
+    /*
     const request = {
       locale: 'tr',
       conversationId: order.orderNumber, // hook tarafından oluşturulan numara
@@ -161,27 +172,27 @@ export async function POST(req: Request) {
         gsmNumber: formattedPhone,
         email: customerInfo.email,
         identityNumber: (customerInfo.isCorporate && customerInfo.taxNumber) ? customerInfo.taxNumber : '11111111111', 
-        lastLoginDate: '2023-10-05 12:43:35',
-        registrationDate: '2023-04-21 15:12:09',
+        lastLoginDate: new Date().toISOString().replace('T', ' ').substring(0, 19),
+        registrationDate: new Date().toISOString().replace('T', ' ').substring(0, 19),
         registrationAddress: safeAddress,
-        ip: '85.34.78.112',
-        city: 'Istanbul',
+        ip: req.headers.get('x-forwarded-for') || '85.34.78.112',
+        city: customerInfo.city,
         country: 'Turkey',
-        zipCode: '34732'
+        zipCode: customerInfo.zipCode || '34000'
       },
       shippingAddress: {
         contactName: `${customerInfo.firstName} ${customerInfo.lastName}`,
-        city: 'Istanbul',
+        city: customerInfo.city,
         country: 'Turkey',
         address: safeAddress,
-        zipCode: '34742'
+        zipCode: customerInfo.zipCode || '34000'
       },
       billingAddress: {
         contactName: customerInfo.isCorporate ? customerInfo.companyName : `${customerInfo.firstName} ${customerInfo.lastName}`,
-        city: 'Istanbul',
+        city: customerInfo.city,
         country: 'Turkey',
         address: safeAddress,
-        zipCode: '34742'
+        zipCode: customerInfo.zipCode || '34000'
       },
       basketItems: validatedItems.map((item) => ({
         id: item.id,
@@ -192,7 +203,10 @@ export async function POST(req: Request) {
       }))
     };
 
+    console.log("Iyzico Request:", JSON.stringify(request, null, 2))
+
     const result = await initializeCheckoutForm(request);
+    console.log("Iyzico Response:", JSON.stringify(result, null, 2))
 
     if (result.status === 'success') {
       return NextResponse.json({ 
@@ -203,11 +217,19 @@ export async function POST(req: Request) {
       })
     } else {
       console.error("Iyzico Error:", result);
-      return NextResponse.json({ success: false, error: result.errorMessage }, { status: 400 })
+      return NextResponse.json({ 
+        success: false, 
+        error: result.errorMessage,
+        errorCode: result.errorCode
+      }, { status: 400 })
     }
+    */
 
   } catch (error: any) {
-    console.error('Checkout error:', error)
-    return NextResponse.json({ success: false, error: error.message }, { status: 500 })
+    console.error('Ödeme başlatma hatası:', error)
+    return NextResponse.json(
+      { success: false, error: error.message || 'Ödeme başlatılamadı' },
+      { status: 500 }
+    )
   }
 }
