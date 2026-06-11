@@ -18,7 +18,7 @@ const ALLOWED_DISTRICTS = [
 ]
 
 export default function OdemePage() {
-  const { data: session, status } = useSession()
+  const { data: session, status: sessionStatus } = useSession()
   const { cartTotal, items, clearCart } = useCart()
   
   const [formData, setFormData] = useState({
@@ -64,7 +64,7 @@ export default function OdemePage() {
         })
         .catch(console.error)
     }
-  }, [status])
+  }, [sessionStatus])
 
   useEffect(() => {
     if (checkoutHtml) {
