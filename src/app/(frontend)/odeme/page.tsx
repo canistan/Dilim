@@ -126,7 +126,7 @@ export default function OdemePage() {
         if (data.paymentPageUrl) {
           try {
             const cleanUrl = data.paymentPageUrl.toString().trim().replace(/[\n\r]/g, '');
-            window.location.href = cleanUrl + '&iframe=true'
+            window.location.href = cleanUrl;
           } catch (urlErr: any) {
             throw new Error("Adım 3 (URL) Hatası: " + urlErr.message);
           }
