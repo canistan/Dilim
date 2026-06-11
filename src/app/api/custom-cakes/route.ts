@@ -46,6 +46,10 @@ export async function POST(req: Request) {
       const arrayBuffer = await file.arrayBuffer()
       const buffer = Buffer.from(arrayBuffer)
       
+      const extension = file.name.split('.').pop() || 'jpg';
+      const randomNumericId = Math.floor(100000000 + Math.random() * 900000000); // 9 haneli rastgele sayi
+      const newFileName = `${randomNumericId}.${extension}`;
+      
       const media = await payload.create({
         collection: 'media',
         data: {
@@ -53,7 +57,7 @@ export async function POST(req: Request) {
         },
         file: {
           data: buffer,
-          name: file.name,
+          name: newFileName,
           mimetype: file.type,
           size: file.size,
         }
