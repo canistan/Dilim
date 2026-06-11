@@ -1,81 +1,69 @@
-import { NextResponse } from 'next/server';
-// import { iyzipay } from '@/lib/iyzico';
-import { getPayload } from 'payload';
-import configPromise from '@payload-config';
+import { NextRequest, NextResponse } from 'next/server'
+import { getPayload } from 'payload'
+import configPromise from '@payload-config'
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   try {
     const protocol = req.headers.get('x-forwarded-proto') || 'https';
     const hostHeader = req.headers.get('x-forwarded-host') || req.headers.get('host') || 'localhost:3000';
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || `${protocol}://${hostHeader}`;
 
-    const redirectHtml = (url: string) => `
-      <!DOCTYPE html>
-      <html>
-        <head><title>Yönlendiriliyor...</title></head>
-        <body>
-          <script>
-            window.top.location.href = "${url}";
-          </script>
-        </body>
-      </html>
-    `;
-
-    const bodyText = await req.text();
-    let token = '';
-    try {
-      if (bodyText.trim().startsWith('{')) {
-        const json = JSON.parse(bodyText);
-        token = json.token;
-      } else {
-        const params = new URLSearchParams(bodyText);
-        token = params.get('token') || '';
-      }
-    } catch (e) {
-      console.error("Callback body parse error", e);
-    }
+    // iyzico token'ı application/x-www-form-urlencoded olarak POST eder
+    const formData = await req.formData()
+    const token = formData.get('token')?.toString()
 
     if (!token) {
-      return new NextResponse(redirectHtml(`${siteUrl}/odeme/basarisiz?reason=MissingToken`), { headers: { 'Content-Type': 'text/html' } });
-    }
-
-    if (token === 'mock-token-123') {
-      return new NextResponse(redirectHtml(`${siteUrl}/odeme/basarili?orderId=mock-basket`), { headers: { 'Content-Type': 'text/html' } });
+      return NextResponse.redirect(new URL('/odeme/basarisiz?neden=token-yok', siteUrl), 303)
     }
 
     const { iyzipay } = await import('@/lib/iyzico');
 
-    const result = await new Promise((resolve) => {
-      iyzipay.checkoutForm.retrieve({
-        locale: 'tr',
-        conversationId: 'fallback-id', 
-        token: token
-      }, async (err: any, result: any) => {
-        if (err || result.status === 'failure' || result.paymentStatus !== 'SUCCESS') {
-          resolve(new NextResponse(redirectHtml(`${siteUrl}/odeme/basarisiz?reason=${encodeURIComponent(result?.errorMessage || 'PaymentFailed')}`), { headers: { 'Content-Type': 'text/html' } }));
-        } else {
-          try {
-            const payload = await getPayload({ config: configPromise });
-            await payload.update({
-              collection: 'orders',
-              id: result.basketId, 
-              data: {
-                paymentStatus: 'paid',
-              }
-            });
-          } catch (updateErr) {
-            console.error("Ödeme başarılı oldu ancak sipariş güncellenirken hata oluştu:", updateErr);
+    const result: any = await new Promise((resolve, reject) => {
+      iyzipay.checkoutForm.retrieve(
+        { locale: 'tr', token },
+        (err: unknown, res: any) => (err ? reject(err) : resolve(res)),
+      )
+    })
+
+    const odemeBasarili = result?.status === 'success' && result?.paymentStatus === 'SUCCESS'
+    const basketId = result?.basketId // We use basketId for Payload order id
+
+    if (odemeBasarili && basketId) {
+      try {
+        const payload = await getPayload({ config: configPromise });
+        await payload.update({
+          collection: 'orders',
+          id: basketId,
+          data: {
+            paymentStatus: 'paid',
           }
-          resolve(new NextResponse(redirectHtml(`${siteUrl}/odeme/basarili?orderId=${result.basketId}`), { headers: { 'Content-Type': 'text/html' } }));
-        }
-      });
-    });
-    return result as Response;
-  } catch (error) {
+        });
+      } catch (updateErr) {
+        console.error("Sipariş güncellenirken hata oluştu:", updateErr);
+      }
+
+      return NextResponse.redirect(
+        new URL(`/odeme/basarili?orderId=${encodeURIComponent(basketId)}`, siteUrl),
+        303,
+      )
+    }
+
+    return NextResponse.redirect(
+      new URL(`/odeme/basarisiz?neden=${encodeURIComponent(result?.errorMessage ?? 'odeme-onaylanmadi')}`, siteUrl),
+      303,
+    )
+  } catch (err) {
+    console.error('iyzico callback hatası:', err)
     const protocol = req.headers.get('x-forwarded-proto') || 'https';
     const hostHeader = req.headers.get('x-forwarded-host') || req.headers.get('host') || 'localhost:3000';
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || `${protocol}://${hostHeader}`;
-    const fallbackHtml = `<html><body><script>window.top.location.href = "${siteUrl}/odeme/basarisiz?reason=InternalError";</script></body></html>`;
-    return new NextResponse(fallbackHtml, { headers: { 'Content-Type': 'text/html' } });
+    return NextResponse.redirect(new URL('/odeme/basarisiz?neden=sistem-hatasi', siteUrl), 303)
   }
+}
+
+export async function GET(req: NextRequest) {
+  const protocol = req.headers.get('x-forwarded-proto') || 'https';
+  const hostHeader = req.headers.get('x-forwarded-host') || req.headers.get('host') || 'localhost:3000';
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || `${protocol}://${hostHeader}`;
+  return NextResponse.redirect(new URL('/sepet', siteUrl), 303)
 }
