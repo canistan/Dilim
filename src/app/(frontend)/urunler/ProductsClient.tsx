@@ -163,6 +163,7 @@ function ProductsClientInner({
                             onClick={() => setQuickAddProduct({
                               id: product.id,
                               title: product.title,
+                              slug: product.slug,
                               price: product.price,
                               image: imageToUse,
                               hasSizes: product.hasSizes,
