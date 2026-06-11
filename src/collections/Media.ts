@@ -5,6 +5,9 @@ export const Media: CollectionConfig = {
   admin: {
     group: 'Yönetim',
   },
+  access: {
+    read: () => true, // Linke sahip herkes (WhatsApp'taki yetkili dahil) görebilir
+  },
   upload: {
     staticDir: process.env.NODE_ENV === 'production' ? '/tmp/media' : 'public/media',
     adminThumbnail: 'thumbnail',
