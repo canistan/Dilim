@@ -123,15 +123,15 @@ export default function OdemePage() {
       }
       
       if (res.ok && data.success) {
-        if (data.checkoutFormContent) {
-          setCheckoutHtml(data.checkoutFormContent);
-        } else if (data.paymentPageUrl) {
+        if (data.paymentPageUrl) {
           try {
             const cleanUrl = data.paymentPageUrl.toString().trim().replace(/[\n\r]/g, '');
-            window.location.href = cleanUrl;
+            window.location.href = cleanUrl + '&iframe=true'
           } catch (urlErr: any) {
             throw new Error("Adım 3 (URL) Hatası: " + urlErr.message);
           }
+        } else if (data.checkoutFormContent) {
+          setCheckoutHtml(data.checkoutFormContent)
         } else {
           window.location.href = `/odeme/basarili?orderNumber=${data.orderNumber}`
         }
