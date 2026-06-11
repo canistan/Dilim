@@ -1,6 +1,9 @@
 import type { CollectionConfig } from 'payload'
 
 export const CustomCakes: CollectionConfig = {
+  access: {
+    read: () => true,
+  },
   slug: 'custom-cakes',
   labels: {
     singular: 'Özel Pasta',
@@ -8,7 +11,7 @@ export const CustomCakes: CollectionConfig = {
   },
   admin: {
     useAsTitle: 'title',
-    group: 'Kendi Pastanı Tasarla',
+    group: 'Site Yönetimi',
     defaultColumns: ['image', 'title'],
     description: 'Fiyatı olmayan, kullanıcıların ilham alması için sergilenen özel tasarım pastalar.',
   },

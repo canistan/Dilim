@@ -1,6 +1,13 @@
+import { isAdmin } from '../access/isAdmin'
 import type { CollectionConfig } from 'payload'
 
 export const Coupons: CollectionConfig = {
+  access: {
+    read: isAdmin,
+    update: isAdmin,
+    delete: isAdmin,
+    create: isAdmin,
+  },
   slug: 'coupons',
   labels: {
     singular: 'Kupon',

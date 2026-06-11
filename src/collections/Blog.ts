@@ -2,6 +2,9 @@ import type { CollectionConfig } from 'payload'
 import { formatSlug } from '../utilities/formatSlug'
 
 export const Blog: CollectionConfig = {
+  access: {
+    read: () => true,
+  },
   slug: 'blog',
   labels: {
     singular: 'Blog Yazısı',

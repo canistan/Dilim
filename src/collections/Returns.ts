@@ -1,6 +1,13 @@
+import { isAdmin } from '../access/isAdmin'
 import type { CollectionConfig } from 'payload'
 
 export const Returns: CollectionConfig = {
+  access: {
+    read: isAdmin,
+    update: isAdmin,
+    delete: isAdmin,
+    create: () => true,
+  },
   slug: 'returns',
   labels: {
     singular: 'İade/Hasar Talebi',
@@ -12,6 +19,65 @@ export const Returns: CollectionConfig = {
     defaultColumns: ['returnNumber', 'status', 'order', 'createdAt'],
   },
   fields: [
+    {
+      type: 'tabs',
+      tabs: [
+        {
+          label: 'Talep Detayları',
+          fields: [
+            {
+              type: 'row',
+              fields: [
+                {
+                  name: 'order',
+                  type: 'relationship',
+                  relationTo: 'orders',
+                  required: true,
+                  label: 'İlgili Sipariş',
+                },
+                {
+                  name: 'customer',
+                  type: 'relationship',
+                  relationTo: 'customers',
+                  label: 'Müşteri',
+                },
+              ]
+            },
+            {
+              name: 'reason',
+              type: 'select',
+              options: [
+                { label: 'Ürün Hasarlı Geldi', value: 'damaged' },
+                { label: 'Yanlış Ürün Gönderildi', value: 'wrong_item' },
+                { label: 'Teslimat Çok Gecikti', value: 'late_delivery' },
+                { label: 'Kalite/Lezzet Şikayeti', value: 'quality' },
+                { label: 'Diğer', value: 'other' },
+              ],
+              required: true,
+              label: 'Talep Nedeni',
+            },
+            {
+              name: 'description',
+              type: 'textarea',
+              required: true,
+              label: 'Açıklama',
+            },
+          ]
+        },
+        {
+          label: 'Görseller',
+          fields: [
+            {
+              name: 'photos',
+              type: 'upload',
+              relationTo: 'media',
+              hasMany: true,
+              label: 'Hasar Fotoğrafları',
+            },
+          ]
+        }
+      ]
+    },
     {
       name: 'returnNumber',
       type: 'text',
@@ -29,45 +95,6 @@ export const Returns: CollectionConfig = {
           },
         ],
       },
-    },
-    {
-      name: 'order',
-      type: 'relationship',
-      relationTo: 'orders',
-      required: true,
-      label: 'İlgili Sipariş',
-    },
-    {
-      name: 'customer',
-      type: 'relationship',
-      relationTo: 'customers',
-      label: 'Müşteri',
-    },
-    {
-      name: 'reason',
-      type: 'select',
-      options: [
-        { label: 'Ürün Hasarlı Geldi', value: 'damaged' },
-        { label: 'Yanlış Ürün Gönderildi', value: 'wrong_item' },
-        { label: 'Teslimat Çok Gecikti', value: 'late_delivery' },
-        { label: 'Kalite/Lezzet Şikayeti', value: 'quality' },
-        { label: 'Diğer', value: 'other' },
-      ],
-      required: true,
-      label: 'Talep Nedeni',
-    },
-    {
-      name: 'description',
-      type: 'textarea',
-      required: true,
-      label: 'Açıklama',
-    },
-    {
-      name: 'photos',
-      type: 'upload',
-      relationTo: 'media',
-      hasMany: true,
-      label: 'Görseller (Hasar Fotoğrafları)',
     },
     {
       name: 'status',

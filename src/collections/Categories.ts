@@ -2,6 +2,9 @@ import type { CollectionConfig } from 'payload'
 import { formatSlug } from '../utilities/formatSlug'
 
 export const Categories: CollectionConfig = {
+  access: {
+    read: () => true,
+  },
   slug: 'categories',
   labels: {
     singular: 'Kategori',
@@ -9,7 +12,7 @@ export const Categories: CollectionConfig = {
   },
   admin: {
     useAsTitle: 'title',
-    group: 'Site Yönetimi',
+    group: 'Yönetim',
   },
   fields: [
     {

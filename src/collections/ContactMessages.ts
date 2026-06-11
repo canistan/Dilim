@@ -8,7 +8,7 @@ export const ContactMessages: CollectionConfig = {
   },
   admin: {
     useAsTitle: 'name',
-    group: 'Site Yönetimi',
+    group: 'Kullanıcı Bilgi Deposu',
   },
   access: {
     create: () => true,
@@ -17,9 +17,24 @@ export const ContactMessages: CollectionConfig = {
     delete: ({ req: { user } }) => Boolean(user),
   },
   fields: [
-    { name: 'name', type: 'text', required: true, label: 'Ad Soyad' },
-    { name: 'email', type: 'email', required: true, label: 'E-posta' },
-    { name: 'phone', type: 'text', label: 'Telefon' },
-    { name: 'message', type: 'textarea', required: true, label: 'Mesaj' },
+    {
+      type: 'tabs',
+      tabs: [
+        {
+          label: 'Mesaj Detayları',
+          fields: [
+            {
+              type: 'row',
+              fields: [
+                { name: 'name', type: 'text', required: true, label: 'Ad Soyad' },
+                { name: 'email', type: 'email', required: true, label: 'E-posta' },
+                { name: 'phone', type: 'text', label: 'Telefon' },
+              ]
+            },
+            { name: 'message', type: 'textarea', required: true, label: 'Mesaj İçeriği' },
+          ]
+        }
+      ]
+    }
   ],
 }

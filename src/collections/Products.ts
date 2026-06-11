@@ -2,6 +2,9 @@ import type { CollectionConfig } from 'payload'
 import { formatSlug } from '../utilities/formatSlug'
 
 export const Products: CollectionConfig = {
+  access: {
+    read: () => true,
+  },
   slug: 'products',
   labels: {
     singular: 'Ürün',
@@ -9,7 +12,7 @@ export const Products: CollectionConfig = {
   },
   admin: {
     useAsTitle: 'title',
-    group: 'Site Yönetimi',
+    group: 'Yönetim',
     defaultColumns: ['images', 'title', 'price', 'category'],
   },
   fields: [

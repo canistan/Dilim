@@ -111,6 +111,176 @@ export const Orders: CollectionConfig = {
   },
   fields: [
     {
+      type: 'tabs',
+      tabs: [
+        {
+          label: 'Müşteri Bilgileri',
+          fields: [
+            {
+              type: 'row',
+              fields: [
+                {
+                  name: 'customer',
+                  type: 'relationship',
+                  relationTo: 'customers',
+                  label: 'Kayıtlı Müşteri Profili',
+                },
+                {
+                  name: 'orderType',
+                  type: 'select',
+                  defaultValue: 'standard',
+                  label: 'Sipariş Türü',
+                  options: [
+                    { label: 'Standart Sepet Siparişi', value: 'standard' },
+                    { label: 'Özel Tasarım Pasta Talebi', value: 'custom' },
+                  ],
+                },
+              ]
+            },
+            {
+              name: 'customerInfo',
+              type: 'group',
+              label: 'Sipariş Veren Bilgileri',
+              fields: [
+                { type: 'row', fields: [{ name: 'firstName', type: 'text', required: true, label: 'Ad' }, { name: 'lastName', type: 'text', required: true, label: 'Soyad' }] },
+                { type: 'row', fields: [{ name: 'email', type: 'text', required: true, label: 'E-Posta' }, { name: 'phone', type: 'text', required: true, label: 'Telefon' }] },
+                { type: 'row', fields: [{ name: 'district', type: 'text', required: true, label: 'İlçe' }] },
+                { name: 'address', type: 'textarea', required: true, label: 'Açık Adres' },
+                { name: 'isCorporate', type: 'checkbox', defaultValue: false, label: 'Kurumsal Müşteri' },
+                { 
+                  type: 'row',
+                  fields: [
+                    { 
+                      name: 'companyName', 
+                      type: 'text', 
+                      label: 'Firma Adı',
+                      admin: { condition: (data, siblingData) => Boolean(siblingData?.isCorporate) }
+                    },
+                    { 
+                      name: 'taxOffice', 
+                      type: 'text', 
+                      label: 'Vergi Dairesi',
+                      admin: { condition: (data, siblingData) => Boolean(siblingData?.isCorporate) }
+                    },
+                    { 
+                      name: 'taxNumber', 
+                      type: 'text', 
+                      label: 'Vergi Numarası',
+                      admin: { condition: (data, siblingData) => Boolean(siblingData?.isCorporate) }
+                    },
+                  ]
+                }
+              ],
+            },
+          ]
+        },
+        {
+          label: 'Sipariş Detayları',
+          fields: [
+            {
+              name: 'orderItems',
+              type: 'array',
+              label: 'Sepet İçeriği',
+              admin: {
+                condition: (data) => Boolean(data?.orderType !== 'custom'),
+              },
+              fields: [
+                {
+                  type: 'row',
+                  fields: [
+                    {
+                      name: 'product',
+                      type: 'relationship',
+                      relationTo: 'products' as any,
+                      label: 'Ürün'
+                    },
+                    {
+                      name: 'quantity',
+                      type: 'number',
+                      label: 'Adet'
+                    },
+                    {
+                      name: 'price',
+                      type: 'number',
+                      label: 'Birim Fiyat'
+                    },
+                  ]
+                },
+                {
+                  name: 'options',
+                  type: 'text',
+                  label: 'Ek Seçenekler (Örn: Boyut, Pasta Yazısı)',
+                },
+              ],
+            },
+            {
+              name: 'customCakeDetails',
+              type: 'group',
+              label: 'Özel Tasarım Pasta Detayları',
+              admin: {
+                condition: (data) => Boolean(data?.orderType === 'custom'),
+              },
+              fields: [
+                { type: 'row', fields: [{ name: 'cakeSize', type: 'number', label: 'Kişi Sayısı (Porsiyon)' }, { name: 'spongeType', type: 'text', label: 'Kek Tipi' }, { name: 'creamFlavor', type: 'text', label: 'Krema Aroması' }] },
+                { name: 'note', type: 'textarea', label: 'Müşteri Notu' },
+                { name: 'referenceImage', type: 'relationship', relationTo: 'media', label: 'Referans Görseli' },
+              ]
+            }
+          ]
+        },
+        {
+          label: 'Finans ve Durum',
+          fields: [
+            {
+              type: 'row',
+              fields: [
+                {
+                  name: 'status',
+                  type: 'select',
+                  label: 'Sipariş Durumu',
+                  defaultValue: 'pending',
+                  admin: {
+                    components: {
+                      Cell: '@/components/Admin/StatusCell#StatusCell',
+                    },
+                  },
+                  options: [
+                    { label: 'Yeni Sipariş', value: 'pending' },
+                    { label: 'Hazırlanıyor', value: 'preparing' },
+                    { label: 'Kargoya Verildi', value: 'shipped' },
+                    { label: 'Teslim Edildi', value: 'delivered' },
+                    { label: 'İptal Edildi', value: 'cancelled' },
+                  ],
+                },
+                {
+                  name: 'paymentStatus',
+                  type: 'select',
+                  label: 'Ödeme Durumu',
+                  defaultValue: 'unpaid',
+                  admin: {
+                    components: {
+                      Cell: '@/components/Admin/StatusCell#StatusCell',
+                    },
+                  },
+                  options: [
+                    { label: 'Ödenmedi', value: 'unpaid' },
+                    { label: 'Ödendi', value: 'paid' },
+                    { label: 'Hatalı İşlem', value: 'failed' },
+                  ],
+                },
+                {
+                  name: 'totalAmount',
+                  type: 'number',
+                  label: 'Genel Toplam',
+                  required: true,
+                },
+              ]
+            },
+          ]
+        }
+      ]
+    },
+    {
       name: 'orderNumber',
       type: 'text',
       admin: {
@@ -129,137 +299,11 @@ export const Orders: CollectionConfig = {
       },
     },
     {
-      name: 'customer',
-      type: 'relationship',
-      relationTo: 'customers',
-      admin: {
-        position: 'sidebar',
-        description: 'Eğer siparişi veren kişi sisteme kayıtlı bir müşteri ise, profili buraya bağlanır.',
-      },
-    },
-    {
-      name: 'customerInfo',
-      type: 'group',
-      fields: [
-        { name: 'firstName', type: 'text', required: true, label: 'Ad' },
-        { name: 'lastName', type: 'text', required: true, label: 'Soyad' },
-        { name: 'email', type: 'text', required: true, label: 'E-Posta' },
-        { name: 'phone', type: 'text', required: true, label: 'Telefon' },
-        { name: 'district', type: 'text', required: true, label: 'İlçe' },
-        { name: 'address', type: 'textarea', required: true, label: 'Açık Adres' },
-        { name: 'isCorporate', type: 'checkbox', defaultValue: false, label: 'Kurumsal Müşteri' },
-        { 
-          name: 'companyName', 
-          type: 'text', 
-          label: 'Firma Adı',
-          admin: { condition: (data, siblingData) => Boolean(siblingData?.isCorporate) }
-        },
-        { 
-          name: 'taxOffice', 
-          type: 'text', 
-          label: 'Vergi Dairesi',
-          admin: { condition: (data, siblingData) => Boolean(siblingData?.isCorporate) }
-        },
-        { 
-          name: 'taxNumber', 
-          type: 'text', 
-          label: 'Vergi Numarası',
-          admin: { condition: (data, siblingData) => Boolean(siblingData?.isCorporate) }
-        },
-      ],
-    },
-    {
-      name: 'orderItems',
-      type: 'array',
-      fields: [
-        {
-          name: 'product',
-          type: 'relationship',
-          relationTo: 'products' as any,
-        },
-        {
-          name: 'quantity',
-          type: 'number',
-        },
-        {
-          name: 'price',
-          type: 'number',
-        },
-        {
-          name: 'options',
-          type: 'text',
-          label: 'Ek Seçenekler (Örn: Boyut)',
-        },
-      ],
-    },
-    {
-      name: 'orderType',
-      type: 'select',
-      defaultValue: 'standard',
-      options: [
-        { label: 'Standart Sepet Siparişi', value: 'standard' },
-        { label: 'Özel Tasarım Pasta Talebi', value: 'custom' },
-      ],
-      admin: {
-        position: 'sidebar',
-      },
-    },
-    {
-      name: 'customCakeDetails',
-      type: 'group',
-      admin: {
-        condition: (data) => Boolean(data?.orderType === 'custom'),
-        description: 'Müşterinin özel pasta talebine ait detaylar',
-      },
-      fields: [
-        { name: 'cakeSize', type: 'number', label: 'Kişi Sayısı (Porsiyon)' },
-        { name: 'spongeType', type: 'text', label: 'Kek Tipi' },
-        { name: 'creamFlavor', type: 'text', label: 'Krema Aroması' },
-        { name: 'note', type: 'textarea', label: 'Müşteri Notu' },
-        { name: 'referenceImage', type: 'relationship', relationTo: 'media', label: 'Referans Görseli' },
-      ]
-    },
-    {
-      name: 'totalAmount',
-      type: 'number',
-      required: true,
-    },
-    {
-      name: 'status',
-      type: 'select',
-      defaultValue: 'pending',
-      admin: {
-        components: {
-          Cell: '@/components/Admin/StatusCell#StatusCell',
-        },
-      },
-      options: [
-        { label: 'Yeni Sipariş', value: 'pending' },
-        { label: 'Hazırlanıyor', value: 'preparing' },
-        { label: 'Kargoya Verildi', value: 'shipped' },
-        { label: 'Teslim Edildi', value: 'delivered' },
-        { label: 'İptal Edildi', value: 'cancelled' },
-      ],
-    },
-    {
-      name: 'paymentStatus',
-      type: 'select',
-      defaultValue: 'unpaid',
-      admin: {
-        components: {
-          Cell: '@/components/Admin/StatusCell#StatusCell',
-        },
-      },
-      options: [
-        { label: 'Ödenmedi', value: 'unpaid' },
-        { label: 'Ödendi', value: 'paid' },
-        { label: 'Hatalı İşlem', value: 'failed' },
-      ],
-    },
-    {
       name: 'iyzicoToken',
       type: 'text',
+      label: 'Iyzico Ödeme Token',
       admin: {
+        position: 'sidebar',
         readOnly: true,
       },
     },

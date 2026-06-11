@@ -7,7 +7,7 @@ export const Resumes: CollectionConfig = {
     plural: 'Özgeçmişler',
   },
   admin: {
-    group: 'Site Yönetimi',
+    group: 'Kullanıcı Bilgi Deposu',
     description: 'Kariyer başvurularında yüklenen CV ve özgeçmiş dosyaları.',
   },
   upload: {

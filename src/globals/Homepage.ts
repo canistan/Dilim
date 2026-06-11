@@ -1,6 +1,9 @@
 import type { GlobalConfig } from 'payload'
 
 export const Homepage: GlobalConfig = {
+  access: {
+    read: () => true,
+  },
   slug: 'homepage',
   label: 'Anasayfa Ayarları',
   admin: {
