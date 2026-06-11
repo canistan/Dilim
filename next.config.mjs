@@ -10,7 +10,10 @@ const nextConfig = {
   },
   serverExternalPackages: ['iyzipay'],
   outputFileTracingIncludes: {
-    '/api/**/*': ['./node_modules/iyzipay/**/*'],
+    '/api/**/*': [
+      './node_modules/iyzipay/**/*',
+      './node_modules/postman-request/**/*'
+    ],
   },
   images: {
     remotePatterns: [
