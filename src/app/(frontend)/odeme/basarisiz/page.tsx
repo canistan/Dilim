@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { XCircle } from 'lucide-react'
 import { Metadata } from 'next'
+import { IframeBreakout } from '@/components/IframeBreakout'
 
 export const metadata: Metadata = {
   title: 'Ödeme Başarısız | Dilim Pastaneleri',
@@ -12,6 +13,7 @@ export default async function BasarisizPage(props: { searchParams: Promise<{ rea
 
   return (
     <div className="flex-1 bg-gray-50 flex items-center justify-center py-20">
+      <IframeBreakout />
       <div className="container mx-auto px-4 max-w-xl text-center bg-white p-12 rounded-3xl shadow-xl border border-gray-100">
         <div className="w-24 h-24 bg-red-100 text-red-500 rounded-full flex items-center justify-center mx-auto mb-8">
           <XCircle className="w-12 h-12" />

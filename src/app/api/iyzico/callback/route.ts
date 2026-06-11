@@ -42,22 +42,25 @@ export async function POST(req: NextRequest) {
         console.error("Sipariş güncellenirken hata oluştu:", updateErr);
       }
 
-      return new NextResponse(`<html><body><script>window.top.location.href="${siteUrl}/odeme/basarili?orderId=${encodeURIComponent(basketId)}";</script></body></html>`, {
-        headers: { 'Content-Type': 'text/html' }
-      });
+      return NextResponse.redirect(
+        new URL(`/odeme/basarili?orderId=${encodeURIComponent(basketId)}`, siteUrl),
+        303
+      );
     }
 
-    return new NextResponse(`<html><body><script>window.top.location.href="${siteUrl}/odeme/basarisiz?neden=${encodeURIComponent(result?.errorMessage ?? 'odeme-onaylanmadi')}";</script></body></html>`, {
-      headers: { 'Content-Type': 'text/html' }
-    });
+    return NextResponse.redirect(
+      new URL(`/odeme/basarisiz?neden=${encodeURIComponent(result?.errorMessage ?? 'odeme-onaylanmadi')}`, siteUrl),
+      303
+    );
   } catch (err) {
     console.error('iyzico callback hatası:', err)
     const protocol = req.headers.get('x-forwarded-proto') || 'https';
     const hostHeader = req.headers.get('x-forwarded-host') || req.headers.get('host') || 'localhost:3000';
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || `${protocol}://${hostHeader}`;
-    return new NextResponse(`<html><body><script>window.top.location.href="${siteUrl}/odeme/basarisiz?neden=sistem-hatasi";</script></body></html>`, {
-      headers: { 'Content-Type': 'text/html' }
-    });
+    return NextResponse.redirect(
+      new URL(`/odeme/basarisiz?neden=sistem-hatasi`, siteUrl),
+      303
+    );
   }
 }
 

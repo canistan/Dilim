@@ -1,9 +1,11 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
 // import { iyzipay } from '@/lib/iyzico'
 import { getServerSession } from "next-auth/next"
 import { authOptions } from "@/lib/auth"
+
+export const maxDuration = 60;
 
 const initializeCheckoutForm = async (request: any): Promise<any> => {
   const { iyzipay } = await import('@/lib/iyzico');
