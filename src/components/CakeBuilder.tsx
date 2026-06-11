@@ -161,7 +161,7 @@ export default function CakeBuilder() {
       formData.append('frosting', selections.frosting)
       formData.append('note', selections.note)
       if (selections.referenceImage) {
-        formData.append('referenceImage', selections.referenceImage)
+        formData.append('referenceImage', selections.referenceImage, selections.referenceImage.name || 'image.jpg')
       }
 
       const res = await fetch('/api/custom-cakes', {

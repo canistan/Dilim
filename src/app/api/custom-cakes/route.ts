@@ -22,6 +22,17 @@ export async function POST(req: Request) {
     // Yüklenen dosyayı al (isteğe bağlı)
     const file = formData.get('referenceImage') as File | null
     
+    let debugInfo = `File is ${typeof file}. `
+    if (file) {
+        debugInfo += `isFile: ${file instanceof File}, isBlob: ${file instanceof Blob}, size: ${(file as any).size}, type: ${(file as any).type}, name: ${(file as any).name}`
+    } else {
+        debugInfo += 'null or undefined'
+    }
+    
+    console.log('--- CUSTOM CAKE UPLOAD DEBUG ---')
+    console.log('Customer:', customerName)
+    console.log(debugInfo)
+    
     if (!customerName || !customerPhone || !customerAddress) {
       return NextResponse.json({ success: false, error: 'Eksik müşteri bilgisi' }, { status: 400 })
     }
@@ -31,40 +42,64 @@ export async function POST(req: Request) {
     let uploadedMediaUrl = null
 
     // Dosya varsa Media koleksiyonuna yükle
-    if (file && file.size > 0) {
+    // Gevşek kontrol: file objesi ise ve size undefined değilse veya 0'dan büyükse. (Bazı Nextjs versiyonlarında size property'si farklı çalışabiliyor)
+    if (file && typeof file === 'object' && ((file as any).size > 0 || (file as any).size === undefined)) {
+      console.log('File detected, processing upload...')
       // Güvenlik: Dosya türü ve boyutu doğrulaması
       const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
-      if (!allowedTypes.includes(file.type)) {
-        return NextResponse.json({ success: false, error: 'Sadece görsel dosyaları (.jpg, .png, .webp) yüklenebilir.' }, { status: 400 })
+      if (file.type && !allowedTypes.includes(file.type)) {
+        console.log('Invalid file type:', file.type)
+        return NextResponse.json({ success: false, error: `Sadece görsel dosyaları (.jpg, .png, .webp) yüklenebilir. Type: ${file.type}` }, { status: 400 })
       }
       
       const maxSize = 5 * 1024 * 1024; // 5 MB
-      if (file.size > maxSize) {
+      if (file.size && file.size > maxSize) {
+        console.log('File too large:', file.size)
         return NextResponse.json({ success: false, error: 'Görsel boyutu maksimum 5MB olmalıdır.' }, { status: 400 })
       }
 
-      const arrayBuffer = await file.arrayBuffer()
-      const buffer = Buffer.from(arrayBuffer)
+      let buffer: Buffer;
+      if (typeof file.arrayBuffer === 'function') {
+         const arrayBuffer = await file.arrayBuffer()
+         buffer = Buffer.from(arrayBuffer)
+      } else {
+         // Fallback if file is somehow not a standard File object but has data
+         return NextResponse.json({ success: false, error: `Dosya yüklenemedi, desteklenmeyen dosya objesi: ${debugInfo}` }, { status: 400 })
+      }
       
-      const extension = file.name.split('.').pop() || 'jpg';
+      console.log('Buffer created, length:', buffer.length)
+      
+      const extension = file.name ? file.name.split('.').pop() || 'jpg' : 'jpg';
       const randomNumericId = Math.floor(100000000 + Math.random() * 900000000); // 9 haneli rastgele sayi
       const newFileName = `${randomNumericId}.${extension}`;
       
-      const media = await payload.create({
-        collection: 'media',
-        data: {
-          alt: `${customerName} - Referans Görseli`
-        },
-        file: {
-          data: buffer,
-          name: newFileName,
-          mimetype: file.type,
-          size: file.size,
-        }
-      })
-      uploadedMediaId = media.id
-      uploadedMediaUrl = media.url
+      console.log('Calling payload.create with name:', newFileName)
+      try {
+        const media = await payload.create({
+          collection: 'media',
+          data: {
+            alt: `${customerName} - Referans Görseli`
+          },
+          file: {
+            data: buffer,
+            name: newFileName,
+            mimetype: file.type || 'image/jpeg',
+            size: file.size || buffer.length,
+          }
+        })
+        console.log('Payload create success. Media object:', JSON.stringify(media, null, 2))
+        uploadedMediaId = media.id
+        uploadedMediaUrl = media.url
+      } catch (err) {
+        console.error('Payload create error:', err)
+        throw err; // Let outer catch block handle it
+      }
+    } else {
+      console.log('No valid file to process. file:', file)
     }
+
+    console.log('Uploaded Media ID:', uploadedMediaId)
+    console.log('Uploaded Media URL:', uploadedMediaUrl)
 
     // Seçilen değerleri CakeSize numarasına çevir (örneğin '6-8' -> 8)
     const sizeMatch = size ? size.match(/\d+/g) : null;
