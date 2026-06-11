@@ -56,7 +56,8 @@ export const Orders: CollectionConfig = {
             // Ödeme başarılı maili gönder
             try {
               if (currentPayload && doc.customerInfo?.email) {
-                await currentPayload.sendEmail({
+                // await kaldirildi, arka planda gondersin, kullaniciyi bekletmesin
+                currentPayload.sendEmail({
                   to: doc.customerInfo.email,
                   from: 'sistem@dilim.com',
                   subject: `Ödemeniz Alındı - Sipariş No: ${doc.orderNumber}`,
@@ -66,7 +67,7 @@ export const Orders: CollectionConfig = {
                           <p>Siparişiniz şu an <strong>hazırlanıyor</strong> durumundadır. Kargoya verildiğinde size tekrar bilgi vereceğiz.</p>
                           <p>Bizi tercih ettiğiniz için teşekkür ederiz.</p>
                         </div>`
-                });
+                }).catch(e => console.error("Email gonderim hatasi", e));
               }
             } catch (e) {}
           }
@@ -90,7 +91,7 @@ export const Orders: CollectionConfig = {
 
             if (subject && message && doc.customerInfo?.email) {
               try {
-                await req.payload.sendEmail({
+                req.payload.sendEmail({
                   to: doc.customerInfo.email,
                   from: 'sistem@dilim.com',
                   subject: subject,
@@ -98,9 +99,9 @@ export const Orders: CollectionConfig = {
                           <h2 style="color: #333;">Merhaba ${doc.customerInfo.firstName},</h2>
                           ${message}
                         </div>`
-                });
+                }).catch(e => console.error("Durum maili gonderilemedi", e));
               } catch (e) {
-                req.payload.logger.error(`Durum maili gönderilemedi: ${doc.orderNumber}`);
+                req.payload.logger.error(`Durum maili hatasi: ${doc.orderNumber}`);
               }
             }
           }
