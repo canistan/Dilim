@@ -1,25 +1,83 @@
-const fetch = require('node-fetch');
+require('dotenv').config({ path: '.env.local' });
+const Iyzipay = require('iyzipay');
 
-async function test() {
-  const res = await fetch('http://localhost:3000/api/odeme-baslat', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      customerInfo: {
-        firstName: "Test",
-        lastName: "User",
-        email: "test@example.com",
-        phone: "05555555555",
-        address: "Test adres",
-        district: "Test Ilce",
-      },
-      items: [{ id: 1, name: "Test Urun", quantity: 1, price: 100 }],
-      totalAmount: 100
-    })
-  });
-  
-  const text = await res.text();
-  console.log(text);
-}
+const iyzipay = new Iyzipay({
+  apiKey: process.env.IYZICO_API_KEY,
+  secretKey: process.env.IYZICO_SECRET_KEY,
+  uri: process.env.IYZICO_BASE_URL || 'https://sandbox-api.iyzipay.com',
+});
 
-test();
+const request = {
+    locale: Iyzipay.LOCALE.TR,
+    conversationId: '123456789',
+    price: '1',
+    paidPrice: '1.2',
+    currency: Iyzipay.CURRENCY.TRY,
+    basketId: 'B67832',
+    paymentGroup: Iyzipay.PAYMENT_GROUP.PRODUCT,
+    callbackUrl: 'https://dilim.semsicanalbayrak.com/api/iyzico/callback',
+    enabledInstallments: [2, 3, 6, 9],
+    buyer: {
+        id: 'BY789',
+        name: 'John',
+        surname: 'Doe',
+        gsmNumber: '+905350000000',
+        email: 'email@email.com',
+        identityNumber: '74300864791',
+        lastLoginDate: '2015-10-05 12:43:35',
+        registrationDate: '2013-04-21 15:12:09',
+        registrationAddress: 'Nidakule Göztepe, Merdivenköy Mah. Bora Sok. No:1',
+        ip: '85.34.78.112',
+        city: 'Istanbul',
+        country: 'Turkey',
+        zipCode: '34732'
+    },
+    shippingAddress: {
+        contactName: 'Jane Doe',
+        city: 'Istanbul',
+        country: 'Turkey',
+        address: 'Nidakule Göztepe, Merdivenköy Mah. Bora Sok. No:1',
+        zipCode: '34742'
+    },
+    billingAddress: {
+        contactName: 'Jane Doe',
+        city: 'Istanbul',
+        country: 'Turkey',
+        address: 'Nidakule Göztepe, Merdivenköy Mah. Bora Sok. No:1',
+        zipCode: '34742'
+    },
+    basketItems: [
+        {
+            id: 'BI101',
+            name: 'Binocular',
+            category1: 'Collectibles',
+            category2: 'Accessories',
+            itemType: Iyzipay.BASKET_ITEM_TYPE.PHYSICAL,
+            price: '0.3'
+        },
+        {
+            id: 'BI102',
+            name: 'Game code',
+            category1: 'Game',
+            category2: 'Online Game Items',
+            itemType: Iyzipay.BASKET_ITEM_TYPE.VIRTUAL,
+            price: '0.5'
+        },
+        {
+            id: 'BI103',
+            name: 'Usb',
+            category1: 'Electronics',
+            category2: 'Usb / Cable',
+            itemType: Iyzipay.BASKET_ITEM_TYPE.PHYSICAL,
+            price: '0.2'
+        }
+    ]
+};
+
+iyzipay.checkoutFormInitialize.create(request, function (err, result) {
+    if (err) {
+        console.error("ERROR:", err);
+    } else {
+        console.log("RESULT:", JSON.stringify(result, null, 2));
+    }
+});
