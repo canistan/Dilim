@@ -179,13 +179,36 @@ export default function CakeBuilder() {
         const fillingName = OPTIONS.filling.find(o => o.id === selections.filling)?.name
         const frostingName = OPTIONS.frosting.find(o => o.id === selections.frosting)?.name
         
-        const mediaUrlStr = data.mediaUrl ? `${window.location.origin}${data.mediaUrl}` : '';
-        const message = `Merhaba, web siteniz üzerinden özel bir pasta tasarımı gönderdim (Talep No: ${data.id}). %0A%0A👤 *İletişim Bilgilerim*%0A- *Ad Soyad:* ${selections.customerName}%0A- *Adres:* ${selections.customerAddress}%0A%0A🎂 *Tasarım Özeti*%0A- *Boyut:* ${sizeName}%0A- *Kek:* ${baseName}%0A- *Krema:* ${fillingName}%0A- *Kaplama:* ${frostingName}%0A- *Özel Not:* ${selections.note || 'Yok'}%0A%0A${mediaUrlStr ? `📎 *Referans Görselim:* ${mediaUrlStr}%0A%0A` : ''}Fiyat teklifinizi ve onayınızı bekliyorum.`
-        setWhatsappMessage(message)
+        let mediaUrlStr = '';
+        if (data.mediaUrl) {
+          if (data.mediaUrl.startsWith('http')) {
+            mediaUrlStr = data.mediaUrl;
+          } else {
+            mediaUrlStr = `${window.location.origin}${data.mediaUrl.startsWith('/') ? '' : '/'}${data.mediaUrl}`;
+          }
+        }
+        
+        const rawMessage = `Merhaba, web siteniz üzerinden özel bir pasta tasarımı gönderdim (Talep No: ${data.id}).
+
+👤 *İletişim Bilgilerim*
+- *Ad Soyad:* ${selections.customerName}
+- *Adres:* ${selections.customerAddress}
+
+🎂 *Tasarım Özeti*
+- *Boyut:* ${sizeName}
+- *Kek:* ${baseName}
+- *Krema:* ${fillingName}
+- *Kaplama:* ${frostingName}
+- *Özel Not:* ${selections.note || 'Yok'}
+${mediaUrlStr ? `\n📎 *Referans Görselim:* ${mediaUrlStr}\n` : ''}
+Fiyat teklifinizi ve onayınızı bekliyorum.`;
+
+        const encodedMessage = encodeURIComponent(rawMessage);
+        setWhatsappMessage(encodedMessage)
         setIsSuccess(true)
         
         // Yeni sekmede WhatsApp'ı aç (Popup engelleyiciye takılabilir, o yüzden butonu da sunacağız)
-        window.open(`https://wa.me/905059638021?text=${message}`, '_blank')
+        window.open(`https://wa.me/905059638021?text=${encodedMessage}`, '_blank')
       } else {
         toast.error("Talebiniz gönderilirken bir hata oluştu: " + data.error)
         setIsSubmitting(false)
