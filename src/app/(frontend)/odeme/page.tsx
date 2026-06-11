@@ -175,7 +175,7 @@ export default function OdemePage() {
       <div className="container mx-auto px-4 max-w-6xl">
         <h1 className="text-3xl md:text-4xl font-serif font-bold text-dilim-siyah mb-10 text-center">Güvenli Ödeme</h1>
         
-        {!checkoutHtml && !paymentIframeUrl ? (
+        {!checkoutHtml && !paymentIframeUrl && !mockData ? (
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             
             {/* SOL SÜTUN: FORM */}
