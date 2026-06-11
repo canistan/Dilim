@@ -6,7 +6,8 @@ export async function POST(req: NextRequest) {
   try {
     const protocol = req.headers.get('x-forwarded-proto') || 'https';
     const hostHeader = req.headers.get('x-forwarded-host') || req.headers.get('host') || 'localhost:3000';
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || `${protocol}://${hostHeader}`;
+    let siteUrl = process.env.NEXT_PUBLIC_SITE_URL || `${protocol}://${hostHeader}`;
+    if (!siteUrl.startsWith('http')) siteUrl = `https://${siteUrl}`;
 
     // iyzico token'ı application/x-www-form-urlencoded olarak POST eder
     const formData = await req.formData()
@@ -56,7 +57,8 @@ export async function POST(req: NextRequest) {
     console.error('iyzico callback hatası:', err)
     const protocol = req.headers.get('x-forwarded-proto') || 'https';
     const hostHeader = req.headers.get('x-forwarded-host') || req.headers.get('host') || 'localhost:3000';
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || `${protocol}://${hostHeader}`;
+    let siteUrl = process.env.NEXT_PUBLIC_SITE_URL || `${protocol}://${hostHeader}`;
+    if (!siteUrl.startsWith('http')) siteUrl = `https://${siteUrl}`;
     return NextResponse.redirect(
       new URL(`/odeme/basarisiz?neden=sistem-hatasi`, siteUrl),
       303
@@ -67,6 +69,7 @@ export async function POST(req: NextRequest) {
 export async function GET(req: NextRequest) {
   const protocol = req.headers.get('x-forwarded-proto') || 'https';
   const hostHeader = req.headers.get('x-forwarded-host') || req.headers.get('host') || 'localhost:3000';
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || `${protocol}://${hostHeader}`;
+  let siteUrl = process.env.NEXT_PUBLIC_SITE_URL || `${protocol}://${hostHeader}`;
+  if (!siteUrl.startsWith('http')) siteUrl = `https://${siteUrl}`;
   return NextResponse.redirect(new URL('/sepet', siteUrl), 303)
 }

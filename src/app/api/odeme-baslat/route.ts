@@ -120,6 +120,7 @@ export async function POST(req: Request) {
     const protocol = req.headers.get('x-forwarded-proto') || (req.url.startsWith('https') ? 'https' : 'http');
     let hostHeader = req.headers.get('x-forwarded-host') || req.headers.get('host') || 'localhost:3000';
     let host = process.env.NEXT_PUBLIC_SITE_URL || `${protocol}://${hostHeader}`;
+    if (!host.startsWith('http')) host = `https://${host}`;
     host = host.endsWith('/') ? host.slice(0, -1) : host;
     
     // Geliştirme ortamında (localhost) Iyzico'yu atla ve direkt başarılı say.
