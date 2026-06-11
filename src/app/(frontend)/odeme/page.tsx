@@ -65,11 +65,34 @@ export default function OdemePage() {
   }, [status])
 
   useEffect(() => {
-    if (checkoutHtml && formRef.current) {
-      // Scriptlerin çalışması için createContextualFragment kullanıyoruz
-      formRef.current.innerHTML = ''
-      const fragment = document.createRange().createContextualFragment(checkoutHtml)
-      formRef.current.appendChild(fragment)
+    if (checkoutHtml) {
+      // Iyzico'nun döndürdüğü HTML içinden script src'sini çıkar ve React'a uygun şekilde DOM'a ekle
+      const scriptMatch = checkoutHtml.match(/src="([^"]+)"/);
+      if (scriptMatch && scriptMatch[1]) {
+        const scriptUrl = scriptMatch[1];
+        
+        // Varsa eski scripti temizle
+        const existingScript = document.getElementById('iyzico-script');
+        if (existingScript) existingScript.remove();
+
+        const script = document.createElement('script');
+        script.id = 'iyzico-script';
+        script.src = scriptUrl;
+        script.async = true;
+        document.body.appendChild(script);
+        
+        return () => {
+          const s = document.getElementById('iyzico-script');
+          if (s) s.remove();
+        };
+      } else {
+        // Fallback: Eğer regex bulamazsa eski yöntemle ekle
+        if (formRef.current) {
+          formRef.current.innerHTML = '';
+          const fragment = document.createRange().createContextualFragment(checkoutHtml);
+          formRef.current.appendChild(fragment);
+        }
+      }
     }
   }, [checkoutHtml])
 
@@ -124,11 +147,11 @@ export default function OdemePage() {
       }
       
       if (res.ok && data.success) {
-        if (data.paymentPageUrl) {
-          const cleanUrl = data.paymentPageUrl.toString().trim().replace(/[\n\r]/g, '');
-          setPaymentIframeUrl(cleanUrl + '&iframe=true');
-        } else if (data.checkoutFormContent) {
+        if (data.checkoutFormContent) {
           setCheckoutHtml(data.checkoutFormContent);
+        } else if (data.paymentPageUrl) {
+          const cleanUrl = data.paymentPageUrl.toString().trim().replace(/[\n\r]/g, '');
+          window.location.href = cleanUrl;
         } else {
           window.location.href = `/odeme/basarili?orderNumber=${data.orderNumber}`
         }
@@ -370,15 +393,7 @@ export default function OdemePage() {
           <div className="bg-white p-8 rounded-3xl shadow-xl border border-gray-100 max-w-2xl mx-auto min-h-[500px]">
             <h2 className="text-2xl font-bold mb-6 text-dilim-siyah text-center">Ödeme Ekranı</h2>
             {/* Iyzico Form Container */}
-            {paymentIframeUrl ? (
-              <iframe 
-                src={paymentIframeUrl} 
-                style={{ width: '100%', minHeight: '600px', border: 'none' }}
-                title="Iyzico Güvenli Ödeme"
-              />
-            ) : (
-              <div ref={formRef} id="iyzi-payment-container"></div>
-            )}
+            <div ref={formRef} id="iyzipay-checkout-form" className="responsive"></div>
           </div>
         )}
       </div>

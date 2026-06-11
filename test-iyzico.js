@@ -2,8 +2,8 @@ require('dotenv').config({ path: '.env.local' });
 const Iyzipay = require('iyzipay');
 
 const iyzipay = new Iyzipay({
-  apiKey: process.env.IYZICO_API_KEY,
-  secretKey: process.env.IYZICO_SECRET_KEY,
+  apiKey: process.env.IYZICO_API_KEY || 'sandbox-api-key',
+  secretKey: process.env.IYZICO_SECRET_KEY || 'sandbox-secret-key',
   uri: process.env.IYZICO_BASE_URL || 'https://sandbox-api.iyzipay.com',
 });
 
@@ -53,23 +53,7 @@ const request = {
             category1: 'Collectibles',
             category2: 'Accessories',
             itemType: Iyzipay.BASKET_ITEM_TYPE.PHYSICAL,
-            price: '0.3'
-        },
-        {
-            id: 'BI102',
-            name: 'Game code',
-            category1: 'Game',
-            category2: 'Online Game Items',
-            itemType: Iyzipay.BASKET_ITEM_TYPE.VIRTUAL,
-            price: '0.5'
-        },
-        {
-            id: 'BI103',
-            name: 'Usb',
-            category1: 'Electronics',
-            category2: 'Usb / Cable',
-            itemType: Iyzipay.BASKET_ITEM_TYPE.PHYSICAL,
-            price: '0.2'
+            price: '1'
         }
     ]
 };
