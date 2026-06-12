@@ -63,6 +63,7 @@ export async function POST(req: Request) {
           productId: productId,
           realUnitPrice: unitPrice,
           realLineTotal: unitPrice * quantity,
+          options: item.options || '',
         });
       } catch (err) {
         return NextResponse.json({ success: false, error: 'Ürün bilgisi alınamadı' }, { status: 400 });
@@ -109,6 +110,7 @@ export async function POST(req: Request) {
           product: item.productId,
           quantity: item.quantity,
           price: item.realUnitPrice,
+          options: item.options,
         })),
         totalAmount: calculatedTotal,
         status: 'pending',

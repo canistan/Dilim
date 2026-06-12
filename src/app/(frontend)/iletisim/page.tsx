@@ -26,10 +26,37 @@ export default function IletisimPage() {
     }
   }, [session])
 
-  const handleEmailSubmit = (e: React.FormEvent) => {
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isSuccess, setIsSuccess] = useState(false)
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    const mailtoLink = `mailto:info@dilim.com.tr?subject=${encodeURIComponent(formData.subject || 'Dilim Pastaneleri İletişim Formu - ' + formData.name)}&body=${encodeURIComponent(`İsim: ${formData.name}\nE-posta: ${formData.email}\n\nMesaj:\n${formData.message}`)}`
-    window.location.href = mailtoLink
+    setIsSubmitting(true)
+    
+    try {
+      const res = await fetch('/api/contact-messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          subject: formData.subject, // Even if there is no subject in schema, Payload ignores extra or we can append it
+          message: formData.subject ? `Konu: ${formData.subject}\n\n${formData.message}` : formData.message,
+        })
+      })
+
+      if (res.ok) {
+        setIsSuccess(true)
+        setFormData({ name: '', email: '', subject: '', message: '' })
+      } else {
+        alert('Mesajınız gönderilirken bir hata oluştu.')
+      }
+    } catch (error) {
+      console.error(error)
+      alert('Beklenmeyen bir hata oluştu.')
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -68,9 +95,19 @@ export default function IletisimPage() {
               transition={{ duration: 0.6 }}
               className="bg-white rounded-3xl p-8 sm:p-12 shadow-xl border border-gray-100 lg:sticky lg:top-28 self-start"
             >
-              <h2 className="text-3xl font-serif font-bold text-dilim-siyah mb-8">Mesaj Gönderin</h2>
-              
-              <form onSubmit={handleEmailSubmit} className="space-y-6 mb-12">
+              {isSuccess ? (
+                <div className="text-center py-12">
+                  <div className="w-20 h-20 bg-green-100 text-green-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                  </div>
+                  <h3 className="text-2xl font-bold text-dilim-siyah mb-2">Mesajınız İletildi!</h3>
+                  <p className="text-gray-600">En kısa sürede sizinle iletişime geçeceğiz.</p>
+                  <button onClick={() => setIsSuccess(false)} className="mt-6 text-dilim-portakal font-semibold underline">Yeni bir mesaj gönder</button>
+                </div>
+              ) : (
+                <>
+                  <h2 className="text-3xl font-serif font-bold text-dilim-siyah mb-8">Mesaj Gönderin</h2>
+                  <form onSubmit={handleSubmit} className="space-y-6 mb-12">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Adınız Soyadınız</label>
@@ -121,12 +158,15 @@ export default function IletisimPage() {
 
                 <button 
                   type="submit"
-                  className="w-full bg-dilim-siyah text-white font-bold py-4 rounded-xl hover:bg-dilim-portakal transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center gap-2 group"
+                  disabled={isSubmitting}
+                  className="w-full bg-dilim-siyah text-white font-bold py-4 rounded-xl hover:bg-dilim-portakal transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center gap-2 group disabled:opacity-50"
                 >
                   <Send className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                  E-posta Olarak Gönder
+                  {isSubmitting ? 'Gönderiliyor...' : 'Mesajı Gönder'}
                 </button>
               </form>
+              </>
+              )}
 
               {/* Quick Actions */}
               <div className="pt-8 border-t border-gray-100">
