@@ -1,5 +1,7 @@
 import type { CollectionConfig } from 'payload'
 
+import { orderAccess } from '../access/roles'
+
 export const Orders: CollectionConfig = {
   slug: 'orders',
   labels: {
@@ -12,9 +14,7 @@ export const Orders: CollectionConfig = {
     defaultColumns: ['orderNumber', 'orderType', 'status', 'totalAmount', 'createdAt'],
   },
   access: {
-    // Sadece adminler (Users) doğrudan Payload API üzerinden siparişlere erişebilir.
-    // Müşteriler (NextAuth) site üzerinden Server Component'ler (Local API) aracılığıyla veriye ulaşır.
-    read: ({ req: { user } }) => Boolean(user?.collection === 'users'),
+    read: orderAccess,
     create: ({ req: { user } }) => Boolean(user?.collection === 'users'),
     update: ({ req: { user } }) => Boolean(user?.collection === 'users'),
     delete: ({ req: { user } }) => Boolean(user?.collection === 'users'),
@@ -172,6 +172,74 @@ export const Orders: CollectionConfig = {
                 }
               ],
             },
+          ]
+        },
+        {
+          label: 'Teslimat Bilgileri',
+          fields: [
+            {
+              type: 'row',
+              fields: [
+                {
+                  name: 'deliveryType',
+                  type: 'select',
+                  label: 'Teslimat Yöntemi',
+                  defaultValue: 'delivery',
+                  options: [
+                    { label: 'Kapıya Teslim', value: 'delivery' },
+                    { label: 'Şubeden Gel-Al', value: 'pickup' },
+                  ]
+                },
+                {
+                  name: 'timeSlot',
+                  type: 'relationship',
+                  relationTo: 'time-slots',
+                  label: 'İstenen Teslimat Aralığı',
+                }
+              ]
+            },
+            {
+              type: 'row',
+              fields: [
+                {
+                  name: 'deliveryZone',
+                  type: 'relationship',
+                  relationTo: 'delivery-zones',
+                  label: 'Teslimat Bölgesi (Kapıya Teslim)',
+                  admin: { condition: (data) => Boolean(data?.deliveryType === 'delivery') }
+                },
+                {
+                  name: 'pickupBranch',
+                  type: 'relationship',
+                  relationTo: 'branches',
+                  label: 'Teslim Alınacak Şube (Gel-Al)',
+                  admin: { condition: (data) => Boolean(data?.deliveryType === 'pickup') }
+                }
+              ]
+            },
+            {
+              name: 'isGift',
+              type: 'checkbox',
+              label: 'Bu Sipariş Hediye mi?',
+              defaultValue: false,
+            },
+            {
+              type: 'row',
+              fields: [
+                {
+                  name: 'giftRecipientName',
+                  type: 'text',
+                  label: 'Alıcı Adı Soyadı',
+                  admin: { condition: (data) => Boolean(data?.isGift) }
+                },
+                {
+                  name: 'giftRecipientPhone',
+                  type: 'text',
+                  label: 'Alıcı Telefon Numarası',
+                  admin: { condition: (data) => Boolean(data?.isGift) }
+                }
+              ]
+            }
           ]
         },
         {

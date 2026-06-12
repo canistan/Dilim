@@ -221,7 +221,7 @@ Fiyat teklifinizi ve onayınızı bekliyorum.`;
   }
 
   return (
-    <div ref={containerRef} className="max-w-4xl mx-auto bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100">
+    <div ref={containerRef} className="max-w-4xl mx-auto bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100 relative z-20">
       
       {/* Progress Header */}
       <div className="bg-gray-50 border-b border-gray-100 p-6 sm:p-8">

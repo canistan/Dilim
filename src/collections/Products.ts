@@ -106,6 +106,48 @@ export const Products: CollectionConfig = {
       },
     },
     {
+      name: 'isSameDayEligible',
+      type: 'checkbox',
+      label: 'Aynı Gün Teslimata Uygun',
+      defaultValue: true,
+      admin: {
+        position: 'sidebar',
+        description: 'Bu ürün aynı gün teslimat siparişleri için uygun mu?',
+      }
+    },
+    {
+      name: 'leadTime',
+      type: 'number',
+      label: 'Hazırlık Süresi (Saat)',
+      defaultValue: 2,
+      admin: {
+        position: 'sidebar',
+        description: 'Bu ürünün hazırlanması için gereken minimum süre.',
+      }
+    },
+    {
+      name: 'dailyProductionLimit',
+      type: 'number',
+      label: 'Günlük Üretim Limiti',
+      admin: {
+        position: 'sidebar',
+        description: 'Boş bırakılırsa stok alanına göre sınırlandırılır.',
+      }
+    },
+    {
+      name: 'allergens',
+      type: 'text',
+      label: 'Alerjen Uyarıları',
+      admin: {
+        description: 'Örn: Süt, Yumurta, Fıstık içerir.',
+      }
+    },
+    {
+      name: 'ingredients',
+      type: 'textarea',
+      label: 'İçindekiler',
+    },
+    {
       name: 'category',
       type: 'relationship',
       relationTo: 'categories' as any,

@@ -24,6 +24,9 @@ import { Returns } from './collections/Returns'
 import { Resumes } from './collections/Resumes'
 import { FranchiseApplications } from './collections/FranchiseApplications'
 import { JobApplications } from './collections/JobApplications'
+import { Branches } from './collections/Branches'
+import { DeliveryZones } from './collections/DeliveryZones'
+import { TimeSlots } from './collections/TimeSlots'
 import { Homepage } from './globals/Homepage'
 import { BirthdayCampaign } from './globals/BirthdayCampaign'
 import { About } from './globals/About'
@@ -69,6 +72,9 @@ export default buildConfig({
     },
   },
   collections: [
+    Branches,
+    DeliveryZones,
+    TimeSlots,
     Users, 
     Customers,
     Products, 

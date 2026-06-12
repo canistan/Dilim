@@ -22,7 +22,10 @@ export default async function TasarlaPage() {
       
       {/* Hero Section */}
       <section className="relative w-full py-24 flex items-center justify-center bg-dilim-siyah overflow-hidden min-h-[500px]">
-        <div className="absolute inset-0 opacity-40 bg-[url('https://images.unsplash.com/photo-1558961363-fa8fdf82db35?q=80&w=2000&auto=format&fit=crop')] bg-cover bg-center" />
+        <div 
+          className="absolute inset-0 opacity-40 bg-cover bg-center" 
+          style={{ backgroundImage: "url('https://images.unsplash.com/photo-1558961363-fa8fdf82db35?q=80&w=2000&auto=format&fit=crop')" }}
+        />
         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-black/60 z-10" />
         
         <div className="relative z-20 text-center px-4 max-w-3xl mx-auto mt-8">
@@ -41,19 +44,9 @@ export default async function TasarlaPage() {
       </section>
 
       {/* Builder Section */}
-      <section className="pt-20 pb-16 bg-gray-50 relative overflow-hidden flex justify-center min-h-[800px]">
+      <section className="pt-20 pb-16 bg-gray-50 relative flex justify-center min-h-[800px]">
         {/* Decorative elements */}
         <div className="absolute top-0 left-0 w-full h-64 bg-gradient-to-b from-black to-transparent opacity-5 pointer-events-none z-0"></div>
-        
-        {/* Left Vertical Marquee */}
-        <div className="hidden lg:block absolute left-4 xl:left-12 top-0 bottom-0 w-48 xl:w-56 z-0">
-          <VerticalCakesMarquee cakes={customCakes.docs as any} direction="up" />
-        </div>
-
-        {/* Right Vertical Marquee */}
-        <div className="hidden lg:block absolute right-4 xl:right-12 top-0 bottom-0 w-48 xl:w-56 z-0">
-          <VerticalCakesMarquee cakes={customCakes.docs as any} direction="down" />
-        </div>
 
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 -mt-32 max-w-5xl">
           <CakeBuilder />
