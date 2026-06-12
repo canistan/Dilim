@@ -111,6 +111,13 @@ export default function OdemePage() {
       taxOffice: addr.taxOffice || '',
       taxNumber: addr.taxNumber || ''
     }))
+
+    // Mobilde adres seçilince sipariş özetine scroll et
+    if (typeof window !== 'undefined' && window.innerWidth < 1024) {
+      setTimeout(() => {
+        document.getElementById('siparis-ozeti')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 150);
+    }
   }
 
   const handleCheckout = async () => {
@@ -321,7 +328,7 @@ export default function OdemePage() {
             </div>
 
             {/* SAĞ SÜTUN: SİPARİŞ ÖZETİ */}
-            <div className="lg:col-span-4 space-y-6">
+            <div className="lg:col-span-4 space-y-6" id="siparis-ozeti">
               <div className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 sticky top-24">
                 <h3 className="text-xl font-bold mb-6 text-dilim-siyah border-b pb-4">Sipariş Özeti</h3>
                 
