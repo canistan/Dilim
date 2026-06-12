@@ -30,10 +30,12 @@ export default function HomePageClient({ homepageData, instagramData }: { homepa
           className="absolute inset-0"
         >
           <Image 
-            src="/generated/hero_cake.png" 
+            src="/generated/hero_cake_4k.png" 
             alt="Dilim Pastaneleri Premium Yaş Pasta" 
             fill
             priority
+            quality={100}
+            unoptimized
             className="object-cover"
           />
         </motion.div>
