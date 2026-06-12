@@ -57,5 +57,24 @@ export const Coupons: CollectionConfig = {
       type: 'number',
       label: 'Minimum Sepet Tutarı',
     },
+    {
+      name: 'totalUsageLimit',
+      type: 'number',
+      label: 'Kaç Adet Kullanılabilir? (Genel Limit)',
+      admin: { description: 'Boş bırakılırsa sınırsız kullanılır.' }
+    },
+    {
+      name: 'usageLimitPerUser',
+      type: 'number',
+      label: 'Bir Kullanıcı Kaç Defa Kullanabilir?',
+      admin: { description: 'Boş bırakılırsa sınırsız kullanılır.' }
+    },
+    {
+      name: 'usedCount',
+      type: 'number',
+      label: 'Şu Ana Kadar Kullanılma Sayısı',
+      defaultValue: 0,
+      admin: { readOnly: true }
+    },
   ],
 }

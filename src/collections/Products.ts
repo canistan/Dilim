@@ -13,20 +13,9 @@ export const Products: CollectionConfig = {
   admin: {
     useAsTitle: 'title',
     group: 'Yönetim',
-    defaultColumns: ['thumbnail', 'title', 'price', 'category'],
+    defaultColumns: ['images', 'title', 'price', 'category'],
   },
   fields: [
-    {
-      name: 'thumbnail',
-      type: 'ui',
-      label: 'Görsel',
-      admin: {
-        components: {
-          Field: () => null,
-          Cell: '@/components/Admin/ThumbnailCell#ThumbnailCell',
-        },
-      },
-    },
     {
       name: 'title',
       type: 'text',
@@ -99,6 +88,11 @@ export const Products: CollectionConfig = {
       type: 'upload',
       relationTo: 'media',
       hasMany: true,
+      admin: {
+        components: {
+          Cell: '@/components/Admin/ThumbnailCell#ThumbnailCell',
+        },
+      },
     },
     {
       name: 'stock',

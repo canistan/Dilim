@@ -4,7 +4,7 @@ import configPromise from '@payload-config'
 
 export async function POST(req: NextRequest) {
   try {
-    const { code, cartTotal } = await req.json()
+    const { code, cartTotal, email } = await req.json()
 
     if (!code) {
       return NextResponse.json({ success: false, error: 'Kupon kodu gerekli' }, { status: 400 })
@@ -47,6 +47,28 @@ export async function POST(req: NextRequest) {
         success: false, 
         error: `Bu kuponu kullanmak için minimum sepet tutarı ${coupon.minimumCartValue} TL olmalıdır.` 
       }, { status: 400 })
+    }
+
+    // Genel limit kontrolü
+    if (coupon.totalUsageLimit && (coupon.usedCount || 0) >= coupon.totalUsageLimit) {
+      return NextResponse.json({ success: false, error: 'Bu kuponun kullanım limiti dolmuş' }, { status: 400 })
+    }
+
+    // Kullanıcı bazlı limit kontrolü (Sadece e-posta varsa kontrol edebiliriz)
+    if (coupon.usageLimitPerUser && email) {
+      const userOrders = await payload.find({
+        collection: 'orders',
+        where: {
+          and: [
+            { usedCoupon: { equals: coupon.code } },
+            { 'customerInfo.email': { equals: email } },
+            { paymentStatus: { equals: 'paid' } }
+          ]
+        }
+      });
+      if (userOrders.totalDocs >= coupon.usageLimitPerUser) {
+        return NextResponse.json({ success: false, error: `Bu kuponu maksimum ${coupon.usageLimitPerUser} kez kullanabilirsiniz.` }, { status: 400 })
+      }
     }
 
     return NextResponse.json({

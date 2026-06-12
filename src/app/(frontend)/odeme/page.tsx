@@ -407,7 +407,7 @@ export default function OdemePage() {
                               const res = await fetch('/api/verify-coupon', {
                                 method: 'POST',
                                 headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify({ code: couponCode, cartTotal })
+                                body: JSON.stringify({ code: couponCode, cartTotal, email: formData.email })
                               });
                               const data = await res.json();
                               if (res.ok && data.success) {

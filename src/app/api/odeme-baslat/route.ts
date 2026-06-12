@@ -80,8 +80,27 @@ export async function POST(req: Request) {
       
       if (couponRes.totalDocs > 0) {
         const coupon = couponRes.docs[0];
-        if (coupon.isActive && 
-           (!coupon.expiryDate || new Date(coupon.expiryDate) >= new Date()) && 
+        
+        // Check limits again to prevent race conditions or direct API calls
+        const isExpired = coupon.expiryDate && new Date(coupon.expiryDate) < new Date();
+        const overTotalLimit = coupon.totalUsageLimit && (coupon.usedCount || 0) >= coupon.totalUsageLimit;
+        
+        let overUserLimit = false;
+        if (coupon.usageLimitPerUser && customerInfo.email) {
+          const userOrders = await payload.find({
+            collection: 'orders',
+            where: {
+              and: [
+                { usedCoupon: { equals: couponCode } },
+                { 'customerInfo.email': { equals: customerInfo.email } },
+                { paymentStatus: { equals: 'paid' } }
+              ]
+            }
+          });
+          if (userOrders.totalDocs >= coupon.usageLimitPerUser) overUserLimit = true;
+        }
+
+        if (coupon.isActive && !isExpired && !overTotalLimit && !overUserLimit && 
            (!coupon.minimumCartValue || calculatedTotal >= coupon.minimumCartValue)) {
              
              if (coupon.discountType === 'percentage') {
@@ -143,6 +162,24 @@ export async function POST(req: Request) {
         paymentStatus: 'unpaid',
       },
     })
+
+    // Increment coupon usage
+    if (couponCode) {
+      const couponRes = await payload.find({
+        collection: 'coupons',
+        where: { code: { equals: couponCode } }
+      });
+      if (couponRes.totalDocs > 0) {
+        const coupon = couponRes.docs[0];
+        await payload.update({
+          collection: 'coupons',
+          id: coupon.id,
+          data: {
+            usedCount: (coupon.usedCount || 0) + 1
+          }
+        });
+      }
+    }
 
     // Prepare Iyzico Request
     const protocol = req.headers.get('x-forwarded-proto') || (req.url.startsWith('https') ? 'https' : 'http');
