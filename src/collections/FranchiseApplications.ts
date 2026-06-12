@@ -14,7 +14,7 @@ export const FranchiseApplications: CollectionConfig = {
   access: {
     create: () => true, // Herkes form doldurabilir
     read: ({ req: { user } }) => Boolean(user), // Sadece admin okuyabilir
-    update: ({ req: { user } }) => Boolean(user),
+    update: () => false,
     delete: ({ req: { user } }) => Boolean(user),
   },
   fields: [
@@ -32,18 +32,21 @@ export const FranchiseApplications: CollectionConfig = {
                   type: 'text',
                   required: true,
                   label: 'Ad Soyad',
+                  admin: { readOnly: true }
                 },
                 {
                   name: 'email',
                   type: 'email',
                   required: true,
                   label: 'E-Posta Adresi',
+                  admin: { readOnly: true }
                 },
                 {
                   name: 'phone',
                   type: 'text',
                   required: true,
                   label: 'Telefon Numarası',
+                  admin: { readOnly: true }
                 },
               ]
             }
@@ -57,18 +60,21 @@ export const FranchiseApplications: CollectionConfig = {
               type: 'text',
               required: true,
               label: 'Düşünülen Şehir/İlçe (Lokasyon)',
+              admin: { readOnly: true }
             },
             {
               name: 'background',
               type: 'textarea',
               required: true,
               label: 'Ticari Geçmiş / Yatırım Bütçesi',
+              admin: { readOnly: true }
             },
             {
               name: 'hasStore',
               type: 'checkbox',
               label: 'Hazır Mağazanız Var mı?',
               defaultValue: false,
+              admin: { readOnly: true }
             }
           ]
         }

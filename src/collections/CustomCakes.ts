@@ -28,11 +28,6 @@ export const CustomCakes: CollectionConfig = {
       relationTo: 'media',
       label: 'Görsel',
       required: false,
-      admin: {
-        components: {
-          Cell: '@/components/Admin/ThumbnailCell#ThumbnailCell',
-        },
-      },
     },
   ],
 }

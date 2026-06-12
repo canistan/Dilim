@@ -34,12 +34,14 @@ export const Returns: CollectionConfig = {
                   relationTo: 'orders',
                   required: true,
                   label: 'İlgili Sipariş',
+                  admin: { readOnly: true }
                 },
                 {
                   name: 'customer',
                   type: 'relationship',
                   relationTo: 'customers',
                   label: 'Müşteri',
+                  admin: { readOnly: true }
                 },
               ]
             },
@@ -55,12 +57,14 @@ export const Returns: CollectionConfig = {
               ],
               required: true,
               label: 'Talep Nedeni',
+              admin: { readOnly: true }
             },
             {
               name: 'description',
               type: 'textarea',
               required: true,
               label: 'Açıklama',
+              admin: { readOnly: true }
             },
           ]
         },
@@ -73,6 +77,7 @@ export const Returns: CollectionConfig = {
               relationTo: 'media',
               hasMany: true,
               label: 'Hasar Fotoğrafları',
+              admin: { readOnly: true }
             },
           ]
         }

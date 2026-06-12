@@ -223,7 +223,7 @@ export const Orders: CollectionConfig = {
               fields: [
                 { type: 'row', fields: [{ name: 'cakeSize', type: 'number', label: 'Kişi Sayısı (Porsiyon)' }, { name: 'spongeType', type: 'text', label: 'Kek Tipi' }, { name: 'creamFlavor', type: 'text', label: 'Krema Aroması' }] },
                 { name: 'note', type: 'textarea', label: 'Müşteri Notu' },
-                { name: 'referenceImage', type: 'relationship', relationTo: 'media', label: 'Referans Görseli' },
+                { name: 'referenceImage', type: 'upload', relationTo: 'media', label: 'Referans Görseli' },
               ]
             }
           ]

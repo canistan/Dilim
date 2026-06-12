@@ -14,7 +14,7 @@ export const JobApplications: CollectionConfig = {
   access: {
     create: () => true, // Herkes form doldurabilir
     read: ({ req: { user } }) => Boolean(user), // Sadece admin okuyabilir
-    update: ({ req: { user } }) => Boolean(user),
+    update: () => false,
     delete: ({ req: { user } }) => Boolean(user),
   },
   fields: [
@@ -32,12 +32,14 @@ export const JobApplications: CollectionConfig = {
                   type: 'text',
                   required: true,
                   label: 'Ad Soyad',
+                  admin: { readOnly: true }
                 },
                 {
                   name: 'phone',
                   type: 'text',
                   required: true,
                   label: 'Telefon Numarası',
+                  admin: { readOnly: true }
                 },
               ]
             },
@@ -46,6 +48,7 @@ export const JobApplications: CollectionConfig = {
               type: 'select',
               required: true,
               label: 'Başvurulan Pozisyon',
+              admin: { readOnly: true },
               options: [
                 { label: 'Servis Elemanı (Garson)', value: 'garson' },
                 { label: 'Barista', value: 'barista' },
@@ -65,12 +68,14 @@ export const JobApplications: CollectionConfig = {
               type: 'textarea',
               required: true,
               label: 'İş Tecrübesi ve Kapak Yazısı',
+              admin: { readOnly: true }
             },
             {
               name: 'resume',
               type: 'upload',
               relationTo: 'resumes',
               label: 'CV / Özgeçmiş Dosyası',
+              admin: { readOnly: true }
             },
           ]
         }
