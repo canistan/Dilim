@@ -29,7 +29,7 @@ export default function IptalIadePage() {
           <div className="prose prose-lg prose-gray max-w-none text-gray-600 font-light">
             <h3 className="text-2xl font-bold text-dilim-siyah mt-10 mb-4">1. İptal Koşulları</h3>
             <p>
-              Siparişleriniz gıda ve taze tüketim ürünleri olduğu için üretime başlanmadan önce iptal edilebilir. Sipariş iptali için teslimat gününden <strong>en az 24 saat önce</strong> 0216 425 61 14 numaralı müşteri hizmetleri hattımızı arayarak bilgi vermeniz gerekmektedir. Üretim sürecine girmiş olan pasta ve tatlı siparişlerinde maalesef iptal işlemi gerçekleştirilememektedir.
+              Siparişleriniz gıda ve taze tüketim ürünleri olduğu için üretime başlanmadan önce iptal edilebilir. Sipariş iptali için teslimat gününden <strong>en az 24 saat önce</strong> 0505 963 80 21 numaralı müşteri hizmetleri hattımızı arayarak bilgi vermeniz gerekmektedir. Üretim sürecine girmiş olan pasta ve tatlı siparişlerinde maalesef iptal işlemi gerçekleştirilememektedir.
             </p>
 
             <h3 className="text-2xl font-bold text-dilim-siyah mt-10 mb-4">2. İade Koşulları</h3>

@@ -21,7 +21,7 @@ export const ContactSettings: GlobalConfig = {
       name: 'phone',
       type: 'text',
       label: 'Telefon Numarası',
-      defaultValue: '+90 216 425 61 14',
+      defaultValue: '+90 505 963 80 21',
     },
     {
       name: 'email',
@@ -29,12 +29,7 @@ export const ContactSettings: GlobalConfig = {
       label: 'E-Posta Adresi',
       defaultValue: 'info@dilim.com.tr',
     },
-    {
-      name: 'whatsapp',
-      type: 'text',
-      label: 'WhatsApp Hattı (Aynıysa kopyalayın)',
-      defaultValue: '+90 216 425 61 14',
-    },
+
     {
       name: 'instagram',
       type: 'text',

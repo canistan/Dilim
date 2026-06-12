@@ -12,10 +12,13 @@ export const metadata = {
 export default async function TasarlaPage() {
   const payload = await getPayload({ config: configPromise })
   
-  // CustomCakeOptions globalini çekiyoruz
   const customCakeOptions = await payload.findGlobal({
     slug: 'custom-cake-options',
     depth: 2,
+  })
+
+  const contactSettings = await payload.findGlobal({
+    slug: 'contact-settings',
   })
 
   const timeSlots = await payload.find({
@@ -56,7 +59,7 @@ export default async function TasarlaPage() {
         <div className="absolute top-0 left-0 w-full h-64 bg-gradient-to-b from-black to-transparent opacity-5 pointer-events-none z-0"></div>
 
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 -mt-32 max-w-5xl">
-          <CakeBuilder timeSlots={timeSlots.docs as any} globalOptions={customCakeOptions} />
+          <CakeBuilder timeSlots={timeSlots.docs as any} globalOptions={customCakeOptions} contactSettings={contactSettings} />
         </div>
       </section>
 

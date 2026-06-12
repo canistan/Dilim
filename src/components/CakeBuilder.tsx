@@ -47,7 +47,7 @@ type TimeSlot = {
   timeRange: string;
 }
 
-export default function CakeBuilder({ timeSlots = [], globalOptions }: { timeSlots?: TimeSlot[], globalOptions?: any }) {
+export default function CakeBuilder({ timeSlots = [], globalOptions, contactSettings }: { timeSlots?: TimeSlot[], globalOptions?: any, contactSettings?: any }) {
   const OPTIONS = {
     size: globalOptions?.sizeOptions?.length > 0 ? globalOptions.sizeOptions.map((o: any) => ({
       id: o.slugId, name: o.name, desc: o.desc, price: o.price, image: o.image?.url || '/placeholder.png'
@@ -231,8 +231,8 @@ Fiyat teklifinizi ve onayınızı bekliyorum.`;
         setWhatsappMessage(encodedMessage)
         setIsSuccess(true)
         
-        // Yeni sekmede WhatsApp'ı aç (Popup engelleyiciye takılabilir, o yüzden butonu da sunacağız)
-        window.open(`https://wa.me/905059638021?text=${encodedMessage}`, '_blank')
+        const waNumber = contactSettings?.phone?.replace(/[^0-9]/g, '') || '905059638021';
+        window.open(`https://wa.me/${waNumber}?text=${encodedMessage}`, '_blank')
       } else {
         toast.error("Talebiniz gönderilirken bir hata oluştu: " + data.error)
         setIsSubmitting(false)
@@ -321,7 +321,7 @@ Fiyat teklifinizi ve onayınızı bekliyorum.`;
 
             <div className="mt-8 flex flex-col items-center gap-4">
               <a 
-                href={`https://wa.me/905059638021?text=${whatsappMessage}`}
+                href={`https://wa.me/${contactSettings?.phone?.replace(/[^0-9]/g, '') || '905059638021'}?text=${whatsappMessage}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center justify-center gap-3 w-full sm:w-auto px-10 py-4 rounded-2xl text-lg font-bold bg-[#25D366] text-white hover:bg-[#1EBE56] shadow-xl hover:shadow-2xl transform hover:-translate-y-1 transition-all"
