@@ -5,6 +5,7 @@ export const BirthdayCampaign: GlobalConfig = {
   label: 'Doğum Günü Ayarları',
   admin: {
     group: 'Site Yönetimi',
+    hidden: true,
   },
   access: {
     read: () => true,
@@ -28,14 +29,6 @@ export const BirthdayCampaign: GlobalConfig = {
       type: 'richText',
       label: 'E-Posta İçeriği',
       required: true,
-    },
-    {
-      name: 'discountCode',
-      type: 'text',
-      label: 'İndirim Kodu',
-      admin: {
-        description: 'Müşteriye e-postada gösterilecek indirim kodu (Örn: DOGUMGUNU15)',
-      },
     },
   ],
 }

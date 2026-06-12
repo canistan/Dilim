@@ -30,7 +30,7 @@ export default function HomePageClient({ homepageData, instagramData }: { homepa
           className="absolute inset-0"
         >
           <Image 
-            src="/generated/hero_cake_4k.png" 
+            src={(typeof homepageData?.heroImage === 'object' && homepageData?.heroImage?.url) ? homepageData.heroImage.url : "/generated/hero_cake_4k.png"} 
             alt="Dilim Pastaneleri Premium Yaş Pasta" 
             fill
             priority
@@ -55,15 +55,7 @@ export default function HomePageClient({ homepageData, instagramData }: { homepa
               </motion.div>
               
               <motion.h1 variants={fadeUp} className="text-5xl md:text-7xl font-bold text-white tracking-tight mb-6 leading-tight">
-                {homepageData?.heroTitle || (
-                  <>
-                    Hayalinizdeki <br/>
-                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-dilim-yaldiz to-dilim-portakal font-serif italic pr-4">
-                      Pastayı
-                    </span> 
-                    Tasarlayın
-                  </>
-                )}
+                {homepageData?.heroTitle || "Özel Anlarınıza Tatlı Bir Dokunuş"}
               </motion.h1>
               
               <motion.p variants={fadeUp} className="text-lg md:text-xl text-gray-300 mb-10 max-w-lg leading-relaxed font-light">
@@ -71,19 +63,19 @@ export default function HomePageClient({ homepageData, instagramData }: { homepa
               </motion.p>
               
               <motion.div variants={fadeUp} className="flex flex-col sm:flex-row gap-5">
-                <Link href="/tasarla" className="relative group inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-white bg-dilim-portakal overflow-hidden rounded-full transition-all">
+                <Link href={homepageData?.heroButton1Link || "/tasarla"} className="relative group inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-white bg-dilim-portakal overflow-hidden rounded-full transition-all">
                   <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-dilim-turuncu to-dilim-portakal opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                   {/* Glow Effect */}
                   <div className="absolute -inset-1 bg-gradient-to-r from-dilim-portakal to-dilim-yaldiz rounded-full blur opacity-40 group-hover:opacity-75 transition duration-500 animate-pulse"></div>
                   <span className="relative flex items-center">
                     <Cake className="mr-2 h-5 w-5" />
-                    Hemen Tasarla
+                    {homepageData?.heroButton1Text || "Hemen Tasarla"}
                   </span>
                 </Link>
                 
-                <Link href="/urunler" className="inline-flex items-center justify-center px-8 py-4 text-lg font-semibold text-white bg-white/5 hover:bg-white/10 backdrop-blur-md transition-all rounded-full border border-white/20 hover:border-white/40">
+                <Link href={homepageData?.heroButton2Link || "/urunler"} className="inline-flex items-center justify-center px-8 py-4 text-lg font-semibold text-white bg-white/5 hover:bg-white/10 backdrop-blur-md transition-all rounded-full border border-white/20 hover:border-white/40">
                   <ShoppingBag className="mr-2 h-5 w-5" />
-                  Ürünleri İncele
+                  {homepageData?.heroButton2Text || "Ürünleri İncele"}
                 </Link>
               </motion.div>
             </motion.div>
@@ -103,10 +95,10 @@ export default function HomePageClient({ homepageData, instagramData }: { homepa
           >
             <div className="flex items-center justify-center gap-4 mb-4">
               <div className="h-[1px] w-12 bg-dilim-yaldiz"></div>
-              <h2 className="text-sm font-bold text-dilim-yaldiz tracking-[0.2em] uppercase">Seçimlerimiz</h2>
+              <h2 className="text-sm font-bold text-dilim-yaldiz tracking-[0.2em] uppercase">{homepageData?.featuredSectionEyebrow || "Seçimlerimiz"}</h2>
               <div className="h-[1px] w-12 bg-dilim-yaldiz"></div>
             </div>
-            <h3 className="text-4xl md:text-5xl font-serif text-dilim-siyah">Sizin İçin Önerilenler</h3>
+            <h3 className="text-4xl md:text-5xl font-serif text-dilim-siyah">{homepageData?.featuredSectionTitle || "Sizin İçin Önerilenler"}</h3>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
@@ -138,62 +130,34 @@ export default function HomePageClient({ homepageData, instagramData }: { homepa
             ) : (
               <>
                 {/* Fallback to static cards if no featured products selected */}
-                {/* Category Card 1 */}
-                <motion.div 
-                  initial={{ opacity: 0, y: 50 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.1 }}
-                >
-                  <Link href="/urunler?kategori=yas-pastalar" className="group relative overflow-hidden rounded-[2rem] aspect-[4/5] bg-gray-100 flex items-end shadow-xl hover:shadow-2xl transition-shadow duration-500 block">
-                    <Image src="/generated/category_yas_pastalar.png" alt="Yaş Pastalar" fill className="absolute inset-0 object-cover transition-transform duration-1000 group-hover:scale-110" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-500" />
-                    <div className="relative z-10 p-10 w-full transform transition-transform duration-500 group-hover:-translate-y-2">
-                      <h4 className="text-3xl font-serif text-white mb-3">Yaş Pastalar</h4>
-                      <div className="flex items-center text-dilim-yaldiz font-medium group-hover:text-white transition-colors">
-                        Koleksiyonu İncele <ArrowRight className="ml-2 h-5 w-5 transform transition-transform group-hover:translate-x-2" />
-                      </div>
-                    </div>
-                  </Link>
-                </motion.div>
-
-                {/* Category Card 2 */}
-                <motion.div 
-                  initial={{ opacity: 0, y: 50 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.2 }}
-                >
-                  <Link href="/tasarla" className="group relative overflow-hidden rounded-[2rem] aspect-[4/5] bg-gray-100 flex items-end shadow-xl hover:shadow-2xl transition-shadow duration-500 block md:-translate-y-8">
-                    <Image src="/generated/category_tasarla.png" alt="Özel Gün Pastaları" fill className="absolute inset-0 object-cover transition-transform duration-1000 group-hover:scale-110" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-500" />
-                    <div className="relative z-10 p-10 w-full transform transition-transform duration-500 group-hover:-translate-y-2">
-                      <h4 className="text-3xl font-serif text-white mb-3">Kendi Pastanı Tasarla</h4>
-                      <div className="flex items-center text-dilim-yaldiz font-medium group-hover:text-white transition-colors">
-                        Hemen Tasarla <ArrowRight className="ml-2 h-5 w-5 transform transition-transform group-hover:translate-x-2" />
-                      </div>
-                    </div>
-                  </Link>
-                </motion.div>
-
-                {/* Category Card 3 */}
-                <motion.div 
-                  initial={{ opacity: 0, y: 50 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.3 }}
-                >
-                  <Link href="/urunler?kategori=tatlilar" className="group relative overflow-hidden rounded-[2rem] aspect-[4/5] bg-gray-100 flex items-end shadow-xl hover:shadow-2xl transition-shadow duration-500 block">
-                    <Image src="/generated/category_tatlilar.png" alt="Tatlılar" fill className="absolute inset-0 object-cover transition-transform duration-1000 group-hover:scale-110" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-500" />
-                    <div className="relative z-10 p-10 w-full transform transition-transform duration-500 group-hover:-translate-y-2">
-                      <h4 className="text-3xl font-serif text-white mb-3">Tatlılar & Ekler</h4>
-                      <div className="flex items-center text-dilim-yaldiz font-medium group-hover:text-white transition-colors">
-                        Koleksiyonu İncele <ArrowRight className="ml-2 h-5 w-5 transform transition-transform group-hover:translate-x-2" />
-                      </div>
-                    </div>
-                  </Link>
-                </motion.div>
+                {(homepageData?.fallbackCards?.length > 0 ? homepageData.fallbackCards : [
+                  { title: 'Yaş Pastalar', link: '/urunler?kategori=yas-pastalar', buttonText: 'Koleksiyonu İncele', image: '/generated/category_yas_pastalar.png' },
+                  { title: 'Kendi Pastanı Tasarla', link: '/tasarla', buttonText: 'Hemen Tasarla', image: '/generated/category_tasarla.png' },
+                  { title: 'Tatlılar & Ekler', link: '/urunler?kategori=tatlilar', buttonText: 'Koleksiyonu İncele', image: '/generated/category_tatlilar.png' }
+                ]).map((card: any, index: number) => {
+                  const isMiddle = index === 1;
+                  const imageUrl = typeof card.image === 'object' && card.image?.url ? card.image.url : card.image;
+                  return (
+                    <motion.div 
+                      key={index}
+                      initial={{ opacity: 0, y: 50 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: 0.1 * (index + 1) }}
+                    >
+                      <Link href={card.link} className={`group relative overflow-hidden rounded-[2rem] aspect-[4/5] bg-gray-100 flex items-end shadow-xl hover:shadow-2xl transition-shadow duration-500 block ${isMiddle ? 'md:-translate-y-8' : ''}`}>
+                        <Image src={imageUrl} alt={card.title} fill className="absolute inset-0 object-cover transition-transform duration-1000 group-hover:scale-110" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-500" />
+                        <div className="relative z-10 p-10 w-full transform transition-transform duration-500 group-hover:-translate-y-2">
+                          <h4 className="text-3xl font-serif text-white mb-3">{card.title}</h4>
+                          <div className="flex items-center text-dilim-yaldiz font-medium group-hover:text-white transition-colors">
+                            {card.buttonText} <ArrowRight className="ml-2 h-5 w-5 transform transition-transform group-hover:translate-x-2" />
+                          </div>
+                        </div>
+                      </Link>
+                    </motion.div>
+                  )
+                })}
               </>
             )}
           </div>

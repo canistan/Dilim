@@ -2,7 +2,7 @@ import type { GlobalConfig } from 'payload'
 
 export const CustomCakeOptions: GlobalConfig = {
   slug: 'custom-cake-options',
-  label: 'Özel Pastalar',
+  label: 'Kendi Pastanı Tasarla',
   admin: {
     group: 'Site Yönetimi',
     description: 'Kendi pastanı tasarla sayfasındaki dinamik seçenekleri (Boyut, Kek türü vb.) buradan yönetebilirsiniz.',
