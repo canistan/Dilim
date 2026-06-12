@@ -15,7 +15,7 @@ const STEPS = [
   { id: 5, title: 'Özel Notlar', icon: ChefHat },
 ]
 
-const OPTIONS = {
+const DEFAULT_OPTIONS = {
   size: [
     { id: '6-8', name: '6-8 Kişilik', desc: 'Küçük Kutlamalar İçin (Tek Katlı)', price: '₺850', image: '/images/builder/cake_size_small_1780532313283.png' },
     { id: '10-12', name: '10-12 Kişilik', desc: 'Orta Boy Kutlamalar (Geniş Tek Kat)', price: '₺1200', image: '/images/builder/cake_size_medium_1780532323926.png' },
@@ -47,7 +47,21 @@ type TimeSlot = {
   timeRange: string;
 }
 
-export default function CakeBuilder({ timeSlots = [] }: { timeSlots?: TimeSlot[] }) {
+export default function CakeBuilder({ timeSlots = [], globalOptions }: { timeSlots?: TimeSlot[], globalOptions?: any }) {
+  const OPTIONS = {
+    size: globalOptions?.sizeOptions?.length > 0 ? globalOptions.sizeOptions.map((o: any) => ({
+      id: o.slugId, name: o.name, desc: o.desc, price: o.price, image: o.image?.url || '/placeholder.png'
+    })) : DEFAULT_OPTIONS.size,
+    base: globalOptions?.baseOptions?.length > 0 ? globalOptions.baseOptions.map((o: any) => ({
+      id: o.slugId, name: o.name, desc: o.desc
+    })) : DEFAULT_OPTIONS.base,
+    filling: globalOptions?.fillingOptions?.length > 0 ? globalOptions.fillingOptions.map((o: any) => ({
+      id: o.slugId, name: o.name, desc: o.desc
+    })) : DEFAULT_OPTIONS.filling,
+    frosting: globalOptions?.frostingOptions?.length > 0 ? globalOptions.frostingOptions.map((o: any) => ({
+      id: o.slugId, name: o.name, desc: o.desc
+    })) : DEFAULT_OPTIONS.frosting,
+  };
   const containerRef = useRef<HTMLDivElement>(null)
   const fillingRef = useRef<HTMLDivElement>(null)
   const footerRef = useRef<HTMLDivElement>(null)

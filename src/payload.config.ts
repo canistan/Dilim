@@ -77,7 +77,7 @@ export default buildConfig({
     TimeSlots,
     Users, 
     Customers,
-    Products, 
+    Products,
     CustomCakes,
     Categories, 
     Orders,

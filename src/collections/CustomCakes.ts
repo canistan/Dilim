@@ -1,33 +1,28 @@
 import type { CollectionConfig } from 'payload'
 
 export const CustomCakes: CollectionConfig = {
-  access: {
-    read: () => true,
-  },
   slug: 'custom-cakes',
   labels: {
-    singular: 'Özel Pasta',
-    plural: 'Özel Pastalar',
+    singular: 'Özel Pasta (Eski)',
+    plural: 'Özel Pastalar (Eski)',
   },
   admin: {
+    hidden: true, // Panelden gizlendi
     useAsTitle: 'title',
-    group: 'Site Yönetimi',
-    defaultColumns: ['image', 'title'],
-    description: 'Fiyatı olmayan, kullanıcıların ilham alması için sergilenen özel tasarım pastalar.',
+  },
+  access: {
+    read: () => true,
   },
   fields: [
     {
       name: 'title',
       type: 'text',
-      label: 'Pasta Adı',
       required: true,
     },
     {
       name: 'image',
       type: 'upload',
       relationTo: 'media',
-      label: 'Görsel',
-      required: false,
     },
   ],
 }

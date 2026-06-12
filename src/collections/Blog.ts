@@ -50,36 +50,5 @@ export const Blog: CollectionConfig = {
         },
       },
     },
-    {
-      name: 'seo',
-      type: 'group',
-      label: 'SEO Ayarları',
-      fields: [
-        {
-          name: 'metaTitle',
-          type: 'text',
-          label: 'Meta Başlığı',
-          admin: {
-            description: 'Google arama sonuçlarında görünecek başlık. İdeal uzunluk 50-60 karakterdir.',
-          },
-        },
-        {
-          name: 'metaDescription',
-          type: 'textarea',
-          label: 'Meta Açıklaması',
-          admin: {
-            description: 'Google arama sonuçlarında görünecek özet açıklama. İdeal uzunluk 150-160 karakterdir.',
-          },
-        },
-        {
-          name: 'metaKeywords',
-          type: 'text',
-          label: 'Meta Anahtar Kelimeler',
-          admin: {
-            description: 'Virgülle ayırarak giriniz (örn: pasta, çikolata, sipariş).',
-          },
-        },
-      ],
-    },
   ],
 }
