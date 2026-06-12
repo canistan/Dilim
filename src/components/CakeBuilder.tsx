@@ -42,7 +42,12 @@ const OPTIONS = {
   ]
 }
 
-export default function CakeBuilder() {
+type TimeSlot = {
+  id: string | number;
+  timeRange: string;
+}
+
+export default function CakeBuilder({ timeSlots = [] }: { timeSlots?: TimeSlot[] }) {
   const containerRef = useRef<HTMLDivElement>(null)
   const fillingRef = useRef<HTMLDivElement>(null)
   const footerRef = useRef<HTMLDivElement>(null)
@@ -58,7 +63,9 @@ export default function CakeBuilder() {
     customerName: '',
     customerPhone: '',
     customerEmail: '',
-    customerAddress: ''
+    customerAddress: '',
+    requestedDate: '',
+    timeSlot: ''
   })
 
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -141,7 +148,7 @@ export default function CakeBuilder() {
       case 1: return selections.size !== '';
       case 2: return selections.base !== '' && selections.filling !== '';
       case 3: return selections.frosting !== '';
-      case 4: return selections.customerName !== '' && selections.customerPhone !== '' && selections.customerAddress !== '';
+      case 4: return selections.customerName !== '' && selections.customerPhone !== '' && selections.customerAddress !== '' && selections.requestedDate !== '' && selections.timeSlot !== '';
       case 5: return true;
       default: return true;
     }
@@ -160,6 +167,8 @@ export default function CakeBuilder() {
       formData.append('filling', selections.filling)
       formData.append('frosting', selections.frosting)
       formData.append('note', selections.note)
+      formData.append('requestedDate', selections.requestedDate)
+      formData.append('timeSlot', selections.timeSlot)
       if (selections.referenceImage) {
         formData.append('referenceImage', selections.referenceImage, selections.referenceImage.name || 'image.jpg')
       }
@@ -193,6 +202,7 @@ export default function CakeBuilder() {
 👤 *İletişim Bilgilerim*
 - *Ad Soyad:* ${selections.customerName}
 - *Adres:* ${selections.customerAddress}
+- *İstenen Teslimat:* ${selections.requestedDate} (${selections.timeSlot})
 
 🎂 *Tasarım Özeti*
 - *Boyut:* ${sizeName}
@@ -283,6 +293,10 @@ Fiyat teklifinizi ve onayınızı bekliyorum.`;
                 <li className="flex justify-between items-center border-b border-orange-100 pb-3">
                   <span className="text-gray-500">Dış Kaplama:</span>
                   <span className="font-bold text-dilim-siyah">{OPTIONS.frosting.find(o => o.id === selections.frosting)?.name}</span>
+                </li>
+                <li className="flex justify-between items-center border-b border-orange-100 pb-3">
+                  <span className="text-gray-500">Teslimat Zamanı:</span>
+                  <span className="font-bold text-dilim-siyah">{selections.requestedDate} ({selections.timeSlot})</span>
                 </li>
                 <li className="flex justify-between items-center">
                   <span className="text-gray-500">Teslimat Adresi:</span>
@@ -461,6 +475,36 @@ Fiyat teklifinizi ve onayınızı bekliyorum.`;
                 <div className="md:col-span-2">
                   <label className="block text-sm font-medium text-gray-700 mb-1">E-Posta</label>
                   <input type="email" value={selections.customerEmail} onChange={(e) => handleSelect('customerEmail', e.target.value)} className="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-dilim-portakal focus:border-transparent outline-none transition-all" placeholder="ornek@email.com" />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Teslimat Tarihi <span className="text-red-500">*</span></label>
+                  <input 
+                    type="date" 
+                    min={new Date().toISOString().split('T')[0]}
+                    value={selections.requestedDate} 
+                    onChange={(e) => handleSelect('requestedDate', e.target.value)} 
+                    className="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-dilim-portakal focus:border-transparent outline-none transition-all" 
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Teslimat Saati <span className="text-red-500">*</span></label>
+                  <select 
+                    value={selections.timeSlot} 
+                    onChange={(e) => handleSelect('timeSlot', e.target.value)} 
+                    className="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-dilim-portakal focus:border-transparent outline-none transition-all bg-white"
+                  >
+                    <option value="" disabled>Saat Aralığı Seçin</option>
+                    {timeSlots.map((slot) => (
+                      <option key={slot.id} value={slot.timeRange}>{slot.timeRange}</option>
+                    ))}
+                    {timeSlots.length === 0 && (
+                      <>
+                        <option value="10:00 - 14:00">10:00 - 14:00</option>
+                        <option value="14:00 - 18:00">14:00 - 18:00</option>
+                      </>
+                    )}
+                  </select>
                 </div>
                 
                 {status === 'authenticated' && userAddresses.length > 0 && (

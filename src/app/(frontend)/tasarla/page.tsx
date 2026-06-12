@@ -17,6 +17,12 @@ export default async function TasarlaPage() {
     depth: 2,
   })
 
+  const timeSlots = await payload.find({
+    collection: 'time-slots',
+    where: { isActive: { equals: true } },
+    sort: 'timeRange'
+  })
+
   return (
     <div className="flex flex-col w-full bg-background min-h-screen">
       
@@ -49,7 +55,7 @@ export default async function TasarlaPage() {
         <div className="absolute top-0 left-0 w-full h-64 bg-gradient-to-b from-black to-transparent opacity-5 pointer-events-none z-0"></div>
 
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 -mt-32 max-w-5xl">
-          <CakeBuilder />
+          <CakeBuilder timeSlots={timeSlots.docs as any} />
         </div>
       </section>
 

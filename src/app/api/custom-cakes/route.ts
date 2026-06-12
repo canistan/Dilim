@@ -18,6 +18,8 @@ export async function POST(req: Request) {
     const filling = formData.get('filling') as string
     const frosting = formData.get('frosting') as string
     const note = formData.get('note') as string
+    const requestedDate = formData.get('requestedDate') as string
+    const timeSlotStr = formData.get('timeSlot') as string
     
     // Yüklenen dosyayı al (isteğe bağlı)
     const file = formData.get('referenceImage') as File | null
@@ -119,6 +121,18 @@ export async function POST(req: Request) {
       }
     }
 
+    // Zaman slotunu bul
+    let timeSlotId = null;
+    if (timeSlotStr) {
+      const timeSlots = await payload.find({
+        collection: 'time-slots',
+        where: { timeRange: { equals: timeSlotStr } }
+      });
+      if (timeSlots.docs.length > 0) {
+        timeSlotId = timeSlots.docs[0].id;
+      }
+    }
+
     // orders koleksiyonuna kaydet
     const customCake = await payload.create({
       collection: 'orders' as any,
@@ -128,6 +142,7 @@ export async function POST(req: Request) {
         paymentStatus: 'unpaid',
         totalAmount: 0, // Fiyat admin tarafından girilecek
         customer: customerId ? customerId : undefined,
+        timeSlot: timeSlotId ? timeSlotId : undefined,
         customerInfo: {
           firstName: customerName.split(' ')[0] || customerName,
           lastName: customerName.split(' ').slice(1).join(' ') || 'Belirtilmedi',
@@ -141,6 +156,7 @@ export async function POST(req: Request) {
           spongeType: base.includes('cacao') ? 'kakaolu' : 'sade',
           creamFlavor: filling.includes('choco') ? 'cikolata' : (filling.includes('raspberry') ? 'meyveli' : 'vanilya'),
           referenceImage: uploadedMediaId,
+          requestedDate: requestedDate ? new Date(requestedDate).toISOString() : undefined,
           note: note || '',
         }
       }
@@ -163,6 +179,7 @@ export async function POST(req: Request) {
             <p><strong>Adres:</strong> ${customerAddress}</p>
             
             <h3 style="border-bottom: 1px solid #eee; padding-bottom: 5px;">Tasarım Detayları</h3>
+            <p><strong>Teslimat Zamanı:</strong> ${requestedDate || 'Belirtilmedi'} (${timeSlotStr || 'Belirtilmedi'})</p>
             <p><strong>Boyut:</strong> ${size}</p>
             <p><strong>Kek:</strong> ${base}</p>
             <p><strong>İç Dolgu:</strong> ${filling}</p>
