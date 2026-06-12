@@ -1,38 +1,26 @@
 import React from 'react'
-import { getPayload } from 'payload'
-import configPromise from '@payload-config'
 
-export const ThumbnailCell = async ({ cellData }: any) => {
-  const fallback = <div style={{width: 40, height: 40, background: '#222', borderRadius: 4}} />
+export const ThumbnailCell = ({ rowData }: any) => {
+  const fallback = <div style={{width: 40, height: 40, background: '#e2e8f0', borderRadius: 6}} />
   
-  if (!cellData) return fallback
+  // Payload v3 sends the fully populated rowData in the list view usually
+  const images = rowData?.images || [];
+  const firstImage = Array.isArray(images) && images.length > 0 ? images[0] : null;
   
-  let mediaId = Array.isArray(cellData) ? cellData[0] : cellData;
-  if (typeof mediaId === 'object' && mediaId !== null && 'id' in mediaId) {
-    mediaId = mediaId.id;
+  let url = null;
+  if (typeof firstImage === 'object' && firstImage !== null && firstImage.url) {
+    url = firstImage.url;
+  } else if (typeof firstImage === 'string' && firstImage.startsWith('/')) {
+    url = firstImage;
   }
 
-  if (!mediaId || typeof mediaId !== 'string' && typeof mediaId !== 'number') {
+  if (!url) {
     return fallback;
   }
 
-  try {
-    const payload = await getPayload({ config: configPromise })
-    const media = await payload.findByID({
-      collection: 'media',
-      id: mediaId as any,
-    })
-    
-    if (media?.url) {
-      return (
-        <div style={{ width: '40px', height: '40px', borderRadius: '4px', overflow: 'hidden', border: '1px solid #333' }}>
-          <img src={media.url} alt="Görsel" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-        </div>
-      )
-    }
-  } catch(e) {
-    // Ignore errors (e.g. if media not found)
-  }
-  
-  return fallback
+  return (
+    <div style={{ width: '40px', height: '40px', borderRadius: '6px', overflow: 'hidden', border: '1px solid #cbd5e1' }}>
+      <img src={url} alt="Ürün" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+    </div>
+  )
 }

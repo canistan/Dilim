@@ -13,9 +13,20 @@ export const Products: CollectionConfig = {
   admin: {
     useAsTitle: 'title',
     group: 'Yönetim',
-    defaultColumns: ['images', 'title', 'price', 'category'],
+    defaultColumns: ['thumbnail', 'title', 'price', 'category'],
   },
   fields: [
+    {
+      name: 'thumbnail',
+      type: 'ui',
+      label: 'Görsel',
+      admin: {
+        components: {
+          Field: () => null,
+          Cell: '@/components/Admin/ThumbnailCell#ThumbnailCell',
+        },
+      },
+    },
     {
       name: 'title',
       type: 'text',
@@ -88,11 +99,6 @@ export const Products: CollectionConfig = {
       type: 'upload',
       relationTo: 'media',
       hasMany: true,
-      admin: {
-        components: {
-          Cell: '@/components/Admin/ThumbnailCell#ThumbnailCell',
-        },
-      },
     },
     {
       name: 'stock',
@@ -110,15 +116,6 @@ export const Products: CollectionConfig = {
       type: 'relationship',
       relationTo: 'categories' as any,
     },
-    {
-      name: 'showInMenu',
-      type: 'checkbox',
-      label: 'Kafé Menüsünde Göster',
-      defaultValue: true,
-      admin: {
-        position: 'sidebar',
-        description: 'Eğer işaretliyse, bu ürün site içindeki Native Menü sayfasında listelenir.',
-      },
-    },
+
   ],
 }
