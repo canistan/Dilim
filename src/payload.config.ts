@@ -113,7 +113,7 @@ export default buildConfig({
         resumes: true,
       },
       token: process.env.BLOB_READ_WRITE_TOKEN || '',
-      clientUploads: true, // 4.5MB üzeri görseller için client-side upload
+      clientUploads: true,
     }),
     seoPlugin({
       collections: ['products', 'categories', 'blog', 'custom-cakes'],
