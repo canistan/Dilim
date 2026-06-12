@@ -7,7 +7,7 @@ export const Customers: CollectionConfig = {
     plural: 'Müşteriler',
   },
   admin: {
-    useAsTitle: 'name', // email is default for auth collections but let's use name or email
+    useAsTitle: 'email', // Use email to prevent confusion with duplicate names
     group: 'Kullanıcı Bilgi Deposu',
     defaultColumns: ['name', 'email', 'birthDate', 'provider', 'createdAt'],
   },

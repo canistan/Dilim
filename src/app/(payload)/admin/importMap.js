@@ -4,6 +4,8 @@ import { MetaTitleComponent as MetaTitleComponent_a8a977ebc872c5d5ea7ee689724c08
 import { MetaDescriptionComponent as MetaDescriptionComponent_a8a977ebc872c5d5ea7ee689724c0860 } from '@payloadcms/plugin-seo/client'
 import { MetaImageComponent as MetaImageComponent_a8a977ebc872c5d5ea7ee689724c0860 } from '@payloadcms/plugin-seo/client'
 import { PreviewComponent as PreviewComponent_a8a977ebc872c5d5ea7ee689724c0860 } from '@payloadcms/plugin-seo/client'
+import { OrderTypeCell as OrderTypeCell_e24027299e6fdee8d0833db5bcab047e } from '@/components/Admin/OrderTypeCell'
+import { DeliveryAddressDisplay as DeliveryAddressDisplay_824020e763633ca6de78391c1137b8fb } from '@/components/Admin/DeliveryAddressDisplay'
 import { StatusCell as StatusCell_f189ca9be581943d1b91480cb00fabee } from '@/components/Admin/StatusCell'
 import { RscEntryLexicalCell as RscEntryLexicalCell_44fe37237e0ebf4470c9990d8cb7b07e } from '@payloadcms/richtext-lexical/rsc'
 import { RscEntryLexicalField as RscEntryLexicalField_44fe37237e0ebf4470c9990d8cb7b07e } from '@payloadcms/richtext-lexical/rsc'
@@ -40,6 +42,8 @@ export const importMap = {
   "@payloadcms/plugin-seo/client#MetaDescriptionComponent": MetaDescriptionComponent_a8a977ebc872c5d5ea7ee689724c0860,
   "@payloadcms/plugin-seo/client#MetaImageComponent": MetaImageComponent_a8a977ebc872c5d5ea7ee689724c0860,
   "@payloadcms/plugin-seo/client#PreviewComponent": PreviewComponent_a8a977ebc872c5d5ea7ee689724c0860,
+  "@/components/Admin/OrderTypeCell#OrderTypeCell": OrderTypeCell_e24027299e6fdee8d0833db5bcab047e,
+  "@/components/Admin/DeliveryAddressDisplay#DeliveryAddressDisplay": DeliveryAddressDisplay_824020e763633ca6de78391c1137b8fb,
   "@/components/Admin/StatusCell#StatusCell": StatusCell_f189ca9be581943d1b91480cb00fabee,
   "@payloadcms/richtext-lexical/rsc#RscEntryLexicalCell": RscEntryLexicalCell_44fe37237e0ebf4470c9990d8cb7b07e,
   "@payloadcms/richtext-lexical/rsc#RscEntryLexicalField": RscEntryLexicalField_44fe37237e0ebf4470c9990d8cb7b07e,

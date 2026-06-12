@@ -12,6 +12,7 @@ export const Orders: CollectionConfig = {
     useAsTitle: 'orderNumber',
     group: 'Kullanıcı Bilgi Deposu',
     defaultColumns: ['orderNumber', 'orderType', 'status', 'totalAmount', 'createdAt'],
+    defaultSort: '-createdAt',
   },
   access: {
     read: orderAccess,
@@ -125,13 +126,21 @@ export const Orders: CollectionConfig = {
                   name: 'customer',
                   type: 'relationship',
                   relationTo: 'customers',
-                  label: 'Kayıtlı Müşteri Profili',
+                  label: 'Müşteri',
+                  admin: {
+                    placeholder: 'Misafir Müşteri (Kayıtsız Sipariş)',
+                  }
                 },
                 {
                   name: 'orderType',
                   type: 'select',
                   defaultValue: 'standard',
                   label: 'Sipariş Türü',
+                  admin: {
+                    components: {
+                      Cell: '@/components/Admin/OrderTypeCell#OrderTypeCell',
+                    },
+                  },
                   options: [
                     { label: 'Standart Sepet Siparişi', value: 'standard' },
                     { label: 'Özel Tasarım Pasta Talebi', value: 'custom' },
@@ -179,6 +188,15 @@ export const Orders: CollectionConfig = {
         {
           label: 'Teslimat Bilgileri',
           fields: [
+            {
+              name: 'deliveryAddressUI',
+              type: 'ui',
+              admin: {
+                components: {
+                  Field: '@/components/Admin/DeliveryAddressDisplay#DeliveryAddressDisplay',
+                }
+              }
+            },
             {
               type: 'row',
               fields: [
