@@ -35,6 +35,7 @@ export const Orders: CollectionConfig = {
                     const productDoc = await currentPayload.findByID({
                       collection: 'products',
                       id: productId,
+                      req, // DEADLOCK FIX
                     });
                     if (productDoc && typeof productDoc.stock === 'number') {
                       const newStock = Math.max(0, productDoc.stock - (item.quantity || 1));
@@ -44,6 +45,7 @@ export const Orders: CollectionConfig = {
                         data: {
                           stock: newStock,
                         },
+                        req, // DEADLOCK FIX
                       });
                     }
                   } catch (e) {

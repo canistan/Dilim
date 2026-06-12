@@ -54,8 +54,14 @@ export default async function BlogPage() {
                 : (staticBlog?.image || '/placeholder.png')
               
               // İçerikten excerpt oluştur
-              const rawContent = post.content || ''
-              const generatedExcerpt = rawContent.length > 150 ? rawContent.substring(0, 150) + '...' : rawContent
+              let rawText = '';
+              if (Array.isArray(post.content)) {
+                const extractText = (nodes: any[]): string => nodes.map((n: any) => n.text || (n.children ? extractText(n.children) : '')).join(' ');
+                rawText = extractText(post.content);
+              } else if (typeof post.content === 'string') {
+                rawText = post.content;
+              }
+              const generatedExcerpt = rawText.length > 150 ? rawText.substring(0, 150) + '...' : rawText;
 
               return (
                 <article key={post.id} className="bg-white rounded-3xl overflow-hidden shadow-xl border border-gray-100 flex flex-col group hover:-translate-y-2 transition-transform duration-500">

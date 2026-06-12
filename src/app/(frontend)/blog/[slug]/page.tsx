@@ -21,15 +21,22 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const post = docs[0] as any
   if (!post) return { title: 'Yazı Bulunamadı' }
   
-  const rawContent = post.content || ''
-  const generatedExcerpt = rawContent.length > 150 ? rawContent.substring(0, 150) + '...' : rawContent
+  let rawText = '';
+  if (Array.isArray(post.content)) {
+    const extractText = (nodes: any[]): string => nodes.map((n: any) => n.text || (n.children ? extractText(n.children) : '')).join(' ');
+    rawText = extractText(post.content);
+  } else if (typeof post.content === 'string') {
+    rawText = post.content;
+  }
+  const generatedExcerpt = rawText.length > 150 ? rawText.substring(0, 150) + '...' : rawText;
   
   return {
-    title: post.meta?.title || `${post.title} | Dilim Blog`,
-    description: post.meta?.description || generatedExcerpt,
+    title: post.seo?.metaTitle || `${post.title} | Dilim Blog`,
+    description: post.seo?.metaDescription || generatedExcerpt,
+    keywords: post.seo?.metaKeywords || '',
     openGraph: {
-      title: post.meta?.title || post.title,
-      description: post.meta?.description || generatedExcerpt,
+      title: post.seo?.metaTitle || post.title,
+      description: post.seo?.metaDescription || generatedExcerpt,
     }
   }
 }
@@ -65,7 +72,21 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
     ? post.image.url 
     : (staticBlog?.image || '/placeholder.png')
 
-  const rawContent = post.content || ''
+  const contentNodes = Array.isArray(post.content) ? post.content : [];
+  const rawContent = typeof post.content === 'string' ? post.content : '';
+
+  const renderNode = (node: any, idx: number): React.ReactNode => {
+    if (node.text) return <span key={idx}>{node.text}</span>;
+    if (!node.children) return null;
+    const children = node.children.map((child: any, i: number) => renderNode(child, i));
+    switch (node.type) {
+      case 'h1': return <h1 key={idx} className="text-4xl font-bold mt-12 mb-6 text-dilim-siyah">{children}</h1>;
+      case 'h2': return <h2 key={idx} className="text-3xl font-bold mt-12 mb-6 text-dilim-siyah">{children}</h2>;
+      case 'h3': return <h3 key={idx} className="text-2xl font-bold mt-8 mb-4 text-dilim-siyah">{children}</h3>;
+      case 'paragraph': return <p key={idx} className="mb-6 whitespace-pre-wrap">{children}</p>;
+      default: return <div key={idx} className="mb-4">{children}</div>;
+    }
+  };
 
   return (
     <div className="flex flex-col w-full bg-background min-h-screen pt-24">
@@ -112,18 +133,21 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
       {/* Article Content */}
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-3xl pb-24">
         <article className="prose prose-lg prose-gray max-w-none prose-headings:font-serif prose-headings:text-dilim-siyah prose-p:text-gray-600 prose-p:leading-relaxed prose-a:text-dilim-portakal hover:prose-a:text-dilim-turuncu">
-          {/* 
-            Basit markdown çevirici (Payload CMS textarea string'ini satır satır render eder)
-          */}
-          {rawContent.split('\n\n').map((paragraph: string, idx: number) => {
-            if (paragraph.startsWith('## ')) {
-              return <h2 key={idx} className="text-3xl font-bold mt-12 mb-6 text-dilim-siyah">{paragraph.replace('## ', '')}</h2>
-            }
-            if (paragraph.startsWith('# ')) {
-              return <h1 key={idx} className="text-4xl font-bold mt-12 mb-6 text-dilim-siyah">{paragraph.replace('# ', '')}</h1>
-            }
-            return <p key={idx} className="mb-6 whitespace-pre-wrap">{paragraph}</p>
-          })}
+          {/* Payload CMS Slate (richText) Renderer */}
+          {contentNodes.length > 0 ? (
+            contentNodes.map((node: any, idx: number) => renderNode(node, idx))
+          ) : (
+            /* Fallback for old string content */
+            rawContent.split('\n\n').map((paragraph: string, idx: number) => {
+              if (paragraph.startsWith('## ')) {
+                return <h2 key={idx} className="text-3xl font-bold mt-12 mb-6 text-dilim-siyah">{paragraph.replace('## ', '')}</h2>
+              }
+              if (paragraph.startsWith('# ')) {
+                return <h1 key={idx} className="text-4xl font-bold mt-12 mb-6 text-dilim-siyah">{paragraph.replace('# ', '')}</h1>
+              }
+              return <p key={idx} className="mb-6 whitespace-pre-wrap">{paragraph}</p>
+            })
+          )}
         </article>
         
         {/* Author Box */}
