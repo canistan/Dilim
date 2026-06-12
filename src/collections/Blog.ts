@@ -44,11 +44,6 @@ export const Blog: CollectionConfig = {
       type: 'upload',
       relationTo: 'media',
       label: 'Öne Çıkan Görsel',
-      admin: {
-        components: {
-          Cell: '@/components/Admin/ThumbnailCell#ThumbnailCell',
-        },
-      },
     },
   ],
 }

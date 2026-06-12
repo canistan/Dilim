@@ -110,7 +110,7 @@ export default buildConfig({
       clientUploads: true, // 4.5MB üzeri görseller için client-side upload
     }),
     seoPlugin({
-      collections: ['products', 'categories', 'blog'],
+      collections: ['products', 'categories', 'blog', 'custom-cakes'],
       uploadsCollection: 'media',
       generateTitle: ({ doc }) => `${doc.title} | Dilim Pastaneleri`,
       generateDescription: ({ doc }) => {

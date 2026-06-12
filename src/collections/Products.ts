@@ -13,7 +13,7 @@ export const Products: CollectionConfig = {
   admin: {
     useAsTitle: 'title',
     group: 'Yönetim',
-    defaultColumns: ['images', 'title', 'price', 'category'],
+    defaultColumns: ['images', 'title', 'price', 'stock', 'category'],
   },
   fields: [
     {
