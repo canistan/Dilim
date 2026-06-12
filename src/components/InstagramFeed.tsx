@@ -37,9 +37,9 @@ const INSTAGRAM_POSTS = [
 
 export function InstagramFeed({ data }: { data?: any }) {
   // Use CMS data if available, otherwise fallback to dummy data
-  const feedPosts = data?.selectedPosts?.length > 0 ? data.selectedPosts.map((post: any, index: number) => ({
+  const feedPosts = data?.posts?.length > 0 ? data.posts.map((post: any, index: number) => ({
     id: post.id || index,
-    image: post.imageUrl || '/generated/hero_cake.png',
+    image: (typeof post.image === 'object' && post.image?.url) ? post.image.url : '/generated/hero_cake.png',
     link: post.link || 'https://instagram.com/dilimpastaneleri',
     type: post.isReel ? 'reel' : 'image',
   })) : INSTAGRAM_POSTS
