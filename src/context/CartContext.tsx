@@ -12,6 +12,12 @@ export type CartItem = {
   options?: string;
 }
 
+export type AppliedCoupon = {
+  code: string;
+  discountType: 'percentage' | 'fixed';
+  discountValue: number;
+}
+
 type CartContextType = {
   items: CartItem[];
   addToCart: (item: CartItem) => void;
@@ -21,12 +27,18 @@ type CartContextType = {
   isCartOpen: boolean;
   setIsCartOpen: (isOpen: boolean) => void;
   cartTotal: number;
+  appliedCoupon: AppliedCoupon | null;
+  applyCoupon: (coupon: AppliedCoupon) => void;
+  removeCoupon: () => void;
+  discountAmount: number;
+  finalTotal: number;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined)
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([])
+  const [appliedCoupon, setAppliedCoupon] = useState<AppliedCoupon | null>(null)
   const [isCartOpen, setIsCartOpen] = useState(false)
   const [isMounted, setIsMounted] = useState(false)
 
@@ -41,14 +53,27 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         console.error('Failed to parse cart from local storage', error)
       }
     }
+    const savedCoupon = localStorage.getItem('dilim_coupon')
+    if (savedCoupon) {
+      try {
+        setAppliedCoupon(JSON.parse(savedCoupon))
+      } catch (error) {
+        console.error('Failed to parse coupon from local storage', error)
+      }
+    }
   }, [])
 
-  // Save to localStorage when items change
+  // Save to localStorage when items or coupon change
   useEffect(() => {
     if (isMounted) {
       localStorage.setItem('dilim_cart', JSON.stringify(items))
+      if (appliedCoupon) {
+        localStorage.setItem('dilim_coupon', JSON.stringify(appliedCoupon))
+      } else {
+        localStorage.removeItem('dilim_coupon')
+      }
     }
-  }, [items, isMounted])
+  }, [items, appliedCoupon, isMounted])
 
   // Dismiss all toast popups when cart sidebar is opened
   useEffect(() => {
@@ -115,9 +140,21 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   const clearCart = () => {
     setItems([])
+    setAppliedCoupon(null)
     if (typeof window !== 'undefined') {
       localStorage.removeItem('dilim_cart')
+      localStorage.removeItem('dilim_coupon')
     }
+  }
+
+  const applyCoupon = (coupon: AppliedCoupon) => {
+    setAppliedCoupon(coupon)
+    toast.success(`Kupon uygulandı: ${coupon.code}`)
+  }
+
+  const removeCoupon = () => {
+    setAppliedCoupon(null)
+    toast.success('Kupon kaldırıldı')
   }
 
   // Helper to parse price string like "₺750" or "₺450/kg" to a number for calculation
@@ -128,6 +165,19 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   }
 
   const cartTotal = items.reduce((total, item) => total + (parsePrice(item.price) * item.quantity), 0)
+
+  // Calculate discount
+  let discountAmount = 0
+  if (appliedCoupon) {
+    if (appliedCoupon.discountType === 'percentage') {
+      discountAmount = (cartTotal * appliedCoupon.discountValue) / 100
+    } else if (appliedCoupon.discountType === 'fixed') {
+      discountAmount = appliedCoupon.discountValue
+    }
+  }
+
+  // Final Total shouldn't be less than 0
+  const finalTotal = Math.max(0, cartTotal - discountAmount)
 
   // Don't render cart contents that depend on localStorage until mounted in the consumer components,
   // but ALWAYS provide the context to avoid useCart throwing errors.
@@ -142,7 +192,12 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         clearCart,
         isCartOpen,
         setIsCartOpen,
-        cartTotal
+        cartTotal,
+        appliedCoupon,
+        applyCoupon,
+        removeCoupon,
+        discountAmount,
+        finalTotal
       }}
     >
       {children}

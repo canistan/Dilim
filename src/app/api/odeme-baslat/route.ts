@@ -24,7 +24,7 @@ const initializeCheckoutForm = async (request: any): Promise<any> => {
 export async function POST(req: Request) {
   try {
     const data = await req.json()
-    const { customerInfo, items, totalAmount } = data
+    const { customerInfo, items, totalAmount, couponCode } = data
 
     if (!customerInfo || !items || items.length === 0) {
       return NextResponse.json({ success: false, error: 'Eksik bilgi gönderildi' }, { status: 400 })
@@ -70,7 +70,32 @@ export async function POST(req: Request) {
       }
     }
 
-    if (calculatedTotal !== totalAmount) {
+    // Eğer kupon kodu geldiyse veritabanından doğrula
+    let discountAmount = 0;
+    if (couponCode) {
+      const couponRes = await payload.find({
+        collection: 'coupons',
+        where: { code: { equals: couponCode } }
+      });
+      
+      if (couponRes.totalDocs > 0) {
+        const coupon = couponRes.docs[0];
+        if (coupon.isActive && 
+           (!coupon.expiryDate || new Date(coupon.expiryDate) >= new Date()) && 
+           (!coupon.minimumCartValue || calculatedTotal >= coupon.minimumCartValue)) {
+             
+             if (coupon.discountType === 'percentage') {
+               discountAmount = (calculatedTotal * coupon.discountValue) / 100;
+             } else {
+               discountAmount = coupon.discountValue;
+             }
+        }
+      }
+    }
+
+    const finalCalculatedTotal = Math.max(0, calculatedTotal - discountAmount);
+
+    if (finalCalculatedTotal !== totalAmount) {
       return NextResponse.json({ success: false, error: 'Sepet tutarı uyuşmuyor. Lütfen sayfanızı yenileyin.' }, { status: 400 });
     }
 
@@ -112,7 +137,8 @@ export async function POST(req: Request) {
           price: item.realUnitPrice,
           options: item.options,
         })),
-        totalAmount: calculatedTotal,
+        totalAmount: finalCalculatedTotal,
+        usedCoupon: couponCode || undefined,
         status: 'pending',
         paymentStatus: 'unpaid',
       },
@@ -147,11 +173,10 @@ export async function POST(req: Request) {
     const safeAddress = `${customerInfo.district} - ${customerInfo.address}`.padEnd(10, ' ').substring(0, 250);
 
     // --- IYZICO IPTAL (MOCK EKRAN ICIN) ---
-    // Iyzico Sandbox sunucuları çok yavaş olduğu için şimdilik Mock ekran kullanıyoruz.
     return NextResponse.json({ 
       success: true, 
       isMock: true,
-      amount: calculatedTotal,
+      amount: finalCalculatedTotal,
       orderId: order.id,
       orderNumber: order.orderNumber
     });

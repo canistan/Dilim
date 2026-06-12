@@ -19,7 +19,9 @@ const ALLOWED_DISTRICTS = [
 
 export default function OdemePage() {
   const { data: session, status: sessionStatus } = useSession()
-  const { cartTotal, items, clearCart } = useCart()
+  const { cartTotal, items, clearCart, finalTotal, discountAmount, appliedCoupon, applyCoupon, removeCoupon } = useCart()
+  const [couponCode, setCouponCode] = useState('')
+  const [validatingCoupon, setValidatingCoupon] = useState(false)
   
   const [formData, setFormData] = useState({
     firstName: '',
@@ -129,7 +131,8 @@ export default function OdemePage() {
         const bodyStr = JSON.stringify({
           customerInfo: formData,
           items: items,
-          totalAmount: cartTotal
+          totalAmount: finalTotal, // İndirimli tutarı gönderiyoruz
+          couponCode: appliedCoupon?.code || undefined // Varsa kupon kodunu da gönderiyoruz
         }).replace(/[\uD800-\uDBFF](?![\uDC00-\uDFFF])|([^\uD800-\uDBFF])[\uDC00-\uDFFF]/g, '');
 
         res = await fetch('/api/odeme-baslat', {
@@ -344,14 +347,82 @@ export default function OdemePage() {
                     <span>Ara Toplam</span>
                     <span>{cartTotal} ₺</span>
                   </div>
+                  {appliedCoupon && (
+                    <div className="flex justify-between text-sm font-semibold text-dilim-portakal">
+                      <span>İndirim ({appliedCoupon.code})</span>
+                      <span>-{discountAmount} ₺</span>
+                    </div>
+                  )}
                   <div className="flex justify-between text-sm text-gray-600">
                     <span>Kargo Ücreti</span>
                     <span className="text-green-600">Ücretsiz</span>
                   </div>
                   <div className="flex justify-between text-lg font-bold text-dilim-siyah border-t pt-3 mt-3">
                     <span>Genel Toplam</span>
-                    <span>{cartTotal} ₺</span>
+                    <span>{finalTotal} ₺</span>
                   </div>
+                </div>
+
+                {/* Kupon Alanı */}
+                <div className="bg-gray-50 p-4 rounded-xl border border-gray-200 mb-6">
+                  {appliedCoupon ? (
+                    <div className="flex items-center justify-between bg-green-50 border border-green-200 p-3 rounded-lg">
+                      <div className="flex items-center gap-2">
+                        <CheckCircle2 className="w-5 h-5 text-green-600" />
+                        <div>
+                          <p className="text-sm font-bold text-green-800">{appliedCoupon.code}</p>
+                          <p className="text-xs text-green-600">Kupon uygulandı</p>
+                        </div>
+                      </div>
+                      <button 
+                        onClick={removeCoupon} 
+                        className="text-xs font-bold text-red-500 hover:text-red-700 hover:underline"
+                      >
+                        Kaldır
+                      </button>
+                    </div>
+                  ) : (
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">İndirim Kuponu</label>
+                      <div className="flex gap-2">
+                        <input 
+                          type="text" 
+                          value={couponCode} 
+                          onChange={(e) => setCouponCode(e.target.value)}
+                          placeholder="Kupon kodunuzu girin"
+                          className="flex-1 p-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-dilim-portakal outline-none text-sm uppercase"
+                        />
+                        <button 
+                          onClick={async () => {
+                            if (!couponCode) return;
+                            setValidatingCoupon(true);
+                            try {
+                              const res = await fetch('/api/verify-coupon', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ code: couponCode, cartTotal })
+                              });
+                              const data = await res.json();
+                              if (res.ok && data.success) {
+                                applyCoupon(data.coupon);
+                                setCouponCode('');
+                              } else {
+                                toast.error(data.error || "Geçersiz kupon");
+                              }
+                            } catch (e) {
+                              toast.error("Hata oluştu");
+                            } finally {
+                              setValidatingCoupon(false);
+                            }
+                          }}
+                          disabled={validatingCoupon || !couponCode}
+                          className="px-4 bg-dilim-siyah text-white rounded-xl font-bold text-sm hover:bg-dilim-portakal transition-colors disabled:opacity-50"
+                        >
+                          {validatingCoupon ? '...' : 'Uygula'}
+                        </button>
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 <div className="bg-gray-50 p-4 rounded-xl border border-gray-200 mb-6">

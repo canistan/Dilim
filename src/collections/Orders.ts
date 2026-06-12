@@ -276,6 +276,19 @@ export const Orders: CollectionConfig = {
                 },
               ]
             },
+            {
+              type: 'row',
+              fields: [
+                {
+                  name: 'usedCoupon',
+                  type: 'text',
+                  label: 'Kullanılan Kupon Kodu',
+                  admin: {
+                    readOnly: true,
+                  }
+                },
+              ]
+            }
           ]
         }
       ]
