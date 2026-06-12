@@ -50,7 +50,7 @@ type TimeSlot = {
 export default function CakeBuilder({ timeSlots = [], globalOptions, contactSettings }: { timeSlots?: TimeSlot[], globalOptions?: any, contactSettings?: any }) {
   const OPTIONS = {
     size: globalOptions?.sizeOptions?.length > 0 ? globalOptions.sizeOptions.map((o: any) => ({
-      id: o.slugId, name: o.name, desc: o.desc, price: o.price, image: o.image?.url || '/placeholder.png'
+      id: o.slugId, name: o.name, desc: o.desc, price: o.price, image: o.image?.url || DEFAULT_OPTIONS.size.find(d => d.id === o.slugId)?.image || '/placeholder.png'
     })) : DEFAULT_OPTIONS.size,
     base: globalOptions?.baseOptions?.length > 0 ? globalOptions.baseOptions.map((o: any) => ({
       id: o.slugId, name: o.name, desc: o.desc

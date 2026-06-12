@@ -25,6 +25,9 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   if (Array.isArray(post.content)) {
     const extractText = (nodes: any[]): string => nodes.map((n: any) => n.text || (n.children ? extractText(n.children) : '')).join(' ');
     rawText = extractText(post.content);
+  } else if (post.content && typeof post.content === 'object' && post.content.root) {
+    const extractText = (nodes: any[]): string => nodes.map((n: any) => n.text || (n.children ? extractText(n.children) : '')).join(' ');
+    rawText = extractText(post.content.root.children || []);
   } else if (typeof post.content === 'string') {
     rawText = post.content;
   }
@@ -72,14 +75,25 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
     ? post.image.url 
     : (staticBlog?.image || '/placeholder.png')
 
-  const contentNodes = Array.isArray(post.content) ? post.content : [];
-  const rawContent = typeof post.content === 'string' ? post.content : '';
+  let contentNodes = [];
+  let rawContent = '';
+
+  if (Array.isArray(post.content)) {
+    contentNodes = post.content;
+  } else if (post.content && typeof post.content === 'object' && post.content.root) {
+    contentNodes = post.content.root.children || [];
+  } else if (typeof post.content === 'string') {
+    rawContent = post.content;
+  }
 
   const renderNode = (node: any, idx: number): React.ReactNode => {
     if (node.text) return <span key={idx}>{node.text}</span>;
     if (!node.children) return null;
     const children = node.children.map((child: any, i: number) => renderNode(child, i));
-    switch (node.type) {
+    
+    const type = node.type === 'heading' ? node.tag : node.type;
+    
+    switch (type) {
       case 'h1': return <h1 key={idx} className="text-4xl font-bold mt-12 mb-6 text-dilim-siyah">{children}</h1>;
       case 'h2': return <h2 key={idx} className="text-3xl font-bold mt-12 mb-6 text-dilim-siyah">{children}</h2>;
       case 'h3': return <h3 key={idx} className="text-2xl font-bold mt-8 mb-4 text-dilim-siyah">{children}</h3>;
