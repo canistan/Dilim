@@ -123,14 +123,14 @@ function ProductsClientInner({
 
                 // ACİL DURUM: Önbelleğe takılan hatalı resimleri ezip, lokaldeki güvenilir kategori resimlerine yönlendiriyoruz
                 const categoryToImageMap: Record<string, string> = {
-                  'Pastalar': '/cover_pastalar.webp',
-                  'Tatlılar': '/cover_tatlilar.webp',
-                  'Kekler ve Çörekler': '/cover_kekler-ve-corekler.webp',
-                  'Börekler': '/cover_borekler.webp',
-                  'Çikolata ve Lokumlar': '/cover_cikolata-ve-lokumlar.webp',
-                  'Hediyelikler': '/cover_hediyelikler.webp',
-                  'Kiloluk Ürünler': '/cover_kiloluk-urunler.webp',
-                  'Paket Ürünler': '/cover_paket-urunler.webp',
+                  'Pastalar': '/urunler_yas_pasta.png',
+                  'Tatlılar': '/detay_pasta_1.png',
+                  'Kekler ve Çörekler': '/detay_pasta_2.png',
+                  'Börekler': '/detay_pasta_3.png',
+                  'Çikolata ve Lokumlar': '/hakkimizda_cikolata.png',
+                  'Hediyelikler': '/hakkimizda_hero.png',
+                  'Kiloluk Ürünler': '/detay_pasta_2.png',
+                  'Paket Ürünler': '/urunler_yas_pasta.png',
                 }
                 const imageToUse = categoryToImageMap[categoryName] || '/placeholder.png'
 
