@@ -56,13 +56,5 @@ export const Branches: CollectionConfig = {
       type: 'text',
       label: 'Harita iframe (src URL)',
     },
-    {
-      name: 'coordinates',
-      type: 'group',
-      label: 'Harita Koordinatları (Opsiyonel)',
-      fields: [
-        { type: 'row', fields: [{ name: 'lat', type: 'number', label: 'Enlem (Lat)' }, { name: 'lng', type: 'number', label: 'Boylam (Lng)' }] }
-      ]
-    }
   ],
 }
