@@ -9,6 +9,7 @@ export const DeliveryZones: CollectionConfig = {
   admin: {
     useAsTitle: 'name',
     group: 'Yönetim',
+    hidden: true,
   },
   fields: [
     {
