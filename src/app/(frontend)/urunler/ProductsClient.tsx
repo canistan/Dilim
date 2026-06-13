@@ -8,6 +8,7 @@ import { Filter, ShoppingBag, Eye } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useCart } from '@/context/CartContext'
 import { QuickAddModal } from '@/components/QuickAddModal'
+import { CrossSellModal } from '@/components/CrossSellModal'
 import STATIC_PRODUCTS from '@/data/products.json'
 
 type Category = {
@@ -40,6 +41,9 @@ function ProductsClientInner({
   const initialCategory = searchParams.get('kategori') || 'all'
   const [activeCategorySlug, setActiveCategorySlug] = useState(initialCategory)
   const [quickAddProduct, setQuickAddProduct] = useState<any>(null)
+  
+  const [showCrossSell, setShowCrossSell] = useState(false)
+  const [addedProductForCrossSell, setAddedProductForCrossSell] = useState<any>(null)
 
   // URL değişirse state'i güncelle
   useEffect(() => {
@@ -48,7 +52,7 @@ function ProductsClientInner({
       setActiveCategorySlug(cat)
     }
   }, [searchParams])
-  const { addToCart } = useCart()
+  const { addToCart, setIsCartOpen } = useCart()
 
   // Add "All" to categories
   const allCategories = [{ id: 'all', title: 'TÜMÜ', slug: 'all' }, ...categories]
@@ -180,7 +184,7 @@ function ProductsClientInner({
                           </button>
                         ) : (
                           <button
-                            onClick={() =>
+                            onClick={() => {
                               addToCart({
                                 id: product.id.toString(),
                                 name: product.title,
@@ -188,7 +192,17 @@ function ProductsClientInner({
                                 image: imageToUse,
                                 quantity: 1,
                               })
-                            }
+                              if (crossSellProducts && crossSellProducts.length > 0) {
+                                setAddedProductForCrossSell({
+                                  title: product.title,
+                                  image: imageToUse,
+                                  displayPrice: product.price
+                                })
+                                setShowCrossSell(true)
+                              } else {
+                                setIsCartOpen(true)
+                              }
+                            }}
                             className="pointer-events-auto bg-dilim-portakal text-white px-5 py-3 rounded-full font-semibold text-sm flex items-center gap-2 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 hover:bg-dilim-turuncu shadow-lg"
                           >
                             <ShoppingBag className="w-4 h-4" />
@@ -240,6 +254,13 @@ function ProductsClientInner({
         product={quickAddProduct}
         isOpen={!!quickAddProduct}
         onClose={() => setQuickAddProduct(null)}
+        crossSellProducts={crossSellProducts}
+      />
+
+      <CrossSellModal 
+        isOpen={showCrossSell}
+        onClose={() => { setShowCrossSell(false); setAddedProductForCrossSell(null); }}
+        product={addedProductForCrossSell}
         crossSellProducts={crossSellProducts}
       />
     </div>
