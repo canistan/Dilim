@@ -36,10 +36,17 @@ export async function POST(req: Request) {
     let calculatedTotal = 0;
     const validatedItems = [];
 
-    for (const item of items) {
-      const productId = typeof item.id === 'number' || (typeof item.id === 'string' && !isNaN(Number(item.id))) ? Number(item.id) : null;
+      let baseId = item.id;
+      let selectedSizeSlug = null;
+      if (typeof baseId === 'string' && baseId.includes('-')) {
+        const parts = baseId.split('-');
+        baseId = parts[0];
+        selectedSizeSlug = parts.slice(1).join('-');
+      }
+
+      const productId = typeof baseId === 'number' || (typeof baseId === 'string' && !isNaN(Number(baseId))) ? Number(baseId) : null;
       if (!productId) {
-        return NextResponse.json({ success: false, error: 'Geçersiz ürün ID' }, { status: 400 });
+        return NextResponse.json({ success: false, error: `Geçersiz ürün ID: ${item.id}` }, { status: 400 });
       }
 
       try {
@@ -53,7 +60,21 @@ export async function POST(req: Request) {
         }
 
         const quantity = parseInt(item.quantity) || 1;
-        const unitPrice = product.price || 0;
+        let unitPrice = product.price || 0;
+
+        // Boyut seçilmişse fiyatı boyutlardan bul
+        if (selectedSizeSlug && product.hasSizes && product.sizes) {
+          // item.options içinde "Boyut: 6 Kişilik" gibi geçiyor olabilir, veya selectedSizeSlug "6-Kişilik" olabilir
+          // En güvenli yol, options stringi içinden boyutu eşleştirmek
+          const matchedSize = product.sizes.find((s: any) => 
+            item.options?.includes(s.size) || 
+            s.size.replace(/\s+/g, '-') === selectedSizeSlug
+          );
+          if (matchedSize) {
+            unitPrice = matchedSize.price;
+          }
+        }
+
         calculatedTotal += unitPrice * quantity;
 
         validatedItems.push({
