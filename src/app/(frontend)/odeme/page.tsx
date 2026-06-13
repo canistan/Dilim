@@ -198,20 +198,20 @@ export default function OdemePage() {
                 <h2 className="text-xl font-bold mb-6 text-dilim-siyah border-b pb-4">İletişim Bilgileri</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Adınız</label>
-                    <input type="text" value={formData.firstName} onChange={e => setFormData({...formData, firstName: e.target.value})} className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-dilim-portakal focus:border-transparent outline-none transition-all" />
+                    <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-1">Adınız</label>
+                    <input id="firstName" name="firstName" autoComplete="given-name" type="text" value={formData.firstName} onChange={e => setFormData({...formData, firstName: e.target.value})} className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-dilim-portakal focus:border-transparent outline-none transition-all" />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Soyadınız</label>
-                    <input type="text" value={formData.lastName} onChange={e => setFormData({...formData, lastName: e.target.value})} className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-dilim-portakal focus:border-transparent outline-none transition-all" />
+                    <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-1">Soyadınız</label>
+                    <input id="lastName" name="lastName" autoComplete="family-name" type="text" value={formData.lastName} onChange={e => setFormData({...formData, lastName: e.target.value})} className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-dilim-portakal focus:border-transparent outline-none transition-all" />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">E-Posta Adresi</label>
-                    <input type="email" value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-dilim-portakal focus:border-transparent outline-none transition-all" />
+                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">E-Posta Adresi</label>
+                    <input id="email" name="email" autoComplete="email" type="email" value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-dilim-portakal focus:border-transparent outline-none transition-all" />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Telefon Numarası</label>
-                    <input type="text" value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-dilim-portakal focus:border-transparent outline-none transition-all" />
+                    <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">Telefon Numarası</label>
+                    <input id="phone" name="phone" autoComplete="tel" type="text" value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-dilim-portakal focus:border-transparent outline-none transition-all" />
                   </div>
                 </div>
               </div>
