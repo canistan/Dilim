@@ -66,19 +66,26 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
     depth: 2,
   })
 
-  // Çapraz satış (Mumlar vb) için Ekstralar kategorisini bul
-  const extrasCategory = await payload.find({
+  // Çapraz satış (Mumlar vb) için Ekstralar ve Hediyelik kategorilerini bul
+  const extrasCategories = await payload.find({
     collection: 'categories' as any,
-    where: { slug: { equals: 'ekstralar' } },
-    limit: 1,
+    where: { 
+      or: [
+        { slug: { equals: 'ekstralar' } },
+        { slug: { equals: 'hediyelik' } },
+        { slug: { contains: 'hediye' } }
+      ]
+    },
+    limit: 5,
   })
   
   let crossSellDocs: any[] = []
-  if (extrasCategory.docs.length > 0) {
+  if (extrasCategories.docs.length > 0) {
+    const categoryIds = extrasCategories.docs.map(cat => cat.id)
     const extrasRes = await payload.find({
       collection: 'products' as any,
-      where: { category: { equals: extrasCategory.docs[0].id } },
-      limit: 10,
+      where: { category: { in: categoryIds } },
+      limit: 15,
     })
     crossSellDocs = extrasRes.docs
   }
