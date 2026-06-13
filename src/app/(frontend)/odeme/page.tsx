@@ -243,87 +243,127 @@ export default function OdemePage() {
                   </div>
                 )}
 
-                <div className="flex justify-end items-center mb-6">
-                  <label className="flex items-center gap-2 cursor-pointer text-sm text-gray-600 bg-gray-50 px-4 py-2 rounded-xl border border-gray-100 hover:bg-gray-100 transition-colors">
-                    <input 
-                      type="checkbox" 
-                      checked={formData.isCorporate} 
-                      onChange={(e) => setFormData({...formData, isCorporate: e.target.checked})}
-                      className="w-4 h-4 text-dilim-portakal rounded border-gray-300 focus:ring-dilim-portakal"
-                    />
-                    Kurumsal Fatura İstiyorum
-                  </label>
+                <div className="flex justify-between items-center mb-6">
+                  <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wider">
+                    {selectedAddressId ? 'Seçili Adres Bilgileri' : 'Yeni Adres Bilgileri'}
+                  </h3>
+                  {selectedAddressId && (
+                    <button 
+                      onClick={() => {
+                        setSelectedAddressId(null)
+                        setFormData(prev => ({
+                          ...prev,
+                          district: '',
+                          address: '',
+                          isCorporate: false,
+                          companyName: '',
+                          taxOffice: '',
+                          taxNumber: ''
+                        }))
+                      }}
+                      className="text-sm font-bold text-dilim-portakal hover:text-dilim-turuncu transition-colors flex items-center gap-1 bg-orange-50 px-3 py-1.5 rounded-lg"
+                    >
+                      + Yeni Adres Gir
+                    </button>
+                  )}
                 </div>
-                
-                {/* Kurumsal Bilgiler (Gizli/Açık) */}
-                {formData.isCorporate && (
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 p-4 bg-orange-50/50 rounded-2xl border border-orange-100">
-                    <div className="md:col-span-3">
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Firma Adı</label>
-                      <input type="text" value={formData.companyName} onChange={e => setFormData({...formData, companyName: e.target.value})} className="w-full p-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-dilim-portakal outline-none" />
+
+                {!selectedAddressId ? (
+                  <div className="animate-in fade-in slide-in-from-top-4 duration-300">
+                    <div className="flex justify-end items-center mb-6">
+                      <label className="flex items-center gap-2 cursor-pointer text-sm text-gray-600 bg-gray-50 px-4 py-2 rounded-xl border border-gray-100 hover:bg-gray-100 transition-colors">
+                        <input 
+                          type="checkbox" 
+                          checked={formData.isCorporate} 
+                          onChange={(e) => setFormData({...formData, isCorporate: e.target.checked})}
+                          className="w-4 h-4 text-dilim-portakal rounded border-gray-300 focus:ring-dilim-portakal"
+                        />
+                        Kurumsal Fatura İstiyorum
+                      </label>
                     </div>
-                    <div className="md:col-span-1">
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Vergi Dairesi</label>
-                      <input 
-                        list="tax-offices-list"
-                        type="text" 
-                        value={formData.taxOffice} 
-                        onChange={e => setFormData({...formData, taxOffice: e.target.value})} 
-                        className="w-full p-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-dilim-portakal outline-none" 
-                        placeholder="Yazın veya listeden seçin"
-                      />
-                      <datalist id="tax-offices-list">
-                        {taxOffices.map((office, idx) => (
-                          <option key={idx} value={office} />
-                        ))}
-                      </datalist>
+                    
+                    {/* Kurumsal Bilgiler (Gizli/Açık) */}
+                    {formData.isCorporate && (
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 p-4 bg-orange-50/50 rounded-2xl border border-orange-100">
+                        <div className="md:col-span-3">
+                          <label className="block text-sm font-medium text-gray-700 mb-1">Firma Adı</label>
+                          <input type="text" value={formData.companyName} onChange={e => setFormData({...formData, companyName: e.target.value})} className="w-full p-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-dilim-portakal outline-none" />
+                        </div>
+                        <div className="md:col-span-1">
+                          <label className="block text-sm font-medium text-gray-700 mb-1">Vergi Dairesi</label>
+                          <input 
+                            list="tax-offices-list"
+                            type="text" 
+                            value={formData.taxOffice} 
+                            onChange={e => setFormData({...formData, taxOffice: e.target.value})} 
+                            className="w-full p-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-dilim-portakal outline-none" 
+                            placeholder="Yazın veya listeden seçin"
+                          />
+                          <datalist id="tax-offices-list">
+                            {taxOffices.map((office, idx) => (
+                              <option key={idx} value={office} />
+                            ))}
+                          </datalist>
+                        </div>
+                        <div className="md:col-span-2">
+                          <label className="block text-sm font-medium text-gray-700 mb-1">Vergi Numarası</label>
+                          <input type="text" value={formData.taxNumber} onChange={e => setFormData({...formData, taxNumber: e.target.value})} className="w-full p-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-dilim-portakal outline-none" />
+                        </div>
+                      </div>
+                    )}
+
+                    <div className="space-y-4">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">İl</label>
+                          <input type="text" value="İstanbul" disabled className="w-full p-3 bg-gray-100 text-gray-500 border border-gray-200 rounded-xl cursor-not-allowed" />
+                          <p className="text-xs text-gray-400 mt-1">Sadece İstanbul içi teslimat yapmaktayız.</p>
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">İlçe Seçiniz <span className="text-red-500">*</span></label>
+                          <select 
+                            value={formData.district} 
+                            onChange={e => {
+                              setFormData({...formData, district: e.target.value})
+                              setSelectedAddressId(null) // Form manipule edilirse secili adres isaretini kaldir
+                            }} 
+                            className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-dilim-portakal outline-none"
+                          >
+                            <option value="">İlçe Seçin...</option>
+                            {ALLOWED_DISTRICTS.map(d => (
+                              <option key={d} value={d}>{d}</option>
+                            ))}
+                          </select>
+                          <p className="text-xs text-dilim-portakal/80 mt-1">Sadece seçili ilçelere taze teslimatımız vardır.</p>
+                        </div>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Açık Adres (Mahalle, Sokak vb.)</label>
+                        <textarea 
+                          value={formData.address} 
+                          onChange={e => {
+                            setFormData({...formData, address: e.target.value})
+                            setSelectedAddressId(null)
+                          }} 
+                          className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-dilim-portakal outline-none" 
+                          rows={3} 
+                          placeholder="Siparişinizin teslim edileceği tam adresinizi giriniz."
+                        ></textarea>
+                      </div>
                     </div>
-                    <div className="md:col-span-2">
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Vergi Numarası</label>
-                      <input type="text" value={formData.taxNumber} onChange={e => setFormData({...formData, taxNumber: e.target.value})} className="w-full p-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-dilim-portakal outline-none" />
+                  </div>
+                ) : (
+                  <div className="bg-green-50 border border-green-200 rounded-2xl p-4 flex items-start gap-3 animate-in fade-in zoom-in-95 duration-300">
+                    <CheckCircle2 className="w-6 h-6 text-green-600 shrink-0 mt-0.5" />
+                    <div>
+                      <h4 className="font-bold text-green-900 mb-1">Kayıtlı Adresiniz Seçildi</h4>
+                      <p className="text-sm text-green-700 leading-relaxed">
+                        Siparişiniz yukarıda seçtiğiniz <strong>{formData.district}</strong> adresine teslim edilecektir. 
+                        {formData.isCorporate && " Faturanız kayıtlı kurumsal bilgilerinize kesilecektir."}
+                      </p>
                     </div>
                   </div>
                 )}
-
-                <div className="space-y-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">İl</label>
-                      <input type="text" value="İstanbul" disabled className="w-full p-3 bg-gray-100 text-gray-500 border border-gray-200 rounded-xl cursor-not-allowed" />
-                      <p className="text-xs text-gray-400 mt-1">Sadece İstanbul içi teslimat yapmaktayız.</p>
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">İlçe Seçiniz <span className="text-red-500">*</span></label>
-                      <select 
-                        value={formData.district} 
-                        onChange={e => {
-                          setFormData({...formData, district: e.target.value})
-                          setSelectedAddressId(null) // Form manipule edilirse secili adres isaretini kaldir
-                        }} 
-                        className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-dilim-portakal outline-none"
-                      >
-                        <option value="">İlçe Seçin...</option>
-                        {ALLOWED_DISTRICTS.map(d => (
-                          <option key={d} value={d}>{d}</option>
-                        ))}
-                      </select>
-                      <p className="text-xs text-dilim-portakal/80 mt-1">Sadece seçili ilçelere taze teslimatımız vardır.</p>
-                    </div>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Açık Adres (Mahalle, Sokak vb.)</label>
-                    <textarea 
-                      value={formData.address} 
-                      onChange={e => {
-                        setFormData({...formData, address: e.target.value})
-                        setSelectedAddressId(null)
-                      }} 
-                      className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-dilim-portakal outline-none" 
-                      rows={3} 
-                      placeholder="Siparişinizin teslim edileceği tam adresinizi giriniz."
-                    ></textarea>
-                  </div>
-                </div>
               </div>
             </div>
 
