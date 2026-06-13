@@ -105,6 +105,7 @@ export default function HesabimPage() {
         .finally(() => setLoadingOrders(false))
     }
   }, [status, router])
+  const maxDate = new Date(new Date().setFullYear(new Date().getFullYear() - 18)).toISOString().split('T')[0]
 
   if (status === 'loading' || status === 'unauthenticated') {
     return <div className="min-h-screen flex items-center justify-center">Yükleniyor...</div>
@@ -445,6 +446,7 @@ export default function HesabimPage() {
                         <input 
                           type="date" 
                           value={birthDate}
+                          max={maxDate}
                           onChange={(e) => setBirthDate(e.target.value)}
                           className="w-full p-3 border border-gray-200 rounded-xl bg-white focus:ring-2 focus:ring-dilim-portakal outline-none" 
                         />
