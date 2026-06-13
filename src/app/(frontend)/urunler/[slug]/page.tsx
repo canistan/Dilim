@@ -66,6 +66,23 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
     depth: 2,
   })
 
+  // Çapraz satış (Mumlar vb) için Ekstralar kategorisini bul
+  const extrasCategory = await payload.find({
+    collection: 'categories' as any,
+    where: { slug: { equals: 'ekstralar' } },
+    limit: 1,
+  })
+  
+  let crossSellDocs: any[] = []
+  if (extrasCategory.docs.length > 0) {
+    const extrasRes = await payload.find({
+      collection: 'products' as any,
+      where: { category: { equals: extrasCategory.docs[0].id } },
+      limit: 10,
+    })
+    crossSellDocs = extrasRes.docs
+  }
+
   const categoryName = typeof product.category === 'object' ? product.category.title : 'Kategori'
 
   const staticProd = STATIC_PRODUCTS.find(p => p.name === product.title)
@@ -146,6 +163,12 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
                   categoryName: categoryName
                 }} 
                 description={product.description || `Günlük taze malzemelerle hazırlanan, Dilim Pastaneleri ustalarının özel tarifi olan ${product.title.toLowerCase()}. Her diliminde hissedeceğiniz lüks doku ve yoğun lezzet profili ile özel günlerinize ve tatlı krizlerinize eşsiz bir dokunuş katar.`}
+                crossSellProducts={crossSellDocs.map((doc: any) => ({
+                  id: doc.id.toString(),
+                  name: doc.title,
+                  price: doc.price,
+                  image: (doc.images && doc.images.length > 0 && doc.images[0].url) ? doc.images[0].url : '/placeholder.png'
+                }))}
               />
 
               {/* Features List */}
