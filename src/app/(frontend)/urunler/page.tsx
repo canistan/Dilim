@@ -64,6 +64,7 @@ export default async function ProductsPage() {
       collection: 'products' as any,
       where: { category: { in: categoryIds } },
       limit: 15,
+      depth: 2,
     })
     crossSellDocs = extrasRes.docs
   }
