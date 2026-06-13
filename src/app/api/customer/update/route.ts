@@ -25,13 +25,18 @@ export async function POST(req: Request) {
       if (surname !== undefined) updateData.surname = surname
       if (phone !== undefined) updateData.phone = phone
 
-      await payload.update({
-        collection: 'customers' as any,
-        id: users.docs[0].id,
-        data: updateData,
-        overrideAccess: true,
-      })
-      return NextResponse.json({ success: true })
+      try {
+        await payload.update({
+          collection: 'customers' as any,
+          id: users.docs[0].id,
+          data: updateData,
+          overrideAccess: true,
+        })
+        return NextResponse.json({ success: true })
+      } catch (updateError: any) {
+        console.error('Payload update payload error:', updateError?.data || updateError)
+        return NextResponse.json({ error: 'Update failed', details: updateError?.data?.errors?.[0]?.message || updateError.message }, { status: 400 })
+      }
     }
     return NextResponse.json({ error: 'Not found' }, { status: 404 })
   } catch (error: any) {

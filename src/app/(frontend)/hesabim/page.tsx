@@ -123,6 +123,7 @@ export default function HesabimPage() {
           phone: profileForm.phone
         })
       })
+      const data = await res.json()
       if (res.ok) {
         setSavedProfile(true)
         toast.success("Profiliniz güncellendi.")
@@ -130,10 +131,10 @@ export default function HesabimPage() {
         // Update session client-side to reflect new name
         update()
       } else {
-        toast.error("Kaydedilemedi.")
+        toast.error(`Kaydedilemedi: ${data.details || data.error || 'Bilinmeyen hata'}`)
       }
-    } catch (e) {
-      toast.error("Kaydedilemedi.")
+    } catch (e: any) {
+      toast.error(`Bağlantı hatası: ${e.message}`)
     }
     setSavingProfile(false)
   }
