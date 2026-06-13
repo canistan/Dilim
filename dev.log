@@ -65,3 +65,6 @@ DATA LOSS WARNING: Possible data loss detected if schema is pushed.
 Accept warnings and push schema to database?[22m [90m›[39m [90m(y/N)[39m✓ Compiled in 117ms
 ✓ Compiled in 66ms
 ✓ Compiled in 418ms
+✓ Compiled in 210ms
+✓ Compiled in 41ms
+✓ Compiled in 30ms
