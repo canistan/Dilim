@@ -45,7 +45,37 @@ export default async function ProductsPage() {
     sizes: doc.sizes,
   }))
 
+  const extrasCategories = await payload.find({
+    collection: 'categories' as any,
+    where: { 
+      or: [
+        { slug: { equals: 'ekstralar' } },
+        { slug: { equals: 'hediyelik' } },
+        { slug: { contains: 'hediye' } }
+      ]
+    },
+    limit: 5,
+  })
+  
+  let crossSellDocs: any[] = []
+  if (extrasCategories.docs.length > 0) {
+    const categoryIds = extrasCategories.docs.map((cat: any) => cat.id)
+    const extrasRes = await payload.find({
+      collection: 'products' as any,
+      where: { category: { in: categoryIds } },
+      limit: 15,
+    })
+    crossSellDocs = extrasRes.docs
+  }
+
+  const crossSellProducts = crossSellDocs.map((doc: any) => ({
+    id: doc.id.toString(),
+    name: doc.title,
+    price: doc.price,
+    image: (doc.images && doc.images.length > 0 && doc.images[0].url) ? doc.images[0].url : '/placeholder.png'
+  }))
+
   return (
-    <ProductsClient categories={categories} products={products} />
+    <ProductsClient categories={categories} products={products} crossSellProducts={crossSellProducts} />
   )
 }

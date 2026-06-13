@@ -30,9 +30,11 @@ type Product = {
 function ProductsClientInner({
   categories,
   products,
+  crossSellProducts = []
 }: {
   categories: Category[]
   products: Product[]
+  crossSellProducts?: any[]
 }) {
   const searchParams = useSearchParams()
   const initialCategory = searchParams.get('kategori') || 'all'
@@ -235,18 +237,31 @@ function ProductsClientInner({
       </section>
 
       <QuickAddModal 
-        product={quickAddProduct} 
-        isOpen={!!quickAddProduct} 
-        onClose={() => setQuickAddProduct(null)} 
+        product={quickAddProduct}
+        isOpen={!!quickAddProduct}
+        onClose={() => setQuickAddProduct(null)}
+        crossSellProducts={crossSellProducts}
       />
     </div>
   )
 }
 
-export default function ProductsClient(props: { categories: Category[]; products: Product[] }) {
+export default function ProductsClient({
+  categories,
+  products,
+  crossSellProducts = []
+}: {
+  categories: Category[]
+  products: Product[]
+  crossSellProducts?: any[]
+}) {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-gray-50 flex items-center justify-center">Yükleniyor...</div>}>
-      <ProductsClientInner {...props} />
+    <Suspense fallback={
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="w-12 h-12 border-4 border-dilim-portakal/30 border-t-dilim-portakal rounded-full animate-spin"></div>
+      </div>
+    }>
+      <ProductsClientInner categories={categories} products={products} crossSellProducts={crossSellProducts} />
     </Suspense>
   )
 }
