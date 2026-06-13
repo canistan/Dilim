@@ -1,7 +1,6 @@
 import type { CollectionConfig } from 'payload'
 
 import { orderAccess } from '../access/roles'
-import { auditLogAfterChange, auditLogAfterDelete } from '../hooks/auditLogHook'
 
 export const Orders: CollectionConfig = {
   slug: 'orders',
@@ -22,9 +21,7 @@ export const Orders: CollectionConfig = {
     delete: ({ req: { user } }) => Boolean(user?.collection === 'users'),
   },
   hooks: {
-    afterDelete: [auditLogAfterDelete('Siparişler')],
     afterChange: [
-      auditLogAfterChange('Siparişler'),
       async ({ doc, previousDoc, operation, req }) => {
         if (operation === 'update' && previousDoc) {
           // 1. STOK DÜŞÜRME OTOMASYONU
