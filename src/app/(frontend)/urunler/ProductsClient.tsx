@@ -122,7 +122,11 @@ function ProductsClientInner({
                   ? product.category.title 
                   : categoryObj?.title || 'Kategori'
 
-                const imageToUse = categoryObj?.image || '/placeholder.png'
+                const productImage = Array.isArray(product.images) && product.images.length > 0 
+                  ? (typeof product.images[0] === 'object' ? product.images[0].url : null) 
+                  : null
+                
+                const imageToUse = productImage || categoryObj?.image || '/placeholder.png'
 
                 return (
                   <motion.div
