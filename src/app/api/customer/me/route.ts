@@ -16,6 +16,7 @@ export async function GET() {
       collection: 'customers' as any,
       where: { email: { equals: session.user.email } },
       overrideAccess: true,
+      depth: 0,
     })
     
     if (users.docs.length > 0) {
