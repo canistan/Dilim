@@ -92,9 +92,27 @@ export async function POST(req: Request) {
       }
     }
 
+    // Müşteri oturumu var mı kontrol et
+    const session = await getServerSession(authOptions);
+    let customerId = null;
+
+    if (session?.user?.email) {
+      const users = await payload.find({
+        collection: 'customers',
+        where: { email: { equals: session.user.email } }
+      });
+      if (users.docs.length > 0) {
+        customerId = users.docs[0].id;
+      }
+    }
+
     // Eğer kupon kodu geldiyse veritabanından doğrula
     let discountAmount = 0;
     if (couponCode) {
+      if (!session?.user?.email) {
+        return NextResponse.json({ success: false, error: 'Kupon kullanmak için üye girişi yapmalısınız.' }, { status: 401 });
+      }
+
       const couponRes = await payload.find({
         collection: 'coupons',
         where: { code: { equals: couponCode } }
@@ -138,20 +156,6 @@ export async function POST(req: Request) {
 
     if (finalCalculatedTotal !== totalAmount) {
       return NextResponse.json({ success: false, error: 'Sepet tutarı uyuşmuyor. Lütfen sayfanızı yenileyin.' }, { status: 400 });
-    }
-
-    // Müşteri oturumu var mı kontrol et
-    const session = await getServerSession(authOptions);
-    let customerId = null;
-
-    if (session?.user?.email) {
-      const users = await payload.find({
-        collection: 'customers',
-        where: { email: { equals: session.user.email } }
-      });
-      if (users.docs.length > 0) {
-        customerId = users.docs[0].id;
-      }
     }
 
     // Create the order in Payload CMS

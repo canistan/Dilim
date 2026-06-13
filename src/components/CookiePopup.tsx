@@ -66,9 +66,9 @@ export function CookiePopup() {
                   <Cookie className="w-6 h-6 text-dilim-portakal" />
                 </div>
                 <div>
-                  <h3 className="font-bold text-dilim-siyah text-lg mb-1">Çerez Tercihleriniz</h3>
+                  <h3 className="font-bold text-dilim-siyah text-lg mb-1">Çerez Tercihleriniz ve Üyelik Fırsatları</h3>
                   <p className="text-gray-600 text-sm leading-relaxed font-light">
-                    Sizlere daha iyi ve kişiselleştirilmiş bir alışveriş deneyimi sunabilmek için web sitemizde çerezler (cookies) kullanıyoruz. Devam ederek çerez kullanımını kabul etmiş olursunuz. Detaylı bilgi için <a href="/kvkk" className="text-dilim-portakal underline hover:text-dilim-turuncu transition-colors font-medium">Gizlilik ve KVKK Politikamızı</a> inceleyebilirsiniz.
+                    Sizlere daha iyi bir alışveriş deneyimi sunabilmek için çerezler (cookies) kullanıyoruz. Ayrıca özel kupon ve indirimlerden yararlanmak, siparişlerinizi kolayca takip etmek için hemen üye olabilirsiniz! Devam ederek çerez kullanımını kabul etmiş olursunuz. Detaylı bilgi için <a href="/kvkk" className="text-dilim-portakal underline hover:text-dilim-turuncu transition-colors font-medium">Gizlilik ve KVKK Politikamızı</a> inceleyebilirsiniz.
                   </p>
                 </div>
               </div>

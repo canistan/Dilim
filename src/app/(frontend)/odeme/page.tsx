@@ -431,43 +431,62 @@ export default function OdemePage() {
                   ) : (
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">İndirim Kuponu</label>
-                      <div className="flex gap-2">
-                        <input 
-                          type="text" 
-                          value={couponCode} 
-                          onChange={(e) => setCouponCode(e.target.value)}
-                          placeholder="Kupon kodunuzu girin"
-                          className="flex-1 p-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-dilim-portakal outline-none text-sm uppercase"
-                        />
-                        <button 
-                          onClick={async () => {
-                            if (!couponCode) return;
-                            setValidatingCoupon(true);
-                            try {
-                              const res = await fetch('/api/verify-coupon', {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify({ code: couponCode, cartTotal, email: formData.email })
-                              });
-                              const data = await res.json();
-                              if (res.ok && data.success) {
-                                applyCoupon(data.coupon);
-                                setCouponCode('');
-                              } else {
-                                toast.error(data.error || "Geçersiz kupon");
+                      {sessionStatus === 'authenticated' ? (
+                        <div className="flex gap-2">
+                          <input 
+                            type="text" 
+                            value={couponCode} 
+                            onChange={(e) => setCouponCode(e.target.value)}
+                            placeholder="Kupon kodunuzu girin"
+                            className="flex-1 p-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-dilim-portakal outline-none text-sm uppercase"
+                          />
+                          <button 
+                            onClick={async () => {
+                              if (!couponCode) return;
+                              setValidatingCoupon(true);
+                              try {
+                                const res = await fetch('/api/verify-coupon', {
+                                  method: 'POST',
+                                  headers: { 'Content-Type': 'application/json' },
+                                  body: JSON.stringify({ code: couponCode, cartTotal, email: formData.email })
+                                });
+                                const data = await res.json();
+                                if (res.ok && data.success) {
+                                  applyCoupon(data.coupon);
+                                  setCouponCode('');
+                                } else {
+                                  toast.error(data.error || "Geçersiz kupon");
+                                }
+                              } catch (e) {
+                                toast.error("Hata oluştu");
+                              } finally {
+                                setValidatingCoupon(false);
                               }
-                            } catch (e) {
-                              toast.error("Hata oluştu");
-                            } finally {
-                              setValidatingCoupon(false);
-                            }
-                          }}
-                          disabled={validatingCoupon || !couponCode}
-                          className="px-4 bg-dilim-siyah text-white rounded-xl font-bold text-sm hover:bg-dilim-portakal transition-colors disabled:opacity-50"
-                        >
-                          {validatingCoupon ? '...' : 'Uygula'}
-                        </button>
-                      </div>
+                            }}
+                            disabled={validatingCoupon || !couponCode}
+                            className="px-4 bg-dilim-siyah text-white rounded-xl font-bold text-sm hover:bg-dilim-portakal transition-colors disabled:opacity-50"
+                          >
+                            {validatingCoupon ? '...' : 'Uygula'}
+                          </button>
+                        </div>
+                      ) : (
+                        <div className="flex flex-col gap-2">
+                          <div className="flex gap-2 opacity-60">
+                            <input 
+                              type="text" 
+                              disabled
+                              placeholder="Kupon kullanmak için üye girişi yapmalısınız"
+                              className="flex-1 p-3 bg-gray-100 border border-gray-200 rounded-xl cursor-not-allowed text-sm"
+                            />
+                            <button disabled className="px-4 bg-gray-400 text-white rounded-xl font-bold text-sm cursor-not-allowed">
+                              Uygula
+                            </button>
+                          </div>
+                          <p className="text-xs text-dilim-portakal font-medium px-1">
+                            Özel kupon ve indirimlerden yararlanmak için <a href="/giris" className="underline hover:text-dilim-turuncu">hemen giriş yapın veya üye olun!</a>
+                          </p>
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>

@@ -10,6 +10,14 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ success: false, error: 'Kupon kodu gerekli' }, { status: 400 })
     }
 
+    const { getServerSession } = await import("next-auth/next")
+    const { authOptions } = await import("@/lib/auth")
+    const session = await getServerSession(authOptions)
+
+    if (!session?.user?.email) {
+      return NextResponse.json({ success: false, error: 'Kupon kullanmak için üye girişi yapmalısınız' }, { status: 401 })
+    }
+
     const payload = await getPayload({ config: configPromise })
 
     // Kuponu veritabanında ara
