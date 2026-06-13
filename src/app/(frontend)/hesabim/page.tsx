@@ -130,6 +130,7 @@ export default function HesabimPage() {
         setTimeout(() => setSavedProfile(false), 3000)
         // Update session client-side to reflect new name
         update()
+        window.scrollTo({ top: 0, behavior: 'smooth' })
       } else {
         toast.error(`Kaydedilemedi: ${data.details || data.error || 'Bilinmeyen hata'}`)
       }
@@ -151,6 +152,7 @@ export default function HesabimPage() {
       if (res.ok) {
         toast.success("Doğum tarihi kaydedildi.")
         setHasExistingBirthDate(true)
+        window.scrollTo({ top: 0, behavior: 'smooth' })
       } else {
         toast.error(`Kaydedilemedi: ${data.details || data.error || 'Bilinmeyen hata'}`)
       }
@@ -205,6 +207,7 @@ export default function HesabimPage() {
         setAddresses(data.addresses)
         setShowAddressForm(false)
         toast.success("Adres kaydedildi.")
+        window.scrollTo({ top: 0, behavior: 'smooth' })
         setAddressForm({
           id: '', title: '', district: '', address: '', isCorporate: false, companyName: '', taxOffice: '', taxNumber: ''
         })
