@@ -63,6 +63,7 @@ export async function POST(req: Request) {
         addresses
       },
       overrideAccess: true,
+      depth: 0,
     })
     
     return NextResponse.json({ success: true, addresses: updatedUser.addresses || [] })

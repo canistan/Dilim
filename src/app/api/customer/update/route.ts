@@ -31,6 +31,7 @@ export async function POST(req: Request) {
           id: users.docs[0].id,
           data: updateData,
           overrideAccess: true,
+          depth: 0,
         })
         return NextResponse.json({ success: true })
       } catch (updateError: any) {
