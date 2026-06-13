@@ -36,6 +36,7 @@ export async function POST(req: Request) {
     let calculatedTotal = 0;
     const validatedItems = [];
 
+    for (const item of items) {
       let baseId = item.id;
       let selectedSizeSlug = null;
       if (typeof baseId === 'string' && baseId.includes('-')) {
