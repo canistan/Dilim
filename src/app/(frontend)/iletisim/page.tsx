@@ -21,5 +21,16 @@ export default async function IletisimPage() {
     console.error('Error fetching contact settings:', error)
   }
 
-  return <IletisimClient contactSettings={contactSettings} />
+  let branches = []
+  try {
+    const branchesRes = await payload.find({
+      collection: 'branches',
+      limit: 100,
+    })
+    branches = branchesRes.docs
+  } catch (error) {
+    console.error('Error fetching branches:', error)
+  }
+
+  return <IletisimClient contactSettings={contactSettings} branches={branches} />
 }

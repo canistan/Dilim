@@ -6,7 +6,7 @@ import { MapPin, Phone, Mail, Send, Clock, ChevronRight, Navigation } from 'luci
 import { motion } from 'framer-motion'
 import { useSession } from 'next-auth/react'
 
-export default function IletisimClient({ contactSettings }: { contactSettings?: any }) {
+export default function IletisimClient({ contactSettings, branches }: { contactSettings?: any, branches?: any[] }) {
   const { data: session } = useSession()
   
   const [formData, setFormData] = useState({
@@ -206,146 +206,74 @@ export default function IletisimClient({ contactSettings }: { contactSettings?: 
                 <h2 className="text-2xl font-serif font-bold text-dilim-siyah mb-8">Şubelerimiz</h2>
                 
                 <div className="space-y-8">
-                  {/* Ümraniye */}
-                  <div className="relative pl-8 border-l-2 border-dilim-portakal">
-                    <div className="absolute -left-[11px] top-0 w-5 h-5 rounded-full bg-white border-4 border-dilim-portakal"></div>
-                    <div className="flex flex-col sm:flex-row gap-6 mb-6">
-                      <div className="flex-1">
-                        <h3 className="text-xl font-bold text-dilim-siyah mb-3">Ümraniye Şubesi</h3>
-                        <ul className="space-y-3 text-gray-600">
-                          <li className="flex items-start gap-3">
-                            <MapPin className="w-5 h-5 text-dilim-yaldiz shrink-0 mt-0.5" />
-                            <span>İnkilap Mahallesi Adem Yavuz Caddesi<br/>Numara: 1/4 Ümraniye / İstanbul</span>
-                          </li>
-                          <li className="flex items-center gap-3">
-                            <Phone className="w-5 h-5 text-dilim-yaldiz shrink-0" />
-                            <a href="tel:+905059638024" className="hover:text-dilim-portakal transition-colors">+90 505 963 80 24</a>
-                          </li>
-                          <li className="flex items-center gap-3">
-                            <Clock className="w-5 h-5 text-dilim-yaldiz shrink-0" />
-                            <span>08:00 - 22:00 (Haftanın Her Günü)</span>
-                          </li>
-                        </ul>
+                  {branches?.length > 0 ? branches.map((branch: any) => (
+                    <div key={branch.id} className="relative pl-8 border-l-2 border-dilim-portakal">
+                      <div className="absolute -left-[11px] top-0 w-5 h-5 rounded-full bg-white border-4 border-dilim-portakal"></div>
+                      <div className="flex flex-col sm:flex-row gap-6 mb-6">
+                        <div className="flex-1">
+                          <h3 className="text-xl font-bold text-dilim-siyah mb-3 flex items-center gap-2">
+                            {branch.name}
+                            {branch.isFranchise && (
+                              <span className="text-xs font-semibold px-2 py-1 bg-dilim-portakal/10 text-dilim-portakal rounded-full">FRANCHISE</span>
+                            )}
+                          </h3>
+                          <ul className="space-y-3 text-gray-600">
+                            <li className="flex items-start gap-3">
+                              <MapPin className="w-5 h-5 text-dilim-yaldiz shrink-0 mt-0.5" />
+                              <span className="whitespace-pre-line">{branch.address}</span>
+                            </li>
+                            {branch.phone && (
+                              <li className="flex items-center gap-3">
+                                <Phone className="w-5 h-5 text-dilim-yaldiz shrink-0" />
+                                <a href={`tel:${branch.phone.replace(/\\s/g, '')}`} className="hover:text-dilim-portakal transition-colors">{branch.phone}</a>
+                              </li>
+                            )}
+                            {branch.workingHours && (
+                              <li className="flex items-center gap-3">
+                                <Clock className="w-5 h-5 text-dilim-yaldiz shrink-0" />
+                                <span>{branch.workingHours}</span>
+                              </li>
+                            )}
+                          </ul>
+                        </div>
+                        {branch.image && (
+                          <div className="w-full sm:w-32 h-32 relative rounded-2xl overflow-hidden shrink-0 shadow-sm">
+                            <Image src={branch.image.url} fill className="object-cover" alt={branch.name} />
+                          </div>
+                        )}
                       </div>
-                      <div className="w-full sm:w-32 h-32 relative rounded-2xl overflow-hidden shrink-0 shadow-sm">
-                        <Image src="/dilim-umraniye-sube.jpg" fill className="object-cover" alt="Ümraniye Şubesi" />
-                      </div>
+                      
+                      {branch.googleMapsUrl && (
+                        <div className="mt-4 flex justify-between items-center mb-2">
+                          <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider flex items-center gap-2">
+                            <span className="w-2 h-2 rounded-full bg-dilim-portakal animate-pulse"></span>
+                            Harita
+                          </span>
+                          <a href={branch.googleMapsUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 bg-white border border-dilim-portakal text-dilim-portakal px-5 py-2 rounded-full text-xs font-bold hover:bg-dilim-portakal hover:text-white transition-all duration-300 shadow-sm hover:shadow-md hover:-translate-y-0.5 group">
+                            <Navigation className="w-4 h-4 group-hover:scale-110 transition-transform" />
+                            Yol Tarifi Al
+                          </a>
+                        </div>
+                      )}
+                      
+                      {branch.mapEmbedUrl && (
+                        <div className="h-48 w-full rounded-2xl overflow-hidden border border-gray-100 shadow-sm">
+                          <iframe 
+                            src={branch.mapEmbedUrl}
+                            width="100%" 
+                            height="100%" 
+                            style={{ border: 0 }} 
+                            allowFullScreen={true} 
+                            loading="lazy" 
+                          ></iframe>
+                        </div>
+                      )}
                     </div>
-                    <div className="mt-4 flex justify-between items-center mb-2">
-                      <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider flex items-center gap-2">
-                        <span className="w-2 h-2 rounded-full bg-dilim-portakal animate-pulse"></span>
-                        Harita
-                      </span>
-                      <a href="https://www.google.com/maps/dir/?api=1&destination=Dilim+Pastanesi+Ümraniye" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 bg-white border border-dilim-portakal text-dilim-portakal px-5 py-2 rounded-full text-xs font-bold hover:bg-dilim-portakal hover:text-white transition-all duration-300 shadow-sm hover:shadow-md hover:-translate-y-0.5 group">
-                        <Navigation className="w-4 h-4 group-hover:scale-110 transition-transform" />
-                        Yol Tarifi Al
-                      </a>
+                  )) : (
+                    <div className="text-gray-500 py-8 text-center bg-gray-50 rounded-2xl border border-gray-100">
+                      Şube bilgileri yakında eklenecektir.
                     </div>
-                    <div className="h-48 w-full rounded-2xl overflow-hidden border border-gray-100 shadow-sm">
-                      <iframe 
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3009.6658909905864!2d29.100954314818352!3d41.032565025879876!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDHCsDAxJzU3LjIiTiAyOcKwMDYnMTEuMyJF!5e0!3m2!1str!2str!4v1506351314913"
-                        width="100%" 
-                        height="100%" 
-                        style={{ border: 0 }} 
-                        allowFullScreen={true} 
-                        loading="lazy" 
-                      ></iframe>
-                    </div>
-                  </div>
-
-                  {/* Kavacık */}
-                  <div className="relative pl-8 border-l-2 border-dilim-portakal">
-                    <div className="absolute -left-[11px] top-0 w-5 h-5 rounded-full bg-white border-4 border-dilim-portakal"></div>
-                    <div className="flex flex-col sm:flex-row gap-6 mb-6">
-                      <div className="flex-1">
-                        <h3 className="text-xl font-bold text-dilim-siyah mb-3">Kavacık Şubesi</h3>
-                        <ul className="space-y-3 text-gray-600">
-                          <li className="flex items-start gap-3">
-                            <MapPin className="w-5 h-5 text-dilim-yaldiz shrink-0 mt-0.5" />
-                            <span>Rüzgarlıbahçe Mah. Cumhuriyet Cad. No: 10<br/>Acarlar İş Merkezi, Kavacık, Beykoz / İstanbul</span>
-                          </li>
-                          <li className="flex items-center gap-3">
-                            <Phone className="w-5 h-5 text-dilim-yaldiz shrink-0" />
-                            <a href={`tel:${contactSettings?.phone?.replace(/\s/g, '') || '+905059638021'}`} className="hover:text-dilim-portakal transition-colors">{contactSettings?.phone || '+90 505 963 80 21'}</a>
-                          </li>
-                          <li className="flex items-center gap-3">
-                            <Clock className="w-5 h-5 text-dilim-yaldiz shrink-0" />
-                            <span>08:00 - 22:00 (Haftanın Her Günü)</span>
-                          </li>
-                        </ul>
-                      </div>
-                      <div className="w-full sm:w-32 h-32 relative rounded-2xl overflow-hidden shrink-0 shadow-sm">
-                        <Image src="/dilim-kavacik-sube.jpg" fill className="object-cover" alt="Kavacık Şubesi" />
-                      </div>
-                    </div>
-                    <div className="mt-4 flex justify-between items-center mb-2">
-                      <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider flex items-center gap-2">
-                        <span className="w-2 h-2 rounded-full bg-dilim-portakal animate-pulse"></span>
-                        Harita
-                      </span>
-                      <a href="https://www.google.com/maps/dir/?api=1&destination=Dilim+Pastanesi+Kavacık" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 bg-white border border-dilim-portakal text-dilim-portakal px-5 py-2 rounded-full text-xs font-bold hover:bg-dilim-portakal hover:text-white transition-all duration-300 shadow-sm hover:shadow-md hover:-translate-y-0.5 group">
-                        <Navigation className="w-4 h-4 group-hover:scale-110 transition-transform" />
-                        Yol Tarifi Al
-                      </a>
-                    </div>
-                    <div className="h-48 w-full rounded-2xl overflow-hidden border border-gray-100 shadow-sm">
-                      <iframe 
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3006.841344028522!2d29.09568331482048!3d41.094313022076044!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDHCsDA1JzM5LjUiTiAyOcKwMDUnNTIuMyJF!5e0!3m2!1str!2str!4v1506350216306"
-                        width="100%" 
-                        height="100%" 
-                        style={{ border: 0 }} 
-                        allowFullScreen={true} 
-                        loading="lazy" 
-                      ></iframe>
-                    </div>
-                  </div>
-
-                  {/* Beykoz */}
-                  <div className="relative pl-8 border-l-2 border-dilim-portakal">
-                    <div className="absolute -left-[11px] top-0 w-5 h-5 rounded-full bg-white border-4 border-dilim-portakal"></div>
-                    <div className="flex flex-col sm:flex-row gap-6 mb-6">
-                      <div className="flex-1">
-                        <h3 className="text-xl font-bold text-dilim-siyah mb-3 flex items-center gap-2">Beykoz Şubesi <span className="text-xs font-semibold px-2 py-1 bg-dilim-portakal/10 text-dilim-portakal rounded-full">FRANCHISE</span></h3>
-                        <ul className="space-y-3 text-gray-600">
-                          <li className="flex items-start gap-3">
-                            <MapPin className="w-5 h-5 text-dilim-yaldiz shrink-0 mt-0.5" />
-                            <span>Fevzipaşa Caddesi Numara: 10/A<br/>Beykoz / İstanbul</span>
-                          </li>
-                          <li className="flex items-center gap-3">
-                            <Phone className="w-5 h-5 text-dilim-yaldiz shrink-0" />
-                            <a href="tel:+902163232430" className="hover:text-dilim-portakal transition-colors">+90 216 323 24 30</a>
-                          </li>
-                          <li className="flex items-center gap-3">
-                            <Clock className="w-5 h-5 text-dilim-yaldiz shrink-0" />
-                            <span>08:00 - 22:00 (Haftanın Her Günü)</span>
-                          </li>
-                        </ul>
-                      </div>
-                      <div className="w-full sm:w-32 h-32 relative rounded-2xl overflow-hidden shrink-0 shadow-sm">
-                        <Image src="/dilim-beykoz-sube.jpg" fill className="object-cover" alt="Beykoz Şubesi" />
-                      </div>
-                    </div>
-                    <div className="mt-4 flex justify-between items-center mb-2">
-                      <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider flex items-center gap-2">
-                        <span className="w-2 h-2 rounded-full bg-dilim-portakal animate-pulse"></span>
-                        Harita
-                      </span>
-                      <a href="https://www.google.com/maps/dir/?api=1&destination=Dilim+Pastanesi+Beykoz" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 bg-white border border-dilim-portakal text-dilim-portakal px-5 py-2 rounded-full text-xs font-bold hover:bg-dilim-portakal hover:text-white transition-all duration-300 shadow-sm hover:shadow-md hover:-translate-y-0.5 group">
-                        <Navigation className="w-4 h-4 group-hover:scale-110 transition-transform" />
-                        Yol Tarifi Al
-                      </a>
-                    </div>
-                    <div className="h-48 w-full rounded-2xl overflow-hidden border border-gray-100 shadow-sm">
-                      <iframe 
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3005.0042118386923!2d29.089701314821873!3d41.134434019602054!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDHCsDA4JzA0LjAiTiAyOcKwMDUnMzAuOCJF!5e0!3m2!1str!2str!4v1506351581686"
-                        width="100%" 
-                        height="100%" 
-                        style={{ border: 0 }} 
-                        allowFullScreen={true} 
-                        loading="lazy" 
-                      ></iframe>
-                    </div>
-                  </div>
+                  )}
                 </div>
               </div>
 

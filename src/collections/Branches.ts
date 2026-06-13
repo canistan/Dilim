@@ -18,6 +18,18 @@ export const Branches: CollectionConfig = {
       label: 'Şube Adı',
     },
     {
+      name: 'isFranchise',
+      type: 'checkbox',
+      label: 'Franchise Şubesi mi?',
+      defaultValue: false,
+    },
+    {
+      name: 'image',
+      type: 'upload',
+      relationTo: 'media',
+      label: 'Şube Görseli',
+    },
+    {
       name: 'address',
       type: 'textarea',
       required: true,
@@ -32,12 +44,22 @@ export const Branches: CollectionConfig = {
       name: 'workingHours',
       type: 'text',
       label: 'Çalışma Saatleri',
-      defaultValue: '08:00 - 22:00',
+      defaultValue: '08:00 - 22:00 (Haftanın Her Günü)',
+    },
+    {
+      name: 'googleMapsUrl',
+      type: 'text',
+      label: 'Google Maps Yol Tarifi Linki',
+    },
+    {
+      name: 'mapEmbedUrl',
+      type: 'text',
+      label: 'Harita iframe (src URL)',
     },
     {
       name: 'coordinates',
       type: 'group',
-      label: 'Harita Koordinatları',
+      label: 'Harita Koordinatları (Opsiyonel)',
       fields: [
         { type: 'row', fields: [{ name: 'lat', type: 'number', label: 'Enlem (Lat)' }, { name: 'lng', type: 'number', label: 'Boylam (Lng)' }] }
       ]
