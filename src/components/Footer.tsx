@@ -9,6 +9,32 @@ import { useState, useEffect } from 'react'
 export const Footer = ({ contactSettings }: { contactSettings?: any }) => {
   const { data: session } = useSession()
   const [email, setEmail] = useState('')
+  const [loading, setLoading] = useState(false)
+
+  const handleSubscribe = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!email || !email.includes('@')) return toast.error('Geçerli bir e-posta adresi giriniz.')
+    
+    setLoading(true)
+    try {
+      const res = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+      })
+      const data = await res.json()
+      
+      if (res.ok) {
+        toast.success('Bültene başarıyla abone oldunuz! Teşekkürler.')
+        setEmail('')
+      } else {
+        toast.error(data.error || 'Abonelik işlemi başarısız oldu.')
+      }
+    } catch (err) {
+      toast.error('Bağlantı hatası oluştu. Lütfen tekrar deneyin.')
+    }
+    setLoading(false)
+  }
 
   useEffect(() => {
     if (session?.user?.email) {
@@ -117,20 +143,22 @@ export const Footer = ({ contactSettings }: { contactSettings?: any }) => {
               <p className="text-xs text-white/80 font-light mb-4">
                 Özel kampanyalardan ilk siz haberdar olun.
               </p>
-              <form className="relative w-full" onSubmit={(e) => { e.preventDefault(); toast.success('Bültene başarıyla abone oldunuz! Teşekkürler.'); }}>
+              <form className="relative w-full" onSubmit={handleSubscribe}>
                 <input 
                   type="email" 
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="E-posta adresiniz" 
                   required
-                  className="w-full bg-white/10 text-white placeholder-white/60 border border-white/20 rounded-md px-4 py-3 pr-[100px] focus:outline-none focus:border-white focus:ring-1 focus:ring-white transition-all text-sm"
+                  disabled={loading}
+                  className="w-full bg-white/10 text-white placeholder-white/60 border border-white/20 rounded-md px-4 py-3 pr-[100px] focus:outline-none focus:border-white focus:ring-1 focus:ring-white transition-all text-sm disabled:opacity-50"
                 />
                 <button 
                   type="submit" 
-                  className="absolute right-1 top-1 bottom-1 bg-white hover:bg-gray-100 text-dilim-portakal font-medium px-4 rounded-md transition-all duration-300 text-sm"
+                  disabled={loading}
+                  className="absolute right-1 top-1 bottom-1 bg-white hover:bg-gray-100 text-dilim-portakal font-medium px-4 rounded-md transition-all duration-300 text-sm disabled:opacity-70"
                 >
-                  Kayıt Ol
+                  {loading ? '...' : 'Kayıt Ol'}
                 </button>
               </form>
             </div>
