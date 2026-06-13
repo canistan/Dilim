@@ -100,18 +100,6 @@ export const Customers: CollectionConfig = {
               ],
             },
           ]
-        },
-        {
-          label: 'Geçmiş Siparişler',
-          fields: [
-            {
-              name: 'pastOrders',
-              type: 'join',
-              collection: 'orders',
-              on: 'customer',
-              label: 'Bu Müşterinin Tüm Siparişleri',
-            }
-          ]
         }
       ]
     }
