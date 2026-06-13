@@ -73,7 +73,7 @@ export function PromoPopup() {
           <div className="p-8 text-center relative z-20">
             <h3 className="text-2xl font-bold font-serif text-dilim-siyah mb-3">Dilim Ailesine Katılın!</h3>
             <p className="text-gray-600 mb-8 font-light">
-              Sitemize üye olun, sürpriz indirimlerden ve ilk alışverişinize özel kampanyalardan anında haberdar olun. Üstelik doğum günlerinizi asla unutmuyoruz!
+              Sitemize üye olun, avantajlı hediye kuponlarından yararlanma fırsatını yakalayın. Üye olmadan indirim kuponları kullanılamamaktadır. Üstelik doğum günlerinizi asla unutmuyoruz!
             </p>
 
             <div className="space-y-3">
