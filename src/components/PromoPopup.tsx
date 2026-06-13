@@ -28,11 +28,11 @@ export function PromoPopup() {
     
     // Eğer hiç görmediyse veya üzerinden 24 saat (86400000 ms) geçtiyse
     if (!lastSeen || (now - parseInt(lastSeen)) > 86400000) {
-      // Ziyaretçi siteye girdikten 5 saniye sonra çıksın
+      // Ziyaretçi siteye girdikten 3 saniye sonra çıksın
       const timer = setTimeout(() => {
         setShowPopup(true)
         localStorage.setItem('dilim_promo_last_seen', now.toString())
-      }, 5000)
+      }, 3000)
       
       return () => clearTimeout(timer)
     }
