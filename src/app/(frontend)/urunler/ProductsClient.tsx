@@ -117,22 +117,12 @@ function ProductsClientInner({
           <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
             <AnimatePresence>
               {filteredProducts.map((product) => {
+                const categoryObj = categories.find(c => c.id === (typeof product.category === 'object' ? product.category.id : product.category))
                 const categoryName = typeof product.category === 'object' 
                   ? product.category.title 
-                  : categories.find(c => c.id === product.category)?.title || 'Kategori'
+                  : categoryObj?.title || 'Kategori'
 
-                // ACİL DURUM: Önbelleğe takılan hatalı resimleri ezip, lokaldeki güvenilir kategori resimlerine yönlendiriyoruz
-                const categoryToImageMap: Record<string, string> = {
-                  'Pastalar': '/urunler_yas_pasta.png',
-                  'Tatlılar': '/detay_pasta_1.png',
-                  'Kekler ve Çörekler': '/detay_pasta_2.png',
-                  'Börekler': '/detay_pasta_3.png',
-                  'Çikolata ve Lokumlar': '/hakkimizda_cikolata.png',
-                  'Hediyelikler': '/hakkimizda_hero.png',
-                  'Kiloluk Ürünler': '/detay_pasta_2.png',
-                  'Paket Ürünler': '/urunler_yas_pasta.png',
-                }
-                const imageToUse = categoryToImageMap[categoryName] || '/placeholder.png'
+                const imageToUse = categoryObj?.image || '/placeholder.png'
 
                 return (
                   <motion.div

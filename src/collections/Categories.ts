@@ -21,6 +21,12 @@ export const Categories: CollectionConfig = {
       required: true,
     },
     {
+      name: 'image',
+      type: 'upload',
+      relationTo: 'media',
+      label: 'Kategori Görseli',
+    },
+    {
       name: 'slug',
       type: 'text',
       unique: true,

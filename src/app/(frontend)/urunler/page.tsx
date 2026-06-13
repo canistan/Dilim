@@ -31,6 +31,7 @@ export default async function ProductsPage() {
     id: doc.id,
     title: doc.title,
     slug: doc.slug,
+    image: doc.image && typeof doc.image === 'object' ? doc.image.url : null,
   }))
 
   const products = productsRes.docs.map((doc: any) => ({
