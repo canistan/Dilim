@@ -22,9 +22,10 @@ type QuickAddModalProps = {
   isOpen: boolean;
   onClose: () => void;
   crossSellProducts?: { id: string; name: string; price: number; image: string }[];
+  onAddedToCart?: (product: ProductForModal, sizeObj: any, quantity: number) => void;
 }
 
-export function QuickAddModal({ product, isOpen, onClose, crossSellProducts }: QuickAddModalProps) {
+export function QuickAddModal({ product, isOpen, onClose, crossSellProducts, onAddedToCart }: QuickAddModalProps) {
   const [quantity, setQuantity] = useState(1)
   const [selectedSize, setSelectedSize] = useState<string | null>(null)
   const [showError, setShowError] = useState(false)
@@ -91,7 +92,12 @@ export function QuickAddModal({ product, isOpen, onClose, crossSellProducts }: Q
     const isCake = product.title.toLowerCase().includes('pasta') || product.hasSizes;
     
     if (isCake && crossSellProducts && crossSellProducts.length > 0) {
-      setShowCrossSell(true);
+      if (onAddedToCart) {
+        const sizeObj = selectedSize && product.sizes ? product.sizes.find(s => s.size === selectedSize) : null;
+        onAddedToCart(product, sizeObj, quantity);
+      } else {
+        setShowCrossSell(true);
+      }
     } else {
       onClose();
       setIsCartOpen(true);

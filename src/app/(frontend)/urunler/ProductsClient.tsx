@@ -258,6 +258,16 @@ function ProductsClientInner({
         isOpen={!!quickAddProduct}
         onClose={() => setQuickAddProduct(null)}
         crossSellProducts={crossSellProducts}
+        onAddedToCart={(product, sizeObj, quantity) => {
+          setQuickAddProduct(null); // İlk pop-up'ı kapat
+          setAddedProductForCrossSell({
+            title: product.title,
+            image: product.image,
+            selectedSize: sizeObj ? sizeObj.size : undefined,
+            displayPrice: sizeObj ? Number(sizeObj.price) * quantity : Number(product.price) * quantity
+          });
+          setShowCrossSell(true);
+        }}
       />
 
       <CrossSellModal 
