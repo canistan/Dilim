@@ -117,14 +117,22 @@ function ProductsClientInner({
           <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
             <AnimatePresence>
               {filteredProducts.map((product) => {
-                const staticProd = STATIC_PRODUCTS.find(p => p.name === product.title)
-                const imageToUse = (product.images && product.images.length > 0 && product.images[0].url) 
-                  ? product.images[0].url 
-                  : (staticProd?.image || '/placeholder.png')
-
                 const categoryName = typeof product.category === 'object' 
                   ? product.category.title 
                   : categories.find(c => c.id === product.category)?.title || 'Kategori'
+
+                // ACİL DURUM: Önbelleğe takılan hatalı resimleri ezip, lokaldeki güvenilir kategori resimlerine yönlendiriyoruz
+                const categoryToImageMap: Record<string, string> = {
+                  'Pastalar': '/cover_pastalar.webp',
+                  'Tatlılar': '/cover_tatlilar.webp',
+                  'Kekler ve Çörekler': '/cover_kekler-ve-corekler.webp',
+                  'Börekler': '/cover_borekler.webp',
+                  'Çikolata ve Lokumlar': '/cover_cikolata-ve-lokumlar.webp',
+                  'Hediyelikler': '/cover_hediyelikler.webp',
+                  'Kiloluk Ürünler': '/cover_kiloluk-urunler.webp',
+                  'Paket Ürünler': '/cover_paket-urunler.webp',
+                }
+                const imageToUse = categoryToImageMap[categoryName] || '/placeholder.png'
 
                 return (
                   <motion.div
