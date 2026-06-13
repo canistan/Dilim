@@ -10,6 +10,7 @@ export type CartItem = {
   image: string;
   quantity: number;
   options?: string;
+  note?: string;
 }
 
 export type AppliedCoupon = {

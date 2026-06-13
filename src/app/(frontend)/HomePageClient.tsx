@@ -131,7 +131,7 @@ export default function HomePageClient({ homepageData, instagramData }: { homepa
               <>
                 {/* Fallback to static cards if no featured products selected */}
                 {(homepageData?.fallbackCards?.length > 0 ? homepageData.fallbackCards : [
-                  { title: 'Yaş Pastalar', link: '/urunler?kategori=yas-pastalar', buttonText: 'Koleksiyonu İncele', image: '/generated/category_yas_pastalar.png' },
+                  { title: 'Yaş Pastalar', link: '/urunler?kategori=pastalar', buttonText: 'Koleksiyonu İncele', image: '/generated/category_yas_pastalar.png' },
                   { title: 'Kendi Pastanı Tasarla', link: '/tasarla', buttonText: 'Hemen Tasarla', image: '/generated/category_tasarla.png' },
                   { title: 'Tatlılar & Ekler', link: '/urunler?kategori=tatlilar', buttonText: 'Koleksiyonu İncele', image: '/generated/category_tatlilar.png' }
                 ]).map((card: any, index: number) => {

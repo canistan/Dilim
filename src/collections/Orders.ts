@@ -297,7 +297,12 @@ export const Orders: CollectionConfig = {
                 {
                   name: 'options',
                   type: 'text',
-                  label: 'Ek Seçenekler (Örn: Boyut, Pasta Yazısı)',
+                  label: 'Ek Seçenekler (Örn: Boyut)',
+                },
+                {
+                  name: 'note',
+                  type: 'textarea',
+                  label: 'Üzerine Yazılacak Not (Sadece Pastalar İçin)',
                 },
               ],
             },

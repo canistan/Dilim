@@ -46,6 +46,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
   const { docs } = await payload.find({
     collection: 'products' as any,
     where: { slug: { equals: slug } },
+    depth: 2,
   })
 
   const product = docs[0] as any
@@ -62,14 +63,19 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
       id: { not_equals: product.id }
     },
     limit: 4,
+    depth: 2,
   })
 
   const categoryName = typeof product.category === 'object' ? product.category.title : 'Kategori'
 
   const staticProd = STATIC_PRODUCTS.find(p => p.name === product.title)
+  const categoryFallbackImage = typeof product.category === 'object' && product.category?.image?.url 
+    ? product.category.image.url 
+    : '/placeholder.png'
+    
   const imageToUse = (product.images && product.images.length > 0 && product.images[0].url) 
     ? product.images[0].url 
-    : (staticProd?.image || '/placeholder.png')
+    : (staticProd?.image || categoryFallbackImage)
 
   return (
     <div className="flex flex-col w-full bg-white min-h-screen">
@@ -136,7 +142,8 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
                   price: product.price > 0 ? `₺${product.price}` : 'Özel Fiyat',
                   image: imageToUse,
                   hasSizes: product.hasSizes,
-                  sizes: product.sizes
+                  sizes: product.sizes,
+                  categoryName: categoryName
                 }} 
                 description={product.description || `Günlük taze malzemelerle hazırlanan, Dilim Pastaneleri ustalarının özel tarifi olan ${product.title.toLowerCase()}. Her diliminde hissedeceğiniz lüks doku ve yoğun lezzet profili ile özel günlerinize ve tatlı krizlerinize eşsiz bir dokunuş katar.`}
               />
@@ -180,9 +187,13 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
               {relatedDocs.map((rel: any) => {
                 const relStaticProd = STATIC_PRODUCTS.find(p => p.name === rel.title)
+                const relCategoryFallback = typeof rel.category === 'object' && rel.category?.image?.url 
+                  ? rel.category.image.url 
+                  : '/placeholder.png'
+                  
                 const relImageToUse = (rel.images && rel.images.length > 0 && rel.images[0].url) 
                   ? rel.images[0].url 
-                  : (relStaticProd?.image || '/placeholder.png')
+                  : (relStaticProd?.image || relCategoryFallback)
 
                 return (
                   <Link key={rel.id} href={`/urunler/${rel.slug}`} className="group bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 border border-gray-100 flex flex-col">

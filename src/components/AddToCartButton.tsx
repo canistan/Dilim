@@ -13,6 +13,7 @@ type AddToCartProps = {
     image: string;
     hasSizes?: boolean;
     sizes?: { size: string; price: number }[];
+    categoryName?: string;
   }
   description?: string;
 }
@@ -20,8 +21,11 @@ type AddToCartProps = {
 export function AddToCartButton({ product, description }: AddToCartProps) {
   const [quantity, setQuantity] = useState(1)
   const [selectedSize, setSelectedSize] = useState<string | null>(null)
+  const [note, setNote] = useState('')
   const [showError, setShowError] = useState(false)
   const { addToCart } = useCart()
+
+  const isCake = product.categoryName?.toLowerCase().includes('pasta') || product.hasSizes;
 
   const handleDecrease = () => {
     if (quantity > 1) setQuantity(q => q - 1)
@@ -51,13 +55,19 @@ export function AddToCartButton({ product, description }: AddToCartProps) {
       }
     }
 
+    if (note.trim()) {
+      finalId = `${finalId}-note-${encodeURIComponent(note.trim().substring(0, 10))}`
+      optionsText = optionsText ? `${optionsText} | Not: ${note.trim()}` : `Not: ${note.trim()}`
+    }
+
     addToCart({
       id: finalId,
       name: product.name,
       price: finalPrice,
       image: product.image,
       quantity: quantity,
-      options: optionsText
+      options: optionsText,
+      note: note.trim() || undefined
     })
   }
 
@@ -113,6 +123,24 @@ export function AddToCartButton({ product, description }: AddToCartProps) {
               </button>
             ))}
           </div>
+        </div>
+      )}
+
+      {isCake && (
+        <div className="mb-6">
+          <label htmlFor="cakeNote" className="block text-sm font-bold text-dilim-siyah mb-2">
+            Pasta Üzerine Yazılacak Not (İsteğe Bağlı)
+          </label>
+          <textarea
+            id="cakeNote"
+            rows={2}
+            className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-dilim-portakal focus:ring-0 outline-none transition-all resize-none text-sm"
+            placeholder="Örn: İyi ki doğdun Can!"
+            value={note}
+            onChange={(e) => setNote(e.target.value)}
+            maxLength={60}
+          />
+          <span className="text-xs text-gray-400 mt-1 block text-right">{note.length}/60 karakter</span>
         </div>
       )}
 
