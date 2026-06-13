@@ -69,3 +69,4 @@ Accept warnings and push schema to database?[22m [90m›[39m [90m(y/N)[39m�
 ✓ Compiled in 41ms
 ✓ Compiled in 30ms
  GET /api/categories?limit=100 200 in 14.4s (next.js: 1879ms, application-code: 12.5s)
+✓ Compiled in 209ms
