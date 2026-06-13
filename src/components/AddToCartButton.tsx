@@ -83,6 +83,8 @@ export function AddToCartButton({ product, description, crossSellProducts = [] }
 
     if (isCake && crossSellProducts.length > 0) {
       setShowCrossSell(true);
+    } else {
+      setIsCartOpen(true);
     }
   }
 
