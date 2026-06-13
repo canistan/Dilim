@@ -24,7 +24,7 @@ type QuickAddModalProps = {
   crossSellProducts?: { id: string; name: string; price: number; image: string }[];
 }
 
-export function QuickAddModal({ product, isOpen, onClose }: QuickAddModalProps) {
+export function QuickAddModal({ product, isOpen, onClose, crossSellProducts }: QuickAddModalProps) {
   const [quantity, setQuantity] = useState(1)
   const [selectedSize, setSelectedSize] = useState<string | null>(null)
   const [showError, setShowError] = useState(false)
