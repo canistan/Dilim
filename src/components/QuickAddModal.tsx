@@ -87,7 +87,10 @@ export function QuickAddModal({ product, isOpen, onClose }: QuickAddModalProps) 
     })
     
     toast.success('Ürün sepetinize eklendi!');
-    if (crossSellProducts && crossSellProducts.length > 0) {
+    
+    const isCake = product.title.toLowerCase().includes('pasta') || product.hasSizes;
+    
+    if (isCake && crossSellProducts && crossSellProducts.length > 0) {
       setShowCrossSell(true);
     } else {
       onClose();

@@ -192,7 +192,10 @@ function ProductsClientInner({
                                 image: imageToUse,
                                 quantity: 1,
                               })
-                              if (crossSellProducts && crossSellProducts.length > 0) {
+                              
+                              const isCake = product.title.toLowerCase().includes('pasta') || categoryName.toLowerCase().includes('pasta');
+                              
+                              if (isCake && crossSellProducts && crossSellProducts.length > 0) {
                                 setAddedProductForCrossSell({
                                   title: product.title,
                                   image: imageToUse,
