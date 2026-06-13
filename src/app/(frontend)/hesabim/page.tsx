@@ -147,14 +147,15 @@ export default function HesabimPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ birthDate })
       })
+      const data = await res.json()
       if (res.ok) {
         toast.success("Doğum tarihi kaydedildi.")
         setHasExistingBirthDate(true)
       } else {
-        toast.error("Kaydedilemedi.")
+        toast.error(`Kaydedilemedi: ${data.details || data.error || 'Bilinmeyen hata'}`)
       }
-    } catch (e) {
-      toast.error("Kaydedilemedi.")
+    } catch (e: any) {
+      toast.error(`Bağlantı hatası: ${e.message}`)
     }
     setSavingBirth(false)
   }
