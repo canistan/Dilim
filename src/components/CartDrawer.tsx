@@ -54,12 +54,13 @@ export function CartDrawer() {
                   <ShoppingBag className="w-16 h-16 mb-4 text-gray-200" />
                   <p className="text-lg font-medium mb-2">Sepetiniz şu an boş</p>
                   <p className="text-sm font-light mb-6">Özel lezzetlerimizi incelemek için ürünler sayfasına göz atabilirsiniz.</p>
-                  <button
+                  <Link
+                    href="/urunler"
                     onClick={() => setIsCartOpen(false)}
-                    className="bg-dilim-siyah text-white px-8 py-3 rounded-full font-bold hover:bg-dilim-portakal transition-colors"
+                    className="inline-block bg-dilim-siyah text-white px-8 py-3 rounded-full font-bold hover:bg-dilim-portakal transition-colors"
                   >
                     Alışverişe Devam Et
-                  </button>
+                  </Link>
                 </div>
               ) : (
                 <div className="space-y-6">

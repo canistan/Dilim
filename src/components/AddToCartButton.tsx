@@ -31,9 +31,9 @@ export function AddToCartButton({ product, description, crossSellProducts = [] }
   
   // Cross-sell modal state
   const [showCrossSell, setShowCrossSell] = useState(false)
-  const [selectedCrossSells, setSelectedCrossSells] = useState<Record<string, number>>({}) // id -> quantity
+  const [addedCrossSells, setAddedCrossSells] = useState<Record<string, boolean>>({}) // id -> true (eklendi mi)
   
-  const { addToCart } = useCart()
+  const { addToCart, items, cartTotal, setIsCartOpen } = useCart()
 
   const isCake = product.categoryName?.toLowerCase().includes('pasta') || product.hasSizes;
 
@@ -45,20 +45,6 @@ export function AddToCartButton({ product, description, crossSellProducts = [] }
     setQuantity(q => q + 1)
   }
 
-  const toggleCrossSell = (id: string, action: 'add' | 'remove') => {
-    setSelectedCrossSells(prev => {
-      const current = prev[id] || 0
-      const updated = { ...prev }
-      if (action === 'add') {
-        updated[id] = current + 1
-      } else {
-        if (current <= 1) delete updated[id]
-        else updated[id] = current - 1
-      }
-      return updated
-    })
-  }
-
   const handleInitialAdd = () => {
     if (product.hasSizes && !selectedSize) {
       setShowError(true);
@@ -66,16 +52,7 @@ export function AddToCartButton({ product, description, crossSellProducts = [] }
       return;
     }
 
-    if (isCake && crossSellProducts.length > 0) {
-      setShowCrossSell(true);
-    } else {
-      executeAdd(false);
-    }
-  }
-
-  const executeAdd = (closeModal: boolean = false) => {
-    if (closeModal) setShowCrossSell(false);
-
+    // Sepete ana ürünü ekle
     let finalId = product.id;
     let finalPrice = product.price;
     let optionsText = undefined;
@@ -94,7 +71,6 @@ export function AddToCartButton({ product, description, crossSellProducts = [] }
       optionsText = optionsText ? `${optionsText} | Not: ${note.trim()}` : `Not: ${note.trim()}`
     }
 
-    // Add main product
     addToCart({
       id: finalId,
       name: product.name,
@@ -105,22 +81,20 @@ export function AddToCartButton({ product, description, crossSellProducts = [] }
       note: note.trim() || undefined
     })
 
-    // Add selected cross-sells
-    Object.entries(selectedCrossSells).forEach(([csId, qty]) => {
-      const csProd = crossSellProducts.find(p => p.id === csId)
-      if (csProd) {
-        addToCart({
-          id: csProd.id,
-          name: csProd.name,
-          price: `₺${csProd.price}`,
-          image: csProd.image,
-          quantity: qty,
-        })
-      }
+    if (isCake && crossSellProducts.length > 0) {
+      setShowCrossSell(true);
+    }
+  }
+
+  const addCrossSellItem = (csProd: any) => {
+    addToCart({
+      id: csProd.id,
+      name: csProd.name,
+      price: `₺${csProd.price}`,
+      image: csProd.image,
+      quantity: 1,
     })
-    
-    // reset cross-sells for next time
-    setSelectedCrossSells({})
+    setAddedCrossSells(prev => ({ ...prev, [csProd.id]: true }))
   }
 
   const basePrice = (product.hasSizes && selectedSize && product.sizes) 
@@ -222,60 +196,108 @@ export function AddToCartButton({ product, description, crossSellProducts = [] }
       </button>
       </div>
 
-      {/* Cross-Sell Modal */}
+      {/* Cross-Sell Modal (Nuga Style Confirmation) */}
       {showCrossSell && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-[120] flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setShowCrossSell(false)} />
-          <div className="relative bg-white rounded-3xl p-6 md:p-8 w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl flex flex-col">
-            <div className="text-center mb-8">
-              <h3 className="text-2xl md:text-3xl font-serif font-bold text-dilim-siyah mb-2">Bunu da İster Misiniz?</h3>
-              <p className="text-gray-500">Pastanızın yanına kutlamanızı renklendirecek ufak detaylar ekleyebilirsiniz.</p>
-            </div>
+          <div className="relative bg-white rounded-xl w-full max-w-lg shadow-2xl flex flex-col overflow-hidden max-h-[90vh]">
             
-            <div className="flex-1 flex flex-col gap-4 mb-8">
-              {crossSellProducts.map((cs) => {
-                const qty = selectedCrossSells[cs.id] || 0
-                return (
-                  <div key={cs.id} className="flex items-center gap-4 p-4 border border-gray-100 rounded-2xl bg-gray-50/50 hover:bg-gray-50 transition-colors">
-                    <div className="w-20 h-20 bg-white rounded-xl overflow-hidden relative shrink-0 border border-gray-100">
-                      <img src={cs.image} alt={cs.name} className="object-cover w-full h-full" />
-                    </div>
-                    <div className="flex-1">
-                      <h4 className="font-bold text-dilim-siyah leading-tight mb-1">{cs.name}</h4>
-                      <div className="text-dilim-portakal font-bold font-serif">₺{cs.price}</div>
-                    </div>
-                    <div className="shrink-0 flex items-center gap-2">
-                      {qty > 0 ? (
-                        <div className="flex items-center gap-3 bg-white border border-gray-200 rounded-xl p-1 shadow-sm">
-                          <button onClick={() => toggleCrossSell(cs.id, 'remove')} className="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-dilim-siyah hover:bg-gray-100 rounded-lg transition-colors">-</button>
-                          <span className="font-bold w-4 text-center text-sm">{qty}</span>
-                          <button onClick={() => toggleCrossSell(cs.id, 'add')} className="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-dilim-siyah hover:bg-gray-100 rounded-lg transition-colors">+</button>
-                        </div>
-                      ) : (
-                        <button onClick={() => toggleCrossSell(cs.id, 'add')} className="px-4 py-2 bg-white border-2 border-gray-200 hover:border-dilim-portakal hover:text-dilim-portakal text-sm font-bold text-gray-600 rounded-xl transition-all shadow-sm">
-                          Ekle
-                        </button>
-                      )}
-                    </div>
-                  </div>
-                )
-              })}
+            {/* Header: Close Button */}
+            <div className="absolute top-4 right-4 z-10">
+              <button 
+                onClick={() => setShowCrossSell(false)}
+                className="w-8 h-8 flex items-center justify-center bg-gray-100 hover:bg-gray-200 text-gray-600 rounded-full transition-colors"
+              >
+                ✕
+              </button>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-gray-100">
+            <div className="flex-1 overflow-y-auto pb-24">
+              {/* Added Confirmation Header */}
+              <div className="p-6 border-b border-gray-100 text-center flex flex-col items-center">
+                <div className="flex items-center justify-center gap-2 text-green-600 font-bold mb-4">
+                  <div className="w-5 h-5 rounded-full bg-green-100 flex items-center justify-center">
+                    <svg className="w-3 h-3 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
+                  </div>
+                  <span className="text-sm">Az önce ekledin</span>
+                </div>
+                
+                <div className="flex items-center gap-4 text-left w-full max-w-sm mx-auto">
+                  <div className="w-16 h-16 rounded-lg overflow-hidden shrink-0 border border-gray-100">
+                    <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-dilim-siyah leading-tight text-sm">{product.name}</h3>
+                    {selectedSize && <p className="text-xs text-gray-500 mt-1">{selectedSize}</p>}
+                    <p className="text-sm font-bold text-dilim-portakal mt-1">₺{displayPrice}</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Cross Sell Title */}
+              <div className="px-6 py-4 bg-gray-50/50">
+                <h4 className="text-sm font-bold text-gray-500 italic">"{product.name}" Ekstralar ↓</h4>
+              </div>
+
+              {/* Cross Sell List */}
+              <div className="px-6 py-2">
+                {crossSellProducts.map((cs) => {
+                  const isAdded = addedCrossSells[cs.id]
+                  return (
+                    <div key={cs.id} className="flex items-center gap-4 py-4 border-b border-gray-50 last:border-0">
+                      <div className="w-16 h-16 bg-white rounded-lg overflow-hidden relative shrink-0 border border-gray-100">
+                        <img src={cs.image} alt={cs.name} className="object-cover w-full h-full" />
+                      </div>
+                      <div className="flex-1">
+                        <h4 className="font-bold text-dilim-siyah text-sm leading-tight mb-1">{cs.name}</h4>
+                        <div className="text-dilim-siyah font-bold text-sm">₺{cs.price.toFixed(2)}</div>
+                      </div>
+                      <div className="shrink-0">
+                        {isAdded ? (
+                          <div className="px-4 py-2 bg-green-50 text-green-600 border border-green-200 text-xs font-bold rounded-lg flex items-center gap-1">
+                            <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                            EKLENDİ
+                          </div>
+                        ) : (
+                          <button 
+                            onClick={() => addCrossSellItem(cs)} 
+                            className="px-4 py-2 bg-[#F14B82] hover:bg-[#d63d6f] text-white text-xs font-bold rounded-lg transition-colors tracking-wide"
+                          >
+                            SEPETE EKLE
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+
+            {/* Sticky Footer */}
+            <div className="absolute bottom-0 left-0 right-0 bg-white border-t border-gray-100 p-4 shadow-[0_-4px_15px_rgba(0,0,0,0.05)] flex items-center justify-between z-20">
+              <div className="flex items-center gap-2">
+                <div className="relative">
+                  <ShoppingBag className="w-6 h-6 text-dilim-siyah" />
+                  <div className="absolute -top-2 -right-2 bg-[#F14B82] text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center">
+                    {items.reduce((total, item) => total + item.quantity, 0)}
+                  </div>
+                </div>
+                <div className="font-bold text-lg text-dilim-siyah ml-2">
+                  ₺{cartTotal.toFixed(2)}
+                </div>
+              </div>
+              
               <button 
-                onClick={() => executeAdd(true)}
-                className="flex-1 bg-white border-2 border-gray-200 text-gray-600 rounded-2xl py-4 px-6 font-bold hover:bg-gray-50 hover:border-gray-300 transition-all text-center"
+                onClick={() => {
+                  setShowCrossSell(false);
+                  setIsCartOpen(true);
+                }}
+                className="bg-[#F14B82] hover:bg-[#d63d6f] text-white px-6 py-3 rounded-xl font-bold transition-colors shadow-md"
               >
-                İstemiyorum, Devam Et
-              </button>
-              <button 
-                onClick={() => executeAdd(true)}
-                className="flex-1 bg-dilim-siyah text-white rounded-2xl py-4 px-6 font-bold hover:bg-dilim-portakal transition-all text-center shadow-lg"
-              >
-                {Object.keys(selectedCrossSells).length > 0 ? 'Seçilenlerle Sepete Ekle' : 'Sepete Ekle'}
+                SEPETİ GÖRÜNTÜLE
               </button>
             </div>
+
           </div>
         </div>
       )}
