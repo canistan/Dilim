@@ -121,7 +121,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
           </button>
         </div>
       </div>
-    ), { position: 'bottom-right', duration: 4000 })
+    ), { position: 'bottom-right', duration: 2000 })
   }
 
   const removeFromCart = (id: string) => {
