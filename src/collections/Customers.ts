@@ -1,4 +1,6 @@
 import type { CollectionConfig } from 'payload'
+import { auditLogAfterChange, auditLogAfterDelete } from '../hooks/auditLogHook'
+
 export const Customers: CollectionConfig = {
   slug: 'customers',
   labels: {
@@ -19,6 +21,10 @@ export const Customers: CollectionConfig = {
     // Disable password requirement for social login users if possible, or handle it by generating a random password
     // Actually Payload 3.0 auth requires password if using local strategy. 
     // We will generate a secure random password for OAuth users on creation.
+  },
+  hooks: {
+    afterChange: [async (args) => auditLogAfterChange('Müşteriler')(args)],
+    afterDelete: [async (args) => auditLogAfterDelete('Müşteriler')(args)],
   },
   fields: [
     {

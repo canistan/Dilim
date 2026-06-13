@@ -1,5 +1,6 @@
 import type { CollectionConfig } from 'payload'
 import { formatSlug } from '../utilities/formatSlug'
+import { auditLogAfterChange, auditLogAfterDelete } from '../hooks/auditLogHook'
 
 export const Products: CollectionConfig = {
   access: {
@@ -14,6 +15,10 @@ export const Products: CollectionConfig = {
     useAsTitle: 'title',
     group: 'Yönetim',
     defaultColumns: ['images', 'title', 'price', 'stock', 'category'],
+  },
+  hooks: {
+    afterChange: [async (args) => auditLogAfterChange('Ürünler')(args)],
+    afterDelete: [async (args) => auditLogAfterDelete('Ürünler')(args)],
   },
   fields: [
     {
