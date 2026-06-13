@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { useState, useEffect } from 'react'
+import { usePathname } from 'next/navigation'
 import { Menu, X, ShoppingBag, User } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
@@ -15,6 +16,7 @@ export const Header = () => {
   const [mounted, setMounted] = useState(false)
   const { items, setIsCartOpen } = useCart()
   const { data: session, status } = useSession()
+  const pathname = usePathname()
 
   useEffect(() => {
     setMounted(true)
@@ -77,6 +79,11 @@ export const Header = () => {
                 </Link>
               )
             )}
+            {mounted && pathname === '/menu' && (
+              <a href="https://instagram.com/dilimpastaneleri" target="_blank" rel="noopener noreferrer" className="hidden lg:flex p-2.5 rounded-full text-dilim-siyah hover:text-dilim-portakal hover:bg-orange-50 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-instagram"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
+              </a>
+            )}
             <button 
               onClick={() => setIsCartOpen(true)}
               className="p-2.5 rounded-full text-dilim-siyah hover:bg-gray-100/80 transition-colors relative group"
@@ -86,6 +93,11 @@ export const Header = () => {
                 <span className="absolute top-1 right-1 h-4 w-4 rounded-full bg-gradient-to-r from-dilim-portakal to-dilim-turuncu text-[10px] font-bold text-white flex items-center justify-center shadow-md border-2 border-white">{items.length}</span>
               )}
             </button>
+            {mounted && pathname === '/menu' && (
+              <a href="https://instagram.com/dilimpastaneleri" target="_blank" rel="noopener noreferrer" className="lg:hidden p-2.5 rounded-full text-dilim-siyah hover:text-dilim-portakal transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-instagram"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
+              </a>
+            )}
             <button className="p-2.5 rounded-full lg:hidden text-dilim-siyah hover:bg-gray-100/80 transition-colors" onClick={() => setIsMobileMenuOpen(true)}>
               <Menu className="h-6 w-6" />
             </button>
