@@ -37,12 +37,7 @@ const INSTAGRAM_POSTS = [
 
 export function InstagramFeed({ data }: { data?: any }) {
   // Use CMS data if available, otherwise fallback to dummy data
-  const feedPosts = data?.posts?.length > 0 ? data.posts.map((post: any, index: number) => ({
-    id: post.id || index,
-    image: (typeof post.image === 'object' && post.image?.url) ? post.image.url : '/generated/hero_cake.png',
-    link: post.link || 'https://instagram.com/dilimpastaneleri',
-    type: post.isReel ? 'reel' : 'image',
-  })) : INSTAGRAM_POSTS
+  const feedPosts = INSTAGRAM_POSTS // ACİL DURUM: CMS iptal, lokal görseller kullanılıyor.
 
   return (
     <section className="bg-white py-16 lg:py-24 overflow-hidden border-t border-gray-100">
