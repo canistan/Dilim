@@ -159,6 +159,8 @@ export default function OdemePage() {
       }
       
       if (res.ok && data.success) {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        
         if (data.isMock) {
           setMockData({ amount: data.amount, orderId: data.orderId })
         } else if (data.checkoutFormContent) {
