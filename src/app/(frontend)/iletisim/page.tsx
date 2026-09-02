@@ -27,7 +27,22 @@ export default async function IletisimPage() {
       collection: 'branches',
       limit: 100,
     })
-    branches = branchesRes.docs
+    
+    // Şubeleri istenilen sıraya göre diz: Kavacık, Ümraniye, Beykoz
+    const order = ['kavacık', 'ümraniye', 'beykoz']
+    
+    branches = branchesRes.docs.sort((a, b) => {
+      const nameA = (a.name || '').toLowerCase()
+      const nameB = (b.name || '').toLowerCase()
+      
+      const indexA = order.findIndex(loc => nameA.includes(loc))
+      const indexB = order.findIndex(loc => nameB.includes(loc))
+      
+      const posA = indexA !== -1 ? indexA : 999
+      const posB = indexB !== -1 ? indexB : 999
+      
+      return posA - posB
+    })
   } catch (error) {
     console.error('Error fetching branches:', error)
   }
