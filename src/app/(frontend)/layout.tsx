@@ -89,6 +89,43 @@ export default async function FrontendLayout({
             gtag('config', 'G-VZT513Y4FP');
           `}
         </Script>
+        <Script id="schema-org" type="application/ld+json" strategy="afterInteractive">
+          {`
+            {
+              "@context": "https://schema.org",
+              "@graph": [
+                {
+                  "@type": "Organization",
+                  "@id": "https://www.dilim.com.tr/#organization",
+                  "name": "Dilim Pastaneleri",
+                  "url": "https://www.dilim.com.tr",
+                  "logo": "https://www.dilim.com.tr/DilimPastLogo-final.png",
+                  "sameAs": [
+                    "https://www.instagram.com/dilimpastaneleri",
+                    "https://www.facebook.com/share/1BQ7yRqh6n/?mibextid=wwXIfr",
+                    "https://x.com/dilimpastanesi",
+                    "https://www.tiktok.com/@dilimpastaneleri"
+                  ]
+                },
+                {
+                  "@type": "Bakery",
+                  "@id": "https://www.dilim.com.tr/#bakery-kavacik",
+                  "name": "Dilim Pastaneleri - Kavacık",
+                  "url": "https://www.dilim.com.tr",
+                  "image": "https://www.dilim.com.tr/urunler_yas_pasta.png",
+                  "telephone": "+905059638021",
+                  "address": {
+                    "@type": "PostalAddress",
+                    "streetAddress": "Rüzgarlıbahçe Mah. Cumhuriyet Cad. Acarlar İş Merkezi",
+                    "addressLocality": "Beykoz",
+                    "addressRegion": "İstanbul",
+                    "addressCountry": "TR"
+                  }
+                }
+              ]
+            }
+          `}
+        </Script>
       </head>
       <body className="min-h-full flex flex-col">
         <AuthProvider>
