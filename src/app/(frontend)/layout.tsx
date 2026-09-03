@@ -55,6 +55,9 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
+  verification: {
+    google: 'KTMZTaRLLTpB7lTBn1rE4KnZYJU3Yroxz5F5-zXj6xo',
+  },
 };
 
 export default async function FrontendLayout({
