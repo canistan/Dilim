@@ -47,11 +47,8 @@ export default function MesafeliSatisPage() {
               Mesafeli Sözleşmeler Yönetmeliği uyarınca, <strong>çabuk bozulabilen veya son kullanma tarihi geçme ihtimali olan (gıda, pasta, tatlı vb.)</strong> ürünler ile ALICI'nın istekleri veya kişisel ihtiyaçları doğrultusunda özel olarak hazırlanan (örn: isim yazılı, özel tasarım) ürünlerde <strong>cayma hakkı bulunmamaktadır.</strong>
             </p>
 
-            <div className="mt-16 p-6 bg-gray-50 rounded-2xl border border-gray-100 text-sm">
-              <p className="mb-0">
-                <strong>Not:</strong> Bu metin taslaktır. Canlı kullanıma geçmeden önce yetkili hukuk müşaviriniz tarafından incelenip şirketinize özel hale getirilmelidir.
-              </p>
-            </div>
+
+
           </div>
         </div>
       </section>

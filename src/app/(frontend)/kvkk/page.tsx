@@ -63,11 +63,8 @@ export default function KvkkPage() {
               KVKK'nın 11. maddesi uyarınca veri sahibi olarak; kişisel verilerinizin işlenip işlenmediğini öğrenme, işlenmişse bilgi talep etme, eksik veya yanlış işlenmişse düzeltilmesini isteme, silinmesini talep etme haklarına sahipsiniz. Haklarınızı kullanmak için <strong>info@dilim.com.tr</strong> adresi üzerinden bizimle iletişime geçebilirsiniz.
             </p>
 
-            <div className="mt-16 p-6 bg-gray-50 rounded-2xl border border-gray-100 text-sm">
-              <p className="mb-0">
-                <strong>Not:</strong> Bu metin standart bir bilgilendirme taslağıdır. Resmi işlemleriniz için lütfen hukuk danışmanınızla görüşerek kurumunuza özel metinler hazırlatınız.
-              </p>
-            </div>
+
+
           </div>
         </div>
       </section>

@@ -50,11 +50,8 @@ export default function IptalIadePage() {
               Lütfen siparişiniz teslim edilirken ürününüzü kontrol ediniz. Herhangi bir hasar veya hata durumunda teslimat personeline durumu bildirerek tutanak tutturabilir veya ürünü teslim almayı reddedebilirsiniz. Teslim alındıktan sonra, gıda güvenliği ve hijyen kuralları gereği iade kabul edilememektedir.
             </p>
 
-            <div className="mt-16 p-6 bg-gray-50 rounded-2xl border border-gray-100 text-sm">
-              <p className="mb-0">
-                <strong>Not:</strong> Bu metin taslaktır. Canlı kullanıma geçmeden önce şirketinizin operasyon ve iade prosedürlerine göre avukatınızca düzenlenmelidir.
-              </p>
-            </div>
+
+
           </div>
         </div>
       </section>
