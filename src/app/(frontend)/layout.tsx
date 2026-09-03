@@ -121,6 +121,34 @@ export default async function FrontendLayout({
                     "addressRegion": "İstanbul",
                     "addressCountry": "TR"
                   }
+                },
+                {
+                  "@type": "Bakery",
+                  "@id": "https://www.dilim.com.tr/#bakery-umraniye",
+                  "name": "Dilim Pastaneleri - Ümraniye",
+                  "url": "https://www.dilim.com.tr",
+                  "image": "https://www.dilim.com.tr/urunler_yas_pasta.png",
+                  "telephone": "+905059638021",
+                  "address": {
+                    "@type": "PostalAddress",
+                    "addressLocality": "Ümraniye",
+                    "addressRegion": "İstanbul",
+                    "addressCountry": "TR"
+                  }
+                },
+                {
+                  "@type": "Bakery",
+                  "@id": "https://www.dilim.com.tr/#bakery-beykoz",
+                  "name": "Dilim Pastaneleri - Beykoz",
+                  "url": "https://www.dilim.com.tr",
+                  "image": "https://www.dilim.com.tr/urunler_yas_pasta.png",
+                  "telephone": "+905059638021",
+                  "address": {
+                    "@type": "PostalAddress",
+                    "addressLocality": "Beykoz",
+                    "addressRegion": "İstanbul",
+                    "addressCountry": "TR"
+                  }
                 }
               ]
             }
