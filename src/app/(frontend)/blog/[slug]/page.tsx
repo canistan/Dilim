@@ -176,6 +176,28 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
         </div>
       </div>
 
+
+      {/* Structured Data (Schema.org) for Article */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Article",
+            "headline": post.title,
+            "image": [
+              `https://www.dilim.com.tr${imageToUse}`
+            ],
+            "datePublished": post.createdAt,
+            "dateModified": post.updatedAt,
+            "author": [{
+              "@type": "Person",
+              "name": staticBlog?.author || 'Dilim Pastaneleri',
+              "url": "https://www.dilim.com.tr"
+            }]
+          })
+        }}
+      />
     </div>
   )
 }

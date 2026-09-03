@@ -254,6 +254,64 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
         </section>
       )}
 
+
+      {/* Structured Data (Schema.org) for Product and BreadcrumbList */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@graph": [
+              {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                  {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Anasayfa",
+                    "item": "https://www.dilim.com.tr"
+                  },
+                  {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "Ürünler",
+                    "item": "https://www.dilim.com.tr/urunler"
+                  },
+                  {
+                    "@type": "ListItem",
+                    "position": 3,
+                    "name": categoryName,
+                    "item": "https://www.dilim.com.tr/urunler"
+                  },
+                  {
+                    "@type": "ListItem",
+                    "position": 4,
+                    "name": product.title,
+                    "item": `https://www.dilim.com.tr/urunler/${product.slug}`
+                  }
+                ]
+              },
+              {
+                "@type": "Product",
+                "name": product.title,
+                "image": `https://www.dilim.com.tr${imageToUse}`,
+                "description": product.description || `${product.title} siparişi verin.`,
+                "brand": {
+                  "@type": "Brand",
+                  "name": "Dilim Pastaneleri"
+                },
+                "offers": {
+                  "@type": "Offer",
+                  "url": `https://www.dilim.com.tr/urunler/${product.slug}`,
+                  "priceCurrency": "TRY",
+                  "price": product.price > 0 ? product.price : 0,
+                  "availability": "https://schema.org/InStock"
+                }
+              }
+            ]
+          })
+        }}
+      />
     </div>
   )
 }
