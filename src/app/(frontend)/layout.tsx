@@ -19,6 +19,10 @@ const montserrat = Montserrat({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://www.dilim.com.tr'),
+  alternates: {
+    canonical: '/',
+  },
   title: "Dilim Pastaneleri | Lezzetin Adresi",
   description: "Özel anlarınıza eşlik eden eşsiz tatlar. Lüks yaş pasta, özel gün pastası ve geleneksel tatlılar için Dilim Pastaneleri.",
   icons: {
@@ -48,8 +52,8 @@ export const metadata: Metadata = {
     images: ["/urunler_yas_pasta.png"],
   },
   robots: {
-    index: false,
-    follow: false,
+    index: true,
+    follow: true,
   },
 };
 

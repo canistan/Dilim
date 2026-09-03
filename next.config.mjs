@@ -33,6 +33,14 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'dilim.semsicanalbayrak.com',
       },
+      {
+        protocol: 'https',
+        hostname: 'dilim.com.tr',
+      },
+      {
+        protocol: 'https',
+        hostname: 'www.dilim.com.tr',
+      },
     ],
   },
 }
