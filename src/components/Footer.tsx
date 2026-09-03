@@ -173,10 +173,32 @@ export const Footer = ({ contactSettings }: { contactSettings?: any }) => {
           <div className="text-xs text-white/80 font-medium">
             &copy; {new Date().getFullYear()} Dilim Pastaneleri. Tüm hakları saklıdır.
           </div>
-          <div className="flex items-center gap-6 text-xs text-white/90 font-bold tracking-wider">
-            <span className="flex items-center gap-1.5"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg> 256-bit SSL</span>
-            <span className="text-white font-bold">iyzi<span className="text-white/80">co</span></span>
-            <span className="italic text-white/80">Masterpass</span>
+          <div className="flex items-center gap-4">
+            {/* SSL Badge */}
+            <span className="flex items-center gap-1.5 text-xs text-white/90 font-bold tracking-wider">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+              256-bit SSL
+            </span>
+            {/* Visa */}
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" className="h-8 w-auto">
+              <rect width="48" height="48" rx="6" fill="white"/>
+              <path d="M19.6 31h-3.3l2.1-13h3.3l-2.1 13zm13.7-12.7c-.7-.3-1.7-.5-3-.5-3.3 0-5.6 1.7-5.6 4.2 0 1.8 1.7 2.8 2.9 3.4 1.3.6 1.7 1 1.7 1.6 0 .8-1 1.2-2 1.2-1.3 0-2-.2-3.1-.7l-.4-.2-.5 2.8c.8.3 2.2.7 3.7.7 3.5 0 5.8-1.7 5.8-4.3 0-1.4-.9-2.5-2.8-3.4-1.2-.6-1.9-1-1.9-1.6 0-.5.6-1.1 1.9-1.1 1.1 0 1.9.2 2.5.5l.3.1.5-2.7zm8.5 0h-2.6c-.8 0-1.4.2-1.7 1l-4.9 11.7h3.5s.6-1.5.7-1.9h4.2c.1.4.4 1.9.4 1.9h3.1l-2.7-12.7zm-4 8.2c.3-.7 1.3-3.5 1.3-3.5s.3-.7.5-1.2l.2 1.1s.6 3 .8 3.6h-2.8zM17.2 18.3l-3.1 8.9-.3-1.7c-.6-1.9-2.3-4-4.3-5l3 11.5h3.5l5.2-13.7h-3.5-.5z" fill="#1A1F71"/>
+              <path d="M11.3 18.3H6l-.1.3c4.1 1 6.8 3.6 8 6.6l-1.1-5.8c-.2-.8-.8-1-1.5-1.1z" fill="#F9A533"/>
+            </svg>
+            {/* MasterCard */}
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" className="h-8 w-auto">
+              <rect width="48" height="48" rx="6" fill="white"/>
+              <circle cx="19" cy="24" r="10" fill="#EB001B"/>
+              <circle cx="29" cy="24" r="10" fill="#F79E1B"/>
+              <path d="M24 16.8a10 10 0 0 0-3.7 7.2 10 10 0 0 0 3.7 7.2 10 10 0 0 0 3.7-7.2 10 10 0 0 0-3.7-7.2z" fill="#FF5F00"/>
+            </svg>
+            {/* iyzico */}
+            <div className="bg-white rounded-md px-2.5 py-1.5">
+              <span className="text-sm font-bold tracking-tight">
+                <span style={{color: '#1D64C1'}}>iyzi</span><span style={{color: '#60BE84'}}>co</span>
+                <span className="text-gray-500 font-normal text-xs ml-0.5">ile öde</span>
+              </span>
+            </div>
           </div>
         </div>
       </div>
