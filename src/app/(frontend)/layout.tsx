@@ -11,6 +11,7 @@ import { CookiePopup } from '@/components/CookiePopup'
 import { PromoPopup } from '@/components/PromoPopup'
 import { AuthProvider } from '@/components/AuthProvider'
 import { Toaster } from 'react-hot-toast'
+import Script from 'next/script'
 
 const montserrat = Montserrat({
   variable: "--font-montserrat",
@@ -75,6 +76,20 @@ export default async function FrontendLayout({
       lang="tr"
       className={`${montserrat.variable} h-full antialiased`}
     >
+      <head>
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-VZT513Y4FP"
+          strategy="afterInteractive"
+        />
+        <Script id="ga4-init" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-VZT513Y4FP');
+          `}
+        </Script>
+      </head>
       <body className="min-h-full flex flex-col">
         <AuthProvider>
           <CartProvider>
