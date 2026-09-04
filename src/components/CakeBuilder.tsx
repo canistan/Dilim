@@ -363,10 +363,7 @@ Fiyat teklifinizi ve onayınızı bekliyorum.`;
                       <img src={opt.image} alt={opt.name} className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
                     </div>
                     <h4 className="text-lg font-bold text-dilim-siyah mb-1">{opt.name}</h4>
-                    <p className="text-sm text-gray-500 mb-4">{opt.desc}</p>
-                    <span className="inline-block px-3 py-1 mt-auto bg-white rounded-full text-sm font-semibold text-dilim-yaldiz border border-gray-100">
-                      Başlangıç: {opt.price}
-                    </span>
+                    <p className="text-sm text-gray-500 mb-2">{opt.desc}</p>
                   </button>
                 ))}
               </div>
