@@ -58,13 +58,34 @@ export const Header = () => {
                 />
               </div>
             </Link>
-            <nav className="hidden lg:flex gap-8 font-medium text-dilim-gri-koyu">
+            <nav className="hidden lg:flex gap-8 font-medium text-dilim-gri-koyu items-center">
               {navLinks.map((link) => (
                 <Link key={link.name} href={link.href} className={`relative group py-2 transition-colors hover:text-dilim-siyah ${link.highlight ? 'text-dilim-portakal font-semibold hover:text-dilim-turuncu' : ''}`}>
                   {link.name}
                   <span className={`absolute left-0 bottom-0 w-0 h-[2px] bg-dilim-portakal transition-all duration-300 ease-out group-hover:w-full ${link.highlight ? 'w-full opacity-30 group-hover:opacity-100' : ''}`}></span>
                 </Link>
               ))}
+              
+              {/* Şubelerimiz Dropdown */}
+              <div className="relative group py-2 cursor-pointer transition-colors hover:text-dilim-siyah">
+                <div className="flex items-center gap-1">
+                  Şubelerimiz
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="opacity-70 group-hover:rotate-180 transition-transform duration-300"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </div>
+                <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-dilim-portakal transition-all duration-300 ease-out group-hover:w-full"></span>
+                
+                {/* Dropdown Menu */}
+                <div className="absolute top-full left-0 mt-2 w-48 bg-white border border-gray-100 shadow-xl rounded-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 flex flex-col overflow-hidden">
+                  <Link href="/subelerimiz/kavacik" className="px-4 py-3 hover:bg-orange-50 hover:text-dilim-portakal transition-colors border-b border-gray-50 flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+                    Kavacık
+                  </Link>
+                  <Link href="/subelerimiz/umraniye" className="px-4 py-3 hover:bg-orange-50 hover:text-dilim-portakal transition-colors flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+                    Ümraniye
+                  </Link>
+                </div>
+              </div>
             </nav>
           </div>
           <div className="flex items-center gap-2 sm:gap-4">
@@ -160,6 +181,27 @@ export const Header = () => {
                     </Link>
                   </motion.div>
                 ))}
+                
+                {/* Mobile Şubelerimiz */}
+                <motion.div
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: navLinks.length * 0.1 }}
+                >
+                  <div className="text-xl tracking-tight block w-full border-b border-gray-100/50 pb-4 text-dilim-siyah font-bold">
+                    Şubelerimiz
+                    <div className="flex flex-col gap-3 mt-4 ml-4">
+                      <Link href="/subelerimiz/kavacik" onClick={() => setIsMobileMenuOpen(false)} className="text-lg text-gray-600 hover:text-dilim-portakal flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+                        Kavacık Şubesi
+                      </Link>
+                      <Link href="/subelerimiz/umraniye" onClick={() => setIsMobileMenuOpen(false)} className="text-lg text-gray-600 hover:text-dilim-portakal flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+                        Ümraniye Şubesi
+                      </Link>
+                    </div>
+                  </div>
+                </motion.div>
               </div>
 
               <div className="p-6 border-t border-gray-100/50 bg-gray-50/50">

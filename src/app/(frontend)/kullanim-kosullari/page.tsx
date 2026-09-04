@@ -15,8 +15,8 @@ export default function KullanimKosullari() {
         <h2 className="text-xl font-bold text-dilim-siyah mt-8 mb-4">3. Fikri Mülkiyet Hakları</h2>
         <p>Sitede yer alan ünvan, işletme adı, marka, patent, logo, tasarım, bilgi ve yöntem gibi tescilli veya tescilsiz tüm fikri mülkiyet hakları site işleteni ve sahibi firmaya veya belirtilen ilgilisine aittir. İzinsiz kopyalanamaz ve kullanılamaz.</p>
         
-        <h2 className="text-xl font-bold text-dilim-siyah mt-8 mb-4">4. Sorumluluğun Sınırlandırılması</h2>
-        <p>Şirket, Siteye erişilmesi veya Sitenin kullanılması nedeniyle doğabilecek doğrudan ya da dolaylı hiçbir zarardan sorumlu tutulamaz.</p>
+        <h2 className="text-xl font-bold text-dilim-siyah mt-8 mb-4">4. Sorumluluğun Sınırlandırılması ve Görseller</h2>
+        <p>Şirket, Siteye erişilmesi veya Sitenin kullanılması nedeniyle doğabilecek doğrudan ya da dolaylı hiçbir zarardan sorumlu tutulamaz. Ayrıca, site üzerinde yer alan tüm ürün görselleri temsilidir. Ürünler el yapımı olduğundan süsleme, renk, boyut ve meyve dizilimi gibi detaylarda teslim edilen ürün ile sitedeki görsel arasında ufak farklılıklar meydana gelebilir.</p>
       </div>
     </div>
   )

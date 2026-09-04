@@ -189,6 +189,16 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
                 }))}
               />
 
+              {/* Legal Disclaimer */}
+              <div className="mt-6 p-4 rounded-xl bg-orange-50/50 border border-orange-100/50 flex items-start gap-3">
+                <svg className="w-5 h-5 text-dilim-portakal/70 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <p className="text-xs text-gray-500 leading-relaxed">
+                  <strong className="font-semibold text-gray-700">Görseller temsilidir.</strong> Tüm ürünlerimiz ustalarımız tarafından günlük ve el yapımı olarak özenle hazırlandığı için süsleme, taze meyve dizilimi ve genel sunumda görselle ufak farklılıklar gösterebilir.
+                </p>
+              </div>
+
               {/* Features List */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-8 border-t border-gray-100 mt-10">
                 <div className="flex items-center gap-3 text-gray-700">

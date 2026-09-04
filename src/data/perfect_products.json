@@ -1,0 +1,292 @@
+[
+  {
+    "name": "CEVİZLİ BAKLAVA",
+    "unit": "KG",
+    "price": 1600.0
+  },
+  {
+    "name": "ÇATAL",
+    "unit": "AD",
+    "price": 50.0
+  },
+  {
+    "name": "VEZİR PARMAĞI",
+    "unit": "KG",
+    "price": 1600.0
+  },
+  {
+    "name": "AY ÇÖREĞİ",
+    "unit": "AD",
+    "price": 70.0
+  },
+  {
+    "name": "EKLER",
+    "unit": "KG",
+    "price": 1400.0
+  },
+  {
+    "name": "UN KURABİYESİ",
+    "unit": "KG",
+    "price": 95.0
+  },
+  {
+    "name": "FINDIKLI GÜLLAÇ",
+    "unit": "KG",
+    "price": 1000.0
+  },
+  {
+    "name": "İRAN POĞAÇASI",
+    "unit": "AD",
+    "price": 180.0
+  },
+  {
+    "name": "FISTIKLI BAKLAVA",
+    "unit": "KG",
+    "price": 2150.0
+  },
+  {
+    "name": "EMİLİ",
+    "unit": "AD",
+    "price": 180.0
+  },
+  {
+    "name": "FISTIKLI GÜLLAÇ",
+    "unit": "KG",
+    "price": 1200.0
+  },
+  {
+    "name": "PONÇİK",
+    "unit": "AD",
+    "price": 160.0
+  },
+  {
+    "name": "HAVUÇ DİLİM",
+    "unit": "KG",
+    "price": 2300.0
+  },
+  {
+    "name": "PRÜZYEN",
+    "unit": "AD",
+    "price": 180.0
+  },
+  {
+    "name": "KİLOLUK PROFİTEROL",
+    "unit": "KG",
+    "price": 1400.0
+  },
+  {
+    "name": "CUPCAKE",
+    "unit": "AD",
+    "price": 240.0
+  },
+  {
+    "name": "KÜÇÜK PİZZA",
+    "unit": "KG",
+    "price": 1200.0
+  },
+  {
+    "name": "TAHİNLİ ÇÖREK",
+    "unit": "AD",
+    "price": 250.0
+  },
+  {
+    "name": "MİDYE",
+    "unit": "KG",
+    "price": 2500.0
+  },
+  {
+    "name": "ISLAK KEK",
+    "unit": "AD",
+    "price": 850.0
+  },
+  {
+    "name": "PETİFÜR ÇEŞİTLERİ",
+    "unit": "KG",
+    "price": 1400.0
+  },
+  {
+    "name": "HAVUÇLU KEK",
+    "unit": "AD",
+    "price": 850.0
+  },
+  {
+    "name": "SARAY SARMASI",
+    "unit": "KG",
+    "price": 1600.0
+  },
+  {
+    "name": "MEKİK KEK",
+    "unit": "KG",
+    "price": 1500.0
+  },
+  {
+    "name": "SARI BURMA",
+    "unit": "KG",
+    "price": 2150.0
+  },
+  {
+    "name": "MAKARON",
+    "unit": "KG",
+    "price": 2300.0
+  },
+  {
+    "name": "SÜTLÜ NURİYE",
+    "unit": "KG",
+    "price": 1600.0
+  },
+  {
+    "name": "ŞEKERPARE",
+    "unit": "KG",
+    "price": 950.0
+  },
+  {
+    "name": "AŞURE",
+    "unit": "AD",
+    "price": 400.0
+  },
+  {
+    "name": "ŞÖBİYET",
+    "unit": "KG",
+    "price": 2200.0
+  },
+  {
+    "name": "KAZANDİBİ",
+    "unit": "AD",
+    "price": 325.0
+  },
+  {
+    "name": "TATLI KURABIYE",
+    "unit": "KG",
+    "price": 1450.0
+  },
+  {
+    "name": "KEŞKÜL",
+    "unit": "AD",
+    "price": 325.0
+  },
+  {
+    "name": "SAKALLI",
+    "unit": "KG",
+    "price": 1300.0
+  },
+  {
+    "name": "MEYVELI CAM KASELER",
+    "unit": "AD",
+    "price": 375.0
+  },
+  {
+    "name": "TEL KADAYIF(CEVİZLİ)",
+    "unit": "KG",
+    "price": 1600.0
+  },
+  {
+    "name": "PROFITEROL",
+    "unit": "AD",
+    "price": 350.0
+  },
+  {
+    "name": "TEL KADAYIF(FISTIKLI)",
+    "unit": "KG",
+    "price": 2150.0
+  },
+  {
+    "name": "SUPANGLE",
+    "unit": "AD",
+    "price": 300.0
+  },
+  {
+    "name": "TUZLU KURABIYE",
+    "unit": "KG",
+    "price": 1200.0
+  },
+  {
+    "name": "SÜTLAÇ",
+    "unit": "AD",
+    "price": 325.0
+  },
+  {
+    "name": "SOĞUK BAKLAVA",
+    "unit": "KG",
+    "price": 1800.0
+  },
+  {
+    "name": "TAVUK GÖĞSÜ",
+    "unit": "AD",
+    "price": 325.0
+  },
+  {
+    "name": "MAGNOLYA",
+    "unit": "AD",
+    "price": 375.0
+  },
+  {
+    "name": "0 NO'LU PASTALAR",
+    "unit": "AD",
+    "price": 1450.0
+  },
+  {
+    "name": "1 NO'LU PASTALAR",
+    "unit": "AD",
+    "price": 1850.0
+  },
+  {
+    "name": "2 NO'LU PASTALAR",
+    "unit": "AD",
+    "price": 2150.0
+  },
+  {
+    "name": "TEK PASTALAR",
+    "unit": "AD",
+    "price": 360.0
+  },
+  {
+    "name": "HAMUR KAPLAMA TEK PASTA",
+    "unit": "AD",
+    "price": 575.0
+  },
+  {
+    "name": "MİLFÖY",
+    "unit": "AD",
+    "price": 350.0
+  },
+  {
+    "name": "MUZLU RULO",
+    "unit": "AD",
+    "price": 325.0
+  },
+  {
+    "name": "TRALİÇE",
+    "unit": "AD",
+    "price": 325.0
+  },
+  {
+    "name": "CHEESECAKE(DİLİM)",
+    "unit": "AD",
+    "price": 400.0
+  },
+  {
+    "name": "DUBAİ ÇİKOLATASI",
+    "unit": "AD",
+    "price": 600.0
+  },
+  {
+    "name": "350",
+    "unit": "ADET",
+    "price": 1750.0
+  },
+  {
+    "name": "235",
+    "unit": "ADET",
+    "price": 1175.0
+  },
+  {
+    "name": "325",
+    "unit": "ADET",
+    "price": 1625.0
+  },
+  {
+    "name": "200",
+    "unit": "ADET",
+    "price": 1000.0
+  }
+]
