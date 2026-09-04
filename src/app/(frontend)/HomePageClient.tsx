@@ -31,11 +31,10 @@ export default function HomePageClient({ homepageData, instagramData }: { homepa
         >
           <Image 
             src={(typeof homepageData?.heroImage === 'object' && homepageData?.heroImage?.url) ? homepageData.heroImage.url : "/generated/hero_cake_4k.png"} 
-            alt="Dilim Pastaneleri Premium Yaş Pasta" 
+            alt="Kavacık ve Ümraniye'ye Teslimat - Dilim Pastaneleri Yaş Pasta Siparişi" 
             fill
             priority
-            quality={100}
-            unoptimized
+            quality={85}
             className="object-cover"
           />
         </motion.div>

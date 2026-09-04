@@ -3,8 +3,8 @@ import configPromise from '@payload-config'
 import IletisimClient from './IletisimClient'
 
 export const metadata = {
-  title: 'İletişim | Dilim Pastaneleri',
-  description: 'Bizimle iletişime geçin. Şubelerimiz, adres bilgilerimiz ve telefon numaralarımız.',
+  title: 'İletişim & Şubelerimiz | Kavacık, Ümraniye Pastane - Dilim Pastaneleri',
+  description: 'Dilim Pastaneleri Kavacık ve Ümraniye şube adresleri, telefon numaraları, çalışma saatleri ve yol tarifi. Pasta siparişi için bize ulaşın.',
 }
 
 export const revalidate = 3600 // ISR

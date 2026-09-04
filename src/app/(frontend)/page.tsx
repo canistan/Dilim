@@ -4,8 +4,8 @@ import HomePageClient from './HomePageClient'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: "Dilim Pastaneleri | Lezzetin Adresi",
-  description: "Özel anlarınıza eşlik eden eşsiz tatlar. Lüks yaş pasta, özel gün pastası ve geleneksel tatlılar için Dilim Pastaneleri.",
+  title: "Dilim Pastaneleri | Kavacık & Ümraniye'nin En İyi Pastanesi",
+  description: "Kavacık ve Ümraniye'de yaş pasta, doğum günü pastası, nişan pastası siparişi verin. 1977'den beri İstanbul Anadolu Yakası'nda butik pasta üretimi. Aynı gün teslimat.",
 }
 
 // Next.js ISR

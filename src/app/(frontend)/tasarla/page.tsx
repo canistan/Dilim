@@ -5,8 +5,8 @@ import { getPayload } from 'payload'
 import configPromise from '@/payload.config'
 
 export const metadata = {
-  title: 'Kendi Pastanı Tasarla | Dilim Pastaneleri',
-  description: 'Hayalinizdeki pastayı adım adım tasarlayın. Dilim kalitesiyle en özel günlerinizi taçlandırın.',
+  title: 'Kendi Pastanı Tasarla | Kavacık & Ümraniye Özel Tasarım Pasta - Dilim',
+  description: 'Hayalinizdeki doğum günü pastasını, nişan pastasını veya özel gün pastasını adım adım tasarlayın. Kavacık ve Ümraniye\'ye aynı gün teslimat.',
 }
 
 export default async function TasarlaPage() {

@@ -6,7 +6,7 @@ import configPromise from '@payload-config'
 import STATIC_BLOGS from '@/data/blog.json'
 
 export const metadata = {
-  title: 'Blog & Öneriler | Dilim Pastaneleri',
+  title: 'Pasta & Tatlı Blogu | Pastacılık Rehberi - Dilim Pastaneleri',
   description: 'Pastacılık sırları, doğum günü partisi tavsiyeleri, nişan pastası trendleri ve en lezzetli tatlıların arkasındaki hikayeler.',
 }
 
@@ -160,6 +160,51 @@ export default async function BlogPage() {
           </div>
         </div>
       </section>
+
+      {/* Structured Data for FAQ */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "Siparişim ne zaman teslim edilir?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Siparişleriniz, seçtiğiniz tarihte ve saat diliminde özel soğutmalı araçlarımızla tazeliğini koruyarak teslim edilir. Aynı gün teslimat seçeneklerimiz için müşteri hizmetlerimizle iletişime geçebilirsiniz."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Özel tasarım (3D, figürlü, resimli) pasta yapıyor musunuz?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Evet, hayalinizdeki her türlü pastayı gerçeğe dönüştürüyoruz. Dilediğiniz konsept, figür veya fotoğrafı pastanıza uygulayabiliriz. Detaylar için menüdeki 'Kendi Pastanı Tasarla' bölümünü kullanabilirsiniz."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Hangi bölgelere teslimatınız var?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Şu an için öncelikli olarak Kavacık, Beykoz ve Ümraniye çevrelerine kendi özel araçlarımızla kusursuz teslimat sağlıyoruz. Diğer bölgeler için bizimle iletişime geçerek anında bilgi alabilirsiniz."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Ürünlerinizde katkı maddesi kullanılıyor mu?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Kesinlikle hayır. 1977'den gelen kalite mirasımız gereği tüm pastalarımızda ve tatlılarımızda en taze, 1. sınıf ve doğal malzemeler kullanıyoruz. Fabrikasyon değil, butik ve günlük üretim yapıyoruz."
+                }
+              }
+            ]
+          })
+        }}
+      />
     </div>
   )
 }

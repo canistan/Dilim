@@ -86,13 +86,17 @@ export const Footer = ({ contactSettings }: { contactSettings?: any }) => {
             <h4 className="text-lg font-bold mb-6 text-white tracking-wide">Hızlı Linkler</h4>
             <ul className="space-y-3 text-sm text-white/80 font-medium">
               <li><Link href="/" className="hover:text-white transition-all duration-300">Ana Sayfa</Link></li>
-              <li><Link href="/menu" className="hover:text-white transition-all duration-300">Menü</Link></li>
               <li><Link href="/urunler" className="hover:text-white transition-all duration-300">Ürünlerimiz</Link></li>
               <li><Link href="/hakkimizda" className="hover:text-white transition-all duration-300">Hakkımızda</Link></li>
               <li><Link href="/iletisim" className="hover:text-white transition-all duration-300">İletişim</Link></li>
-              <li><Link href="/sss" className="hover:text-white transition-all duration-300">Sıkça Sorulan Sorular</Link></li>
               <li><Link href="/tasarla" className="hover:text-white transition-all duration-300">Kendi Pastanı Tasarla</Link></li>
               <li><Link href="/blog" className="hover:text-white transition-all duration-300">Blog</Link></li>
+            </ul>
+            
+            <h4 className="text-lg font-bold mt-8 mb-4 text-white tracking-wide">Şubelerimiz</h4>
+            <ul className="space-y-3 text-sm text-white/80 font-medium">
+              <li><Link href="/subelerimiz/kavacik" className="hover:text-white transition-all duration-300">Kavacık Şubesi</Link></li>
+              <li><Link href="/subelerimiz/umraniye" className="hover:text-white transition-all duration-300">Ümraniye Şubesi</Link></li>
             </ul>
           </div>
 

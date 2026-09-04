@@ -24,8 +24,8 @@ export const metadata: Metadata = {
   alternates: {
     canonical: '/',
   },
-  title: "Dilim Pastaneleri | Lezzetin Adresi",
-  description: "Özel anlarınıza eşlik eden eşsiz tatlar. Lüks yaş pasta, özel gün pastası ve geleneksel tatlılar için Dilim Pastaneleri.",
+  title: "Dilim Pastaneleri | Kavacık & Ümraniye Pasta Siparişi",
+  description: "Kavacık ve Ümraniye'de yaş pasta, doğum günü pastası, özel tasarım pasta siparişi. 1977'den beri taze ve doğal malzemelerle üretim. Aynı gün teslimat.",
   icons: {
     icon: "/icon.png",
     apple: "/icon.png",
@@ -111,29 +111,88 @@ export default async function FrontendLayout({
                   "@type": "Bakery",
                   "@id": "https://www.dilim.com.tr/#bakery-kavacik",
                   "name": "Dilim Pastaneleri - Kavacık",
+                  "alternateName": "Dilim Pasta Cafe Restoran",
                   "url": "https://www.dilim.com.tr",
-                  "image": "https://www.dilim.com.tr/urunler_yas_pasta.png",
-                  "telephone": "+905059638021",
+                  "hasMap": "https://maps.google.com/?cid=16198642051939109480",
+                  "image": "https://www.dilim.com.tr/dilim-kavacik-sube.jpg",
+                  "telephone": "+902164256114",
+                  "priceRange": "₺₺",
+                  "servesCuisine": ["Pasta", "Yaş Pasta", "Tatlı", "Börek", "Cafe"],
+                  "menu": "https://www.dilim.com.tr/urunler",
+                  "acceptsReservations": false,
                   "address": {
                     "@type": "PostalAddress",
-                    "streetAddress": "Rüzgarlıbahçe Mah. Cumhuriyet Cad. Acarlar İş Merkezi",
+                    "streetAddress": "Rüzgarlıbahçe, Cumhuriyet Cd. No:10 (Acarlar Plaza)",
                     "addressLocality": "Beykoz",
+                    "postalCode": "34805",
                     "addressRegion": "İstanbul",
                     "addressCountry": "TR"
+                  },
+                  "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 41.0948546,
+                    "longitude": 29.0985319
+                  },
+                  "openingHoursSpecification": [
+                    {
+                      "@type": "OpeningHoursSpecification",
+                      "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],
+                      "opens": "08:00",
+                      "closes": "23:30"
+                    }
+                  ],
+                  "areaServed": [
+                    { "@type": "City", "name": "Kavacık" },
+                    { "@type": "City", "name": "Beykoz" },
+                    { "@type": "City", "name": "Acarkent" }
+                  ],
+                  "aggregateRating": {
+                    "@type": "AggregateRating",
+                    "ratingValue": "3.8",
+                    "reviewCount": "307"
                   }
                 },
                 {
                   "@type": "Bakery",
                   "@id": "https://www.dilim.com.tr/#bakery-umraniye",
                   "name": "Dilim Pastaneleri - Ümraniye",
+                  "alternateName": "Dilim Pasta & Cafe",
                   "url": "https://www.dilim.com.tr",
-                  "image": "https://www.dilim.com.tr/urunler_yas_pasta.png",
-                  "telephone": "+905059638021",
+                  "hasMap": "https://maps.google.com/?cid=5071191567119623373",
+                  "image": "https://www.dilim.com.tr/dilim-umraniye-sube.jpg",
+                  "telephone": "+902166325731",
+                  "priceRange": "₺₺",
+                  "servesCuisine": ["Pasta", "Yaş Pasta", "Tatlı", "Börek", "Cafe"],
+                  "menu": "https://www.dilim.com.tr/urunler",
+                  "acceptsReservations": false,
                   "address": {
                     "@type": "PostalAddress",
+                    "streetAddress": "İnkılap, Adem Yavuz Cd. 1/4",
                     "addressLocality": "Ümraniye",
+                    "postalCode": "34766",
                     "addressRegion": "İstanbul",
                     "addressCountry": "TR"
+                  },
+                  "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 41.032473,
+                    "longitude": 29.103323
+                  },
+                  "openingHoursSpecification": [
+                    {
+                      "@type": "OpeningHoursSpecification",
+                      "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],
+                      "opens": "08:00",
+                      "closes": "23:30"
+                    }
+                  ],
+                  "areaServed": [
+                    { "@type": "City", "name": "Ümraniye" }
+                  ],
+                  "aggregateRating": {
+                    "@type": "AggregateRating",
+                    "ratingValue": "3.7",
+                    "reviewCount": "532"
                   }
                 },
                 {

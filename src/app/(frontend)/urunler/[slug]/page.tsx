@@ -35,7 +35,17 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
   return {
     title: product.meta?.title || `${product.title} | Dilim Pastaneleri`,
-    description: product.meta?.description || product.description || `${product.title} siparişi verin. Günlük taze malzemelerle hazırlanan lüks lezzetler.`,
+    description: product.meta?.description || product.description || `${product.title} siparişi - Kavacık ve Ümraniye'ye aynı gün teslimat. Günlük taze malzemelerle hazırlanan lüks pasta siparişi.`,
+    alternates: {
+      canonical: `https://www.dilim.com.tr/urunler/${slug}`,
+    },
+    openGraph: {
+      title: `${product.title} | Dilim Pastaneleri`,
+      description: product.meta?.description || `${product.title} siparişi. Kavacık ve Ümraniye'ye taze teslimat.`,
+      url: `https://www.dilim.com.tr/urunler/${slug}`,
+      images: product.images?.[0]?.url ? [{ url: `https://www.dilim.com.tr${product.images[0].url}` }] : [],
+      type: 'website',
+    },
   }
 }
 

@@ -157,6 +157,17 @@ export const Products: CollectionConfig = {
       type: 'relationship',
       relationTo: 'categories' as any,
     },
+    {
+      name: 'meta',
+      type: 'group',
+      label: 'SEO',
+      admin: { position: 'sidebar' },
+      fields: [
+        { name: 'title', type: 'text', label: 'Meta Title' },
+        { name: 'description', type: 'textarea', label: 'Meta Açıklama' },
+        { name: 'keywords', type: 'text', label: 'Anahtar Kelimeler' },
+      ],
+    },
 
   ],
 }

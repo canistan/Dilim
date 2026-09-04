@@ -194,7 +194,15 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
               "@type": "Person",
               "name": staticBlog?.author || 'Dilim Pastaneleri',
               "url": "https://www.dilim.com.tr"
-            }]
+            }],
+            "publisher": {
+              "@type": "Organization",
+              "name": "Dilim Pastaneleri",
+              "logo": {
+                "@type": "ImageObject",
+                "url": "https://www.dilim.com.tr/DilimPastLogo-final.png"
+              }
+            }
           })
         }}
       />

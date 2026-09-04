@@ -4,8 +4,8 @@ import ProductsClient from './ProductsClient'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Ürünlerimiz | Dilim Pastaneleri',
-  description: 'Tüm yaş pasta, özel gün pastası ve tatlı çeşitlerimizi inceleyin.',
+  title: 'Pasta Çeşitleri | Kavacık & Ümraniye Pasta Siparişi - Dilim Pastaneleri',
+  description: 'Yaş pasta, doğum günü pastası, nişan pastası, çikolatalı pasta ve tüm tatlı çeşitleri. Kavacık ve Ümraniye\'ye aynı gün teslimat.',
 }
 
 // Next.js ISR (Incremental Static Regeneration) - 1 saatte bir yenile
