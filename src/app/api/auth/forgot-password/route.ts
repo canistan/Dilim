@@ -17,7 +17,7 @@ export async function POST(req: Request) {
     const token = await payload.forgotPassword({
       collection: 'customers' as any,
       data: { email },
-      disableEmail: !process.env.SMTP_HOST,
+      disableEmail: false,
     })
 
     if (!token) {
@@ -25,10 +25,9 @@ export async function POST(req: Request) {
       return NextResponse.json({ success: true, simulatedToken: null })
     }
 
-    // SMTP ayarları yoksa sunum simülasyonu için token gönderilir, varsa gerçek maile gidilir
     return NextResponse.json({ 
-      success: true, 
-      simulatedToken: process.env.SMTP_HOST ? null : token 
+      success: true,
+      message: 'Şifre sıfırlama e-postası gönderildi.'
     })
 
   } catch (error: any) {

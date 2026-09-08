@@ -32,14 +32,6 @@ export default function ForgotPasswordPage() {
       if (data.success) {
         setSuccess(true)
         toast.success('Şifre sıfırlama bağlantısı gönderildi.')
-        
-        // SUNUM SİMÜLASYONU (Canlıda kaldırılıp sadece başarılı mesajı gösterilecek)
-        if (data.simulatedToken) {
-          setTimeout(() => {
-            toast('Simülasyon: Maile tıkladığınız varsayılarak yönlendiriliyorsunuz...', { icon: '🤖', duration: 4000 })
-            router.push(`/sifre-sifirla?token=${data.simulatedToken}`)
-          }, 3000)
-        }
       } else {
         toast.error(data.error || 'Bir hata oluştu.')
         setLoading(false)
