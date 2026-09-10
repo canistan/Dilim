@@ -217,7 +217,7 @@ export async function POST(req: Request) {
     host = host.endsWith('/') ? host.slice(0, -1) : host;
     
     // Geliştirme ortamında (localhost) Iyzico'yu atla ve direkt başarılı say.
-    if (process.env.NODE_ENV !== 'production' || host.includes('localhost')) {
+    if (process.env.NODE_ENV !== 'production') {
       await payload.update({
         collection: 'orders',
         id: order.id,

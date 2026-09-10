@@ -94,6 +94,9 @@ export default buildConfig({
   ],
   globals: [Homepage, BirthdayCampaign, About, CustomCakeOptions, ContactSettings, InstagramFeedConfig],
   editor: lexicalEditor(),
+  graphQL: { disable: true },
+  cors: ['https://dilim.com.tr', 'https://www.dilim.com.tr', 'http://localhost:3000'],
+  csrf: ['https://dilim.com.tr', 'https://www.dilim.com.tr', 'http://localhost:3000'],
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
