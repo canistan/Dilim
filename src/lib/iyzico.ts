@@ -2,8 +2,8 @@
 import Iyzipay from 'iyzipay';
 
 export const iyzipay = new Iyzipay({
-  apiKey: process.env.IYZICO_API_KEY || '',
-  secretKey: process.env.IYZICO_SECRET_KEY || '',
+  apiKey: process.env.IYZICO_API_KEY || 'dummy_api_key_to_pass_build',
+  secretKey: process.env.IYZICO_SECRET_KEY || 'dummy_secret_key_to_pass_build',
   uri: process.env.IYZICO_URI || 'https://api.iyzipay.com',
 });
 
