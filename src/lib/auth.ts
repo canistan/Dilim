@@ -76,17 +76,42 @@ export const authOptions: AuthOptions = {
   callbacks: {
     async signIn({ user, account, profile }) {
       try {
-        const url = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
-        await fetch(`${url}/api/sync-customer`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            email: user.email,
-            name: user.name,
-            provider: account?.provider,
-            providerAccountId: account?.providerAccountId
-          })
-        });
+        const payload = await getPayload({ config: configPromise });
+        const email = user.email;
+        const name = user.name;
+        const provider = account?.provider;
+        const providerAccountId = account?.providerAccountId;
+
+        if (email) {
+          const existingCustomers = await payload.find({
+            collection: 'customers' as any,
+            where: { email: { equals: email } },
+            overrideAccess: true,
+          });
+
+          if (existingCustomers.docs.length === 0) {
+            await payload.create({
+              collection: 'customers' as any,
+              data: {
+                name: name || email.split('@')[0],
+                email: email,
+                provider: provider || 'credentials',
+                providerAccountId: providerAccountId || '',
+              },
+              overrideAccess: true,
+            });
+          } else if (provider !== 'credentials' && !existingCustomers.docs[0].providerAccountId) {
+            await payload.update({
+              collection: 'customers' as any,
+              id: existingCustomers.docs[0].id,
+              data: {
+                provider: provider,
+                providerAccountId: providerAccountId,
+              },
+              overrideAccess: true,
+            });
+          }
+        }
       } catch (e) {
         console.error("Müşteri senkronizasyon hatası:", e);
       }
