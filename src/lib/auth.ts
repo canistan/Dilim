@@ -96,5 +96,5 @@ export const authOptions: AuthOptions = {
       return session;
     }
   },
-  secret: process.env.NEXTAUTH_SECRET || "dilim_secret_key_123_test_only",
+  secret: process.env.NEXTAUTH_SECRET,
 };

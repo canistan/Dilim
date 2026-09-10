@@ -2,9 +2,9 @@
 import Iyzipay from 'iyzipay';
 
 export const iyzipay = new Iyzipay({
-  apiKey: process.env.IYZICO_API_KEY || 'sandbox-pF6JPex6gGBfpAWiHeXPomDJVBEr4RCs',
-  secretKey: process.env.IYZICO_SECRET_KEY || 'sandbox-ARBM7yLcE2ndXcHwwY7nDtmJQOyz9WTJ',
-  uri: process.env.IYZICO_URI || 'https://sandbox-api.iyzipay.com',
+  apiKey: process.env.IYZICO_API_KEY || '',
+  secretKey: process.env.IYZICO_SECRET_KEY || '',
+  uri: process.env.IYZICO_URI || 'https://api.iyzipay.com',
 });
 
 // Vercel NFT Workaround

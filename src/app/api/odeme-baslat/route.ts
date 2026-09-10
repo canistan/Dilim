@@ -237,16 +237,6 @@ export async function POST(req: Request) {
 
     const safeAddress = `${customerInfo.district} - ${customerInfo.address}`.padEnd(10, ' ').substring(0, 250);
 
-    // --- IYZICO IPTAL (MOCK EKRAN ICIN) ---
-    return NextResponse.json({ 
-      success: true, 
-      isMock: true,
-      amount: finalCalculatedTotal,
-      orderId: order.id,
-      orderNumber: order.orderNumber
-    });
-
-    /*
     const request = {
       locale: 'tr',
       conversationId: order.orderNumber, // hook tarafından oluşturulan numara
@@ -255,7 +245,7 @@ export async function POST(req: Request) {
       currency: 'TRY',
       basketId: order.id.toString(),
       paymentGroup: 'PRODUCT',
-      callbackUrl: `${host}/api/iyzico/callback`,
+      callbackUrl: `${host}/api/odeme-baslat/callback`,
       enabledInstallments: [2, 3, 6, 9],
       buyer: {
         id: 'BY789',
@@ -315,7 +305,6 @@ export async function POST(req: Request) {
         errorCode: result.errorCode
       }, { status: 400 })
     }
-    */
 
   } catch (error: any) {
     console.error('Ödeme başlatma hatası:', error)
