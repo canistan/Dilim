@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { sendNotificationEmail } from '../lib/hooks/sendNotificationEmail'
 
 export const ContactMessages: CollectionConfig = {
   slug: 'contact-messages',
@@ -16,6 +17,11 @@ export const ContactMessages: CollectionConfig = {
     read: ({ req: { user } }) => Boolean(user), // Sadece admin okuyabilir
     update: () => false, // Gelen mesaj sonradan değiştirilemez
     delete: ({ req: { user } }) => Boolean(user), // Sadece admin silebilir
+  },
+  hooks: {
+    afterChange: [
+      sendNotificationEmail('İletişim Mesajı')
+    ]
   },
   fields: [
     {

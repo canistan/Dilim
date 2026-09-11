@@ -60,7 +60,7 @@ export default function KvkkPage() {
 
             <h3 className="text-2xl font-bold text-dilim-siyah mt-10 mb-4">4. Haklarınız</h3>
             <p>
-              KVKK'nın 11. maddesi uyarınca veri sahibi olarak; kişisel verilerinizin işlenip işlenmediğini öğrenme, işlenmişse bilgi talep etme, eksik veya yanlış işlenmişse düzeltilmesini isteme, silinmesini talep etme haklarına sahipsiniz. Haklarınızı kullanmak için <strong>info@dilim.com.tr</strong> adresi üzerinden bizimle iletişime geçebilirsiniz.
+              KVKK'nın 11. maddesi uyarınca veri sahibi olarak; kişisel verilerinizin işlenip işlenmediğini öğrenme, işlenmişse bilgi talep etme, eksik veya yanlış işlenmişse düzeltilmesini isteme, silinmesini talep etme haklarına sahipsiniz. Haklarınızı kullanmak için <strong>destek@dilim.com.tr</strong> adresi üzerinden bizimle iletişime geçebilirsiniz.
             </p>
 
 

@@ -39,7 +39,7 @@ const dirname = path.dirname(filename)
 
 export default buildConfig({
   email: process.env.SMTP_HOST ? nodemailerAdapter({
-    defaultFromAddress: process.env.SMTP_USER || 'sosyalmedya@dilim.com.tr',
+    defaultFromAddress: process.env.SMTP_USER || 'noreply@dilim.com.tr',
     defaultFromName: 'Dilim Pastaneleri',
     transportOptions: {
       host: process.env.SMTP_HOST,

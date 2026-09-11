@@ -27,7 +27,7 @@ export const ContactSettings: GlobalConfig = {
       name: 'email',
       type: 'text',
       label: 'E-Posta Adresi',
-      defaultValue: 'info@dilim.com.tr',
+      defaultValue: 'destek@dilim.com.tr',
     },
 
     {

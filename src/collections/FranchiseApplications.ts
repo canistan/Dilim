@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { sendNotificationEmail } from '../lib/hooks/sendNotificationEmail'
 
 export const FranchiseApplications: CollectionConfig = {
   slug: 'franchise-applications',
@@ -16,6 +17,11 @@ export const FranchiseApplications: CollectionConfig = {
     read: ({ req: { user } }) => Boolean(user), // Sadece admin okuyabilir
     update: () => false,
     delete: ({ req: { user } }) => Boolean(user),
+  },
+  hooks: {
+    afterChange: [
+      sendNotificationEmail('Franchise Başvurusu')
+    ]
   },
   fields: [
     {
