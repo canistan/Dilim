@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
+import { getResetPasswordEmailHTML } from '@/lib/emailTemplates'
 
 export async function POST(req: Request) {
   try {
@@ -12,17 +13,31 @@ export async function POST(req: Request) {
 
     const payload = await getPayload({ config: configPromise })
 
-    // Payload CMS auth koleksiyonlarında yerleşik bir forgotPassword fonksiyonu vardır.
-    // Eğer SMTP_HOST ayarlanmışsa gerçek mail atılır, ayarlanmamışsa simülasyon token'ı döner.
+    // Payload'ın varsayılan e-postasını devre dışı bırak, sadece token al
     const token = await payload.forgotPassword({
       collection: 'customers' as any,
       data: { email },
-      disableEmail: false,
+      disableEmail: true, // Payload'ın çirkin varsayılan e-postasını engelle
     })
 
     if (!token) {
       // Güvenlik gereği "Kullanıcı bulunamadı" demek yerine her zaman başarılı dönüyoruz
-      return NextResponse.json({ success: true, simulatedToken: null })
+      return NextResponse.json({ success: true })
+    }
+
+    // Kendi kurumsal e-postamızı gönder
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://dilim.com.tr'
+    const resetUrl = `${siteUrl}/sifre-sifirla?token=${token}`
+
+    try {
+      await payload.sendEmail({
+        to: email,
+        subject: 'Şifre Sıfırlama - Dilim Pastaneleri',
+        html: getResetPasswordEmailHTML(resetUrl),
+      })
+    } catch (emailError) {
+      console.error('E-posta gönderme hatası:', emailError)
+      // E-posta gönderilemese bile güvenlik gereği başarılı dönüyoruz
     }
 
     return NextResponse.json({ 
@@ -33,6 +48,6 @@ export async function POST(req: Request) {
   } catch (error: any) {
     console.error('Forgot password hatası:', error)
     // Payload kullanıcı bulamazsa hata fırlatabilir, güvenlik için her zaman başarılı gibi dönüyoruz.
-    return NextResponse.json({ success: true, simulatedToken: null })
+    return NextResponse.json({ success: true })
   }
 }

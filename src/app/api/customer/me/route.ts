@@ -31,7 +31,7 @@ export async function GET() {
         email: session.user.email,
         name: session.user.name || session.user.email.split('@')[0],
         password: randomPassword,
-        provider: 'google',
+        provider: 'google', // fallback - gerçek provider auth.ts signIn callback'inde doğru set edilir
       }
       const newCustomer = await payload.create({
         collection: 'customers' as any,
