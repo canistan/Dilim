@@ -1,6 +1,6 @@
 import 'dotenv/config'
 import { getPayload } from 'payload'
-import configPromise from './src/payload.config'
+import configPromise from '@payload-config'
 import fs from 'fs'
 import path from 'path'
 

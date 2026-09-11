@@ -1,0 +1,84 @@
+{
+  "excelFirstRows": [
+    {
+      "ŞUBE ADI:                                                                                 ": "MAMÜLLER"
+    },
+    {
+      "ŞUBE ADI:                                                                                 ": "POĞAÇALAR",
+      "__EMPTY": "ADET",
+      "__EMPTY_1": "BIRIM",
+      "__EMPTY_2": "FIYAT",
+      "TARİH:                                                                                 ": "KILOLUK",
+      "__EMPTY_4": "BIRIM",
+      "__EMPTY_5": "FIYAT",
+      "__EMPTY_7": "KEKLER VE ÇÖREKLER",
+      "__EMPTY_8": "BIRIM",
+      "__EMPTY_9": "FIYAT"
+    },
+    {
+      "ŞUBE ADI:                                                                                 ": "MAYALI POĞAÇALAR",
+      "TARİH:                                                                                 ": "CEVİZLİ BAKLAVA",
+      "__EMPTY_4": "KG",
+      "__EMPTY_5": 1600,
+      "__EMPTY_7": "ÇATAL",
+      "__EMPTY_8": "AD",
+      "__EMPTY_9": 50
+    },
+    {
+      "ŞUBE ADI:                                                                                 ": "KAŞARLI POĞAÇA",
+      "__EMPTY_1": "ADET",
+      "__EMPTY_2": 45,
+      "TARİH:                                                                                 ": "VEZİR PARMAĞI",
+      "__EMPTY_4": "KG",
+      "__EMPTY_5": 1600,
+      "__EMPTY_7": "AY ÇÖREĞİ",
+      "__EMPTY_8": "AD",
+      "__EMPTY_9": 70
+    },
+    {
+      "ŞUBE ADI:                                                                                 ": "KIYMALI POĞAÇA",
+      "__EMPTY_1": "ADET",
+      "__EMPTY_2": 40,
+      "TARİH:                                                                                 ": "EKLER",
+      "__EMPTY_4": "KG",
+      "__EMPTY_5": 1400,
+      "__EMPTY_7": "UN KURABİYESİ",
+      "__EMPTY_8": "KG",
+      "__EMPTY_9": 95
+    }
+  ],
+  "excelTotalCount": 82,
+  "dbProductsCount": 56,
+  "dbProductsSample": [
+    {
+      "title": "KROKANLI PASTA",
+      "price": 0,
+      "slug": "krokanli-pasta",
+      "hasImage": false
+    },
+    {
+      "title": "MUZLU PASTA",
+      "price": 0,
+      "slug": "muzlu-pasta",
+      "hasImage": false
+    },
+    {
+      "title": "ÇİLEKLİ PASTA",
+      "price": 0,
+      "slug": "cilekli-pasta",
+      "hasImage": false
+    },
+    {
+      "title": "ÇİKOLATALI PASTA",
+      "price": 0,
+      "slug": "cikolatali-pasta",
+      "hasImage": false
+    },
+    {
+      "title": "DUBAİ ÇİKOLATASI",
+      "price": 600,
+      "slug": "dubai-ci-kolatasi",
+      "hasImage": false
+    }
+  ]
+}

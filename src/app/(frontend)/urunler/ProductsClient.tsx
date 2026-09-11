@@ -26,6 +26,7 @@ type Product = {
   images?: any[]
   hasSizes?: boolean
   sizes?: { size: string; price: number }[]
+  hasNumberSelection?: boolean
 }
 
 function ProductsClientInner({
@@ -166,7 +167,7 @@ function ProductsClientInner({
                           <Eye className="w-4 h-4" />
                           İncele
                         </Link>
-                        {product.hasSizes ? (
+                        {product.hasSizes || product.hasNumberSelection ? (
                           <button
                             onClick={() => setQuickAddProduct({
                               id: product.id,
@@ -175,7 +176,8 @@ function ProductsClientInner({
                               price: product.price,
                               image: imageToUse,
                               hasSizes: product.hasSizes,
-                              sizes: product.sizes
+                              sizes: product.sizes,
+                              hasNumberSelection: product.hasNumberSelection
                             })}
                             className="pointer-events-auto bg-dilim-portakal text-white px-5 py-3 rounded-full font-semibold text-sm flex items-center gap-2 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 hover:bg-dilim-turuncu shadow-lg"
                           >

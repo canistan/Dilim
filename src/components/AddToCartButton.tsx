@@ -13,6 +13,7 @@ type AddToCartProps = {
     image: string;
     hasSizes?: boolean;
     sizes?: { size: string; price: number }[];
+    hasNumberSelection?: boolean;
     categoryName?: string;
   }
   crossSellProducts?: {
@@ -26,6 +27,7 @@ type AddToCartProps = {
 export function AddToCartButton({ product, description, crossSellProducts = [] }: AddToCartProps) {
   const [quantity, setQuantity] = useState(1)
   const [selectedSize, setSelectedSize] = useState<string | null>(null)
+  const [selectedNumber, setSelectedNumber] = useState<number | null>(null)
   const [note, setNote] = useState('')
   const [showError, setShowError] = useState(false)
   
@@ -52,6 +54,12 @@ export function AddToCartButton({ product, description, crossSellProducts = [] }
       return;
     }
 
+    if (product.hasNumberSelection && selectedNumber === null) {
+      setShowError(true);
+      toast.error('Lütfen sepete eklemeden önce bir rakam seçiniz.');
+      return;
+    }
+
     // Sepete ana ürünü ekle
     let finalId = product.id;
     let finalPrice = product.price;
@@ -60,10 +68,16 @@ export function AddToCartButton({ product, description, crossSellProducts = [] }
     if (product.hasSizes && selectedSize && product.sizes) {
       const sizeObj = product.sizes.find(s => s.size === selectedSize);
       if (sizeObj) {
-        finalId = `${product.id}-${selectedSize.replace(/\\s+/g, '-')}`;
+        finalId = `${product.id}-${selectedSize.replace(/\s+/g, '-')}`;
         finalPrice = `₺${sizeObj.price}`;
         optionsText = `Boyut: ${selectedSize}`;
       }
+    }
+
+    if (product.hasNumberSelection && selectedNumber !== null) {
+      finalId = `${finalId}-num-${selectedNumber}`;
+      const numText = `Seçilen Rakam: ${selectedNumber}`;
+      optionsText = optionsText ? `${optionsText} | ${numText}` : numText;
     }
 
     if (note.trim()) {
@@ -150,6 +164,33 @@ export function AddToCartButton({ product, description, crossSellProducts = [] }
                 }`}
               >
                 {s.size} <span className={`block text-xs mt-1 opacity-90 ${selectedSize === s.size ? 'text-white' : 'text-gray-400 font-normal'}`}>(₺{s.price})</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {product.hasNumberSelection && (
+        <div className={`mb-6 p-5 rounded-2xl border-2 transition-all duration-300 ${showError ? 'border-red-400 bg-red-50/50 shadow-[0_0_15px_rgba(248,113,113,0.3)]' : 'border-gray-100 bg-gray-50'}`}>
+          <h4 className="text-sm font-bold text-dilim-siyah mb-3 flex items-center justify-between">
+            <span>Rakam Seçiniz <span className="text-red-500">*</span></span>
+            {showError && <span className="text-red-500 text-xs animate-pulse font-medium">Zorunlu Seçim</span>}
+          </h4>
+          <div className="flex flex-wrap gap-2">
+            {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => (
+              <button
+                key={num}
+                onClick={() => {
+                  setSelectedNumber(num);
+                  setShowError(false);
+                }}
+                className={`w-12 h-12 rounded-xl text-lg font-bold transition-all duration-300 flex items-center justify-center ${
+                  selectedNumber === num
+                    ? 'bg-dilim-portakal text-white shadow-lg transform scale-110 border-2 border-dilim-portakal'
+                    : 'bg-white text-gray-600 border-2 border-gray-200 hover:border-dilim-portakal/50 hover:bg-orange-50'
+                }`}
+              >
+                {num}
               </button>
             ))}
           </div>

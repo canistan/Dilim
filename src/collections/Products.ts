@@ -40,6 +40,16 @@ export const Products: CollectionConfig = {
       index: true,
     },
     {
+      name: 'hasNumberSelection',
+      type: 'checkbox',
+      label: 'Bu üründe rakam seçimi var mı (0-9)?',
+      defaultValue: false,
+      admin: {
+        position: 'sidebar',
+        description: 'İşaretlenirse müşteri sepete eklerken rakam seçmek zorunda kalır.',
+      },
+    },
+    {
       name: 'hasSizes',
       type: 'checkbox',
       label: 'Bu ürün boyutlara (0, 1, 2 Numara) sahip mi?',

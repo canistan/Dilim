@@ -15,6 +15,7 @@ export type ProductForModal = {
   image: string;
   hasSizes?: boolean;
   sizes?: { size: string; price: number }[];
+  hasNumberSelection?: boolean;
 }
 
 type QuickAddModalProps = {
@@ -28,6 +29,7 @@ type QuickAddModalProps = {
 export function QuickAddModal({ product, isOpen, onClose, crossSellProducts, onAddedToCart }: QuickAddModalProps) {
   const [quantity, setQuantity] = useState(1)
   const [selectedSize, setSelectedSize] = useState<string | null>(null)
+  const [selectedNumber, setSelectedNumber] = useState<number | null>(null)
   const [showError, setShowError] = useState(false)
   const [cakeMessage, setCakeMessage] = useState('')
   const [showCrossSell, setShowCrossSell] = useState(false)
@@ -39,6 +41,7 @@ export function QuickAddModal({ product, isOpen, onClose, crossSellProducts, onA
     if (isOpen) {
       setQuantity(1)
       setSelectedSize(null)
+      setSelectedNumber(null)
       setShowError(false)
       setCakeMessage('')
       setShowCrossSell(false)
@@ -63,6 +66,12 @@ export function QuickAddModal({ product, isOpen, onClose, crossSellProducts, onA
       return;
     }
 
+    if (product.hasNumberSelection && selectedNumber === null) {
+      setShowError(true);
+      toast.error('Lütfen sepete eklemeden önce bir rakam seçiniz.');
+      return;
+    }
+
     let finalId = product.id.toString();
     let finalPrice = `₺${product.price}`;
     
@@ -76,6 +85,12 @@ export function QuickAddModal({ product, isOpen, onClose, crossSellProducts, onA
         finalPrice = `₺${sizeObj.price}`;
         optionsText = optionsText ? `Boyut: ${selectedSize} | ${optionsText}` : `Boyut: ${selectedSize}`;
       }
+    }
+
+    if (product.hasNumberSelection && selectedNumber !== null) {
+      finalId = `${finalId}-num-${selectedNumber}`;
+      const numText = `Seçilen Rakam: ${selectedNumber}`;
+      optionsText = optionsText ? `${optionsText} | ${numText}` : numText;
     }
 
     addToCart({
@@ -190,6 +205,34 @@ export function QuickAddModal({ product, isOpen, onClose, crossSellProducts, onA
                 ))}
               </div>
               {showError && <span className="text-red-500 text-xs font-medium block mt-2 animate-pulse">Lütfen sepete eklemeden önce boyut seçiniz.</span>}
+            </div>
+          )}
+
+          {/* Rakam Seçimi */}
+          {product.hasNumberSelection && (
+            <div className="mb-6 p-4 rounded-xl border border-gray-200 bg-gray-50">
+              <h4 className="text-sm font-bold text-dilim-siyah mb-3 flex items-center justify-between">
+                <span>Rakam Seçiniz <span className="text-red-500">*</span></span>
+                {showError && <span className="text-red-500 text-xs animate-pulse font-medium">Zorunlu Seçim</span>}
+              </h4>
+              <div className="flex flex-wrap gap-2">
+                {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => (
+                  <button
+                    key={num}
+                    onClick={() => {
+                      setSelectedNumber(num);
+                      setShowError(false);
+                    }}
+                    className={`w-10 h-10 rounded-xl text-base font-bold transition-all duration-300 flex items-center justify-center ${
+                      selectedNumber === num
+                        ? 'bg-dilim-portakal text-white shadow-md transform scale-110 border-2 border-dilim-portakal'
+                        : 'bg-white text-gray-600 border border-gray-200 hover:border-dilim-portakal/50 hover:bg-orange-50'
+                    }`}
+                  >
+                    {num}
+                  </button>
+                ))}
+              </div>
             </div>
           )}
 
