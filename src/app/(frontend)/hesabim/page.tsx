@@ -40,7 +40,9 @@ export default function HesabimPage() {
   const [deletingAccount, setDeletingAccount] = useState(false)
 
   // Birth Date State
-  const [birthDate, setBirthDate] = useState('')
+  const [birthDay, setBirthDay] = useState('')
+  const [birthMonth, setBirthMonth] = useState('')
+  const [birthYear, setBirthYear] = useState('')
   const [savingBirth, setSavingBirth] = useState(false)
   const [hasExistingBirthDate, setHasExistingBirthDate] = useState(false)
 
@@ -83,7 +85,9 @@ export default function HesabimPage() {
             })
             if (data.user.birthDate) {
               const date = new Date(data.user.birthDate)
-              setBirthDate(date.toISOString().split('T')[0])
+              setBirthDay(date.getDate().toString())
+              setBirthMonth((date.getMonth() + 1).toString())
+              setBirthYear(date.getFullYear().toString())
               setHasExistingBirthDate(true)
             }
             if (data.user.addresses) {
@@ -143,11 +147,16 @@ export default function HesabimPage() {
 
   const handleSaveBirthDate = async () => {
     setSavingBirth(true)
+    let formattedDate = undefined;
+    if (birthDay && birthMonth && birthYear) {
+      formattedDate = `${birthYear}-${birthMonth.padStart(2, '0')}-${birthDay.padStart(2, '0')}`;
+    }
+
     try {
       const res = await fetch('/api/customer/update', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ birthDate })
+        body: JSON.stringify({ birthDate: formattedDate })
       })
       const data = await res.json()
       if (res.ok) {
@@ -443,17 +452,44 @@ export default function HesabimPage() {
                     <div className="flex gap-4 items-end">
                       <div className="flex-1">
                         <label className="block text-sm font-semibold text-gray-700 mb-1">Doğum Tarihi</label>
-                        <input 
-                          type="date" 
-                          value={birthDate}
-                          max={maxDate}
-                          onChange={(e) => setBirthDate(e.target.value)}
-                          className="w-full p-3 border border-gray-200 rounded-xl bg-white focus:ring-2 focus:ring-dilim-portakal outline-none" 
-                        />
+                        <div className="flex gap-2">
+                          <select
+                            value={birthDay}
+                            onChange={(e) => setBirthDay(e.target.value)}
+                            className="w-full p-3 border border-gray-200 rounded-xl bg-white focus:ring-2 focus:ring-dilim-portakal outline-none appearance-none"
+                          >
+                            <option value="">Gün</option>
+                            {Array.from({ length: 31 }, (_, i) => i + 1).map(day => (
+                              <option key={day} value={day}>{day}</option>
+                            ))}
+                          </select>
+                          
+                          <select
+                            value={birthMonth}
+                            onChange={(e) => setBirthMonth(e.target.value)}
+                            className="w-full p-3 border border-gray-200 rounded-xl bg-white focus:ring-2 focus:ring-dilim-portakal outline-none appearance-none"
+                          >
+                            <option value="">Ay</option>
+                            {['Oca', 'Şub', 'Mar', 'Nis', 'May', 'Haz', 'Tem', 'Ağu', 'Eyl', 'Eki', 'Kas', 'Ara'].map((month, i) => (
+                              <option key={i} value={i + 1}>{month}</option>
+                            ))}
+                          </select>
+
+                          <select
+                            value={birthYear}
+                            onChange={(e) => setBirthYear(e.target.value)}
+                            className="w-full p-3 border border-gray-200 rounded-xl bg-white focus:ring-2 focus:ring-dilim-portakal outline-none appearance-none"
+                          >
+                            <option value="">Yıl</option>
+                            {Array.from({ length: 100 }, (_, i) => new Date().getFullYear() - i).map(year => (
+                              <option key={year} value={year}>{year}</option>
+                            ))}
+                          </select>
+                        </div>
                       </div>
                       <button 
                         onClick={handleSaveBirthDate}
-                        disabled={!birthDate || savingBirth}
+                        disabled={(!birthDay || !birthMonth || !birthYear) || savingBirth}
                         className="px-6 py-3 bg-dilim-portakal text-white font-semibold rounded-xl hover:bg-dilim-turuncu disabled:bg-gray-400 transition-colors"
                       >
                         {savingBirth ? 'Kaydediliyor...' : hasExistingBirthDate ? 'Güncelle' : 'Kaydet'}
