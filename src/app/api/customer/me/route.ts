@@ -26,12 +26,18 @@ export async function GET() {
 
     // Müşteri kaydı yoksa (eski OAuth girişlerinden kalmış), otomatik oluştur
     try {
+      const fullName = session.user.name || '';
+      const nameParts = fullName.trim().split(' ');
+      const surname = nameParts.length > 1 ? nameParts.pop() : '';
+      const firstName = nameParts.join(' ') || session.user.email.split('@')[0];
+
       const randomPassword = crypto.randomBytes(32).toString('hex')
       const createData: any = {
         email: session.user.email,
-        name: session.user.name || session.user.email.split('@')[0],
+        name: firstName,
+        surname: surname,
         password: randomPassword,
-        provider: 'google', // fallback - gerçek provider auth.ts signIn callback'inde doğru set edilir
+        provider: 'social', // fallback - gerçek provider auth.ts signIn callback'inde doğru set edilir
       }
       const newCustomer = await payload.create({
         collection: 'customers' as any,

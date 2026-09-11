@@ -79,7 +79,10 @@ export const authOptions: AuthOptions = {
       try {
         const payload = await getPayload({ config: configPromise });
         const email = user.email;
-        const name = user.name;
+        const fullName = user.name || '';
+        const nameParts = fullName.trim().split(' ');
+        const surname = nameParts.length > 1 ? nameParts.pop() : '';
+        const firstName = nameParts.join(' ') || email?.split('@')[0] || '';
         const provider = account?.provider;
         const providerAccountId = account?.providerAccountId;
 
@@ -95,7 +98,8 @@ export const authOptions: AuthOptions = {
             await payload.create({
               collection: 'customers' as any,
               data: {
-                name: name || email.split('@')[0],
+                name: firstName,
+                surname: surname,
                 email: email,
                 password: randomPassword,
                 provider: provider || 'credentials',

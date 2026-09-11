@@ -44,14 +44,23 @@ export async function POST(req: Request) {
 
     // Müşteri kaydı yoksa (eski OAuth girişlerinden kalmış olabilir), otomatik oluştur
     try {
+      const fullName = session.user.name || '';
+      const nameParts = fullName.trim().split(' ');
+      const sessionSurname = nameParts.length > 1 ? nameParts.pop() : '';
+      const sessionFirstName = nameParts.join(' ') || session.user.email.split('@')[0];
+
       const randomPassword = crypto.randomBytes(32).toString('hex')
       const createData: any = {
         email: session.user.email,
-        name: name || session.user.name || session.user.email.split('@')[0],
+        name: name || sessionFirstName,
         password: randomPassword,
-        provider: 'google',
+        provider: 'social',
       }
-      if (surname !== undefined) createData.surname = surname
+      if (surname !== undefined) {
+        createData.surname = surname
+      } else if (sessionSurname) {
+        createData.surname = sessionSurname
+      }
       if (phone !== undefined) createData.phone = phone
       if (birthDate !== undefined) createData.birthDate = birthDate ? new Date(birthDate).toISOString() : null
 
