@@ -40,7 +40,28 @@ export async function POST(req: Request) {
         return NextResponse.json({ error: 'Update failed', details: updateError?.data?.errors?.[0]?.message || updateError.message }, { status: 400 })
       }
     }
-    return NextResponse.json({ error: 'Not found' }, { status: 404 })
+
+    // Müşteri kaydı yoksa (eski OAuth girişlerinden kalmış olabilir), otomatik oluştur
+    try {
+      const createData: any = {
+        email: session.user.email,
+        name: name || session.user.name || session.user.email.split('@')[0],
+        provider: 'google',
+      }
+      if (surname !== undefined) createData.surname = surname
+      if (phone !== undefined) createData.phone = phone
+      if (birthDate !== undefined) createData.birthDate = birthDate ? new Date(birthDate).toISOString() : null
+
+      await payload.create({
+        collection: 'customers' as any,
+        data: createData,
+        overrideAccess: true,
+      })
+      return NextResponse.json({ success: true })
+    } catch (createError: any) {
+      console.error('Customer auto-create error:', createError?.data || createError)
+      return NextResponse.json({ error: 'Not found', details: 'Müşteri kaydı oluşturulamadı' }, { status: 404 })
+    }
   } catch (error: any) {
     console.error('Profil güncelleme hatası:', error?.data?.errors || error?.message || error)
     return NextResponse.json({ error: 'Server error', details: error?.message }, { status: 500 })

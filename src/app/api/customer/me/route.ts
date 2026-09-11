@@ -22,7 +22,23 @@ export async function GET() {
     if (users.docs.length > 0) {
       return NextResponse.json({ user: users.docs[0] })
     }
-    return NextResponse.json({ error: 'Not found' }, { status: 404 })
+
+    // Müşteri kaydı yoksa (eski OAuth girişlerinden kalmış), otomatik oluştur
+    try {
+      const newCustomer = await payload.create({
+        collection: 'customers' as any,
+        data: {
+          email: session.user.email,
+          name: session.user.name || session.user.email.split('@')[0],
+          provider: 'google',
+        },
+        overrideAccess: true,
+      })
+      return NextResponse.json({ user: newCustomer })
+    } catch (createError: any) {
+      console.error('Customer auto-create error:', createError?.data || createError)
+      return NextResponse.json({ error: 'Not found' }, { status: 404 })
+    }
   } catch (error: any) {
     console.error('Müşteri bilgi hatası:', error?.message || error)
     return NextResponse.json({ error: 'Server error' }, { status: 500 })
