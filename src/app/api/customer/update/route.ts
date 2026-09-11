@@ -3,6 +3,7 @@ import { getPayload } from 'payload'
 import configPromise from '@payload-config'
 import { getServerSession } from "next-auth/next"
 import { authOptions } from "@/lib/auth"
+import crypto from 'crypto'
 
 export async function POST(req: Request) {
   try {
@@ -43,9 +44,11 @@ export async function POST(req: Request) {
 
     // Müşteri kaydı yoksa (eski OAuth girişlerinden kalmış olabilir), otomatik oluştur
     try {
+      const randomPassword = crypto.randomBytes(32).toString('hex')
       const createData: any = {
         email: session.user.email,
         name: name || session.user.name || session.user.email.split('@')[0],
+        password: randomPassword,
         provider: 'google',
       }
       if (surname !== undefined) createData.surname = surname

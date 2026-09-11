@@ -4,6 +4,7 @@ import configPromise from "@payload-config";
 import GoogleProvider from "next-auth/providers/google";
 import FacebookProvider from "next-auth/providers/facebook";
 import CredentialsProvider from "next-auth/providers/credentials";
+import crypto from 'crypto';
 
 export const authOptions: AuthOptions = {
   providers: [
@@ -90,11 +91,13 @@ export const authOptions: AuthOptions = {
           });
 
           if (existingCustomers.docs.length === 0) {
+            const randomPassword = crypto.randomBytes(32).toString('hex');
             await payload.create({
               collection: 'customers' as any,
               data: {
                 name: name || email.split('@')[0],
                 email: email,
+                password: randomPassword,
                 provider: provider || 'credentials',
                 providerAccountId: providerAccountId || '',
               },

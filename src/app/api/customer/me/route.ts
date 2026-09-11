@@ -3,6 +3,7 @@ import { getPayload } from 'payload'
 import configPromise from '@payload-config'
 import { getServerSession } from "next-auth/next"
 import { authOptions } from "@/lib/auth"
+import crypto from 'crypto'
 
 export const dynamic = 'force-dynamic'
 
@@ -25,13 +26,16 @@ export async function GET() {
 
     // Müşteri kaydı yoksa (eski OAuth girişlerinden kalmış), otomatik oluştur
     try {
+      const randomPassword = crypto.randomBytes(32).toString('hex')
+      const createData: any = {
+        email: session.user.email,
+        name: session.user.name || session.user.email.split('@')[0],
+        password: randomPassword,
+        provider: 'google',
+      }
       const newCustomer = await payload.create({
         collection: 'customers' as any,
-        data: {
-          email: session.user.email,
-          name: session.user.name || session.user.email.split('@')[0],
-          provider: 'google',
-        },
+        data: createData,
         overrideAccess: true,
       })
       return NextResponse.json({ user: newCustomer })
