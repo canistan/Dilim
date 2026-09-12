@@ -53,11 +53,20 @@ export default function OdemePage() {
         .then(res => res.json())
         .then(data => {
           if (data.user) {
+            const fullName = data.user.name || session?.user?.name || '';
+            const nameParts = fullName.trim().split(' ');
+            let fallbackSurname = '';
+            let fallbackName = fullName;
+            if (nameParts.length > 1) {
+              fallbackSurname = nameParts.pop() || '';
+              fallbackName = nameParts.join(' ');
+            }
+
             setFormData(prev => ({
               ...prev,
-              firstName: data.user.name || prev.firstName,
-              lastName: data.user.surname || prev.lastName,
-              email: data.user.email || prev.email,
+              firstName: fallbackName,
+              lastName: data.user.surname || fallbackSurname,
+              email: data.user.email || session?.user?.email || prev.email,
               phone: data.user.phone || prev.phone,
             }))
             if (data.user.addresses && data.user.addresses.length > 0) {
