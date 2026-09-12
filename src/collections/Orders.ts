@@ -174,7 +174,33 @@ export const Orders: CollectionConfig = {
             } catch (e) {}
           }
 
-          // 2. SİPARİŞ DURUMU OTOMASYONU (Müşteriye bilgi maili)
+          // 2. İPTAL TALEBİ BİLDİRİMİ (Admin'e bilgi maili)
+          if (
+            doc.cancellationRequest?.requested === true && 
+            previousDoc.cancellationRequest?.requested !== true
+          ) {
+            try {
+              const cancelHtml = `
+                <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eee; border-radius: 8px;">
+                  <h2 style="color: #FF0000; text-align: center;">🚨 Yeni İptal Talebi</h2>
+                  <p><strong>Sipariş No:</strong> ${doc.orderNumber}</p>
+                  <p><strong>Müşteri:</strong> ${doc.customerInfo?.firstName} ${doc.customerInfo?.lastName}</p>
+                  <p>Müşteri bu sipariş için iptal talebi oluşturdu. Lütfen yönetici panelinden inceleyip işlemi onaylayın veya reddedin.</p>
+                  <div style="text-align: center; margin-top: 20px;">
+                    <a href="https://dilim.com.tr/admin/collections/orders/${doc.id}" style="background-color: #FF8A00; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold;">Siparişi İncele</a>
+                  </div>
+                </div>
+              `;
+              await req.payload.sendEmail({
+                to: 'cuneydsahin@dilim.com.tr',
+                from: 'noreply@dilim.com.tr',
+                subject: `🚨 İptal Talebi: ${doc.orderNumber}`,
+                html: cancelHtml
+              }).catch(e => console.error("Admin iptal talep mail gonderim hatasi", e));
+            } catch (e) {}
+          }
+
+          // 3. SİPARİŞ DURUMU OTOMASYONU (Müşteriye bilgi maili)
           if (doc.status !== previousDoc.status) {
             let subject = '';
             let message = '';
