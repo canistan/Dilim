@@ -179,7 +179,7 @@ export const Orders: CollectionConfig = {
                   html: statusHtml
                 }).catch(e => console.error("Durum maili gonderilemedi", e));
               } catch (e) {
-                req.payload.logger.error(\`Durum maili hatasi: \${doc.orderNumber}\`);
+                req.payload.logger.error(`Durum maili hatasi: ${doc.orderNumber}`);
               }
             }
           }
