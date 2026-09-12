@@ -20,7 +20,6 @@
 
 ## 🅿️ Park Edilen Konular
 - [ ] **İyzico Canlı Ortam Geçişi:** İyzico live (canlı) API anahtarlarının `.env` dosyasına tanımlanması ve entegrasyonun test edilmesi (Akşama bırakıldı).
-- [ ] **WhatsApp Link Preview Sorunu** (Kapanan sekme başlığınızdan tespit edildi, linklerin WhatsApp'ta düzgün önizlenmesi sorunu).
 - *(Hatırladığınız diğer park edilmiş konuları buraya ekleyelim)*
 
 ## ✅ Tamamlananlar

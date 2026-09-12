@@ -26,24 +26,29 @@ export default async function ProductsPage() {
     limit: 1000,
   })
 
-  // Serialize to simple objects to pass to Client Component
-  const categories = categoriesRes.docs.map((doc: any) => ({
-    id: doc.id,
-    title: doc.title,
-    slug: doc.slug,
-    image: doc.image && typeof doc.image === 'object' ? doc.image.url : null,
-  }))
-
   const products = productsRes.docs.map((doc: any) => ({
     id: doc.id,
     title: doc.title,
     slug: doc.slug,
-    price: doc.price,
+    price: doc.price || 0,
     category: doc.category,
     images: doc.images,
     hasSizes: doc.hasSizes,
     sizes: doc.sizes,
   }))
+
+  const activeCategoryIds = new Set(productsRes.docs.map((doc: any) => 
+    typeof doc.category === 'object' && doc.category !== null ? doc.category.id : doc.category
+  ))
+
+  const categories = categoriesRes.docs
+    .filter((doc: any) => activeCategoryIds.has(doc.id))
+    .map((doc: any) => ({
+      id: doc.id,
+      title: doc.title,
+      slug: doc.slug,
+      image: doc.image && typeof doc.image === 'object' ? doc.image.url : null,
+    }))
 
   const extrasCategories = await payload.find({
     collection: 'categories' as any,

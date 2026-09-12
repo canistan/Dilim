@@ -4,7 +4,7 @@ import { useState, useEffect, Suspense } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
-import { Filter, ShoppingBag, Eye } from 'lucide-react'
+import { Filter, ShoppingBag, Eye, PaintBucket } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useCart } from '@/context/CartContext'
 import { QuickAddModal } from '@/components/QuickAddModal'
@@ -167,7 +167,15 @@ function ProductsClientInner({
                           <Eye className="w-4 h-4" />
                           İncele
                         </Link>
-                        {product.hasSizes || product.hasNumberSelection ? (
+                        {product.price === 0 ? (
+                          <Link
+                            href={`/tasarla?ref=${product.slug}`}
+                            className="pointer-events-auto bg-dilim-siyah text-white px-5 py-3 rounded-full font-semibold text-sm flex items-center gap-2 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 hover:bg-gray-800 shadow-lg"
+                          >
+                            <PaintBucket className="w-4 h-4" />
+                            Tasarla
+                          </Link>
+                        ) : product.hasSizes || product.hasNumberSelection ? (
                           <button
                             onClick={() => setQuickAddProduct({
                               id: product.id,

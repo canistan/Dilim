@@ -107,16 +107,18 @@ export const authOptions: AuthOptions = {
               },
               overrideAccess: true,
             });
-          } else if (provider !== 'credentials' && !existingCustomers.docs[0].providerAccountId) {
-            await payload.update({
-              collection: 'customers' as any,
-              id: existingCustomers.docs[0].id,
-              data: {
-                provider: provider,
-                providerAccountId: providerAccountId,
-              },
-              overrideAccess: true,
-            });
+          } else if (provider !== 'credentials') {
+            const existingUser = existingCustomers.docs[0];
+            
+            // Eğer daha önceden bu sağlayıcıyla giriş yapmış ve hesap bağlanmışsa sorun yok
+            if (existingUser.provider === provider && existingUser.providerAccountId === providerAccountId) {
+              // Zaten bağlı, devam et
+            } else {
+              // GÜVENLİK (Account Takeover): Sadece e-posta eşleşmesine bakarak mevcut 
+              // hesaba otomatik bağlama YAPMIYORUZ. Eğer e-posta daha önce şifreyle 
+              // veya başka bir yöntemle alınmışsa girişi reddet ve uyar.
+              throw new Error("EmailAlreadyExists");
+            }
           }
         }
       } catch (e) {
