@@ -299,6 +299,7 @@ export async function POST(req: Request) {
       })
     } else {
       console.error("Iyzico Error:", result);
+      // Sipariş 'pending' + 'unpaid' olarak kalıyor → remarketing (terk edilmiş sepet kurtarma) için kullanılabilir
       return NextResponse.json({ 
         success: false, 
         error: result.errorMessage,
