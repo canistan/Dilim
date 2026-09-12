@@ -1,6 +1,7 @@
 import type { CollectionConfig } from 'payload'
 import { formatSlug } from '../utilities/formatSlug'
 import { auditLogAfterChange, auditLogAfterDelete } from '../hooks/auditLogHook'
+import { revalidatePath } from 'next/cache'
 
 export const Products: CollectionConfig = {
   access: {
@@ -20,8 +21,22 @@ export const Products: CollectionConfig = {
     drafts: true,
   },
   hooks: {
-    afterChange: [async (args) => auditLogAfterChange('Ürünler')(args)],
-    afterDelete: [async (args) => auditLogAfterDelete('Ürünler')(args)],
+    afterChange: [
+      async (args) => auditLogAfterChange('Ürünler')(args),
+      ({ doc }) => {
+        revalidatePath('/urunler')
+        revalidatePath('/')
+        return doc
+      }
+    ],
+    afterDelete: [
+      async (args) => auditLogAfterDelete('Ürünler')(args),
+      ({ doc }) => {
+        revalidatePath('/urunler')
+        revalidatePath('/')
+        return doc
+      }
+    ],
   },
   fields: [
     {
