@@ -8,11 +8,21 @@ const client = new Client({
 async function fix() {
   try {
     await client.connect();
-    // Payload uses enum for _status usually (draft, published), but adding it as varchar is enough to stop the crash.
-    // Let's actually check how Payload defines it, or just use payload's own push if possible.
-    // Wait, let's just add it as varchar. Payload will alter it if needed.
-    await client.query(`ALTER TABLE products ADD COLUMN _status varchar;`);
-    console.log("Added _status column");
+    
+    // Drop bad columns
+    const queries = [
+      `ALTER TABLE orders DROP COLUMN IF EXISTS "iyzicoPaymentId";`,
+      `ALTER TABLE orders DROP COLUMN IF EXISTS "refundStatus";`,
+      `ALTER TABLE orders DROP COLUMN IF EXISTS "cancellationRequest_requested";`,
+      `ALTER TABLE orders DROP COLUMN IF EXISTS "cancellationRequest_requestedAt";`,
+      `ALTER TABLE orders DROP COLUMN IF EXISTS "cancellationRequest_decision";`
+    ];
+
+    for (const q of queries) {
+      await client.query(q);
+      console.log("Executed: ", q);
+    }
+    console.log("Bad columns dropped successfully.");
   } catch (err) {
     console.error(err);
   } finally {
