@@ -164,8 +164,8 @@ export async function POST(req: Request) {
 
     try {
       await payload.sendEmail({
-        to: 'siparis@dilim.com', // Değiştirilebilir
-        from: 'sistem@dilim.com', // Değiştirilebilir
+        to: 'cuneydsahin@dilim.com.tr', // Değiştirildi
+        from: 'noreply@dilim.com.tr', // Değiştirildi
         subject: `Yeni Özel Pasta Tasarım Talebi: ${customerName}`,
         html: `
           <div style="font-family: sans-serif; line-height: 1.5; color: #333;">

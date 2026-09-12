@@ -61,21 +61,82 @@ export const Orders: CollectionConfig = {
               }
             }
             
-            // Ödeme başarılı maili gönder
+            // Ödeme başarılı maili gönder (Müşteriye)
             try {
               if (currentPayload && doc.customerInfo?.email) {
-                // await kaldirildi, arka planda gondersin, kullaniciyi bekletmesin
+                const customerHtml = `
+                  <div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #eaeaea; border-radius: 8px; overflow: hidden;">
+                    <div style="background-color: #FF8A00; padding: 20px; text-align: center;">
+                      <h1 style="color: #ffffff; margin: 0; font-size: 24px;">Dilim Pastaneleri</h1>
+                    </div>
+                    <div style="padding: 30px; background-color: #ffffff;">
+                      <h2 style="color: #333333; margin-top: 0;">Merhaba ${doc.customerInfo.firstName},</h2>
+                      <p style="color: #555555; font-size: 16px; line-height: 1.6;">
+                        <strong>${doc.orderNumber}</strong> numaralı siparişinizin ödemesi başarıyla alınmıştır.
+                      </p>
+                      <p style="color: #555555; font-size: 16px; line-height: 1.6;">
+                        Siparişiniz şu an <strong>hazırlanıyor</strong> durumundadır. Teslimat için yola çıktığında size tekrar bilgi vereceğiz.
+                      </p>
+                      <div style="margin-top: 30px; padding: 15px; background-color: #f9f9f9; border-radius: 6px;">
+                        <p style="margin: 0; color: #777777; font-size: 14px;">Bizi tercih ettiğiniz için teşekkür ederiz.</p>
+                      </div>
+                    </div>
+                  </div>
+                `;
+
                 currentPayload.sendEmail({
                   to: doc.customerInfo.email,
-                  from: 'sistem@dilim.com',
+                  from: 'noreply@dilim.com.tr',
                   subject: `Ödemeniz Alındı - Sipariş No: ${doc.orderNumber}`,
-                  html: `<div style="font-family: sans-serif; padding: 20px; line-height: 1.6;">
-                          <h2 style="color: #333;">Merhaba ${doc.customerInfo.firstName},</h2>
-                          <p>${doc.orderNumber} numaralı siparişinizin ödemesi başarıyla alınmıştır.</p>
-                          <p>Siparişiniz şu an <strong>hazırlanıyor</strong> durumundadır. Kargoya verildiğinde size tekrar bilgi vereceğiz.</p>
-                          <p>Bizi tercih ettiğiniz için teşekkür ederiz.</p>
-                        </div>`
+                  html: customerHtml
                 }).catch(e => console.error("Email gonderim hatasi", e));
+              }
+            } catch (e) {}
+
+            // Admin Alert Maili Gönder (Mağaza Yöneticisine)
+            try {
+              if (currentPayload) {
+                const adminHtml = `
+                  <div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #eaeaea; border-radius: 8px; overflow: hidden;">
+                    <div style="background-color: #1a1a1a; padding: 20px; text-align: center;">
+                      <h1 style="color: #FF8A00; margin: 0; font-size: 20px;">🚨 YENİ SİPARİŞ ALINDI</h1>
+                    </div>
+                    <div style="padding: 30px; background-color: #ffffff;">
+                      <table style="width: 100%; border-collapse: collapse;">
+                        <tr>
+                          <td style="padding: 10px 0; border-bottom: 1px solid #eee;"><strong>Sipariş No:</strong></td>
+                          <td style="padding: 10px 0; border-bottom: 1px solid #eee;">${doc.orderNumber}</td>
+                        </tr>
+                        <tr>
+                          <td style="padding: 10px 0; border-bottom: 1px solid #eee;"><strong>Müşteri:</strong></td>
+                          <td style="padding: 10px 0; border-bottom: 1px solid #eee;">${doc.customerInfo?.firstName} ${doc.customerInfo?.lastName}</td>
+                        </tr>
+                        <tr>
+                          <td style="padding: 10px 0; border-bottom: 1px solid #eee;"><strong>Telefon:</strong></td>
+                          <td style="padding: 10px 0; border-bottom: 1px solid #eee;">${doc.customerInfo?.phone}</td>
+                        </tr>
+                        <tr>
+                          <td style="padding: 10px 0; border-bottom: 1px solid #eee;"><strong>Tutar:</strong></td>
+                          <td style="padding: 10px 0; border-bottom: 1px solid #eee;">${doc.totalAmount} TL</td>
+                        </tr>
+                        <tr>
+                          <td style="padding: 10px 0; border-bottom: 1px solid #eee;"><strong>İlçe:</strong></td>
+                          <td style="padding: 10px 0; border-bottom: 1px solid #eee;">${doc.customerInfo?.district}</td>
+                        </tr>
+                      </table>
+                      <div style="margin-top: 20px; text-align: center;">
+                        <a href="https://dilim.com.tr/admin/collections/orders/${doc.id}" style="display: inline-block; background-color: #FF8A00; color: #ffffff; text-decoration: none; padding: 12px 24px; border-radius: 6px; font-weight: bold;">Siparişi Panele Git</a>
+                      </div>
+                    </div>
+                  </div>
+                `;
+
+                currentPayload.sendEmail({
+                  to: 'cuneydsahin@dilim.com.tr',
+                  from: 'noreply@dilim.com.tr',
+                  subject: `🚨 Yeni Sipariş: ${doc.orderNumber} - ${doc.customerInfo?.firstName} ${doc.customerInfo?.lastName}`,
+                  html: adminHtml
+                }).catch(e => console.error("Admin mail gonderim hatasi", e));
               }
             } catch (e) {}
           }
@@ -86,30 +147,39 @@ export const Orders: CollectionConfig = {
             let message = '';
             
             if (doc.status === 'shipped') {
-              subject = `Siparişiniz Kargoya Verildi - Sipariş No: ${doc.orderNumber}`;
-              message = `<p>Siparişiniz kargoya teslim edilmiştir. En kısa sürede size ulaşacaktır.</p>`;
+              subject = `Siparişiniz Yola Çıktı - Sipariş No: ${doc.orderNumber}`;
+              message = `<p style="color: #555555; font-size: 16px; line-height: 1.6;">Siparişiniz teslim edilmek üzere yola çıkmıştır. En kısa sürede adresinize ulaşacaktır.</p>`;
             } else if (doc.status === 'delivered') {
               subject = `Siparişiniz Teslim Edildi - Sipariş No: ${doc.orderNumber}`;
-              message = `<p>Siparişiniz başarıyla teslim edilmiştir. Afiyet olsun!</p>
-                         <p style="margin-top:20px; padding:15px; background:#f9f9f9; border-left:4px solid #FF8A00;">
-                           <strong>Bizi Değerlendirin:</strong><br/>
-                           Deneyiminizi Google Haritalar'da paylaşarak bize destek olabilirsiniz.
-                         </p>`;
+              message = `<p style="color: #555555; font-size: 16px; line-height: 1.6;">Siparişiniz başarıyla teslim edilmiştir. Afiyet olsun!</p>
+                         <div style="margin-top:30px; padding:20px; background-color:#fff5eb; border-left:4px solid #FF8A00; border-radius:4px;">
+                           <strong style="color:#333;">Bizi Değerlendirin:</strong><br/>
+                           <p style="margin-top:8px; color:#666;">Deneyiminizi Google Haritalar'da paylaşarak bize destek olabilirsiniz.</p>
+                         </div>`;
             }
 
             if (subject && message && doc.customerInfo?.email) {
               try {
+                const statusHtml = `
+                  <div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #eaeaea; border-radius: 8px; overflow: hidden;">
+                    <div style="background-color: #FF8A00; padding: 20px; text-align: center;">
+                      <h1 style="color: #ffffff; margin: 0; font-size: 24px;">Dilim Pastaneleri</h1>
+                    </div>
+                    <div style="padding: 30px; background-color: #ffffff;">
+                      <h2 style="color: #333333; margin-top: 0;">Merhaba ${doc.customerInfo.firstName},</h2>
+                      ${message}
+                    </div>
+                  </div>
+                `;
+
                 req.payload.sendEmail({
                   to: doc.customerInfo.email,
-                  from: 'sistem@dilim.com',
+                  from: 'noreply@dilim.com.tr',
                   subject: subject,
-                  html: `<div style="font-family: sans-serif; padding: 20px; line-height: 1.6;">
-                          <h2 style="color: #333;">Merhaba ${doc.customerInfo.firstName},</h2>
-                          ${message}
-                        </div>`
+                  html: statusHtml
                 }).catch(e => console.error("Durum maili gonderilemedi", e));
               } catch (e) {
-                req.payload.logger.error(`Durum maili hatasi: ${doc.orderNumber}`);
+                req.payload.logger.error(\`Durum maili hatasi: \${doc.orderNumber}\`);
               }
             }
           }
