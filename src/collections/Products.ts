@@ -16,6 +16,9 @@ export const Products: CollectionConfig = {
     group: 'Yönetim',
     defaultColumns: ['images', 'title', 'price', 'stock', 'category'],
   },
+  versions: {
+    drafts: true,
+  },
   hooks: {
     afterChange: [async (args) => auditLogAfterChange('Ürünler')(args)],
     afterDelete: [async (args) => auditLogAfterDelete('Ürünler')(args)],
