@@ -84,7 +84,7 @@ export const Orders: CollectionConfig = {
                   </div>
                 `;
 
-                currentPayload.sendEmail({
+                await currentPayload.sendEmail({
                   to: doc.customerInfo.email,
                   from: 'noreply@dilim.com.tr',
                   subject: `Ödemeniz Alındı - Sipariş No: ${doc.orderNumber}`,
@@ -131,7 +131,7 @@ export const Orders: CollectionConfig = {
                   </div>
                 `;
 
-                currentPayload.sendEmail({
+                await currentPayload.sendEmail({
                   to: 'cuneydsahin@dilim.com.tr',
                   from: 'noreply@dilim.com.tr',
                   subject: `🚨 Yeni Sipariş: ${doc.orderNumber} - ${doc.customerInfo?.firstName} ${doc.customerInfo?.lastName}`,
@@ -172,7 +172,7 @@ export const Orders: CollectionConfig = {
                   </div>
                 `;
 
-                req.payload.sendEmail({
+                await req.payload.sendEmail({
                   to: doc.customerInfo.email,
                   from: 'noreply@dilim.com.tr',
                   subject: subject,
