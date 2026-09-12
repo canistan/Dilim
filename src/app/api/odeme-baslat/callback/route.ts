@@ -48,7 +48,8 @@ export async function POST(req: Request) {
           id: orders.docs[0].id,
           data: {
             paymentStatus: 'paid',
-            status: 'preparing'
+            status: 'preparing',
+            iyzicoPaymentId: result.paymentId,
           }
         })
         

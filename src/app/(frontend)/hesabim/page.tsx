@@ -265,18 +265,18 @@ export default function HesabimPage() {
     if (!orderToCancel) return;
     
     try {
-      const res = await fetch('/api/customer/orders/cancel', {
+      const res = await fetch('/api/customer/orders/request-cancel', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ orderId: orderToCancel })
       });
       const data = await res.json();
       if (res.ok) {
-        toast.success("Siparişiniz iptal edildi.");
+        toast.success("Sipariş iptal talebiniz alındı.");
         // Siparişi listede güncelle
-        setOrders(orders.map(o => o.id === orderToCancel ? { ...o, status: 'cancelled' } : o));
+        setOrders(orders.map(o => o.id === orderToCancel ? { ...o, cancellationRequest: data.order.cancellationRequest } : o));
       } else {
-        toast.error(data.error || "Sipariş iptal edilemedi.");
+        toast.error(data.error || "İptal talebi oluşturulamadı.");
       }
     } catch (error) {
       toast.error("Bir hata oluştu.");
@@ -372,7 +372,13 @@ export default function HesabimPage() {
                                   {statusInfo.icon}
                                   {statusInfo.text}
                                 </span>
-                                {order.status === 'pending' && (
+                                {order.cancellationRequest?.requested && (
+                                  <span className="px-3 py-1 rounded-full text-xs font-bold bg-orange-100 text-orange-600 flex items-center gap-1">
+                                    <Clock className="w-3.5 h-3.5" />
+                                    İptal Talebi
+                                  </span>
+                                )}
+                                {order.status !== 'delivered' && order.status !== 'cancelled' && order.orderType !== 'custom' && !order.cancellationRequest?.requested && (
                                   <button 
                                     onClick={() => setOrderToCancel(order.id)}
                                     className="px-3 py-1 rounded-full text-xs font-bold bg-white border border-red-200 text-red-500 hover:bg-red-50 transition-colors flex items-center gap-1"
@@ -679,7 +685,9 @@ export default function HesabimPage() {
               <XCircle className="w-8 h-8" />
             </div>
             <h3 className="text-xl font-bold text-center text-dilim-siyah mb-2">Siparişi İptal Et</h3>
-            <p className="text-gray-500 text-center mb-6 text-sm">Siparişinizi iptal etmek istediğinize emin misiniz? Bu işlem geri alınamaz.</p>
+            <p className="text-gray-600 text-center mb-6">
+              Bu sipariş için iptal talebi oluşturmak istediğinize emin misiniz? Talebiniz mağaza yöneticisi tarafından incelenip en kısa sürede ücret iadeniz gerçekleştirilecektir.
+            </p>
             <div className="flex gap-3">
               <button 
                 onClick={() => setOrderToCancel(null)}

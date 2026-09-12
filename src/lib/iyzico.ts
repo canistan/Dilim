@@ -20,3 +20,31 @@ if (process.env.NODE_ENV === 'production') {
     // Ignore in case of local execution without dependencies
   }
 }
+
+export const cancelPayment = (paymentId: string): Promise<any> => {
+  return new Promise((resolve, reject) => {
+    iyzipay.cancel.create({
+      locale: 'tr',
+      paymentId: paymentId,
+      ip: '127.0.0.1' // Iyzico requires IP, we pass dummy or server IP
+    }, (err: any, result: any) => {
+      if (err) return reject(err);
+      resolve(result);
+    });
+  });
+};
+
+export const refundPayment = (paymentTransactionId: string, price: string): Promise<any> => {
+  return new Promise((resolve, reject) => {
+    iyzipay.refund.create({
+      locale: 'tr',
+      paymentTransactionId: paymentTransactionId,
+      price: price,
+      ip: '127.0.0.1',
+      currency: 'TRY'
+    }, (err: any, result: any) => {
+      if (err) return reject(err);
+      resolve(result);
+    });
+  });
+};

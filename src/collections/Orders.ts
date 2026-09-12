@@ -2,6 +2,7 @@ import type { CollectionConfig } from 'payload'
 
 import { orderAccess } from '../access/roles'
 import { auditLogAfterChange, auditLogAfterDelete } from '../hooks/auditLogHook'
+import { cancelPayment } from '@/lib/iyzico'
 
 export const Orders: CollectionConfig = {
   slug: 'orders',
@@ -24,6 +25,38 @@ export const Orders: CollectionConfig = {
   hooks: {
     afterDelete: [
       async (args) => auditLogAfterDelete('Siparişler')(args)
+    ],
+    beforeChange: [
+      async ({ data, originalDoc, operation, req }) => {
+        // İptal onaylandığında İyzico API üzerinden iade yapılması
+        if (operation === 'update' && originalDoc) {
+          if (
+            data.cancellationRequest?.decision === 'approved' &&
+            originalDoc.cancellationRequest?.decision !== 'approved' &&
+            originalDoc.paymentStatus === 'paid' &&
+            originalDoc.iyzicoPaymentId &&
+            originalDoc.refundStatus !== 'success'
+          ) {
+            try {
+              req.payload.logger.info(`İptal onaylandı, İyzico'ya iade isteği gönderiliyor. PaymentID: ${originalDoc.iyzicoPaymentId}`);
+              
+              const cancelResult = await cancelPayment(originalDoc.iyzicoPaymentId);
+              
+              if (cancelResult.status === 'success') {
+                data.refundStatus = 'success';
+                data.status = 'cancelled'; // Siparişi direkt iptal edildiye çek
+                req.payload.logger.info(`İade başarılı: ${originalDoc.iyzicoPaymentId}`);
+              } else {
+                throw new Error(`İade başarısız: ${cancelResult.errorMessage}`);
+              }
+            } catch (err: any) {
+              req.payload.logger.error(`İade işlemi sırasında hata: ${err.message}`);
+              throw new Error(`İyzico İade Hatası: ${err.message}`);
+            }
+          }
+        }
+        return data;
+      }
     ],
     afterChange: [
       async (args) => auditLogAfterChange('Siparişler')(args),
@@ -443,6 +476,66 @@ export const Orders: CollectionConfig = {
                   label: 'Genel Toplam',
                   required: true,
                 },
+              ]
+            },
+            {
+              type: 'row',
+              fields: [
+                {
+                  name: 'iyzicoPaymentId',
+                  type: 'text',
+                  label: 'İyzico Ödeme Kimliği',
+                  admin: { readOnly: true }
+                },
+                {
+                  name: 'refundStatus',
+                  type: 'select',
+                  label: 'İade Durumu',
+                  defaultValue: 'none',
+                  options: [
+                    { label: 'Yok', value: 'none' },
+                    { label: 'Bekliyor', value: 'pending' },
+                    { label: 'Başarılı', value: 'success' },
+                    { label: 'Başarısız', value: 'failed' },
+                  ],
+                  admin: { readOnly: true }
+                },
+              ]
+            },
+            {
+              name: 'cancellationRequest',
+              type: 'group',
+              label: 'İptal Talebi Yönetimi',
+              fields: [
+                {
+                  type: 'row',
+                  fields: [
+                    {
+                      name: 'requested',
+                      type: 'checkbox',
+                      label: 'Müşteri İptal Talep Etti',
+                      defaultValue: false,
+                    },
+                    {
+                      name: 'requestedAt',
+                      type: 'date',
+                      label: 'Talep Tarihi',
+                      admin: { condition: (data, siblingData) => Boolean(siblingData?.requested) }
+                    },
+                    {
+                      name: 'decision',
+                      type: 'select',
+                      label: 'Yönetici Kararı',
+                      defaultValue: 'pending',
+                      options: [
+                        { label: 'Bekliyor', value: 'pending' },
+                        { label: 'Onaylandı (İade Yapılacak)', value: 'approved' },
+                        { label: 'Reddedildi', value: 'rejected' },
+                      ],
+                      admin: { condition: (data, siblingData) => Boolean(siblingData?.requested) }
+                    }
+                  ]
+                }
               ]
             },
             {
