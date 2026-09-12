@@ -6,31 +6,8 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 
-const WHATSAPP_NUMBER = '905059638021'
-
 export function CartDrawer() {
   const { items, isCartOpen, setIsCartOpen, updateQuantity, removeFromCart, cartTotal } = useCart()
-
-  const handleWhatsAppOrder = () => {
-    const itemLines = items.map((item, i) => {
-      let line = `${i + 1}. *${item.name}*`
-      if (item.options) line += ` (${item.options})`
-      line += ` — ${item.quantity} Adet — ${item.price}`
-      return line
-    }).join('\n')
-
-    const message = `Merhaba, web siteniz üzerinden sipariş vermek istiyorum 🎂
-
-🛒 *Sepetim:*
-${itemLines}
-
-💰 *Toplam:* ₺${cartTotal}
-
-Siparişimi onaylamak istiyorum. Bilgi verebilir misiniz?`
-
-    const encodedMessage = encodeURIComponent(message)
-    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodedMessage}`, '_blank')
-  }
 
   return (
     <AnimatePresence>
@@ -156,13 +133,14 @@ Siparişimi onaylamak istiyorum. Bilgi verebilir misiniz?`
                   <span className="text-gray-500 font-medium">Ara Toplam</span>
                   <span className="text-2xl font-serif font-bold text-dilim-siyah">₺{cartTotal}</span>
                 </div>
-                <button
-                  onClick={handleWhatsAppOrder}
-                  className="w-full bg-[#25D366] text-white rounded-2xl py-4 font-bold text-lg flex items-center justify-center gap-3 hover:bg-[#1EBE56] transition-all duration-300 shadow-xl hover:-translate-y-1"
+                <Link
+                  href="/odeme"
+                  onClick={() => setIsCartOpen(false)}
+                  className="w-full bg-dilim-portakal text-white rounded-2xl py-4 font-bold text-lg flex items-center justify-center gap-3 hover:bg-dilim-turuncu transition-all duration-300 shadow-xl hover:-translate-y-1"
                 >
-                  <MessageCircle className="w-6 h-6" />
-                  WhatsApp ile Sipariş Ver
-                </button>
+                  <ShoppingBag className="w-5 h-5" />
+                  Ödemeye Geç
+                </Link>
               </div>
             )}
           </motion.div>
