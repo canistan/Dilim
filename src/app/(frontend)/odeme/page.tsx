@@ -28,6 +28,7 @@ export default function OdemePage() {
     lastName: '',
     email: '',
     phone: '',
+    city: 'İstanbul',
     district: '',
     address: '',
     isCorporate: false,
@@ -104,6 +105,7 @@ export default function OdemePage() {
     setSelectedAddressId(addr.id)
     setFormData(prev => ({
       ...prev,
+      city: addr.city || 'İstanbul',
       district: addr.district,
       address: addr.address,
       isCorporate: addr.isCorporate,
