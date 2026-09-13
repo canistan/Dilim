@@ -24,16 +24,24 @@ export const Products: CollectionConfig = {
     afterChange: [
       async (args) => auditLogAfterChange('Ürünler')(args),
       ({ doc }) => {
-        revalidatePath('/urunler')
-        revalidatePath('/')
+        try {
+          revalidatePath('/urunler')
+          revalidatePath('/')
+        } catch (e) {
+          // ignore error when running outside Next.js context
+        }
         return doc
       }
     ],
     afterDelete: [
       async (args) => auditLogAfterDelete('Ürünler')(args),
       ({ doc }) => {
-        revalidatePath('/urunler')
-        revalidatePath('/')
+        try {
+          revalidatePath('/urunler')
+          revalidatePath('/')
+        } catch (e) {
+          // ignore error when running outside Next.js context
+        }
         return doc
       }
     ],
@@ -59,12 +67,16 @@ export const Products: CollectionConfig = {
     },
     {
       name: 'isActive',
-      type: 'checkbox',
-      label: 'Sitede Görünsün mü? (Aktif/Pasif)',
-      defaultValue: true,
+      type: 'select',
+      label: 'Sitede Görünme Durumu',
+      defaultValue: 'active',
+      options: [
+        { label: 'Aktif (Sitede Görünür)', value: 'active' },
+        { label: 'Pasif (Gizli)', value: 'passive' },
+      ],
       admin: {
         position: 'sidebar',
-        description: 'Bu işareti kaldırırsanız ürün sitede tamamen gizlenir.',
+        description: 'Pasif seçilirse ürün müşterilere gösterilmez.',
       },
     },
     {

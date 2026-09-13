@@ -59,7 +59,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
       and: [
         { slug: { equals: slug } },
         { _status: { equals: 'published' } },
-        { isActive: { equals: true } }
+        { isActive: { equals: 'active' } }
       ]
     },
     depth: 2,
@@ -79,7 +79,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
         { category: { equals: categoryId } },
         { id: { not_equals: product.id } },
         { _status: { equals: 'published' } },
-        { isActive: { equals: true } },
+        { isActive: { equals: 'active' } },
         { stock: { greater_than: 0 } }
       ]
     },
@@ -109,7 +109,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
         and: [
           { category: { in: categoryIds } },
           { _status: { equals: 'published' } },
-          { isActive: { equals: true } },
+          { isActive: { equals: 'active' } },
           { stock: { greater_than: 0 } }
         ]
       },

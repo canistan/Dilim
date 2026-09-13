@@ -26,7 +26,7 @@ export default async function ProductsPage() {
     where: {
       and: [
         { _status: { equals: 'published' } },
-        { isActive: { equals: true } },
+        { isActive: { equals: 'active' } },
         { stock: { greater_than: 0 } }
       ]
     },
@@ -78,7 +78,7 @@ export default async function ProductsPage() {
         and: [
           { category: { in: categoryIds } },
           { _status: { equals: 'published' } },
-          { isActive: { equals: true } },
+          { isActive: { equals: 'active' } },
           { stock: { greater_than: 0 } }
         ]
       },
