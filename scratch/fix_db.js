@@ -9,20 +9,16 @@ async function fix() {
   try {
     await client.connect();
     
-    // Drop bad columns
+    // Add missing is_active column
     const queries = [
-      `ALTER TABLE orders DROP COLUMN IF EXISTS "iyzicoPaymentId";`,
-      `ALTER TABLE orders DROP COLUMN IF EXISTS "refundStatus";`,
-      `ALTER TABLE orders DROP COLUMN IF EXISTS "cancellationRequest_requested";`,
-      `ALTER TABLE orders DROP COLUMN IF EXISTS "cancellationRequest_requestedAt";`,
-      `ALTER TABLE orders DROP COLUMN IF EXISTS "cancellationRequest_decision";`
+      `ALTER TABLE products ADD COLUMN IF NOT EXISTS "is_active" varchar DEFAULT 'active';`
     ];
 
     for (const q of queries) {
       await client.query(q);
       console.log("Executed: ", q);
     }
-    console.log("Bad columns dropped successfully.");
+    console.log("Column added successfully.");
   } catch (err) {
     console.error(err);
   } finally {
