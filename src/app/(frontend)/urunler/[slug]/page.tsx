@@ -55,7 +55,13 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
   
   const { docs } = await payload.find({
     collection: 'products' as any,
-    where: { slug: { equals: slug } },
+    where: { 
+      and: [
+        { slug: { equals: slug } },
+        { _status: { equals: 'published' } },
+        { isActive: { equals: true } }
+      ]
+    },
     depth: 2,
   })
 
@@ -69,8 +75,13 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
   const { docs: relatedDocs } = await payload.find({
     collection: 'products' as any,
     where: { 
-      category: { equals: categoryId },
-      id: { not_equals: product.id }
+      and: [
+        { category: { equals: categoryId } },
+        { id: { not_equals: product.id } },
+        { _status: { equals: 'published' } },
+        { isActive: { equals: true } },
+        { stock: { greater_than: 0 } }
+      ]
     },
     limit: 4,
     depth: 2,
@@ -94,7 +105,14 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
     const categoryIds = extrasCategories.docs.map(cat => cat.id)
     const extrasRes = await payload.find({
       collection: 'products' as any,
-      where: { category: { in: categoryIds } },
+      where: { 
+        and: [
+          { category: { in: categoryIds } },
+          { _status: { equals: 'published' } },
+          { isActive: { equals: true } },
+          { stock: { greater_than: 0 } }
+        ]
+      },
       limit: 15,
       depth: 2,
     })

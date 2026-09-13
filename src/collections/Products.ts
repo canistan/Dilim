@@ -58,6 +58,16 @@ export const Products: CollectionConfig = {
       index: true,
     },
     {
+      name: 'isActive',
+      type: 'checkbox',
+      label: 'Sitede Görünsün mü? (Aktif/Pasif)',
+      defaultValue: true,
+      admin: {
+        position: 'sidebar',
+        description: 'Bu işareti kaldırırsanız ürün sitede tamamen gizlenir.',
+      },
+    },
+    {
       name: 'hasNumberSelection',
       type: 'checkbox',
       label: 'Bu üründe rakam seçimi var mı (0-9)?',

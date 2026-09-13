@@ -23,6 +23,13 @@ export default async function ProductsPage() {
   // Fetch products
   const productsRes = await payload.find({
     collection: 'products' as any,
+    where: {
+      and: [
+        { _status: { equals: 'published' } },
+        { isActive: { equals: true } },
+        { stock: { greater_than: 0 } }
+      ]
+    },
     limit: 1000,
   })
 
@@ -67,7 +74,14 @@ export default async function ProductsPage() {
     const categoryIds = extrasCategories.docs.map((cat: any) => cat.id)
     const extrasRes = await payload.find({
       collection: 'products' as any,
-      where: { category: { in: categoryIds } },
+      where: { 
+        and: [
+          { category: { in: categoryIds } },
+          { _status: { equals: 'published' } },
+          { isActive: { equals: true } },
+          { stock: { greater_than: 0 } }
+        ]
+      },
       limit: 15,
       depth: 2,
     })

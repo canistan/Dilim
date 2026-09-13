@@ -101,8 +101,10 @@ export default function HomePageClient({ homepageData, instagramData }: { homepa
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-            {homepageData?.featuredProducts?.length > 0 ? (
-              homepageData.featuredProducts.map((product: any, index: number) => {
+            {homepageData?.featuredProducts?.filter((p: any) => p._status === 'published' && p.isActive !== false && p.stock > 0)?.length > 0 ? (
+              homepageData.featuredProducts
+                .filter((p: any) => p._status === 'published' && p.isActive !== false && p.stock > 0)
+                .map((product: any, index: number) => {
                 const isMiddle = index === 1;
                 const image = product.images?.[0]?.url || "/generated/hero_cake.png";
                 return (
