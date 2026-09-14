@@ -192,7 +192,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
                 product={{
                   id: product.id.toString(),
                   name: product.title,
-                  price: product.price > 0 ? `₺${product.price}` : 'Özel Fiyat',
+                  price: product.price || 0,
                   image: imageToUse,
                   hasSizes: product.hasSizes,
                   sizes: product.sizes,

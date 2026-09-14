@@ -9,7 +9,7 @@ type AddToCartProps = {
   product: {
     id: string;
     name: string;
-    price: string;
+    price: number;
     image: string;
     hasSizes?: boolean;
     sizes?: { size: string; price: number }[];
@@ -62,7 +62,7 @@ export function AddToCartButton({ product, description, crossSellProducts = [] }
 
     // Sepete ana ürünü ekle
     let finalId = product.id;
-    let finalPrice = product.price;
+    let finalPrice = `₺${product.price}`;
     let optionsText = undefined;
 
     if (product.hasSizes && selectedSize && product.sizes) {

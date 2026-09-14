@@ -19,7 +19,7 @@
   - [/] Üretilen görseller sisteme yüklenecek.
 
 ## 🅿️ Park Edilen Konular
-- [ ] **İyzico Canlı Ortam Geçişi:** İyzico live (canlı) API anahtarlarının `.env` dosyasına tanımlanması ve entegrasyonun test edilmesi (Akşama bırakıldı).
+- [x] **İyzico Canlı Ortam Geçişi:** İyzico live (canlı) API anahtarları tanımlandı ve test edildi.
 - [ ] **Facebook ile Giriş Hatası:** Facebook ile girişlerde (login) yaşanan problemin tespit edilip düzeltilmesi.
 - *(Hatırladığınız diğer park edilmiş konuları buraya ekleyelim)*
 
