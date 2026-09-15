@@ -174,13 +174,10 @@ export default function UmraniyeSubePage() {
               ],
               "areaServed": [
                 { "@type": "City", "name": "Ümraniye" },
+                { "@type": "City", "name": "Ataşehir" },
+                { "@type": "City", "name": "Çekmeköy" },
                 { "@type": "City", "name": "İstanbul" }
-              ],
-              "aggregateRating": {
-                "@type": "AggregateRating",
-                "ratingValue": "3.7",
-                "reviewCount": "532"
-              }
+              ]
             },
             {
               "@context": "https://schema.org",

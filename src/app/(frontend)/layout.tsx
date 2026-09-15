@@ -145,12 +145,7 @@ export default async function FrontendLayout({
                     { "@type": "City", "name": "Kavacık" },
                     { "@type": "City", "name": "Beykoz" },
                     { "@type": "City", "name": "Acarkent" }
-                  ],
-                  "aggregateRating": {
-                    "@type": "AggregateRating",
-                    "ratingValue": "3.8",
-                    "reviewCount": "307"
-                  }
+                  ]
                 },
                 {
                   "@type": "Bakery",
@@ -188,12 +183,7 @@ export default async function FrontendLayout({
                   ],
                   "areaServed": [
                     { "@type": "City", "name": "Ümraniye" }
-                  ],
-                  "aggregateRating": {
-                    "@type": "AggregateRating",
-                    "ratingValue": "3.7",
-                    "reviewCount": "532"
-                  }
+                  ]
                 },
                 {
                   "@type": "Bakery",

@@ -177,12 +177,7 @@ export default function KavacikSubePage() {
                 { "@type": "City", "name": "Beykoz" },
                 { "@type": "City", "name": "Acarkent" },
                 { "@type": "City", "name": "İstanbul" }
-              ],
-              "aggregateRating": {
-                "@type": "AggregateRating",
-                "ratingValue": "3.8",
-                "reviewCount": "307"
-              }
+              ]
             },
             {
               "@context": "https://schema.org",

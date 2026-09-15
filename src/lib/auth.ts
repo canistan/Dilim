@@ -121,8 +121,11 @@ export const authOptions: AuthOptions = {
             }
           }
         }
-      } catch (e) {
+      } catch (e: any) {
         console.error("Müşteri senkronizasyon hatası:", e);
+        if (e.message === "EmailAlreadyExists") {
+          return '/giris?error=OAuthAccountNotLinked';
+        }
       }
       return true;
     },
