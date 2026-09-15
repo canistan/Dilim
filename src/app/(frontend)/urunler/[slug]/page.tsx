@@ -176,16 +176,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
                 {product.title}
               </h1>
 
-              <div className="flex items-center gap-4 mb-8">
-                <div className="flex items-center text-dilim-yaldiz">
-                  <Star className="w-5 h-5 fill-current" />
-                  <Star className="w-5 h-5 fill-current" />
-                  <Star className="w-5 h-5 fill-current" />
-                  <Star className="w-5 h-5 fill-current" />
-                  <Star className="w-5 h-5 fill-current" />
-                </div>
-                <span className="text-gray-500 text-sm">(Müşteri Favorisi)</span>
-              </div>
+
               
               {/* Product Actions (Dynamic Price, Description, Size Selector, Add To Cart) */}
               <AddToCartButton 
@@ -207,6 +198,21 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
                   image: (doc.images && doc.images.length > 0 && doc.images[0].url) ? doc.images[0].url : '/placeholder.png'
                 }))}
               />
+
+              {/* Allergen Alert */}
+              {product.allergens && (
+                <div className="mt-6 p-4 rounded-xl bg-red-50/50 border border-red-100 flex items-start gap-3">
+                  <svg className="w-5 h-5 text-red-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                  </svg>
+                  <div>
+                    <strong className="font-semibold text-red-700 block mb-1 text-sm">Alerjen Uyarısı</strong>
+                    <p className="text-xs text-red-600/90 leading-relaxed">
+                      {product.allergens}
+                    </p>
+                  </div>
+                </div>
+              )}
 
               {/* Legal Disclaimer */}
               <div className="mt-6 p-4 rounded-xl bg-orange-50/50 border border-orange-100/50 flex items-start gap-3">
