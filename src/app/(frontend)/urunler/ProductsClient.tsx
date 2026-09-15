@@ -4,7 +4,7 @@ import { useState, useEffect, Suspense } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
-import { Filter, ShoppingBag, Eye, PaintBucket } from 'lucide-react'
+import { Filter, ShoppingBag, Eye, PaintBucket, Search, X } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useCart } from '@/context/CartContext'
 import { QuickAddModal } from '@/components/QuickAddModal'
@@ -41,6 +41,7 @@ function ProductsClientInner({
   const searchParams = useSearchParams()
   const initialCategory = searchParams.get('kategori') || 'all'
   const [activeCategorySlug, setActiveCategorySlug] = useState(initialCategory)
+  const [searchQuery, setSearchQuery] = useState('')
   const [quickAddProduct, setQuickAddProduct] = useState<any>(null)
   
   const [showCrossSell, setShowCrossSell] = useState(false)
@@ -55,15 +56,38 @@ function ProductsClientInner({
   }, [searchParams])
   const { addToCart, setIsCartOpen } = useCart()
 
+  // Türkçe-dostu küçük harf dönüşümü
+  const turkishLower = (str: string) => {
+    return str
+      .replace(/İ/g, 'i')
+      .replace(/I/g, 'ı')
+      .replace(/Ş/g, 'ş')
+      .replace(/Ç/g, 'ç')
+      .replace(/Ö/g, 'ö')
+      .replace(/Ü/g, 'ü')
+      .replace(/Ğ/g, 'ğ')
+      .toLowerCase()
+  }
+
   // Add "All" to categories
   const allCategories = [{ id: 'all', title: 'TÜMÜ', slug: 'all' }, ...categories]
 
-  const filteredProducts = activeCategorySlug === 'all'
-    ? products
-    : products.filter((p) => {
-        const catSlug = typeof p.category === 'object' ? p.category?.slug : p.category
-        return catSlug === activeCategorySlug
-      })
+  const filteredProducts = products.filter((p) => {
+    // Kategori filtresi
+    const matchesCategory = activeCategorySlug === 'all' || (() => {
+      const catSlug = typeof p.category === 'object' ? p.category?.slug : p.category
+      return catSlug === activeCategorySlug
+    })()
+
+    // Arama filtresi (Türkçe-dostu)
+    const matchesSearch = !searchQuery.trim() || (() => {
+      const query = turkishLower(searchQuery.trim())
+      const title = turkishLower(p.title)
+      return title.includes(query)
+    })()
+
+    return matchesCategory && matchesSearch
+  })
 
   return (
     <div className="flex flex-col w-full bg-gray-50 min-h-screen">
@@ -96,6 +120,30 @@ function ProductsClientInner({
       {/* Main Content */}
       <section className="py-16 md:py-24">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Search Bar */}
+          <div className="flex flex-col items-center mb-10">
+            <div className="relative w-full max-w-lg">
+              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                <Search className="w-5 h-5 text-dilim-portakal" />
+              </div>
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Ürün ara... (ör: baklava, poğaça, çikolata)"
+                className="w-full pl-12 pr-12 py-4 bg-white border border-gray-200 rounded-2xl text-dilim-siyah placeholder:text-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-dilim-portakal/30 focus:border-dilim-portakal/50 transition-all duration-300 text-base font-light"
+              />
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery('')}
+                  className="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-dilim-portakal transition-colors duration-200"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              )}
+            </div>
+          </div>
+
           {/* Filters */}
           <div className="flex flex-col items-center mb-16">
             <div className="flex items-center gap-2 mb-8 text-dilim-siyah">
@@ -255,9 +303,27 @@ function ProductsClientInner({
 
           {filteredProducts.length === 0 && (
             <div className="text-center py-20">
-              <p className="text-xl text-gray-500 font-light">
-                Bu kategoride henüz ürün bulunmamaktadır.
-              </p>
+              {searchQuery.trim() ? (
+                <>
+                  <Search className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+                  <p className="text-xl text-gray-500 font-light mb-2">
+                    &ldquo;<span className="font-medium text-dilim-siyah">{searchQuery}</span>&rdquo; ile eşleşen ürün bulunamadı.
+                  </p>
+                  <p className="text-sm text-gray-400">
+                    Farklı bir arama terimi deneyin veya kategorilere göz atın.
+                  </p>
+                  <button
+                    onClick={() => { setSearchQuery(''); setActiveCategorySlug('all'); }}
+                    className="mt-6 px-6 py-3 bg-dilim-portakal text-white rounded-full text-sm font-medium hover:bg-dilim-turuncu transition-colors duration-300"
+                  >
+                    Tüm Ürünleri Göster
+                  </button>
+                </>
+              ) : (
+                <p className="text-xl text-gray-500 font-light">
+                  Bu kategoride henüz ürün bulunmamaktadır.
+                </p>
+              )}
             </div>
           )}
         </div>

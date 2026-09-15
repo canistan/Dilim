@@ -16,11 +16,29 @@ export const Products: CollectionConfig = {
     useAsTitle: 'title',
     group: 'Yönetim',
     defaultColumns: ['images', 'title', 'price', 'stock', 'category'],
+    listSearchableFields: ['title', 'searchTitle'],
   },
   versions: {
     drafts: true,
   },
   hooks: {
+    beforeChange: [
+      ({ data }) => {
+        // Türkçe-dostu küçük harf dönüşümü (İ→i, I→ı, Ş→ş, Ç→ç, Ö→ö, Ü→ü, Ğ→ğ)
+        if (data?.title) {
+          data.searchTitle = data.title
+            .replace(/İ/g, 'i')
+            .replace(/I/g, 'ı')
+            .replace(/Ş/g, 'ş')
+            .replace(/Ç/g, 'ç')
+            .replace(/Ö/g, 'ö')
+            .replace(/Ü/g, 'ü')
+            .replace(/Ğ/g, 'ğ')
+            .toLowerCase()
+        }
+        return data
+      },
+    ],
     afterChange: [
       async (args) => auditLogAfterChange('Ürünler')(args),
       ({ doc }) => {
@@ -51,6 +69,14 @@ export const Products: CollectionConfig = {
       name: 'title',
       type: 'text',
       required: true,
+    },
+    {
+      name: 'searchTitle',
+      type: 'text',
+      admin: {
+        hidden: true,
+      },
+      index: true,
     },
     {
       name: 'slug',

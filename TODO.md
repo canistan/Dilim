@@ -15,7 +15,7 @@
 - [x] **Menü İçin Logolu QR Kod:** Menüye yönlendirecek ve ortasında Dilim Pastaneleri logosu bulunan bir QR kod oluşturulacak.
 - [/] **Eksik Ürün Görsellerinin Üretilmesi:** (Kota sıfırlandığında devam edilecek)
   - [x] 56 eksik görsel kategorilere ayrılacak.
-  - [/] Sitedeki diğer görseller standardında, yüksek kaliteli ve düşük boyutlu (WEBP formatında) yapay zeka ile görseller üretilecek. (İlk 13 görsel tamamlandı)
+  - [/] Sitedeki diğer görseller standardında, yüksek kaliteli ve düşük boyutlu (WEBP formatında) yapay zeka ile görseller üretilecek. (23/65 görsel tamamlandı — Kota ~18:44'te sıfırlanacak)
   - [/] Üretilen görseller sisteme yüklenecek.
 
 ## 🅿️ Park Edilen Konular
