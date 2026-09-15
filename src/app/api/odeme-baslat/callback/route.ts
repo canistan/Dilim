@@ -50,6 +50,7 @@ export async function POST(req: Request) {
             paymentStatus: 'paid',
             status: 'preparing',
             iyzicoPaymentId: result.paymentId,
+            iyzicoTransactions: result.itemTransactions || [],
           }
         })
         

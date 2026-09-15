@@ -2,7 +2,7 @@ import type { CollectionConfig } from 'payload'
 
 import { orderAccess } from '../access/roles'
 import { auditLogAfterChange, auditLogAfterDelete } from '../hooks/auditLogHook'
-import { cancelPayment } from '@/lib/iyzico'
+import { cancelPayment, refundPayment } from '@/lib/iyzico'
 
 export const Orders: CollectionConfig = {
   slug: 'orders',
@@ -40,14 +40,56 @@ export const Orders: CollectionConfig = {
             try {
               req.payload.logger.info(`İptal onaylandı, İyzico'ya iade isteği gönderiliyor. PaymentID: ${originalDoc.iyzicoPaymentId}`);
               
-              const cancelResult = await cancelPayment(originalDoc.iyzicoPaymentId);
-              
-              if (cancelResult.status === 'success') {
+              let cancelSuccess = false;
+              let cancelErrorMsg = '';
+
+              try {
+                const cancelResult = await cancelPayment(originalDoc.iyzicoPaymentId);
+                if (cancelResult.status === 'success') {
+                  cancelSuccess = true;
+                  req.payload.logger.info(`İptal başarılı (Cancel): ${originalDoc.iyzicoPaymentId}`);
+                } else {
+                  cancelErrorMsg = cancelResult.errorMessage;
+                }
+              } catch (e: any) {
+                cancelErrorMsg = e.message || 'İptal çağrısı hata verdi';
+              }
+
+              if (cancelSuccess) {
                 data.refundStatus = 'success';
-                data.status = 'cancelled'; // Siparişi direkt iptal edildiye çek
-                req.payload.logger.info(`İade başarılı: ${originalDoc.iyzicoPaymentId}`);
+                data.status = 'cancelled';
               } else {
-                throw new Error(`İade başarısız: ${cancelResult.errorMessage}`);
+                req.payload.logger.warn(`İptal (Cancel) başarısız oldu, İade (Refund) deneniyor... Hata: ${cancelErrorMsg}`);
+                
+                // Fallback: Refund using itemTransactions
+                if (originalDoc.iyzicoTransactions && Array.isArray(originalDoc.iyzicoTransactions) && originalDoc.iyzicoTransactions.length > 0) {
+                  let allRefundsSuccessful = true;
+                  let refundErrors = [];
+
+                  for (const tx of originalDoc.iyzicoTransactions) {
+                    try {
+                      if (!tx.paymentTransactionId || !tx.paidPrice) continue;
+                      const refundRes = await refundPayment(tx.paymentTransactionId, tx.paidPrice);
+                      if (refundRes.status !== 'success') {
+                        allRefundsSuccessful = false;
+                        refundErrors.push(refundRes.errorMessage || 'Bilinmeyen iade hatası');
+                      }
+                    } catch (e: any) {
+                      allRefundsSuccessful = false;
+                      refundErrors.push(e.message || 'İade çağrısı başarısız');
+                    }
+                  }
+
+                  if (allRefundsSuccessful) {
+                    data.refundStatus = 'success';
+                    data.status = 'cancelled';
+                    req.payload.logger.info(`İade (Refund) başarılı: ${originalDoc.iyzicoPaymentId}`);
+                  } else {
+                    throw new Error(`İade başarısız: ${refundErrors.join(', ')}`);
+                  }
+                } else {
+                  throw new Error(`İptal başarısız oldu (${cancelErrorMsg}) ve İade için işlem verisi (paymentTransactionId) bulunamadı.`);
+                }
               }
             } catch (err: any) {
               req.payload.logger.error(`İade işlemi sırasında hata: ${err.message}`);
@@ -511,6 +553,12 @@ export const Orders: CollectionConfig = {
                   name: 'iyzicoPaymentId',
                   type: 'text',
                   label: 'İyzico Ödeme Kimliği',
+                  admin: { readOnly: true }
+                },
+                {
+                  name: 'iyzicoTransactions',
+                  type: 'json',
+                  label: 'İyzico İşlem Detayları (İade İçin)',
                   admin: { readOnly: true }
                 },
                 {
