@@ -92,11 +92,11 @@ export const Products: CollectionConfig = {
     {
       name: 'hasSizes',
       type: 'checkbox',
-      label: 'Bu ürün boyutlara (0, 1, 2 Numara) sahip mi?',
+      label: 'Bu ürün farklı boyutlara/birimlere (0-1-2 Numara veya Paket/Kilo) sahip mi?',
       defaultValue: false,
       admin: {
         position: 'sidebar',
-        description: 'İşaretlenirse tek bir fiyat yerine boyutlara göre ayrı fiyatlar girilir.',
+        description: 'İşaretlenirse tek bir fiyat yerine boyutlara veya birimlere göre ayrı fiyatlar girilir.',
       },
     },
     {
@@ -115,6 +115,8 @@ export const Products: CollectionConfig = {
             { label: '0 Numara (4-6 Kişilik)', value: '0 Numara' },
             { label: '1 Numara (6-8 Kişilik)', value: '1 Numara' },
             { label: '2 Numara (8-10 Kişilik)', value: '2 Numara' },
+            { label: 'Paket (Adet)', value: 'Paket' },
+            { label: '1 Kilogram', value: '1 Kilogram' },
           ],
           required: true,
         },
