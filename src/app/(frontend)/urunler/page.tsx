@@ -42,6 +42,8 @@ export default async function ProductsPage() {
     images: doc.images,
     hasSizes: doc.hasSizes,
     sizes: doc.sizes,
+    hasNumberSelection: doc.hasNumberSelection,
+    hasTextSelection: doc.hasTextSelection,
   }))
 
   const activeCategoryIds = new Set(productsRes.docs.map((doc: any) => 
