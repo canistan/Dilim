@@ -20,7 +20,7 @@
 
 ## 🅿️ Park Edilen Konular
 - [x] **İyzico Canlı Ortam Geçişi:** İyzico live (canlı) API anahtarları tanımlandı ve test edildi.
-- [ ] **Facebook ile Giriş Hatası:** Facebook ile girişlerde (login) yaşanan problemin tespit edilip düzeltilmesi.
+- [x] **Facebook ile Giriş Hatası:** Facebook ile girişlerde (login) yaşanan problem yeni App oluşturularak ve Vercel env'leri güncellenerek tamamen çözüldü!
 - *(Hatırladığınız diğer park edilmiş konuları buraya ekleyelim)*
 
 ## ✅ Tamamlananlar
