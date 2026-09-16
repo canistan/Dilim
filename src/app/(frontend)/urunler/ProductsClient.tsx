@@ -27,6 +27,7 @@ type Product = {
   hasSizes?: boolean
   sizes?: { size: string; price: number }[]
   hasNumberSelection?: boolean
+  hasTextSelection?: boolean
 }
 
 function ProductsClientInner({
@@ -223,7 +224,7 @@ function ProductsClientInner({
                             <PaintBucket className="w-4 h-4" />
                             Tasarla
                           </Link>
-                        ) : product.hasSizes || product.hasNumberSelection ? (
+                        ) : product.hasSizes || product.hasNumberSelection || product.hasTextSelection ? (
                           <button
                             onClick={() => setQuickAddProduct({
                               id: product.id,
@@ -233,7 +234,8 @@ function ProductsClientInner({
                               image: imageToUse,
                               hasSizes: product.hasSizes,
                               sizes: product.sizes,
-                              hasNumberSelection: product.hasNumberSelection
+                              hasNumberSelection: product.hasNumberSelection,
+                              hasTextSelection: product.hasTextSelection
                             })}
                             className="pointer-events-auto bg-dilim-portakal text-white px-5 py-3 rounded-full font-semibold text-sm flex items-center gap-2 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 hover:bg-dilim-turuncu shadow-lg"
                           >
