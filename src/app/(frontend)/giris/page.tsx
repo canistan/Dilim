@@ -57,7 +57,7 @@ export default function GirisPage() {
           <div className="space-y-3">
             <button
               onClick={() => signIn('google')}
-              className="w-full flex justify-center items-center gap-3 py-3 px-4 border border-gray-300 rounded-xl shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+              className="w-full flex justify-center items-center gap-3 py-3 px-4 border border-gray-300 rounded-xl shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 hover:-translate-y-0.5 hover:shadow-md active:translate-y-0 transition-all duration-200"
             >
               <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" className="w-5 h-5" />
               Google ile Devam Et
@@ -65,7 +65,7 @@ export default function GirisPage() {
 
             <button
               onClick={() => signIn('facebook')}
-              className="w-full flex justify-center items-center gap-3 py-3 px-4 border border-transparent rounded-xl shadow-sm bg-[#1877F2] text-sm font-medium text-white hover:bg-[#166FE5] transition-colors"
+              className="w-full flex justify-center items-center gap-3 py-3 px-4 border border-transparent rounded-xl shadow-sm bg-[#1877F2] text-sm font-medium text-white hover:bg-[#166FE5] hover:-translate-y-0.5 hover:shadow-md active:translate-y-0 transition-all duration-200"
             >
               <img src="https://www.svgrepo.com/show/475647/facebook-color.svg" alt="Facebook" className="w-5 h-5 brightness-0 invert" />
               Facebook ile Devam Et
@@ -114,7 +114,7 @@ export default function GirisPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full flex justify-center py-3 px-4 border border-transparent rounded-xl shadow-sm text-sm font-bold text-white bg-dilim-portakal hover:bg-dilim-turuncu focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-dilim-portakal disabled:opacity-70 transition-colors"
+                className="w-full flex justify-center py-3 px-4 border border-transparent rounded-xl shadow-sm text-sm font-bold text-white bg-dilim-portakal hover:bg-dilim-turuncu hover:-translate-y-0.5 hover:shadow-md active:translate-y-0 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-dilim-portakal disabled:opacity-70 disabled:hover:translate-y-0 disabled:hover:shadow-sm transition-all duration-200"
               >
                 {loading ? 'Giriş Yapılıyor...' : 'Giriş Yap'}
               </button>
@@ -129,7 +129,7 @@ export default function GirisPage() {
             <div className="mt-6 pt-6 border-t border-gray-200">
               <a 
                 href="/kayit" 
-                className="w-full flex justify-center py-3 px-4 border border-dilim-portakal rounded-xl shadow-sm text-sm font-bold text-dilim-portakal bg-white hover:bg-orange-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-dilim-portakal transition-colors"
+                className="w-full flex justify-center py-3 px-4 border border-dilim-portakal rounded-xl shadow-sm text-sm font-bold text-dilim-portakal bg-white hover:bg-orange-50 hover:-translate-y-0.5 hover:shadow-md active:translate-y-0 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-dilim-portakal transition-all duration-200"
               >
                 Yeni hesap oluştur
               </a>
