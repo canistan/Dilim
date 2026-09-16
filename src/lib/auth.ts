@@ -114,18 +114,10 @@ export const authOptions: AuthOptions = {
             if (existingUser.provider === provider && existingUser.providerAccountId === providerAccountId) {
               // Zaten bağlı, devam et
             } else {
-              // Kullanıcı daha önce Google vb. ile girmiş ama şimdi Facebook ile aynı emaili kullanıyor.
-              // Güvenlik kuralını esneterek (Email zaten kendisine ait olduğu için) girişine izin veriyoruz.
-              // Provider'ı yeni sağlayıcıya güncelliyoruz (opsiyonel, veya sadece geçişine izin veriyoruz).
-              await payload.update({
-                collection: 'customers' as any,
-                id: existingUser.id,
-                data: {
-                  provider: provider || 'credentials',
-                  providerAccountId: providerAccountId || '',
-                },
-                overrideAccess: true,
-              });
+              // GÜVENLİK (Account Takeover): Sadece e-posta eşleşmesine bakarak mevcut 
+              // hesaba otomatik bağlama YAPMIYORUZ. Eğer e-posta daha önce şifreyle 
+              // veya başka bir yöntemle alınmışsa girişi reddet ve uyar.
+              throw new Error("EmailAlreadyExists");
             }
           }
         }
