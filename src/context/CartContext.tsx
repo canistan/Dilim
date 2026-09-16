@@ -5,6 +5,7 @@ import toast from 'react-hot-toast'
 
 export type CartItem = {
   id: string;
+  productId?: string;
   name: string;
   price: string;
   image: string;
@@ -84,14 +85,25 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   }, [isCartOpen])
 
   const addToCart = (newItem: CartItem) => {
+    // Generate a unique ID based on product ID and options to allow multiple variants in cart
+    const uniqueId = newItem.options 
+      ? `${newItem.productId || newItem.id}-${newItem.options.replace(/[^a-zA-Z0-9]/g, '')}` 
+      : (newItem.productId || newItem.id);
+    
+    const itemToAdd = {
+      ...newItem,
+      productId: newItem.productId || newItem.id,
+      id: uniqueId
+    };
+
     setItems((prev) => {
-      const existing = prev.find((item) => item.id === newItem.id)
+      const existing = prev.find((item) => item.id === itemToAdd.id)
       if (existing) {
         return prev.map((item) =>
-          item.id === newItem.id ? { ...item, quantity: item.quantity + newItem.quantity } : item
+          item.id === itemToAdd.id ? { ...item, quantity: item.quantity + itemToAdd.quantity } : item
         )
       }
-      return [...prev, newItem]
+      return [...prev, itemToAdd]
     })
     
     toast.custom((t) => (

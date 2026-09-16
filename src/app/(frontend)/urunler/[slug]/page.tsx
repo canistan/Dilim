@@ -188,6 +188,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
                   hasSizes: product.hasSizes,
                   sizes: product.sizes,
                   hasNumberSelection: product.hasNumberSelection,
+                  hasTextSelection: product.hasTextSelection,
                   categoryName: categoryName
                 }} 
                 description={product.description || `Günlük taze malzemelerle hazırlanan, Dilim Pastaneleri ustalarının özel tarifi olan ${product.title.toLowerCase()}. Her diliminde hissedeceğiniz lüks doku ve yoğun lezzet profili ile özel günlerinize ve tatlı krizlerinize eşsiz bir dokunuş katar.`}

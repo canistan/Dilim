@@ -14,6 +14,7 @@ type AddToCartProps = {
     hasSizes?: boolean;
     sizes?: { size: string; price: number }[];
     hasNumberSelection?: boolean;
+    hasTextSelection?: boolean;
     categoryName?: string;
   }
   crossSellProducts?: {
@@ -28,6 +29,7 @@ export function AddToCartButton({ product, description, crossSellProducts = [] }
   const [quantity, setQuantity] = useState(1)
   const [selectedSize, setSelectedSize] = useState<string | null>(null)
   const [selectedNumber, setSelectedNumber] = useState<number | null>(null)
+  const [selectedText, setSelectedText] = useState<string | null>(null)
   const [note, setNote] = useState('')
   const [showError, setShowError] = useState(false)
   
@@ -60,6 +62,12 @@ export function AddToCartButton({ product, description, crossSellProducts = [] }
       return;
     }
 
+    if (product.hasTextSelection && !selectedText) {
+      setShowError(true);
+      toast.error('Lütfen sepete eklemeden önce bir pleksi yazısı seçiniz.');
+      return;
+    }
+
     // Sepete ana ürünü ekle
     let finalId = product.id;
     let finalPrice = `₺${product.price}`;
@@ -76,8 +84,14 @@ export function AddToCartButton({ product, description, crossSellProducts = [] }
 
     if (product.hasNumberSelection && selectedNumber !== null) {
       finalId = `${finalId}-num-${selectedNumber}`;
-      const numText = `Seçilen Rakam: ${selectedNumber}`;
+      const numText = `Rakam: ${selectedNumber}`;
       optionsText = optionsText ? `${optionsText} | ${numText}` : numText;
+    }
+
+    if (product.hasTextSelection && selectedText) {
+      finalId = `${finalId}-txt-${selectedText.replace(/\s+/g, '-')}`;
+      const txtText = `Yazı: ${selectedText}`;
+      optionsText = optionsText ? `${optionsText} | ${txtText}` : txtText;
     }
 
     if (note.trim()) {
@@ -171,10 +185,10 @@ export function AddToCartButton({ product, description, crossSellProducts = [] }
       )}
 
       {product.hasNumberSelection && (
-        <div className={`mb-6 p-5 rounded-2xl border-2 transition-all duration-300 ${showError ? 'border-red-400 bg-red-50/50 shadow-[0_0_15px_rgba(248,113,113,0.3)]' : 'border-gray-100 bg-gray-50'}`}>
+        <div className={`mb-6 p-5 rounded-2xl border-2 transition-all duration-300 ${showError && selectedNumber === null ? 'border-red-400 bg-red-50/50 shadow-[0_0_15px_rgba(248,113,113,0.3)]' : 'border-gray-100 bg-gray-50'}`}>
           <h4 className="text-sm font-bold text-dilim-siyah mb-3 flex items-center justify-between">
             <span>Rakam Seçiniz <span className="text-red-500">*</span></span>
-            {showError && <span className="text-red-500 text-xs animate-pulse font-medium">Zorunlu Seçim</span>}
+            {showError && selectedNumber === null && <span className="text-red-500 text-xs animate-pulse font-medium">Zorunlu Seçim</span>}
           </h4>
           <div className="flex flex-wrap gap-2">
             {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => (
@@ -193,6 +207,33 @@ export function AddToCartButton({ product, description, crossSellProducts = [] }
                 {num}
               </button>
             ))}
+          </div>
+        </div>
+      )}
+
+      {product.hasTextSelection && (
+        <div className={`mb-6 p-5 rounded-2xl border-2 transition-all duration-300 ${showError && !selectedText ? 'border-red-400 bg-red-50/50 shadow-[0_0_15px_rgba(248,113,113,0.3)]' : 'border-gray-100 bg-gray-50'}`}>
+          <h4 className="text-sm font-bold text-dilim-siyah mb-3 flex items-center justify-between">
+            <span>Yazı Seçiniz (Pleksi) <span className="text-red-500">*</span></span>
+            {showError && !selectedText && <span className="text-red-500 text-xs animate-pulse font-medium">Zorunlu Seçim</span>}
+          </h4>
+          <div className="relative">
+            <select
+              className="w-full appearance-none bg-white border-2 border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded-xl leading-tight focus:outline-none focus:bg-white focus:border-dilim-portakal transition-colors cursor-pointer font-medium"
+              value={selectedText || ''}
+              onChange={(e) => {
+                setSelectedText(e.target.value);
+                setShowError(false);
+              }}
+            >
+              <option value="" disabled>Lütfen bir yazı seçin</option>
+              {['İyi ki Doğdun', 'Happy Birthday', 'Canım Annem', 'Canım Kızım', 'Canım Babam', 'Canım Eşim', 'Seni Seviyoruz', 'Gönlümün Sultanı', 'İyi ki Varsın', 'Queen', 'Prenses', 'Canım Oğlum', 'Seni Seviyorum'].map(txt => (
+                <option key={txt} value={txt}>{txt}</option>
+              ))}
+            </select>
+            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-500">
+              <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+            </div>
           </div>
         </div>
       )}

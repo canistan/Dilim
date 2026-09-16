@@ -116,6 +116,16 @@ export const Products: CollectionConfig = {
       },
     },
     {
+      name: 'hasTextSelection',
+      type: 'checkbox',
+      label: 'Bu üründe yazı seçimi var mı (Pleksi)?',
+      defaultValue: false,
+      admin: {
+        position: 'sidebar',
+        description: 'İşaretlenirse müşteri sepete eklerken özel yazı (İyi ki doğdun vb.) seçmek zorunda kalır.',
+      },
+    },
+    {
       name: 'hasSizes',
       type: 'checkbox',
       label: 'Bu ürün farklı boyutlara/birimlere (0-1-2 Numara veya Paket/Kilo) sahip mi?',
