@@ -11,42 +11,54 @@ import STATIC_PRODUCTS from '@/data/products.json'
 export const revalidate = 3600
 
 export async function generateStaticParams() {
-  const payload = await getPayload({ config: configPromise })
-  const products = await payload.find({
-    collection: 'products' as any,
-    limit: 1000,
-  })
+  try {
+    const payload = await getPayload({ config: configPromise })
+    const products = await payload.find({
+      collection: 'products' as any,
+      limit: 1000,
+    })
 
-  return products.docs.map((product: any) => ({
-    slug: product.slug,
-  }))
+    return products.docs.map((product: any) => ({
+      slug: product.slug,
+    }))
+  } catch (error) {
+    console.error("Error in generateStaticParams (possibly due to pending migrations):", error)
+    return [] // Fallback to empty array to allow build to continue
+  }
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
-  const payload = await getPayload({ config: configPromise })
-  const { docs } = await payload.find({
-    collection: 'products' as any,
-    where: { slug: { equals: slug } },
-  })
+  try {
+    const payload = await getPayload({ config: configPromise })
+    const { docs } = await payload.find({
+      collection: 'products' as any,
+      where: { slug: { equals: slug } },
+    })
 
-  const product = docs[0] as any
-  if (!product) return { title: 'Ürün Bulunamadı' }
+    const product = docs[0] as any
+    if (!product) return { title: 'Ürün Bulunamadı' }
 
-  return {
-    title: product.meta?.title || `${product.title} | Dilim Pastaneleri`,
-    description: product.meta?.description || product.description || `${product.title} siparişi - Kavacık ve Ümraniye'ye aynı gün teslimat. Günlük taze malzemelerle hazırlanan lüks pasta siparişi.`,
-    alternates: {
-      canonical: `https://www.dilim.com.tr/urunler/${slug}`,
-    },
-    openGraph: {
-      title: `${product.title} | Dilim Pastaneleri`,
-      description: product.meta?.description || `${product.title} siparişi. Kavacık ve Ümraniye'ye taze teslimat.`,
-      url: `https://www.dilim.com.tr/urunler/${slug}`,
-      images: product.images?.[0]?.url ? [{ url: `https://www.dilim.com.tr${product.images[0].url}` }] : [],
-      type: 'website',
-    },
+    return {
+      title: product.meta?.title || `${product.title} | Dilim Pastaneleri`,
+      description: product.meta?.description || product.description || `${product.title} siparişi - Kavacık ve Ümraniye'ye aynı gün teslimat. Günlük taze malzemelerle hazırlanan lüks pasta siparişi.`,
+      alternates: {
+        canonical: `https://www.dilim.com.tr/urunler/${slug}`,
+      },
+      openGraph: {
+        title: `${product.title} | Dilim Pastaneleri`,
+        description: product.meta?.description || `${product.title} siparişi. Kavacık ve Ümraniye'ye taze teslimat.`,
+        url: `https://www.dilim.com.tr/urunler/${slug}`,
+        images: product.images?.[0]?.url ? [{ url: `https://www.dilim.com.tr${product.images[0].url}` }] : [],
+        type: 'website',
+      },
+    }
+  } catch (error) {
+    console.error("Error in generateMetadata (possibly due to pending migrations):", error)
+    return { title: 'Dilim Pastaneleri' } // Fallback metadata
   }
+}
+
 }
 
 export default async function ProductDetailPage({ params }: { params: Promise<{ slug: string }> }) {
