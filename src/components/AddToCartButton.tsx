@@ -186,9 +186,15 @@ export function AddToCartButton({ product, description, crossSellProducts = [] }
 
       {product.hasNumberSelection && (
         <div className={`mb-6 p-5 rounded-2xl border-2 transition-all duration-300 ${showError && selectedNumber === null ? 'border-red-400 bg-red-50/50 shadow-[0_0_15px_rgba(248,113,113,0.3)]' : 'border-gray-100 bg-gray-50'}`}>
-          <h4 className="text-sm font-bold text-dilim-siyah mb-3 flex items-center justify-between">
-            <span>Rakam Seçiniz <span className="text-red-500">*</span></span>
-            {showError && selectedNumber === null && <span className="text-red-500 text-xs animate-pulse font-medium">Zorunlu Seçim</span>}
+          <h4 className="text-sm font-bold text-dilim-siyah mb-3 flex flex-col">
+            <div className="flex items-center justify-between">
+              <span>Rakam Seçiniz <span className="text-red-500">*</span></span>
+              {showError && selectedNumber === null && <span className="text-red-500 text-xs animate-pulse font-medium">Zorunlu Seçim</span>}
+            </div>
+            <span className="text-xs text-gray-500 font-normal mt-1.5 flex items-center gap-1">
+               <svg className="w-3 h-3 text-dilim-portakal" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+               Örn: 25 yaş için 2 ve 5 rakamlarını <strong>ayrı ayrı</strong> sepete ekleyiniz.
+            </span>
           </h4>
           <div className="flex flex-wrap gap-2">
             {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => (

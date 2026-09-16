@@ -16,6 +16,7 @@ export type ProductForModal = {
   hasSizes?: boolean;
   sizes?: { size: string; price: number }[];
   hasNumberSelection?: boolean;
+  hasTextSelection?: boolean;
 }
 
 type QuickAddModalProps = {
@@ -30,6 +31,7 @@ export function QuickAddModal({ product, isOpen, onClose, crossSellProducts, onA
   const [quantity, setQuantity] = useState(1)
   const [selectedSize, setSelectedSize] = useState<string | null>(null)
   const [selectedNumber, setSelectedNumber] = useState<number | null>(null)
+  const [selectedText, setSelectedText] = useState<string | null>(null)
   const [showError, setShowError] = useState(false)
   const [cakeMessage, setCakeMessage] = useState('')
   const [showCrossSell, setShowCrossSell] = useState(false)
@@ -42,6 +44,7 @@ export function QuickAddModal({ product, isOpen, onClose, crossSellProducts, onA
       setQuantity(1)
       setSelectedSize(null)
       setSelectedNumber(null)
+      setSelectedText(null)
       setShowError(false)
       setCakeMessage('')
       setShowCrossSell(false)
@@ -72,6 +75,12 @@ export function QuickAddModal({ product, isOpen, onClose, crossSellProducts, onA
       return;
     }
 
+    if (product.hasTextSelection && !selectedText) {
+      setShowError(true);
+      toast.error('Lütfen sepete eklemeden önce bir yazı seçiniz.');
+      return;
+    }
+
     let finalId = product.id.toString();
     let finalPrice = `₺${product.price}`;
     
@@ -91,6 +100,12 @@ export function QuickAddModal({ product, isOpen, onClose, crossSellProducts, onA
       finalId = `${finalId}-num-${selectedNumber}`;
       const numText = `Seçilen Rakam: ${selectedNumber}`;
       optionsText = optionsText ? `${optionsText} | ${numText}` : numText;
+    }
+
+    if (product.hasTextSelection && selectedText) {
+      finalId = `${finalId}-text-${selectedText.replace(/[^a-zA-Z0-9]/g, '')}`;
+      const txt = `Seçilen Yazı: ${selectedText}`;
+      optionsText = optionsText ? `${optionsText} | ${txt}` : txt;
     }
 
     addToCart({
@@ -211,9 +226,15 @@ export function QuickAddModal({ product, isOpen, onClose, crossSellProducts, onA
           {/* Rakam Seçimi */}
           {product.hasNumberSelection && (
             <div className="mb-6 p-4 rounded-xl border border-gray-200 bg-gray-50">
-              <h4 className="text-sm font-bold text-dilim-siyah mb-3 flex items-center justify-between">
-                <span>Rakam Seçiniz <span className="text-red-500">*</span></span>
-                {showError && <span className="text-red-500 text-xs animate-pulse font-medium">Zorunlu Seçim</span>}
+              <h4 className="text-sm font-bold text-dilim-siyah mb-3 flex flex-col">
+                <div className="flex items-center justify-between">
+                  <span>Rakam Seçiniz <span className="text-red-500">*</span></span>
+                  {showError && selectedNumber === null && <span className="text-red-500 text-xs animate-pulse font-medium">Zorunlu Seçim</span>}
+                </div>
+                <span className="text-xs text-gray-500 font-normal mt-1.5 flex items-center gap-1">
+                   <svg className="w-3 h-3 text-dilim-portakal" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                   Örn: 25 yaş için 2 ve 5 rakamlarını <strong>ayrı ayrı</strong> sepete ekleyiniz.
+                </span>
               </h4>
               <div className="flex flex-wrap gap-2">
                 {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => (
@@ -236,18 +257,47 @@ export function QuickAddModal({ product, isOpen, onClose, crossSellProducts, onA
             </div>
           )}
 
-          {/* Pasta Yazısı Input */}
-          <div className="mb-8">
-            <input 
-              type="text" 
-              placeholder="Pasta üzerine yazılacak yazı. (Maksimum 50 Karakter)"
-              maxLength={50}
-              value={cakeMessage}
-              onChange={(e) => setCakeMessage(e.target.value)}
-              className="w-full px-4 py-3.5 rounded-xl border border-gray-200 focus:outline-none focus:border-dilim-portakal focus:ring-1 focus:ring-dilim-portakal transition-all text-sm text-dilim-siyah placeholder:text-gray-400"
-            />
-          </div>
+          {/* Yazı Seçimi (Pleksi vs) */}
+          {product.hasTextSelection && (
+            <div className="mb-6 p-4 rounded-xl border border-gray-200 bg-gray-50">
+              <h4 className="text-sm font-bold text-dilim-siyah mb-3 flex items-center justify-between">
+                <span>Yazı Seçiniz <span className="text-red-500">*</span></span>
+                {showError && !selectedText && <span className="text-red-500 text-xs animate-pulse font-medium">Zorunlu Seçim</span>}
+              </h4>
+              <div className="relative">
+                <select
+                  className="w-full appearance-none bg-white border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded-xl leading-tight focus:outline-none focus:bg-white focus:border-dilim-portakal transition-colors cursor-pointer text-sm font-medium"
+                  value={selectedText || ''}
+                  onChange={(e) => {
+                    setSelectedText(e.target.value);
+                    setShowError(false);
+                  }}
+                >
+                  <option value="" disabled>Lütfen bir yazı seçin</option>
+                  {['İyi ki Doğdun', 'Happy Birthday', 'Canım Annem', 'Canım Kızım', 'Canım Babam', 'Canım Eşim', 'Seni Seviyoruz', 'Gönlümün Sultanı', 'İyi ki Varsın', 'Queen', 'Prenses', 'Canım Oğlum', 'Seni Seviyorum'].map(txt => (
+                    <option key={txt} value={txt}>{txt}</option>
+                  ))}
+                </select>
+                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-500">
+                  <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                </div>
+              </div>
+            </div>
+          )}
 
+          {/* Serbest Pasta Yazısı Input (Sadece pastalarda gösterilmesi için kontrol eklenebilir, şimdilik kalabilir) */}
+          {(!product.hasTextSelection && !product.hasNumberSelection) && (
+            <div className="mb-8">
+              <input 
+                type="text" 
+                placeholder="Pasta üzerine yazılacak yazı. (Maksimum 50 Karakter)"
+                maxLength={50}
+                value={cakeMessage}
+                onChange={(e) => setCakeMessage(e.target.value)}
+                className="w-full px-4 py-3.5 rounded-xl border border-gray-200 focus:outline-none focus:border-dilim-portakal focus:ring-1 focus:ring-dilim-portakal transition-all text-sm text-dilim-siyah placeholder:text-gray-400"
+              />
+            </div>
+          )}
           {/* Alt Butonlar */}
           <div className="mt-auto flex flex-col gap-3">
             <div className="flex gap-3">
