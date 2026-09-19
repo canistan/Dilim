@@ -184,7 +184,16 @@ export default function OdemePage() {
         }
       } else {
         console.error("Checkout failed API response:", data);
-        toast.error("Sipariş oluşturulamadı: " + (data.error || "Bilinmeyen hata"))
+        let errorMsg = data.error || "Bilinmeyen hata";
+        if (typeof errorMsg === 'string' && errorMsg.includes("The following field is invalid")) {
+            const fieldMatch = errorMsg.split(">").pop()?.trim();
+            if (fieldMatch) {
+               errorMsg = `Lütfen "${fieldMatch}" bilgisini eksiksiz ve doğru giriniz.`;
+            } else {
+               errorMsg = "Lütfen formdaki eksik bilgileri doldurunuz.";
+            }
+        }
+        toast.error("Sipariş oluşturulamadı: " + errorMsg)
       }
     } catch (err: any) {
       console.error("Checkout network or parse error:", err);

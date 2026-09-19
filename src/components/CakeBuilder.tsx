@@ -89,6 +89,53 @@ export default function CakeBuilder({ timeSlots = [], globalOptions, contactSett
   const [userAddresses, setUserAddresses] = useState<any[]>([])
   const [selectedAddressType, setSelectedAddressType] = useState<'saved' | 'new'>('saved')
 
+  const getMinDate = () => {
+    const now = new Date();
+    if (now.getDay() === 6 && now.getHours() >= 12) {
+      now.setDate(now.getDate() + 2); // Cumartesi 12:00 sonrası ise Pazartesi
+    } else if (now.getDay() === 0) {
+      now.setDate(now.getDate() + 1); // Pazar ise Pazartesi
+    }
+    return now.toISOString().split('T')[0];
+  }
+
+  const handleDateChange = (val: string) => {
+    if (!val) {
+      handleSelect('requestedDate', '');
+      return;
+    }
+    const selectedDate = new Date(val);
+    if (selectedDate.getDay() === 0) {
+      toast.error("Pazar günleri imalathanemiz kapalıdır. Lütfen başka bir gün seçiniz.");
+      handleSelect('requestedDate', '');
+      return;
+    }
+    handleSelect('requestedDate', val);
+  }
+
+  const getFilteredTimeSlots = () => {
+    const now = new Date();
+    const isSaturdayAfternoon = now.getDay() === 6 && now.getHours() >= 12;
+    const isSunday = now.getDay() === 0;
+    
+    let slots = timeSlots.length > 0 ? timeSlots : [
+      { id: '1', timeRange: "10:00 - 14:00" },
+      { id: '2', timeRange: "14:00 - 18:00" }
+    ];
+
+    if ((isSaturdayAfternoon || isSunday) && selections.requestedDate) {
+      const selected = new Date(selections.requestedDate);
+      if (selected.getDay() === 1) { // Eğer Pazartesi seçildiyse
+        slots = slots.filter(slot => {
+          const startHourStr = slot.timeRange.split(':')[0];
+          const startHour = parseInt(startHourStr);
+          return !isNaN(startHour) && startHour >= 12;
+        });
+      }
+    }
+    return slots;
+  }
+
   const { status } = useSession()
 
   useEffect(() => {
@@ -492,11 +539,12 @@ Fiyat teklifinizi ve onayınızı bekliyorum.`;
                   <label className="block text-sm font-medium text-gray-700 mb-1">Teslimat Tarihi <span className="text-red-500">*</span></label>
                   <input 
                     type="date" 
-                    min={new Date().toISOString().split('T')[0]}
+                    min={getMinDate()}
                     value={selections.requestedDate} 
-                    onChange={(e) => handleSelect('requestedDate', e.target.value)} 
+                    onChange={(e) => handleDateChange(e.target.value)} 
                     className="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-dilim-portakal focus:border-transparent outline-none transition-all" 
                   />
+                  <p className="text-xs text-gray-400 mt-1">Pazar günleri imalathanemiz kapalıdır.</p>
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Teslimat Saati <span className="text-red-500">*</span></label>
@@ -506,15 +554,9 @@ Fiyat teklifinizi ve onayınızı bekliyorum.`;
                     className="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-dilim-portakal focus:border-transparent outline-none transition-all bg-white"
                   >
                     <option value="" disabled>Saat Aralığı Seçin</option>
-                    {timeSlots.map((slot) => (
+                    {getFilteredTimeSlots().map((slot) => (
                       <option key={slot.id} value={slot.timeRange}>{slot.timeRange}</option>
                     ))}
-                    {timeSlots.length === 0 && (
-                      <>
-                        <option value="10:00 - 14:00">10:00 - 14:00</option>
-                        <option value="14:00 - 18:00">14:00 - 18:00</option>
-                      </>
-                    )}
                   </select>
                 </div>
                 

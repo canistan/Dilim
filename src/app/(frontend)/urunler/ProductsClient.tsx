@@ -216,7 +216,7 @@ function ProductsClientInner({
                           <Eye className="w-4 h-4" />
                           İncele
                         </Link>
-                        {product.price === 0 ? (
+                        {product.price === 0 && !product.hasSizes && !product.hasNumberSelection && !product.hasTextSelection ? (
                           <Link
                             href={`/tasarla?ref=${product.slug}`}
                             className="pointer-events-auto bg-dilim-siyah text-white px-5 py-3 rounded-full font-semibold text-sm flex items-center gap-2 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 hover:bg-gray-800 shadow-lg"

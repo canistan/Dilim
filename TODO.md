@@ -5,6 +5,10 @@
 ## 🚧 Aktif Görevler
 *(Ekran görüntünüzden ve açık dosyalardan toparlanan görevler)*
 
+- [x] Sipariş oluşturma hatalarını Türkçeleştir ve kurumsal bir yapıya dönüştür (`odeme/page.tsx`).
+- [x] Ürün kartlarındaki "Tasarla" butonunu Pastalar hariç diğer ürünlerde "Hızlı Ekle" yap (`ProductsClient.tsx`).
+- [x] Kendi Pastanı Tasarla takvimine "Pazar kapalı" ve "Cumartesi öğlen -> Pazartesi öğlen teslimat" kuralını ekle (`CakeBuilder.tsx`).
+- [ ] **Ürün Görselleri Üretimi:** Hazırlanan `generate_all_images.ts` scriptini çalıştırarak tüm dummy ürünler için yapay zeka ile görsel üret (Yaklaşık 110 ürün).
 - [x] **Ana Sayfa CMS Entegrasyonu:**
   - [x] `scripts/seed_homepage.ts` scriptini çalıştırıp sabit metinleri/görselleri veritabanına aktarmak.
   - [x] Ön yüzde (frontend) değişikliklerin sorunsuz çalıştığını doğrulamak.
