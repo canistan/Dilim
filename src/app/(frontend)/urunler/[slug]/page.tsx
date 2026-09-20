@@ -97,14 +97,14 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
     depth: 2,
   })
 
-  // Çapraz satış (Mumlar vb) için Ekstralar ve Hediyelik kategorilerini bul
+  // Çapraz satış (Mumlar vb) yerine yeni menüdeki Çikolata ve Petifürleri kullan
   const extrasCategories = await payload.find({
     collection: 'categories' as any,
     where: { 
       or: [
-        { slug: { equals: 'ekstralar' } },
-        { slug: { equals: 'hediyelik' } },
-        { slug: { contains: 'hediye' } }
+        { slug: { equals: 'cikolata' } },
+        { slug: { equals: 'petifur-makaron' } },
+        { slug: { contains: 'cikolata' } }
       ]
     },
     limit: 5,

@@ -29,7 +29,7 @@ export default async function ProductsPage() {
     where: {
       and: [
         { _status: { equals: 'published' } },
-        { isActive: { equals: true } },
+        { isActive: { equals: 'active' } },
         { stock: { greater_than: 0 } }
       ]
     },
@@ -66,9 +66,9 @@ export default async function ProductsPage() {
     collection: 'categories' as any,
     where: { 
       or: [
-        { slug: { equals: 'ekstralar' } },
-        { slug: { equals: 'hediyelik' } },
-        { slug: { contains: 'hediye' } }
+        { slug: { equals: 'cikolata' } },
+        { slug: { equals: 'petifur-makaron' } },
+        { slug: { contains: 'cikolata' } }
       ]
     },
     limit: 5,

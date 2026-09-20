@@ -43,6 +43,7 @@ function ProductsClientInner({
   const initialCategory = searchParams.get('kategori') || 'all'
   const [activeCategorySlug, setActiveCategorySlug] = useState(initialCategory)
   const [searchQuery, setSearchQuery] = useState('')
+  const [subFilter, setSubFilter] = useState('tumu') // Alt filtre state
   const [quickAddProduct, setQuickAddProduct] = useState<any>(null)
   
   const [showCrossSell, setShowCrossSell] = useState(false)
@@ -87,7 +88,14 @@ function ProductsClientInner({
       return title.includes(query)
     })()
 
-    return matchesCategory && matchesSearch
+    // Alt filtre (Şerbetli tatlılar vs)
+    let matchesSub = true
+    if (activeCategorySlug === 'serbetli-tatlilar' && subFilter !== 'tumu') {
+      const title = turkishLower(p.title)
+      matchesSub = title.includes(subFilter)
+    }
+
+    return matchesCategory && matchesSearch && matchesSub
   })
 
   return (
@@ -156,7 +164,10 @@ function ProductsClientInner({
               {allCategories.map((cat) => (
                 <button
                   key={cat.id}
-                  onClick={() => setActiveCategorySlug(cat.slug)}
+                  onClick={() => {
+                    setActiveCategorySlug(cat.slug)
+                    setSubFilter('tumu') // Kategori değiştiğinde alt filtreyi sıfırla
+                  }}
                   className={`px-6 py-3 rounded-full text-sm font-medium transition-all duration-300 shadow-sm ${
                     activeCategorySlug === cat.slug
                       ? 'bg-gradient-to-r from-dilim-portakal to-dilim-turuncu text-white shadow-md transform scale-105'
@@ -167,6 +178,32 @@ function ProductsClientInner({
                 </button>
               ))}
             </div>
+
+            {/* Alt Filtre (Sadece Şerbetli Tatlılar İçin) */}
+            <AnimatePresence>
+              {activeCategorySlug === 'serbetli-tatlilar' && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0, marginTop: 0 }}
+                  animate={{ opacity: 1, height: 'auto', marginTop: 16 }}
+                  exit={{ opacity: 0, height: 0, marginTop: 0 }}
+                  className="flex justify-center gap-2 flex-wrap overflow-hidden"
+                >
+                  {['Tümü', 'Cevizli', 'Fıstıklı', 'Fındıklı'].map(filter => (
+                    <button
+                      key={filter}
+                      onClick={() => setSubFilter(turkishLower(filter))}
+                      className={`px-5 py-2 rounded-full text-xs font-semibold transition-all duration-300 ${
+                        subFilter === turkishLower(filter)
+                          ? 'bg-dilim-siyah text-white shadow-md transform scale-105'
+                          : 'bg-white text-gray-500 border border-gray-200 hover:bg-gray-100'
+                      }`}
+                    >
+                      {filter}
+                    </button>
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
 
           {/* Product Grid */}
