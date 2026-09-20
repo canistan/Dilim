@@ -17,6 +17,9 @@ export default async function ProductsPage() {
   // Fetch categories
   const categoriesRes = await payload.find({
     collection: 'categories' as any,
+    where: {
+      isActive: { equals: true },
+    },
     limit: 100,
   })
 
@@ -26,7 +29,7 @@ export default async function ProductsPage() {
     where: {
       and: [
         { _status: { equals: 'published' } },
-        { isActive: { equals: 'active' } },
+        { isActive: { equals: true } },
         { stock: { greater_than: 0 } }
       ]
     },

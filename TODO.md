@@ -22,6 +22,8 @@
   - [/] Sitedeki diğer görseller standardında, yüksek kaliteli ve düşük boyutlu (WEBP formatında) yapay zeka ile görseller üretilecek. (23/65 görsel tamamlandı — Kota ~18:44'te sıfırlanacak)
   - [/] Üretilen görseller sisteme yüklenecek.
   - 📝 **Not (Görsel Üretimi Nasıl Çalışır):** Görsel üretimi `scripts/generate_all_images.ts` üzerinden Payload CMS'in `products` koleksiyonundan görseli olmayan (veya test/default görseli olan) ürünleri otomatik olarak çekerek DALL-E 3 ile yüksek kaliteli (WEBP) görsel üretip sisteme yükler. Komutu `npx tsx scripts/generate_all_images.ts` şeklinde çalıştırarak üretimi yapıyoruz.
+- [ ] **Birlikte İyi Gider (Cross-Sell) Optimizasyonu:**
+  - Sepete eklenen ürüne göre mantıklı tamamlayıcı ürünler sunan (Çapraz Satış) sisteminin iyileştirilmesi (Örn: Tatlı alanlara dondurma önermek).
 
 ## 🅿️ Park Edilen Konular
 - [x] **İyzico Canlı Ortam Geçişi:** İyzico live (canlı) API anahtarları tanımlandı ve test edildi.

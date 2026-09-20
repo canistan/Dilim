@@ -1,7 +1,7 @@
 "use client"
 
 import { useCart } from '@/context/CartContext'
-import { X, Minus, Plus, ShoppingBag, Trash2, MessageCircle } from 'lucide-react'
+import { ShoppingBag, X, Plus, Minus, Trash2, ArrowRight, Info, MessageCircle } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -129,6 +129,11 @@ export function CartDrawer() {
             {/* Footer */}
             {items.length > 0 && (
               <div className="p-6 bg-gray-50 border-t border-gray-100">
+                <div className="bg-orange-50/80 border border-orange-200/50 p-3.5 rounded-2xl mb-5 flex gap-3 items-start text-sm text-orange-900 shadow-sm">
+                  <Info className="w-5 h-5 flex-shrink-0 mt-0.5 text-orange-500" />
+                  <p className="leading-relaxed"><strong>Önemli Bilgi:</strong> Tüm ürünlerimiz size özel taze hazırlandığı için teslimatlarımız <strong>en erken 1 gün sonra (yarın)</strong> yapılmaktadır.</p>
+                </div>
+
                 <div className="flex items-center justify-between mb-6">
                   <span className="text-gray-500 font-medium">Ara Toplam</span>
                   <span className="text-2xl font-serif font-bold text-dilim-siyah">₺{cartTotal}</span>

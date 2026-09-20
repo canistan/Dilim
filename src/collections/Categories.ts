@@ -16,6 +16,15 @@ export const Categories: CollectionConfig = {
   },
   fields: [
     {
+      name: 'isActive',
+      type: 'checkbox',
+      label: 'Aktif (Kullanıcılar Görebilir mi?)',
+      defaultValue: true,
+      admin: {
+        position: 'sidebar',
+      },
+    },
+    {
       name: 'title',
       type: 'text',
       required: true,
