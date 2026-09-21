@@ -193,31 +193,39 @@ function ProductsClientInner({
 
             {/* Alt Filtre (Sütlü ve Şerbetli Tatlılar İçin) */}
             <AnimatePresence>
-              {(activeCategorySlug === 'serbetli-tatlilar' || activeCategorySlug === 'sutlu-tatlilar') && (
-                <motion.div
-                  initial={{ opacity: 0, height: 0, marginTop: 0 }}
-                  animate={{ opacity: 1, height: 'auto', marginTop: 16 }}
-                  exit={{ opacity: 0, height: 0, marginTop: 0 }}
-                  className="flex justify-center gap-2 flex-wrap overflow-hidden"
-                >
-                  {(activeCategorySlug === 'serbetli-tatlilar' 
-                    ? ['Tümü', 'Cevizli Seçenekler', 'Fıstıklı Seçenekler', 'Fındıklı Seçenekler']
-                    : ['Tümü', 'Cheesecake Dilim']
-                  ).map(filter => (
-                    <button
-                      key={filter}
-                      onClick={() => setSubFilter(turkishLower(filter))}
-                      className={`px-5 py-2 rounded-full text-xs font-semibold transition-all duration-300 ${
-                        subFilter === turkishLower(filter)
-                          ? 'bg-dilim-siyah text-white shadow-md transform scale-105'
-                          : 'bg-white text-gray-500 border border-gray-200 hover:bg-gray-100'
-                      }`}
-                    >
-                      {filter}
-                    </button>
-                  ))}
-                </motion.div>
-              )}
+              {(() => {
+                const activeCatObj = allCategories.find(c => c.slug === activeCategorySlug);
+                const isSerbetli = activeCatObj?.title?.toUpperCase().includes('ŞERBETLİ');
+                const isSutlu = activeCatObj?.title?.toUpperCase().includes('SÜTLÜ');
+                
+                if (!isSerbetli && !isSutlu) return null;
+
+                return (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0, marginTop: 0 }}
+                    animate={{ opacity: 1, height: 'auto', marginTop: 16 }}
+                    exit={{ opacity: 0, height: 0, marginTop: 0 }}
+                    className="flex justify-center gap-2 flex-wrap overflow-hidden"
+                  >
+                    {(isSerbetli 
+                      ? ['Tümü', 'Cevizli Seçenekler', 'Fıstıklı Seçenekler', 'Fındıklı Seçenekler']
+                      : ['Tümü', 'Cheesecake Dilim']
+                    ).map(filter => (
+                      <button
+                        key={filter}
+                        onClick={() => setSubFilter(turkishLower(filter))}
+                        className={`px-5 py-2 rounded-full text-xs font-semibold transition-all duration-300 ${
+                          subFilter === turkishLower(filter)
+                            ? 'bg-dilim-siyah text-white shadow-md transform scale-105'
+                            : 'bg-white text-gray-500 border border-gray-200 hover:bg-gray-100'
+                        }`}
+                      >
+                        {filter}
+                      </button>
+                    ))}
+                  </motion.div>
+                );
+              })()}
             </AnimatePresence>
           </div>
 
