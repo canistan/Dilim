@@ -217,7 +217,38 @@ export default async function FrontendLayout({
             <Footer contactSettings={contactSettings} />
             <CookiePopup />
             <PromoPopup />
-            <Toaster position="bottom-center" toastOptions={{ duration: 3000, style: { background: '#1c1c1c', color: '#fff', borderRadius: '12px', padding: '16px', marginBottom: '80px' } }} />
+            <Toaster 
+              position="top-center" 
+              toastOptions={{ 
+                duration: 4000, 
+                style: { 
+                  background: '#ffffff', 
+                  color: '#1f2937', 
+                  borderRadius: '16px', 
+                  padding: '16px 24px',
+                  boxShadow: '0 10px 40px -10px rgba(0,0,0,0.08), 0 4px 10px -4px rgba(0,0,0,0.04)',
+                  border: '1px solid #f3f4f6',
+                  fontSize: '14px',
+                  fontWeight: 500
+                },
+                success: {
+                  iconTheme: {
+                    primary: '#f97316', // dilim-portakal
+                    secondary: '#ffffff',
+                  },
+                },
+                error: {
+                  iconTheme: {
+                    primary: '#ef4444', 
+                    secondary: '#ffffff',
+                  },
+                  style: {
+                    border: '1px solid #fecaca',
+                    background: '#fef2f2'
+                  }
+                }
+              }} 
+            />
           </CartProvider>
         </AuthProvider>
       </body>
