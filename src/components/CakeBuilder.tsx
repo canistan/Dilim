@@ -20,28 +20,28 @@ const STEPS = [
 
 const OPTIONS = {
   krema: [
-    { id: 'Çikolata Kremalı', name: 'Çikolata Kremalı', desc: 'Yoğun çikolata lezzeti' },
-    { id: 'Beyaz Kremalı', name: 'Beyaz Kremalı', desc: 'Hafif ve sade vanilya dokunuşu' },
-    { id: 'Akışkan Kremalı', name: 'Akışkan Kremalı', desc: 'Taze, ıslak ve akışkan doku' },
+    { id: 'Çikolata Kremalı', name: 'Çikolata Kremalı', desc: 'Yoğun çikolata lezzeti', color: 'bg-amber-900' },
+    { id: 'Beyaz Kremalı', name: 'Beyaz Kremalı', desc: 'Hafif ve sade vanilya dokunuşu', color: 'bg-orange-50 border border-gray-200' },
+    { id: 'Akışkan Kremalı', name: 'Akışkan Kremalı', desc: 'Taze, ıslak ve akışkan doku', color: 'bg-amber-200' },
   ],
   kek: [
-    { id: 'Çikolatalı Kek', name: 'Çikolatalı Kek', desc: 'Klasik yoğun kakaolu sünger' },
-    { id: 'Beyaz Kek', name: 'Beyaz Kek', desc: 'Sade, yumuşacık sünger kek' },
+    { id: 'Çikolatalı Kek', name: 'Çikolatalı Kek', desc: 'Klasik yoğun kakaolu sünger', color: 'bg-amber-900' },
+    { id: 'Beyaz Kek', name: 'Beyaz Kek', desc: 'Sade, yumuşacık sünger kek', color: 'bg-orange-50 border border-gray-200' },
   ],
   icerik: [
-    { id: 'Çilekli', name: 'Çilekli' },
-    { id: 'Muzlu', name: 'Muzlu' },
-    { id: 'Karışık Meyveli', name: 'Karışık Meyveli' },
-    { id: 'Profiterollü', name: 'Profiterollü' },
-    { id: 'Fıstıklı', name: 'Fıstıklı' },
-    { id: 'Parça Çikolatalı', name: 'Parça Çikolatalı' },
-    { id: 'Frambuazlı', name: 'Frambuazlı' },
-    { id: 'Böğürtlenli', name: 'Böğürtlenli' },
-    { id: 'Krokanlı', name: 'Krokanlı' },
-    { id: 'Kestaneli', name: 'Kestaneli' },
-    { id: 'Orman Meyveli', name: 'Orman Meyveli' },
-    { id: 'Oreolu', name: 'Oreolu' },
-    { id: 'Lotus Bisküvili', name: 'Lotus Bisküvili' },
+    { id: 'Çilekli', name: 'Çilekli', color: 'bg-red-400' },
+    { id: 'Muzlu', name: 'Muzlu', color: 'bg-yellow-300' },
+    { id: 'Karışık Meyveli', name: 'Karışık Meyveli', color: 'bg-purple-400' },
+    { id: 'Profiterollü', name: 'Profiterollü', color: 'bg-amber-800' },
+    { id: 'Fıstıklı', name: 'Fıstıklı', color: 'bg-green-500' },
+    { id: 'Parça Çikolatalı', name: 'Parça Çikolatalı', color: 'bg-amber-950' },
+    { id: 'Frambuazlı', name: 'Frambuazlı', color: 'bg-pink-500' },
+    { id: 'Böğürtlenli', name: 'Böğürtlenli', color: 'bg-violet-600' },
+    { id: 'Krokanlı', name: 'Krokanlı', color: 'bg-amber-500' },
+    { id: 'Kestaneli', name: 'Kestaneli', color: 'bg-orange-900' },
+    { id: 'Orman Meyveli', name: 'Orman Meyveli', color: 'bg-fuchsia-600' },
+    { id: 'Oreolu', name: 'Oreolu', color: 'bg-slate-800' },
+    { id: 'Lotus Bisküvili', name: 'Lotus Bisküvili', color: 'bg-orange-600' },
   ],
   pat: [
     { id: 'Standart Pat', name: 'Standart Pat (Normal)' },
@@ -302,64 +302,64 @@ export default function CakeBuilder({ timeSlots = [], contactSettings }: { timeS
     switch (currentStep) {
       case 1:
         return (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {OPTIONS.krema.map((opt) => (
-              <div key={opt.id} onClick={() => handleSelect('krema', opt.id)} 
-                className={`relative cursor-pointer rounded-2xl p-6 border transition-all duration-200 
+              <motion.div key={opt.id} onClick={() => handleSelect('krema', opt.id)} whileTap={{ scale: 0.97 }}
+                className={`relative cursor-pointer rounded-2xl p-5 border transition-all duration-300 flex items-start gap-4
                 ${selections.krema === opt.id 
-                  ? 'border-dilim-portakal ring-1 ring-dilim-portakal bg-orange-50/30' 
-                  : 'border-gray-200 bg-white hover:border-gray-300'}`}>
-                {selections.krema === opt.id && (
-                  <div className="absolute top-4 right-4">
-                    <Check className="w-5 h-5 text-dilim-portakal" />
-                  </div>
-                )}
-                <div>
-                  <h3 className={`font-semibold text-lg mb-1 ${selections.krema === opt.id ? 'text-dilim-portakal' : 'text-gray-900'}`}>{opt.name}</h3>
-                  <p className="text-sm text-gray-500">{opt.desc}</p>
+                  ? 'border-dilim-portakal shadow-[0_4px_20px_rgba(249,115,22,0.15)] bg-orange-50/20' 
+                  : 'border-gray-200 bg-white hover:border-gray-300 hover:shadow-sm'}`}>
+                <div className={`w-12 h-12 rounded-full shrink-0 flex items-center justify-center ${opt.color} shadow-inner`}>
+                  {selections.krema === opt.id && <Check className="w-5 h-5 text-white drop-shadow-md" />}
                 </div>
-              </div>
+                <div>
+                  <h3 className={`font-semibold text-[15px] mb-1 ${selections.krema === opt.id ? 'text-dilim-portakal' : 'text-gray-900'}`}>{opt.name}</h3>
+                  <p className="text-xs text-gray-500 leading-relaxed">{opt.desc}</p>
+                </div>
+              </motion.div>
             ))}
           </div>
         );
       case 2:
         return (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-4xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-4xl mx-auto">
             {OPTIONS.kek.map((opt) => (
-              <div key={opt.id} onClick={() => handleSelect('kek', opt.id)} 
-                className={`relative cursor-pointer rounded-2xl p-8 border transition-all duration-200 
+              <motion.div key={opt.id} onClick={() => handleSelect('kek', opt.id)} whileTap={{ scale: 0.97 }}
+                className={`relative cursor-pointer rounded-2xl p-6 border transition-all duration-300 flex items-center gap-5
                 ${selections.kek === opt.id 
-                  ? 'border-dilim-portakal ring-1 ring-dilim-portakal bg-orange-50/30' 
-                  : 'border-gray-200 bg-white hover:border-gray-300'}`}>
-                {selections.kek === opt.id && (
-                  <div className="absolute top-4 right-4">
-                    <Check className="w-5 h-5 text-dilim-portakal" />
-                  </div>
-                )}
+                  ? 'border-dilim-portakal shadow-[0_4px_20px_rgba(249,115,22,0.15)] bg-orange-50/20' 
+                  : 'border-gray-200 bg-white hover:border-gray-300 hover:shadow-sm'}`}>
+                <div className={`w-14 h-14 rounded-full shrink-0 flex items-center justify-center ${opt.color} shadow-inner`}>
+                  {selections.kek === opt.id && <Check className="w-6 h-6 text-white drop-shadow-md" />}
+                </div>
                 <div>
-                  <h3 className={`font-semibold text-xl mb-2 ${selections.kek === opt.id ? 'text-dilim-portakal' : 'text-gray-900'}`}>{opt.name}</h3>
+                  <h3 className={`font-semibold text-lg mb-1 ${selections.kek === opt.id ? 'text-dilim-portakal' : 'text-gray-900'}`}>{opt.name}</h3>
                   <p className="text-sm text-gray-500">{opt.desc}</p>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         );
       case 3:
         return (
           <div className="max-w-5xl mx-auto">
-            <p className="text-gray-500 text-sm mb-6">Lütfen en az 1, en fazla 3 içerik seçiniz.</p>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+            <div className="bg-blue-50 text-blue-800 p-4 rounded-xl mb-6 text-sm flex items-center gap-3">
+              <Check className="w-5 h-5 shrink-0" />
+              Lütfen pastanızın içine girecek en az 1, en fazla 3 içerik seçiniz.
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
               {OPTIONS.icerik.map((opt) => {
                 const isSelected = selections.icerik.includes(opt.id);
                 return (
-                  <button key={opt.id} onClick={() => handleToggleIcerik(opt.id)} 
-                    className={`relative p-4 rounded-xl border transition-all duration-200 text-center font-medium
+                  <motion.button key={opt.id} onClick={() => handleToggleIcerik(opt.id)} whileTap={{ scale: 0.95 }}
+                    className={`relative p-3 rounded-xl border transition-all duration-300 flex items-center gap-3 text-left
                     ${isSelected 
-                      ? 'border-dilim-portakal ring-1 ring-dilim-portakal bg-orange-50 text-dilim-portakal' 
-                      : 'border-gray-200 bg-white text-gray-700 hover:border-gray-300 hover:bg-gray-50'}`}>
-                    {isSelected && <Check className="w-4 h-4 absolute top-2 right-2 text-dilim-portakal" />}
-                    {opt.name}
-                  </button>
+                      ? 'border-dilim-portakal shadow-md bg-white' 
+                      : 'border-gray-200 bg-white hover:border-gray-300 hover:shadow-sm'}`}>
+                    <div className={`w-4 h-4 rounded-full ${opt.color} shrink-0`} />
+                    <span className={`text-sm font-medium ${isSelected ? 'text-dilim-portakal' : 'text-gray-700'}`}>{opt.name}</span>
+                    {isSelected && <Check className="w-4 h-4 absolute right-3 text-dilim-portakal" />}
+                  </motion.button>
                 )
               })}
             </div>
@@ -604,7 +604,7 @@ export default function CakeBuilder({ timeSlots = [], contactSettings }: { timeS
             </div>
           </div>
 
-          <div className="p-8 sm:p-12 min-h-[400px]">
+          <div className="p-6 sm:p-12 min-h-[400px] pb-32 sm:pb-12">
             <AnimatePresence mode="wait">
               <motion.div key={currentStep} initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -10 }} transition={{ duration: 0.2 }}>
                 {renderStepContent()}
@@ -612,18 +612,18 @@ export default function CakeBuilder({ timeSlots = [], contactSettings }: { timeS
             </AnimatePresence>
           </div>
 
-          {/* Clean Footer Navigation */}
-          <div className="bg-white border-t border-gray-100 p-6 sm:px-10 sm:py-6 flex items-center justify-between">
-            <button onClick={prevStep} className={`flex items-center gap-2 px-6 py-3 rounded-xl font-medium text-sm transition-all ${currentStep === 1 ? 'opacity-0 pointer-events-none' : 'text-gray-600 hover:bg-gray-50'}`}>
+          {/* Sticky Mobile Footer Navigation */}
+          <div className="fixed sm:relative bottom-0 left-0 w-full bg-white sm:border-t sm:border-gray-100 p-4 sm:p-6 sm:px-10 flex items-center justify-between shadow-[0_-10px_30px_rgba(0,0,0,0.08)] sm:shadow-none z-50 rounded-t-3xl sm:rounded-none">
+            <button onClick={prevStep} className={`flex items-center gap-1 sm:gap-2 px-4 sm:px-6 py-3 sm:py-3.5 rounded-xl font-medium text-sm transition-all ${currentStep === 1 ? 'opacity-0 pointer-events-none' : 'text-gray-600 bg-gray-50 hover:bg-gray-100'}`}>
               <ChevronLeft className="w-4 h-4" /> Geri
             </button>
             
             {currentStep < STEPS.length ? (
-              <button onClick={nextStep} disabled={!isStepValid()} className={`flex items-center gap-2 px-8 py-3 rounded-xl font-medium text-sm transition-all ${isStepValid() ? 'bg-gray-900 text-white hover:bg-black' : 'bg-gray-100 text-gray-400 cursor-not-allowed'}`}>
+              <button onClick={nextStep} disabled={!isStepValid()} className={`flex items-center gap-2 px-6 sm:px-10 py-3 sm:py-3.5 rounded-xl font-semibold text-sm transition-all shadow-md active:scale-95 ${isStepValid() ? 'bg-gray-900 text-white hover:bg-black shadow-gray-900/20' : 'bg-gray-100 text-gray-400 cursor-not-allowed shadow-none'}`}>
                 Devam Et <ChevronRight className="w-4 h-4" />
               </button>
             ) : (
-              <button onClick={handleOrder} disabled={!isStepValid() || isSubmitting} className={`flex items-center gap-2 px-8 py-3 rounded-xl font-medium text-sm transition-all ${!isStepValid() || isSubmitting ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-dilim-portakal text-white hover:bg-orange-600'}`}>
+              <button onClick={handleOrder} disabled={!isStepValid() || isSubmitting} className={`flex items-center gap-2 px-6 sm:px-10 py-3 sm:py-3.5 rounded-xl font-semibold text-sm transition-all shadow-md active:scale-95 ${!isStepValid() || isSubmitting ? 'bg-gray-100 text-gray-400 cursor-not-allowed shadow-none' : 'bg-gradient-to-r from-dilim-portakal to-dilim-turuncu text-white hover:shadow-lg hover:shadow-orange-500/30'}`}>
                 {isSubmitting ? 'Gönderiliyor...' : (
                   <>
                     <MessageCircle className="w-4 h-4" /> Gönder & Fiyat Al
