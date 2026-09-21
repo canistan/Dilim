@@ -88,11 +88,25 @@ function ProductsClientInner({
       return title.includes(query)
     })()
 
-    // Alt filtre (Şerbetli tatlılar vs)
+    // Alt filtre (Şerbetli tatlılar, Sütlü Tatlılar vs)
     let matchesSub = true
-    if (activeCategorySlug === 'serbetli-tatlilar' && subFilter !== 'tumu') {
+    if (subFilter !== 'tumu') {
       const title = turkishLower(p.title)
-      matchesSub = title.includes(subFilter)
+      const sub = subFilter
+
+      if (sub === turkishLower('Cheesecake Dilim')) {
+        matchesSub = title.includes('cheesecake')
+      } else if (sub === turkishLower('Cevizli Seçenekler')) {
+        matchesSub = title.includes('ceviz')
+      } else if (sub === turkishLower('Fıstıklı Seçenekler')) {
+        matchesSub = title.includes('fıstık') || title.includes('havuç') || title.includes('şöbiyet') || title.includes('burma') || title.includes('midye')
+      } else if (sub === turkishLower('Fındıklı Seçenekler')) {
+        matchesSub = title.includes('fındık') || title.includes('nuriye') || title.includes('yalova')
+      } else if (sub === turkishLower('Kurabiye ve Börekler')) {
+        matchesSub = title.includes('kurabiye') || title.includes('börek') || title.includes('pizza') || title.includes('sakallı')
+      } else {
+        matchesSub = title.includes(sub)
+      }
     }
 
     return matchesCategory && matchesSearch && matchesSub
@@ -179,16 +193,19 @@ function ProductsClientInner({
               ))}
             </div>
 
-            {/* Alt Filtre (Sadece Şerbetli Tatlılar İçin) */}
+            {/* Alt Filtre (Sütlü ve Şerbetli Tatlılar İçin) */}
             <AnimatePresence>
-              {activeCategorySlug === 'serbetli-tatlilar' && (
+              {(activeCategorySlug === 'serbetli-tatlilar' || activeCategorySlug === 'sutlu-tatlilar') && (
                 <motion.div
                   initial={{ opacity: 0, height: 0, marginTop: 0 }}
                   animate={{ opacity: 1, height: 'auto', marginTop: 16 }}
                   exit={{ opacity: 0, height: 0, marginTop: 0 }}
                   className="flex justify-center gap-2 flex-wrap overflow-hidden"
                 >
-                  {['Tümü', 'Cevizli', 'Fıstıklı', 'Fındıklı'].map(filter => (
+                  {(activeCategorySlug === 'serbetli-tatlilar' 
+                    ? ['Tümü', 'Cevizli Seçenekler', 'Fıstıklı Seçenekler', 'Fındıklı Seçenekler', 'Kurabiye ve Börekler']
+                    : ['Tümü', 'Cheesecake Dilim']
+                  ).map(filter => (
                     <button
                       key={filter}
                       onClick={() => setSubFilter(turkishLower(filter))}

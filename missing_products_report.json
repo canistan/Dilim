@@ -1,0 +1,69 @@
+{
+  "totalProductsInDB": 117,
+  "matchedProducts": 51,
+  "missingProducts": {
+    "TEK PASTALAR": [
+      "KARIŞIK MEYVELİ TEK PASTA",
+      "ORMAN MEYVELİ TEK PASTA",
+      "FISTIK ÇİKOLATALI TEK PASTA",
+      "FRAMBUAZLI TEK PASTA",
+      "FRAMBUAZ ÇİKOLATALI TEK PASTA",
+      "LOTUSLU TEK PASTA",
+      "MUZ ÇİKOLATALI TEK PASTA",
+      "IBIZA MUZLU",
+      "IBIZA ÇİLEKLİ",
+      "ÇİLEKLİ RULO PASTA",
+      "ŞEKER HAMURLU TEK PASTA"
+    ],
+    "SÜTLÜ TATLILAR": [
+      "TAVUKGÖĞSÜ",
+      "MUHALLEBİ",
+      "ALAÇATI MUHALLEBİSİ",
+      "ÇİLEKLİ MAGNOLYA",
+      "MUZLU ÇİKOLATALI MAGNOLYA",
+      "SPOONFUL",
+      "LOTUSLU CHEESECAKE",
+      "LİMONLU CHEESECAKE",
+      "FRAMBUAZLI CHEESECAKE",
+      "DUBAI CHEESECAKE"
+    ],
+    "PETİFÜRLER": [
+      "KROKANLI PETİFÜRLER",
+      "MUZLU ÇİKOLATALI PETİFÜRLER",
+      "MİNİ MUZLU RULO",
+      "MİNİ KROKANLI RULO",
+      "MİNİ ÇİLEKLİ RULO",
+      "ÇİLEKLİ TARTOLET",
+      "MİNİ İBİZA ÇİLEKLİ",
+      "MİNİ İBİZA MUZLU",
+      "MİNİ CHEESECAKE",
+      "EKLER ÇİKOLATA KREMA",
+      "MİNİ SÜT BURGERLER"
+    ],
+    "YAŞ PASTALAR": [
+      "ÇİLEK ÇİKOLATALI",
+      "ÇİLEKLİ PROFİTEROL SOSLU",
+      "GANAJ",
+      "FISTIK ÇİKOLATALI",
+      "FISTIKLI MUZLU",
+      "KARIŞIK MEYVELİ",
+      "ORMAN MEYVELİ",
+      "FRAMBUAZLI",
+      "FRAMBUAZ ÇİKOLATALI",
+      "FRAMBUAZ MUZLU",
+      "PROFİTEROLLÜ",
+      "LOTUS ÇİLEKLİ",
+      "MUZ ÇİKOLATALI"
+    ],
+    "ŞERBETLİ TATLILAR": [
+      "CEVİZLİ EV BAKLAVASI",
+      "FISTIKLI TEL KADAYIF",
+      "FINDIKLI ŞEKERPARE",
+      "YALOVA SÜTLÜSÜ",
+      "KARIŞIK TATLI KURABİYE",
+      "KARIŞIK TUZLU KURABİYE",
+      "MİNİ PİZZALAR"
+    ],
+    "PAKET ÜRÜNLER": []
+  }
+}

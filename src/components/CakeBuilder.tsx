@@ -507,19 +507,7 @@ export default function CakeBuilder({ timeSlots = [], globalOptions, contactSett
   return (
     <div className="min-h-screen bg-gray-50" ref={scrollRef}>
       {/* Hero Section */}
-      <div className="relative pt-32 pb-20 px-4 sm:px-6 lg:px-8 bg-dilim-siyah overflow-hidden">
-        <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'url("/images/pattern-light.png")', backgroundSize: '200px' }}></div>
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-dilim-siyah/90"></div>
-        <div className="relative max-w-4xl mx-auto text-center">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-            <span className="inline-block py-1 px-3 rounded-full bg-dilim-portakal/20 text-dilim-portakal font-semibold text-sm mb-4 border border-dilim-portakal/20">Kişiye Özel Tasarım</span>
-            <h1 className="text-4xl md:text-5xl font-serif font-bold text-white mb-6">Hayalindeki Pastayı Tasarla</h1>
-            <p className="text-gray-300 text-lg md:text-xl max-w-2xl mx-auto mb-8">Adım adım seçimlerini yap, referans görselini ekle ve bize gönder. Şeflerimiz senin için en özel pastayı hazırlasın.</p>
-          </motion.div>
-        </div>
-      </div>
-
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8 pb-24 relative z-10">
+      <div className="w-full relative z-10">
         <div className="bg-white rounded-[2rem] shadow-xl overflow-hidden">
           {/* Progress Bar */}
           <div className="bg-gray-50 border-b border-gray-100 px-6 sm:px-10 py-6">
