@@ -3,31 +3,30 @@
 import { useState, useRef, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ChevronRight, ChevronLeft, Check, Layers, CakeSlice, PaintBucket, ChefHat, MessageCircle, User, MapPin } from 'lucide-react'
+import { ChevronRight, ChevronLeft, Check, Layers, CakeSlice, PaintBucket, ChefHat, MessageCircle, User, MapPin, Sparkles } from 'lucide-react'
 import toast from 'react-hot-toast'
-import Image from 'next/image'
 import Link from 'next/link'
 
 // Sipariş Adımları Verileri
 const STEPS = [
   { id: 1, title: 'Krema Çeşidi', icon: PaintBucket },
   { id: 2, title: 'Kek Çeşidi', icon: CakeSlice },
-  { id: 3, title: 'İçerik Çeşitleri', icon: Layers },
-  { id: 4, title: 'Yapı ve Şekil', icon: Layers },
+  { id: 3, title: 'İçerik', icon: Layers },
+  { id: 4, title: 'Yapı & Şekil', icon: Layers },
   { id: 5, title: 'Kişi Sayısı', icon: User },
-  { id: 6, title: 'İletişim & Teslimat', icon: MapPin },
-  { id: 7, title: 'Özel Notlar', icon: ChefHat },
+  { id: 6, title: 'Teslimat', icon: MapPin },
+  { id: 7, title: 'Notlar', icon: ChefHat },
 ]
 
 const OPTIONS = {
   krema: [
-    { id: 'Çikolata Kremalı', name: 'Çikolata Kremalı', desc: 'Yoğun çikolata lezzeti' },
-    { id: 'Beyaz Kremalı', name: 'Beyaz Kremalı', desc: 'Hafif ve sade' },
-    { id: 'Akışkan Kremalı', name: 'Akışkan Kremalı', desc: 'Taze ve akışkan doku' },
+    { id: 'Çikolata Kremalı', name: 'Çikolata Kremalı', desc: 'Yoğun çikolata lezzeti', color: 'from-amber-700 to-amber-900' },
+    { id: 'Beyaz Kremalı', name: 'Beyaz Kremalı', desc: 'Hafif ve sade vanilya dokunuşu', color: 'from-orange-100 to-orange-50 text-gray-800' },
+    { id: 'Akışkan Kremalı', name: 'Akışkan Kremalı', desc: 'Taze, ıslak ve akışkan doku', color: 'from-orange-400 to-dilim-portakal' },
   ],
   kek: [
-    { id: 'Çikolatalı Kek', name: 'Çikolatalı Kek', desc: 'Klasik kakaolu' },
-    { id: 'Beyaz Kek', name: 'Beyaz Kek', desc: 'Sade sünger kek' },
+    { id: 'Çikolatalı Kek', name: 'Çikolatalı Kek', desc: 'Klasik yoğun kakaolu sünger', color: 'from-amber-800 to-amber-950' },
+    { id: 'Beyaz Kek', name: 'Beyaz Kek', desc: 'Sade, yumuşacık sünger kek', color: 'from-gray-100 to-gray-50' },
   ],
   icerik: [
     { id: 'Çilekli', name: 'Çilekli' },
@@ -45,21 +44,21 @@ const OPTIONS = {
     { id: 'Lotus Bisküvili', name: 'Lotus Bisküvili' },
   ],
   pat: [
-    { id: 'Standart Pat', name: 'Standart Pat' },
-    { id: 'Yüksek Pat', name: 'Yüksek Pat' },
+    { id: 'Standart Pat', name: 'Standart Pat (Normal Yükseklik)' },
+    { id: 'Yüksek Pat', name: 'Yüksek Pat (Gösterişli)' },
   ],
   sekil: [
-    { id: 'Yuvarlak', name: 'Yuvarlak (Standart)' },
-    { id: 'Kare', name: 'Kare' },
-    { id: 'Kalp', name: 'Kalp' },
-    { id: 'Diğer', name: 'Diğer (Notlarda belirtin)' },
+    { id: 'Yuvarlak', name: 'Yuvarlak (Klasik)' },
+    { id: 'Kare', name: 'Kare (Modern)' },
+    { id: 'Kalp', name: 'Kalp (Romantik)' },
+    { id: 'Diğer', name: 'Özel Şekil (Notlarda)' },
   ],
   kisi: [
     { id: '10 Kişilik', name: '10 Kişilik' },
     { id: '15 Kişilik', name: '15 Kişilik' },
     { id: '20 Kişilik', name: '20 Kişilik' },
     { id: '25 Kişilik', name: '25 Kişilik' },
-    { id: '30 Kişilik ve Üzeri', name: '30 Kişilik ve Üzeri (Not)' },
+    { id: '30 Kişilik ve Üzeri', name: '30 Kişilik ve Üzeri (Büyük)' },
   ]
 }
 
@@ -68,7 +67,7 @@ type TimeSlot = {
   timeRange: string;
 }
 
-export default function CakeBuilder({ timeSlots = [], globalOptions, contactSettings }: { timeSlots?: TimeSlot[], globalOptions?: any, contactSettings?: any }) {
+export default function CakeBuilder({ timeSlots = [], contactSettings }: { timeSlots?: TimeSlot[], globalOptions?: any, contactSettings?: any }) {
   const [currentStep, setCurrentStep] = useState(1)
   const [isSuccess, setIsSuccess] = useState(false)
   const [whatsappMessage, setWhatsappMessage] = useState('')
@@ -193,7 +192,7 @@ export default function CakeBuilder({ timeSlots = [], globalOptions, contactSett
       setCurrentStep(prev => prev + 1)
       setTimeout(scrollToTop, 100)
     } else {
-      toast.error('Lütfen gerekli seçimleri yapınız.')
+      toast.error('Lütfen bu adımdaki gerekli seçimleri yapınız.')
     }
   }
 
@@ -280,44 +279,71 @@ export default function CakeBuilder({ timeSlots = [], globalOptions, contactSett
     switch (currentStep) {
       case 1:
         return (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {OPTIONS.krema.map((opt) => (
-              <div key={opt.id} onClick={() => handleSelect('krema', opt.id)} className={`relative group cursor-pointer rounded-3xl p-6 border-2 transition-all duration-300 hover:shadow-xl ${selections.krema === opt.id ? 'border-dilim-portakal bg-orange-50' : 'border-gray-100 bg-white hover:border-orange-200'}`}>
-                {selections.krema === opt.id && <div className="absolute top-4 right-4 w-6 h-6 bg-dilim-portakal rounded-full flex items-center justify-center"><Check className="w-4 h-4 text-white" /></div>}
-                <div className="mt-4">
-                  <h3 className="font-bold text-lg text-dilim-siyah mb-2 group-hover:text-dilim-portakal transition-colors">{opt.name}</h3>
-                  <p className="text-sm text-gray-500 line-clamp-2">{opt.desc}</p>
+              <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} key={opt.id} onClick={() => handleSelect('krema', opt.id)} 
+                className={`relative group cursor-pointer overflow-hidden rounded-[2rem] border-2 transition-all duration-300 min-h-[160px] flex flex-col justify-end p-6 
+                ${selections.krema === opt.id ? 'border-dilim-portakal shadow-[0_8px_30px_rgba(234,88,12,0.2)]' : 'border-transparent shadow-[0_8px_30px_rgb(0,0,0,0.04)] bg-white hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)]'}`}>
+                
+                <div className={`absolute inset-0 bg-gradient-to-br ${opt.color} opacity-[0.85] transition-opacity duration-300 ${selections.krema === opt.id ? 'opacity-100' : 'group-hover:opacity-100'}`} />
+                
+                <div className="relative z-10">
+                  <div className="flex justify-between items-start mb-2">
+                    <h3 className={`font-black text-2xl tracking-tight ${opt.id === 'Beyaz Kremalı' ? 'text-gray-900' : 'text-white'}`}>{opt.name}</h3>
+                    {selections.krema === opt.id && (
+                      <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="w-8 h-8 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center">
+                        <Check className={`w-5 h-5 ${opt.id === 'Beyaz Kremalı' ? 'text-gray-900' : 'text-white'}`} />
+                      </motion.div>
+                    )}
+                  </div>
+                  <p className={`font-medium ${opt.id === 'Beyaz Kremalı' ? 'text-gray-600' : 'text-white/80'}`}>{opt.desc}</p>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         );
       case 2:
         return (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-4xl mx-auto">
             {OPTIONS.kek.map((opt) => (
-              <div key={opt.id} onClick={() => handleSelect('kek', opt.id)} className={`relative group cursor-pointer rounded-3xl p-6 border-2 transition-all duration-300 hover:shadow-xl ${selections.kek === opt.id ? 'border-dilim-portakal bg-orange-50' : 'border-gray-100 bg-white hover:border-orange-200'}`}>
-                {selections.kek === opt.id && <div className="absolute top-4 right-4 w-6 h-6 bg-dilim-portakal rounded-full flex items-center justify-center"><Check className="w-4 h-4 text-white" /></div>}
-                <div className="mt-4">
-                  <h3 className="font-bold text-lg text-dilim-siyah mb-2 group-hover:text-dilim-portakal transition-colors">{opt.name}</h3>
-                  <p className="text-sm text-gray-500">{opt.desc}</p>
+              <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} key={opt.id} onClick={() => handleSelect('kek', opt.id)} 
+                className={`relative group cursor-pointer overflow-hidden rounded-[2rem] border-2 transition-all duration-300 min-h-[180px] flex flex-col justify-end p-8 
+                ${selections.kek === opt.id ? 'border-dilim-portakal shadow-[0_8px_30px_rgba(234,88,12,0.2)]' : 'border-transparent shadow-[0_8px_30px_rgb(0,0,0,0.06)] bg-white'}`}>
+                
+                <div className={`absolute inset-0 bg-gradient-to-br ${opt.color} opacity-90 transition-opacity duration-300 ${selections.kek === opt.id ? 'opacity-100' : 'group-hover:opacity-100'}`} />
+                
+                <div className="relative z-10">
+                  <div className="flex justify-between items-start mb-2">
+                    <h3 className={`font-black text-3xl tracking-tight ${opt.id === 'Beyaz Kek' ? 'text-gray-900' : 'text-white'}`}>{opt.name}</h3>
+                    {selections.kek === opt.id && (
+                      <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="w-8 h-8 bg-black/10 backdrop-blur-md rounded-full flex items-center justify-center">
+                        <Check className={`w-5 h-5 ${opt.id === 'Beyaz Kek' ? 'text-gray-900' : 'text-white'}`} />
+                      </motion.div>
+                    )}
+                  </div>
+                  <p className={`font-medium text-lg ${opt.id === 'Beyaz Kek' ? 'text-gray-600' : 'text-white/80'}`}>{opt.desc}</p>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         );
       case 3:
         return (
-          <div>
-            <p className="mb-4 text-gray-500 text-sm">Lütfen en az 1, en fazla 3 içerik seçiniz.</p>
-            <div className="flex flex-wrap gap-3">
+          <div className="max-w-5xl mx-auto">
+            <div className="bg-orange-50/50 rounded-2xl p-4 mb-8 flex items-center gap-3 border border-orange-100">
+              <Sparkles className="w-6 h-6 text-dilim-portakal shrink-0" />
+              <p className="text-gray-700 font-medium">Kusursuz bir lezzet dengesi için <span className="font-bold text-dilim-siyah">en az 1, en fazla 3</span> özel içerik seçebilirsiniz.</p>
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
               {OPTIONS.icerik.map((opt) => {
                 const isSelected = selections.icerik.includes(opt.id);
                 return (
-                  <button key={opt.id} onClick={() => handleToggleIcerik(opt.id)} className={`px-4 py-2 rounded-full border-2 font-medium transition-all ${isSelected ? 'border-dilim-portakal bg-dilim-portakal text-white shadow-md' : 'border-gray-200 text-gray-600 hover:border-dilim-portakal hover:text-dilim-portakal'}`}>
-                    {isSelected && <Check className="w-4 h-4 inline-block mr-1" />}
+                  <motion.button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} key={opt.id} onClick={() => handleToggleIcerik(opt.id)} 
+                    className={`relative p-5 rounded-2xl border-2 font-bold transition-all duration-300 flex items-center justify-center text-center
+                    ${isSelected ? 'border-dilim-portakal bg-gradient-to-br from-dilim-portakal to-orange-500 text-white shadow-lg shadow-orange-500/25' : 'border-gray-100 bg-white text-gray-600 hover:border-orange-200 hover:bg-orange-50'}`}>
+                    {isSelected && <Check className="w-5 h-5 absolute top-2 right-2 text-white/80" />}
                     {opt.name}
-                  </button>
+                  </motion.button>
                 )
               })}
             </div>
@@ -325,24 +351,35 @@ export default function CakeBuilder({ timeSlots = [], globalOptions, contactSett
         );
       case 4:
         return (
-          <div className="space-y-8">
-            <div>
-              <h4 className="text-lg font-bold mb-4 border-b pb-2">Pat Sayısı (Pasta Katı)</h4>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-5xl mx-auto">
+            <div className="space-y-6">
+              <div className="flex items-center gap-3 mb-6 border-b border-gray-100 pb-4">
+                <Layers className="w-8 h-8 text-dilim-portakal" />
+                <h4 className="text-2xl font-black text-gray-900 tracking-tight">Katman & Yükseklik</h4>
+              </div>
+              <div className="flex flex-col gap-4">
                 {OPTIONS.pat.map((opt) => (
-                  <div key={opt.id} onClick={() => handleSelect('pat', opt.id)} className={`p-5 rounded-2xl border-2 font-medium cursor-pointer transition-all ${selections.pat === opt.id ? 'border-dilim-portakal bg-orange-50 text-dilim-portakal' : 'border-gray-100 hover:border-orange-200'}`}>
+                  <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} key={opt.id} onClick={() => handleSelect('pat', opt.id)} 
+                    className={`p-6 rounded-[2rem] border-2 font-bold text-lg cursor-pointer transition-all flex items-center justify-between
+                    ${selections.pat === opt.id ? 'border-dilim-portakal bg-orange-50 text-dilim-portakal shadow-md' : 'border-gray-100 bg-white text-gray-600 hover:border-orange-200'}`}>
                     {opt.name}
-                  </div>
+                    {selections.pat === opt.id && <Check className="w-6 h-6 text-dilim-portakal" />}
+                  </motion.div>
                 ))}
               </div>
             </div>
-            <div>
-              <h4 className="text-lg font-bold mb-4 border-b pb-2">Pasta Şekli</h4>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            <div className="space-y-6">
+              <div className="flex items-center gap-3 mb-6 border-b border-gray-100 pb-4">
+                <CakeSlice className="w-8 h-8 text-dilim-portakal" />
+                <h4 className="text-2xl font-black text-gray-900 tracking-tight">Pasta Şekli</h4>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
                 {OPTIONS.sekil.map((opt) => (
-                  <div key={opt.id} onClick={() => handleSelect('sekil', opt.id)} className={`p-4 text-center font-medium rounded-2xl border-2 cursor-pointer transition-all ${selections.sekil === opt.id ? 'border-dilim-portakal bg-orange-50 text-dilim-portakal' : 'border-gray-100 hover:border-orange-200'}`}>
+                  <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} key={opt.id} onClick={() => handleSelect('sekil', opt.id)} 
+                    className={`p-6 text-center font-bold rounded-3xl border-2 cursor-pointer transition-all flex flex-col items-center justify-center gap-2
+                    ${selections.sekil === opt.id ? 'border-dilim-portakal bg-orange-50 text-dilim-portakal shadow-md' : 'border-gray-100 bg-white text-gray-600 hover:border-orange-200'}`}>
                     {opt.name}
-                  </div>
+                  </motion.div>
                 ))}
               </div>
             </div>
@@ -350,97 +387,102 @@ export default function CakeBuilder({ timeSlots = [], globalOptions, contactSett
         );
       case 5:
         return (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
             {OPTIONS.kisi.map((opt) => (
-              <div key={opt.id} onClick={() => handleSelect('kisi', opt.id)} className={`relative group cursor-pointer rounded-3xl p-6 border-2 transition-all duration-300 hover:shadow-xl ${selections.kisi === opt.id ? 'border-dilim-portakal bg-orange-50' : 'border-gray-100 bg-white hover:border-orange-200'}`}>
-                {selections.kisi === opt.id && <div className="absolute top-4 right-4 w-6 h-6 bg-dilim-portakal rounded-full flex items-center justify-center"><Check className="w-4 h-4 text-white" /></div>}
-                <div className="mt-2">
-                  <h3 className="font-bold text-lg text-dilim-siyah group-hover:text-dilim-portakal transition-colors">{opt.name}</h3>
-                </div>
-              </div>
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} key={opt.id} onClick={() => handleSelect('kisi', opt.id)} 
+                className={`relative cursor-pointer rounded-3xl p-6 border-2 transition-all duration-300 flex flex-col items-center justify-center text-center h-40
+                ${selections.kisi === opt.id ? 'border-dilim-portakal bg-gradient-to-b from-orange-50 to-orange-100 shadow-lg shadow-orange-500/20' : 'border-gray-100 bg-white hover:border-orange-200 hover:shadow-md'}`}>
+                {selections.kisi === opt.id && <div className="absolute top-3 right-3"><Check className="w-5 h-5 text-dilim-portakal" /></div>}
+                <User className={`w-10 h-10 mb-3 ${selections.kisi === opt.id ? 'text-dilim-portakal' : 'text-gray-300'}`} />
+                <h3 className={`font-black text-lg ${selections.kisi === opt.id ? 'text-dilim-siyah' : 'text-gray-500'}`}>{opt.name}</h3>
+              </motion.div>
             ))}
           </div>
         );
       case 6:
         return (
-          <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-gray-100">
-             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div className="space-y-6">
-                <h3 className="font-bold text-xl text-dilim-siyah border-b pb-2">Kişisel Bilgiler</h3>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Ad Soyad <span className="text-red-500">*</span></label>
-                  <input type="text" value={selections.customerName} onChange={(e) => handleSelect('customerName', e.target.value)} className="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-dilim-portakal focus:border-transparent outline-none transition-all bg-gray-50/50" placeholder="Örn: Ayşe Yılmaz" />
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Telefon <span className="text-red-500">*</span></label>
-                    <input type="tel" value={selections.customerPhone} onChange={(e) => handleSelect('customerPhone', e.target.value)} className="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-dilim-portakal focus:border-transparent outline-none transition-all bg-gray-50/50" placeholder="05XX XXX XX XX" />
+          <div className="max-w-5xl mx-auto">
+             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+              {/* Sol: İletişim */}
+              <div className="bg-white rounded-[2.5rem] p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100">
+                <div className="flex items-center gap-3 mb-8">
+                  <div className="w-12 h-12 rounded-2xl bg-orange-50 flex items-center justify-center text-dilim-portakal">
+                    <User className="w-6 h-6" />
                   </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">E-posta</label>
-                    <input type="email" value={selections.customerEmail} onChange={(e) => handleSelect('customerEmail', e.target.value)} className="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-dilim-portakal focus:border-transparent outline-none transition-all bg-gray-50/50" placeholder="Opsiyonel" />
-                  </div>
+                  <h3 className="font-black text-2xl text-gray-900 tracking-tight">Kişisel Bilgiler</h3>
                 </div>
                 
-                {status === 'authenticated' && userAddresses.length > 0 && (
-                  <div className="mb-4">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Adres Seçimi</label>
-                    <div className="flex bg-gray-100 rounded-xl p-1 mb-3">
-                      <button 
-                        onClick={() => setSelectedAddressType('saved')}
-                        className={`flex-1 py-2 text-sm font-medium rounded-lg transition-all ${selectedAddressType === 'saved' ? 'bg-white shadow-sm text-dilim-portakal' : 'text-gray-500 hover:text-gray-700'}`}
-                      >
-                        Kayıtlı Adresler
-                      </button>
-                      <button 
-                        onClick={() => setSelectedAddressType('new')}
-                        className={`flex-1 py-2 text-sm font-medium rounded-lg transition-all ${selectedAddressType === 'new' ? 'bg-white shadow-sm text-dilim-portakal' : 'text-gray-500 hover:text-gray-700'}`}
-                      >
-                        Yeni Adres Gir
-                      </button>
+                <div className="space-y-5">
+                  <div>
+                    <label className="block text-sm font-bold text-gray-700 mb-2">Ad Soyad <span className="text-red-500">*</span></label>
+                    <input type="text" value={selections.customerName} onChange={(e) => handleSelect('customerName', e.target.value)} 
+                      className="w-full px-5 py-4 bg-gray-50/50 border-2 border-gray-100 rounded-2xl focus:ring-0 focus:border-dilim-portakal outline-none transition-all font-medium text-gray-900 placeholder:text-gray-400" placeholder="Örn: Ayşe Yılmaz" />
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    <div>
+                      <label className="block text-sm font-bold text-gray-700 mb-2">Telefon <span className="text-red-500">*</span></label>
+                      <input type="tel" value={selections.customerPhone} onChange={(e) => handleSelect('customerPhone', e.target.value)} 
+                        className="w-full px-5 py-4 bg-gray-50/50 border-2 border-gray-100 rounded-2xl focus:ring-0 focus:border-dilim-portakal outline-none transition-all font-medium text-gray-900 placeholder:text-gray-400" placeholder="05XX XXX XX XX" />
                     </div>
-
-                    {selectedAddressType === 'saved' && (
-                      <select 
-                        className="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-dilim-portakal bg-gray-50 outline-none"
-                        onChange={(e) => {
-                          const addr = userAddresses.find(a => a.id === e.target.value)
-                          if (addr) handleSelect('customerAddress', `${addr.district} - ${addr.details}`)
-                        }}
-                      >
-                        <option value="">Kayıtlı Adres Seçin</option>
-                        {userAddresses.map((addr) => (
-                          <option key={addr.id} value={addr.id}>
-                            {addr.title} ({addr.district})
-                          </option>
-                        ))}
-                      </select>
-                    )}
+                    <div>
+                      <label className="block text-sm font-bold text-gray-700 mb-2">E-posta</label>
+                      <input type="email" value={selections.customerEmail} onChange={(e) => handleSelect('customerEmail', e.target.value)} 
+                        className="w-full px-5 py-4 bg-gray-50/50 border-2 border-gray-100 rounded-2xl focus:ring-0 focus:border-dilim-portakal outline-none transition-all font-medium text-gray-900 placeholder:text-gray-400" placeholder="Opsiyonel" />
+                    </div>
                   </div>
-                )}
-                
-                {(status !== 'authenticated' || selectedAddressType === 'new') && (
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Teslimat Adresi <span className="text-red-500">*</span></label>
-                    <textarea value={selections.customerAddress} onChange={(e) => handleSelect('customerAddress', e.target.value)} rows={3} className="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-dilim-portakal focus:border-transparent outline-none transition-all bg-gray-50/50 resize-none" placeholder="Açık adresinizi giriniz..."></textarea>
-                  </div>
-                )}
-              </div>
-              <div className="space-y-6">
-                <h3 className="font-bold text-xl text-dilim-siyah border-b pb-2">Teslimat Zamanı</h3>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Teslimat Tarihi <span className="text-red-500">*</span></label>
-                  <input type="date" min={getMinDate()} value={selections.requestedDate} onChange={(e) => handleDateChange(e.target.value)} className="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-dilim-portakal focus:border-transparent outline-none transition-all" />
-                  <p className="text-xs text-gray-400 mt-1">Hafta sonları (Cumartesi ve Pazar) özel sipariş alamıyoruz.</p>
                 </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Teslimat Saati <span className="text-red-500">*</span></label>
-                  <select value={selections.timeSlot} onChange={(e) => handleSelect('timeSlot', e.target.value)} className="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-dilim-portakal focus:border-transparent outline-none transition-all bg-white">
-                    <option value="" disabled>Saat Aralığı Seçin</option>
-                    {getFilteredTimeSlots().map((slot) => (
-                      <option key={slot.id} value={slot.timeRange}>{slot.timeRange}</option>
-                    ))}
-                  </select>
+              </div>
+
+              {/* Sağ: Teslimat */}
+              <div className="bg-white rounded-[2.5rem] p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100">
+                <div className="flex items-center gap-3 mb-8">
+                  <div className="w-12 h-12 rounded-2xl bg-orange-50 flex items-center justify-center text-dilim-portakal">
+                    <MapPin className="w-6 h-6" />
+                  </div>
+                  <h3 className="font-black text-2xl text-gray-900 tracking-tight">Teslimat Detayları</h3>
+                </div>
+
+                <div className="space-y-6">
+                  {status === 'authenticated' && userAddresses.length > 0 && (
+                    <div>
+                      <div className="flex bg-gray-50 rounded-xl p-1 mb-4 border border-gray-100">
+                        <button onClick={() => setSelectedAddressType('saved')} className={`flex-1 py-3 text-sm font-bold rounded-lg transition-all ${selectedAddressType === 'saved' ? 'bg-white shadow-sm text-dilim-portakal' : 'text-gray-500 hover:text-gray-700'}`}>Kayıtlı Adresler</button>
+                        <button onClick={() => setSelectedAddressType('new')} className={`flex-1 py-3 text-sm font-bold rounded-lg transition-all ${selectedAddressType === 'new' ? 'bg-white shadow-sm text-dilim-portakal' : 'text-gray-500 hover:text-gray-700'}`}>Yeni Adres Gir</button>
+                      </div>
+
+                      {selectedAddressType === 'saved' && (
+                        <select className="w-full px-5 py-4 bg-gray-50/50 border-2 border-gray-100 rounded-2xl focus:ring-0 focus:border-dilim-portakal outline-none transition-all font-medium text-gray-900 appearance-none"
+                          onChange={(e) => { const addr = userAddresses.find(a => a.id === e.target.value); if (addr) handleSelect('customerAddress', `${addr.district} - ${addr.details}`); }}>
+                          <option value="">Kayıtlı Adres Seçin</option>
+                          {userAddresses.map((addr) => <option key={addr.id} value={addr.id}>{addr.title} ({addr.district})</option>)}
+                        </select>
+                      )}
+                    </div>
+                  )}
+                  
+                  {(status !== 'authenticated' || selectedAddressType === 'new') && (
+                    <div>
+                      <label className="block text-sm font-bold text-gray-700 mb-2">Teslimat Adresi <span className="text-red-500">*</span></label>
+                      <textarea value={selections.customerAddress} onChange={(e) => handleSelect('customerAddress', e.target.value)} rows={3} 
+                        className="w-full px-5 py-4 bg-gray-50/50 border-2 border-gray-100 rounded-2xl focus:ring-0 focus:border-dilim-portakal outline-none transition-all font-medium text-gray-900 resize-none placeholder:text-gray-400" placeholder="Açık adresinizi detaylıca giriniz..."></textarea>
+                    </div>
+                  )}
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    <div>
+                      <label className="block text-sm font-bold text-gray-700 mb-2">Tarih <span className="text-red-500">*</span></label>
+                      <input type="date" min={getMinDate()} value={selections.requestedDate} onChange={(e) => handleDateChange(e.target.value)} 
+                        className="w-full px-5 py-4 bg-gray-50/50 border-2 border-gray-100 rounded-2xl focus:ring-0 focus:border-dilim-portakal outline-none transition-all font-medium text-gray-900" />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-bold text-gray-700 mb-2">Saat <span className="text-red-500">*</span></label>
+                      <select value={selections.timeSlot} onChange={(e) => handleSelect('timeSlot', e.target.value)} 
+                        className="w-full px-5 py-4 bg-gray-50/50 border-2 border-gray-100 rounded-2xl focus:ring-0 focus:border-dilim-portakal outline-none transition-all font-medium text-gray-900 appearance-none">
+                        <option value="" disabled>Saat Aralığı</option>
+                        {getFilteredTimeSlots().map((slot) => <option key={slot.id} value={slot.timeRange}>{slot.timeRange}</option>)}
+                      </select>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -448,28 +490,42 @@ export default function CakeBuilder({ timeSlots = [], globalOptions, contactSett
         );
       case 7:
         return (
-          <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-gray-100">
-            <h3 className="font-bold text-xl text-dilim-siyah mb-6">Özel İstekleriniz ve Görsel (Opsiyonel)</h3>
-            <div className="space-y-6">
+          <div className="max-w-4xl mx-auto bg-white rounded-[3rem] p-8 sm:p-12 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100">
+            <div className="text-center mb-10">
+              <h3 className="font-black text-3xl text-gray-900 mb-3">Tasarımınızı Kişiselleştirin</h3>
+              <p className="text-gray-500 font-medium">Özel bir mesajınız, şekil isteğiniz veya referans görseliniz varsa bize iletin.</p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Tasarım İçin Referans Görsel (Varsa)</label>
-                <div className="flex items-center justify-center w-full">
-                  <label className="flex flex-col items-center justify-center w-full h-48 border-2 border-gray-300 border-dashed rounded-2xl cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors">
-                    <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                      <PaintBucket className="w-10 h-10 mb-3 text-gray-400" />
-                      <p className="mb-2 text-sm text-gray-500"><span className="font-semibold">Resim yüklemek için tıklayın</span> veya sürükleyin</p>
-                      <p className="text-xs text-gray-500">PNG, JPG, WEBP (Maks. 5MB)</p>
-                      {selections.referenceImage && (
-                        <p className="mt-2 text-sm text-dilim-portakal font-medium">Seçilen Dosya: {selections.referenceImage.name}</p>
-                      )}
-                    </div>
-                    <input type="file" className="hidden" accept="image/*" onChange={(e) => handleImageUpload(e)} />
-                  </label>
-                </div>
+                <label className="block text-sm font-bold text-gray-700 mb-4">Referans Görsel (Opsiyonel)</label>
+                <label className={`flex flex-col items-center justify-center w-full h-56 border-2 border-dashed rounded-3xl cursor-pointer transition-all ${selections.referenceImage ? 'border-dilim-portakal bg-orange-50' : 'border-gray-300 bg-gray-50 hover:bg-gray-100 hover:border-gray-400'}`}>
+                  <div className="flex flex-col items-center justify-center pt-5 pb-6 px-4 text-center">
+                    {selections.referenceImage ? (
+                      <>
+                        <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-md mb-4 text-dilim-portakal">
+                          <Check className="w-8 h-8" />
+                        </div>
+                        <p className="text-sm font-bold text-dilim-siyah mb-1">Görsel Eklendi</p>
+                        <p className="text-xs text-gray-500 max-w-[200px] truncate">{selections.referenceImage.name}</p>
+                      </>
+                    ) : (
+                      <>
+                        <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-sm mb-4 text-gray-400">
+                          <PaintBucket className="w-8 h-8" />
+                        </div>
+                        <p className="text-sm font-bold text-gray-700 mb-1">Dosya Yükle</p>
+                        <p className="text-xs text-gray-500">Tıkla veya Sürükle (Maks 5MB)</p>
+                      </>
+                    )}
+                  </div>
+                  <input type="file" className="hidden" accept="image/*" onChange={(e) => handleImageUpload(e)} />
+                </label>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Eklemek İstediğiniz Notlar</label>
-                <textarea value={selections.note} onChange={(e) => handleSelect('note', e.target.value)} rows={4} className="w-full p-4 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-dilim-portakal focus:border-transparent outline-none transition-all resize-none" placeholder="Pastanın üzerine yazılacak yazı, renk tercihleri vb. özel isteklerinizi buraya yazabilirsiniz..."></textarea>
+                <label className="block text-sm font-bold text-gray-700 mb-4">Ek Notlar & Üzerine Yazılacaklar</label>
+                <textarea value={selections.note} onChange={(e) => handleSelect('note', e.target.value)} 
+                  className="w-full h-56 p-6 bg-gray-50/50 border-2 border-gray-100 rounded-3xl focus:ring-0 focus:border-dilim-portakal outline-none transition-all font-medium text-gray-900 resize-none placeholder:text-gray-400" 
+                  placeholder="İyi ki doğdun Can..., Pembe renk tonları olsun..., İçinde ekstra fındık olabilir mi? vb."></textarea>
               </div>
             </div>
           </div>
@@ -481,94 +537,106 @@ export default function CakeBuilder({ timeSlots = [], globalOptions, contactSett
 
   if (isSuccess) {
     return (
-      <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6">
-        <div className="max-w-2xl mx-auto">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-white rounded-[2rem] p-8 sm:p-12 shadow-xl text-center">
-            <div className="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-8">
-              <Check className="w-12 h-12 text-green-500" />
-            </div>
-            <h2 className="text-3xl font-serif font-bold text-dilim-siyah mb-4">Talebiniz Alındı!</h2>
-            <p className="text-gray-600 mb-8 text-lg">
-              Tasarım detaylarınız bize ulaştı (Talep No: {orderId}). 
-              Şimdi onay ve fiyat teklifi için WhatsApp'a yönlendirileceksiniz.
-            </p>
-            <div className="space-y-4">
-              <a href={`https://wa.me/${contactSettings?.phone?.replace(/[^0-9]/g, '') || '905059638021'}?text=${whatsappMessage}`} target="_blank" rel="noopener noreferrer" className="block w-full bg-[#25D366] text-white rounded-2xl py-4 font-bold text-lg flex items-center justify-center gap-2 hover:bg-[#128C7E] transition-all">
-                <MessageCircle className="w-6 h-6" /> WhatsApp'a Git
-              </a>
-              <Link href="/urunler" className="block w-full bg-gray-100 text-gray-700 rounded-2xl py-4 font-bold text-lg hover:bg-gray-200 transition-all">Alışverişe Devam Et</Link>
-            </div>
-          </motion.div>
-        </div>
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-gray-100 to-orange-50 py-16 px-4 sm:px-6 flex items-center justify-center">
+        <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="bg-white/80 backdrop-blur-xl border border-white rounded-[3rem] p-10 sm:p-16 shadow-[0_20px_60px_rgb(0,0,0,0.05)] text-center max-w-2xl w-full">
+          <div className="w-32 h-32 bg-gradient-to-tr from-green-400 to-green-300 rounded-full flex items-center justify-center mx-auto mb-10 shadow-xl shadow-green-500/20">
+            <Check className="w-16 h-16 text-white" />
+          </div>
+          <h2 className="text-4xl font-black text-gray-900 mb-4 tracking-tight">Harika! Tasarımınız Alındı.</h2>
+          <p className="text-gray-600 mb-10 text-xl leading-relaxed">
+            Pasta detaylarınız sistemimize ulaştı <span className="font-bold text-gray-900">(Talep No: {orderId})</span>.<br/>Şimdi fiyat teklifi almak ve siparişi kesinleştirmek için WhatsApp'a yönlendirileceksiniz.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <a href={`https://wa.me/${contactSettings?.phone?.replace(/[^0-9]/g, '') || '905059638021'}?text=${whatsappMessage}`} target="_blank" rel="noopener noreferrer" 
+              className="bg-[#25D366] text-white rounded-2xl px-8 py-5 font-bold text-lg flex items-center justify-center gap-3 hover:bg-[#128C7E] transition-all hover:shadow-lg hover:shadow-[#25D366]/30 hover:-translate-y-1">
+              <MessageCircle className="w-6 h-6" /> WhatsApp İle Onayla
+            </a>
+            <Link href="/urunler" className="bg-white text-gray-900 border-2 border-gray-200 rounded-2xl px-8 py-5 font-bold text-lg hover:border-gray-300 transition-all hover:-translate-y-1">
+              Alışverişe Dön
+            </Link>
+          </div>
+        </motion.div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gray-50" ref={scrollRef}>
-      {/* Hero Section */}
-      <div className="w-full relative z-10">
-        <div className="bg-white rounded-[2rem] shadow-xl overflow-hidden">
-          {/* Progress Bar */}
-          <div className="bg-gray-50 border-b border-gray-100 px-6 sm:px-10 py-6">
-            <div className="flex items-center justify-between mb-8 overflow-x-auto pb-4 hide-scrollbar">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-gray-100 to-orange-50 pb-20 pt-10" ref={scrollRef}>
+      
+      {/* Premium Header */}
+      <div className="text-center max-w-3xl mx-auto px-4 mb-12">
+        <h1 className="text-5xl md:text-6xl font-black text-gray-900 tracking-tight mb-6">Hayalindeki Pastayı <br/><span className="text-transparent bg-clip-text bg-gradient-to-r from-dilim-portakal to-orange-400">Bizimle Tasarla</span></h1>
+        <p className="text-lg md:text-xl text-gray-600 font-medium">Adım adım seçimlerini yap, ustalarımız hayallerini gerçeğe dönüştürsün. Tamamen sana özel, eşsiz bir lezzet serüveni.</p>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="bg-white/70 backdrop-blur-2xl rounded-[3rem] shadow-[0_20px_60px_rgb(0,0,0,0.03)] border border-white overflow-hidden">
+          
+          {/* Stepper (Progress) */}
+          <div className="border-b border-gray-100/50 bg-white/40 px-6 sm:px-12 py-8">
+            <div className="flex items-center justify-between mb-8 overflow-x-auto pb-4 hide-scrollbar gap-4 sm:gap-0">
               {STEPS.map((step, index) => {
                 const Icon = step.icon
                 const isActive = currentStep === step.id
                 const isPassed = currentStep > step.id
 
                 return (
-                  <div key={step.id} className={`flex flex-col items-center min-w-[80px] relative ${isActive ? 'text-dilim-portakal' : isPassed ? 'text-green-500' : 'text-gray-400'}`}>
-                    <div className={`w-12 h-12 rounded-2xl flex items-center justify-center mb-3 transition-all duration-300 ${isActive ? 'bg-dilim-portakal text-white shadow-lg shadow-dilim-portakal/30 scale-110' : isPassed ? 'bg-green-100 text-green-500' : 'bg-white border-2 border-gray-200'}`}>
-                      {isPassed ? <Check className="w-5 h-5" /> : <Icon className="w-5 h-5" />}
+                  <div key={step.id} className="flex flex-col items-center relative min-w-[90px] group">
+                    <div className={`w-14 h-14 rounded-full flex items-center justify-center mb-4 transition-all duration-500 z-10
+                      ${isActive ? 'bg-gradient-to-br from-dilim-portakal to-orange-500 text-white shadow-xl shadow-orange-500/30 scale-110' 
+                        : isPassed ? 'bg-gray-900 text-white shadow-lg' 
+                        : 'bg-white text-gray-400 border-2 border-gray-100'}`}>
+                      {isPassed ? <Check className="w-6 h-6" /> : <Icon className="w-6 h-6" />}
                     </div>
-                    <span className="text-xs font-bold uppercase tracking-wider text-center whitespace-nowrap">{step.title}</span>
+                    <span className={`text-[11px] sm:text-xs font-black uppercase tracking-widest text-center transition-colors duration-300
+                      ${isActive ? 'text-dilim-portakal' : isPassed ? 'text-gray-900' : 'text-gray-400'}`}>
+                      {step.title}
+                    </span>
                     {index < STEPS.length - 1 && (
-                      <div className={`absolute top-6 left-1/2 w-full h-[2px] -z-10 ${isPassed ? 'bg-green-500' : 'bg-gray-200'}`} style={{ width: 'calc(100% + 2rem)', marginLeft: '1.5rem' }}></div>
+                      <div className="absolute top-7 left-[50%] w-full h-1 -z-0 bg-gray-100 rounded-full" style={{ width: 'calc(100% + 2rem)' }}>
+                        <motion.div 
+                          className="h-full bg-gradient-to-r from-gray-900 to-gray-700 rounded-full"
+                          initial={{ width: '0%' }}
+                          animate={{ width: isPassed ? '100%' : '0%' }}
+                          transition={{ duration: 0.5, ease: 'easeInOut' }}
+                        />
+                      </div>
                     )}
                   </div>
                 )
               })}
             </div>
-            
-            <div className="flex justify-between items-center bg-white rounded-2xl p-4 shadow-sm">
-              <span className="text-gray-500 font-medium">Adım {currentStep} / {STEPS.length}</span>
-              <h2 className="text-xl font-bold text-dilim-siyah">{STEPS.find(s => s.id === currentStep)?.title}</h2>
-            </div>
           </div>
 
-          <div className="p-6 sm:p-10">
+          <div className="p-6 sm:p-12 md:p-16 min-h-[500px]">
             <AnimatePresence mode="wait">
-              <motion.div key={currentStep} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.3 }}>
+              <motion.div key={currentStep} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.4, ease: "easeOut" }}>
                 {renderStepContent()}
               </motion.div>
             </AnimatePresence>
-
-            <div className="mt-12 flex items-center justify-between border-t border-gray-100 pt-8">
-              <button onClick={prevStep} className={`flex items-center gap-2 px-6 py-3 rounded-xl font-bold transition-all ${currentStep === 1 ? 'opacity-0 pointer-events-none' : 'text-gray-500 hover:bg-gray-100'}`}>
-                <ChevronLeft className="w-5 h-5" /> Geri
-              </button>
-              
-              {currentStep < STEPS.length ? (
-                <button onClick={nextStep} disabled={!isStepValid()} className={`flex items-center gap-2 px-8 py-4 rounded-xl font-bold text-white transition-all shadow-lg ${isStepValid() ? 'bg-dilim-portakal hover:bg-dilim-turuncu hover:-translate-y-1' : 'bg-gray-300 cursor-not-allowed'}`}>
-                  Devam Et <ChevronRight className="w-5 h-5" />
-                </button>
-              ) : (
-                <button 
-                  onClick={handleOrder} 
-                  disabled={!isStepValid() || isSubmitting} 
-                  className={`flex items-center gap-2 px-8 py-4 rounded-xl font-bold text-white transition-all shadow-lg ${
-                    !isStepValid() || isSubmitting
-                      ? 'bg-gray-300 cursor-not-allowed' 
-                      : 'bg-[#25D366] hover:bg-[#128C7E] hover:-translate-y-1'
-                  }`}
-                >
-                  <MessageCircle className="w-5 h-5" />
-                  {isSubmitting ? 'Gönderiliyor...' : 'Tasarımımı Gönder & Teklif İste'}
-                </button>
-              )}
-            </div>
           </div>
+
+          {/* Footer Navigation */}
+          <div className="bg-white/40 border-t border-gray-100/50 p-6 sm:px-12 sm:py-8 flex items-center justify-between">
+            <button onClick={prevStep} className={`flex items-center gap-2 px-8 py-4 rounded-2xl font-bold text-lg transition-all ${currentStep === 1 ? 'opacity-0 pointer-events-none' : 'text-gray-600 bg-white hover:bg-gray-50 shadow-sm border border-gray-100 hover:shadow-md'}`}>
+              <ChevronLeft className="w-6 h-6" /> Geri
+            </button>
+            
+            {currentStep < STEPS.length ? (
+              <button onClick={nextStep} disabled={!isStepValid()} className={`flex items-center gap-2 px-10 py-4 rounded-2xl font-bold text-lg transition-all ${isStepValid() ? 'bg-gray-900 text-white shadow-xl shadow-gray-900/20 hover:bg-black hover:-translate-y-1' : 'bg-gray-200 text-gray-400 cursor-not-allowed'}`}>
+                Sonraki Adım <ChevronRight className="w-6 h-6" />
+              </button>
+            ) : (
+              <button onClick={handleOrder} disabled={!isStepValid() || isSubmitting} className={`flex items-center gap-3 px-10 py-4 rounded-2xl font-bold text-lg transition-all ${!isStepValid() || isSubmitting ? 'bg-gray-200 text-gray-400 cursor-not-allowed' : 'bg-gradient-to-r from-dilim-portakal to-orange-500 text-white shadow-xl shadow-orange-500/30 hover:shadow-2xl hover:-translate-y-1'}`}>
+                {isSubmitting ? 'Gönderiliyor...' : (
+                  <>
+                    <MessageCircle className="w-6 h-6" /> Gönder & Fiyat Al
+                  </>
+                )}
+              </button>
+            )}
+          </div>
+
         </div>
       </div>
     </div>
