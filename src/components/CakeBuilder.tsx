@@ -144,21 +144,20 @@ export default function CakeBuilder({ timeSlots = [], contactSettings }: { timeS
       fetch('/api/customer/me')
         .then(res => res.json())
         .then(data => {
-          if (data.customer) {
+          if (data.user) {
             setSelections(prev => ({
               ...prev,
-              customerName: `${data.customer.firstName || ''} ${data.customer.lastName || ''}`.trim(),
-              customerPhone: data.customer.phone || '',
-              customerEmail: data.customer.email || '',
-              customerAddress: data.customer.address || '',
+              customerName: `${data.user.name || ''} ${data.user.surname || ''}`.trim(),
+              customerPhone: data.user.phone || '',
+              customerEmail: data.user.email || '',
             }))
             
-            if (data.customer.savedAddresses && data.customer.savedAddresses.length > 0) {
-              setUserAddresses(data.customer.savedAddresses)
-              const defaultAddr = data.customer.savedAddresses.find((a:any) => a.isDefault) || data.customer.savedAddresses[0]
+            if (data.user.addresses && data.user.addresses.length > 0) {
+              setUserAddresses(data.user.addresses)
+              const defaultAddr = data.user.addresses[0]
               setSelections(prev => ({
                 ...prev,
-                customerAddress: `${defaultAddr.district} - ${defaultAddr.details}`
+                customerAddress: `${defaultAddr.district} - ${defaultAddr.address}`
               }))
             }
           }
@@ -454,7 +453,7 @@ export default function CakeBuilder({ timeSlots = [], contactSettings }: { timeS
 
                     {selectedAddressType === 'saved' && (
                       <select className="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl focus:ring-2 focus:ring-dilim-portakal focus:border-dilim-portakal outline-none transition-all text-sm"
-                        onChange={(e) => { const addr = userAddresses.find(a => a.id === e.target.value); if (addr) handleSelect('customerAddress', `${addr.district} - ${addr.details}`); }}>
+                        onChange={(e) => { const addr = userAddresses.find(a => a.id === e.target.value); if (addr) handleSelect('customerAddress', `${addr.district} - ${addr.address}`); }}>
                         <option value="">Kayıtlı Adres Seçin</option>
                         {userAddresses.map((addr) => <option key={addr.id} value={addr.id}>{addr.title} ({addr.district})</option>)}
                       </select>
