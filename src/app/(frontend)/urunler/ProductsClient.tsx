@@ -102,8 +102,6 @@ function ProductsClientInner({
         matchesSub = title.includes('fıstık') || title.includes('havuç') || title.includes('şöbiyet') || title.includes('burma') || title.includes('midye')
       } else if (sub === turkishLower('Fındıklı Seçenekler')) {
         matchesSub = title.includes('fındık') || title.includes('nuriye') || title.includes('yalova')
-      } else if (sub === turkishLower('Kurabiye ve Börekler')) {
-        matchesSub = title.includes('kurabiye') || title.includes('börek') || title.includes('pizza') || title.includes('sakallı')
       } else {
         matchesSub = title.includes(sub)
       }
@@ -203,7 +201,7 @@ function ProductsClientInner({
                   className="flex justify-center gap-2 flex-wrap overflow-hidden"
                 >
                   {(activeCategorySlug === 'serbetli-tatlilar' 
-                    ? ['Tümü', 'Cevizli Seçenekler', 'Fıstıklı Seçenekler', 'Fındıklı Seçenekler', 'Kurabiye ve Börekler']
+                    ? ['Tümü', 'Cevizli Seçenekler', 'Fıstıklı Seçenekler', 'Fındıklı Seçenekler']
                     : ['Tümü', 'Cheesecake Dilim']
                   ).map(filter => (
                     <button
