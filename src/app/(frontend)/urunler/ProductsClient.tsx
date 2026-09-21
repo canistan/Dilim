@@ -90,7 +90,7 @@ function ProductsClientInner({
 
     // Alt filtre (Şerbetli tatlılar, Sütlü Tatlılar vs)
     let matchesSub = true
-    if (subFilter !== 'tumu') {
+    if (subFilter !== 'tumu' && subFilter !== 'tümü') {
       const title = turkishLower(p.title)
       const sub = subFilter
 
@@ -178,7 +178,7 @@ function ProductsClientInner({
                   key={cat.id}
                   onClick={() => {
                     setActiveCategorySlug(cat.slug)
-                    setSubFilter('tumu') // Kategori değiştiğinde alt filtreyi sıfırla
+                    setSubFilter('tümü') // Kategori değiştiğinde alt filtreyi 'tümü' yap
                   }}
                   className={`px-6 py-3 rounded-full text-sm font-medium transition-all duration-300 shadow-sm ${
                     activeCategorySlug === cat.slug
