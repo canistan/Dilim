@@ -121,6 +121,22 @@ export default function CakeBuilder({ timeSlots = [], contactSettings }: { timeS
     ];
   }
 
+  const handlePhoneChange = (val: string) => {
+    let numbers = val.replace(/\D/g, '');
+    if (numbers.length > 0 && numbers[0] !== '0') {
+      numbers = '0' + numbers;
+    }
+    numbers = numbers.substring(0, 11);
+    
+    let formatted = '';
+    if (numbers.length > 0) formatted += numbers.substring(0, 4);
+    if (numbers.length > 4) formatted += ' ' + numbers.substring(4, 7);
+    if (numbers.length > 7) formatted += ' ' + numbers.substring(7, 9);
+    if (numbers.length > 9) formatted += ' ' + numbers.substring(9, 11);
+    
+    handleSelect('customerPhone', formatted);
+  }
+
   const { status } = useSession()
 
   useEffect(() => {
@@ -218,7 +234,7 @@ export default function CakeBuilder({ timeSlots = [], contactSettings }: { timeS
       case 3: return selections.icerik.length > 0 && selections.icerik.length <= 3;
       case 4: return selections.pat !== '' && selections.sekil !== '';
       case 5: return selections.kisi !== '';
-      case 6: return selections.customerName !== '' && selections.customerPhone !== '' && selections.customerAddress !== '' && selections.requestedDate !== '' && selections.timeSlot !== '';
+      case 6: return selections.customerName.trim() !== '' && selections.customerPhone.replace(/\D/g, '').length === 11 && selections.customerAddress.trim() !== '' && selections.requestedDate !== '' && selections.timeSlot !== '';
       case 7: return true;
       default: return true;
     }
@@ -414,7 +430,7 @@ export default function CakeBuilder({ timeSlots = [], contactSettings }: { timeS
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Telefon <span className="text-red-500">*</span></label>
-                    <input type="tel" value={selections.customerPhone} onChange={(e) => handleSelect('customerPhone', e.target.value)} 
+                    <input type="tel" value={selections.customerPhone} onChange={(e) => handlePhoneChange(e.target.value)} 
                       className="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl focus:ring-2 focus:ring-dilim-portakal focus:border-dilim-portakal outline-none transition-all text-sm placeholder:text-gray-400" placeholder="05XX XXX XX XX" />
                   </div>
                   <div>
@@ -446,7 +462,7 @@ export default function CakeBuilder({ timeSlots = [], contactSettings }: { timeS
                   </div>
                 )}
                 
-                {(status !== 'authenticated' || selectedAddressType === 'new') && (
+                {(status !== 'authenticated' || selectedAddressType === 'new' || userAddresses.length === 0) && (
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Teslimat Adresi <span className="text-red-500">*</span></label>
                     <textarea value={selections.customerAddress} onChange={(e) => handleSelect('customerAddress', e.target.value)} rows={3} 
