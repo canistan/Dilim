@@ -96,6 +96,7 @@ function ProductsClientInner({
   }
 
   const getCategoryOrder = (title: string) => {
+    if (!title) return 99;
     const t = title.toLowerCase('tr-TR');
     if (t.includes('yaş') || t.includes('yas')) return 1;
     if (t.includes('tek')) return 2;
@@ -267,7 +268,13 @@ function ProductsClientInner({
           {/* Product Grid */}
           <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
             <AnimatePresence>
-              {filteredProducts.map((product) => {
+              {[...filteredProducts]
+                .sort((a, b) => {
+                  const catA = typeof a.category === 'object' ? a.category?.title : categories.find(c => c.id === a.category)?.title;
+                  const catB = typeof b.category === 'object' ? b.category?.title : categories.find(c => c.id === b.category)?.title;
+                  return getCategoryOrder(catA || '') - getCategoryOrder(catB || '');
+                })
+                .map((product) => {
                 const categoryObj = categories.find(c => c.id === (typeof product.category === 'object' ? product.category.id : product.category))
                 const categoryName = typeof product.category === 'object' 
                   ? product.category.title 
