@@ -3,7 +3,7 @@
 import { useState, useEffect, Suspense } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useSearchParams } from 'next/navigation'
+import { useSearchParams, useRouter } from 'next/navigation'
 import { Filter, ShoppingBag, Eye, PaintBucket, Search, X } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useCart } from '@/context/CartContext'
@@ -40,10 +40,12 @@ function ProductsClientInner({
   crossSellProducts?: any[]
 }) {
   const searchParams = useSearchParams()
+  const router = useRouter()
   const initialCategory = searchParams.get('kategori') || 'all'
+  const initialSubFilter = searchParams.get('alt_filtre') || 'tumu'
   const [activeCategorySlug, setActiveCategorySlug] = useState(initialCategory)
   const [searchQuery, setSearchQuery] = useState('')
-  const [subFilter, setSubFilter] = useState('tumu') // Alt filtre state
+  const [subFilter, setSubFilter] = useState(initialSubFilter) // Alt filtre state
   const [quickAddProduct, setQuickAddProduct] = useState<any>(null)
   
   const [showCrossSell, setShowCrossSell] = useState(false)
@@ -52,10 +54,32 @@ function ProductsClientInner({
   // URL değişirse state'i güncelle
   useEffect(() => {
     const cat = searchParams.get('kategori')
-    if (cat) {
-      setActiveCategorySlug(cat)
-    }
+    if (cat) setActiveCategorySlug(cat)
+    else setActiveCategorySlug('all')
+
+    const sub = searchParams.get('alt_filtre')
+    if (sub) setSubFilter(sub)
+    else setSubFilter('tumu')
   }, [searchParams])
+
+  const handleCategoryChange = (slug: string) => {
+    setActiveCategorySlug(slug)
+    setSubFilter('tümü')
+    const params = new URLSearchParams(searchParams.toString())
+    if (slug === 'all') params.delete('kategori')
+    else params.set('kategori', slug)
+    params.delete('alt_filtre')
+    router.replace(`?${params.toString()}`, { scroll: false })
+  }
+
+  const handleSubFilterChange = (filter: string) => {
+    setSubFilter(filter)
+    const params = new URLSearchParams(searchParams.toString())
+    if (filter === 'tümü' || filter === 'tumu') params.delete('alt_filtre')
+    else params.set('alt_filtre', filter)
+    router.replace(`?${params.toString()}`, { scroll: false })
+  }
+
   const { addToCart, setIsCartOpen } = useCart()
 
   // Türkçe-dostu küçük harf dönüşümü
@@ -71,8 +95,22 @@ function ProductsClientInner({
       .toLowerCase()
   }
 
+  const getCategoryOrder = (title: string) => {
+    const t = title.toLowerCase('tr-TR');
+    if (t.includes('yaş') || t.includes('yas')) return 1;
+    if (t.includes('tek')) return 2;
+    if (t.includes('petifür') || t.includes('petifur') || t.includes('peti̇für')) return 3;
+    if (t.includes('sütlü') || t.includes('sutlu')) return 4;
+    if (t.includes('şerbet') || t.includes('serbet')) return 5;
+    if (t.includes('kurabiye') || t.includes('börek')) return 6;
+    if (t.includes('paket')) return 7;
+    return 99;
+  }
+
+  const sortedCategories = [...categories].sort((a, b) => getCategoryOrder(a.title) - getCategoryOrder(b.title));
+  
   // Add "All" to categories
-  const allCategories = [{ id: 'all', title: 'TÜMÜ', slug: 'all' }, ...categories]
+  const allCategories = [{ id: 'all', title: 'TÜMÜ', slug: 'all' }, ...sortedCategories]
 
   const filteredProducts = products.filter((p) => {
     // Kategori filtresi
@@ -176,10 +214,7 @@ function ProductsClientInner({
               {allCategories.map((cat) => (
                 <button
                   key={cat.id}
-                  onClick={() => {
-                    setActiveCategorySlug(cat.slug)
-                    setSubFilter('tümü') // Kategori değiştiğinde alt filtreyi 'tümü' yap
-                  }}
+                  onClick={() => handleCategoryChange(cat.slug)}
                   className={`px-6 py-3 rounded-full text-sm font-medium transition-all duration-300 shadow-sm ${
                     activeCategorySlug === cat.slug
                       ? 'bg-gradient-to-r from-dilim-portakal to-dilim-turuncu text-white shadow-md transform scale-105'
@@ -213,7 +248,7 @@ function ProductsClientInner({
                     ).map(filter => (
                       <button
                         key={filter}
-                        onClick={() => setSubFilter(turkishLower(filter))}
+                        onClick={() => handleSubFilterChange(turkishLower(filter))}
                         className={`px-5 py-2 rounded-full text-xs font-semibold transition-all duration-300 ${
                           subFilter === turkishLower(filter)
                             ? 'bg-dilim-siyah text-white shadow-md transform scale-105'
@@ -375,7 +410,7 @@ function ProductsClientInner({
                     Farklı bir arama terimi deneyin veya kategorilere göz atın.
                   </p>
                   <button
-                    onClick={() => { setSearchQuery(''); setActiveCategorySlug('all'); }}
+                    onClick={() => { setSearchQuery(''); handleCategoryChange('all'); }}
                     className="mt-6 px-6 py-3 bg-dilim-portakal text-white rounded-full text-sm font-medium hover:bg-dilim-turuncu transition-colors duration-300"
                   >
                     Tüm Ürünleri Göster

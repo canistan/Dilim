@@ -5,6 +5,16 @@
 ## 🚧 Aktif Görevler
 *(Ekran görüntünüzden ve açık dosyalardan toparlanan görevler)*
 
+### 🔥 Yeni Gelen Talepler (Dilim Site)
+- [ ] **Karışık petifür yok - oluşturulacak.**
+- [x] **Ürünlerde filtre kırılımında geri geldiğimizde aynı filtreye düşelim.** (URL parametresi ile State senkronizasyonu)
+- [ ] **Ürünler kategorileri tekrar gözden geçirilecek.**
+- [ ] **Ekler; çikolatalı ve beyaz krema olarak ikiye ayrılacak/düzenlenecek.**
+- [ ] **Panele (Admin) Kendi Pastanı Tasarla siparişleri düzgün gelmiyor, formatı düzeltilecek.**
+- [x] **Filtrelerin sıralaması (yeri) değişecek:** Yaş Pasta, Tek Pasta, Petifür, Sütlü Tatlı, Şerbetli Tatlı, Kurabiye, Paket olacak şekilde sıralanacak.
+- [ ] **AI Destekli GEO & SEO Optimizasyonu:** Bütün kategoriler ve ürünler netleştikten sonra, DALL-E görsel üretim scriptine eklenti yapılarak her ürün için yapay zeka ile İstanbul/Beykoz hedefli benzersiz 'SEO Title' ve 'Meta Description' metinleri üretilip sisteme otomatik kaydedilecek.
+
+
 - [x] Sipariş oluşturma hatalarını Türkçeleştir ve kurumsal bir yapıya dönüştür (`odeme/page.tsx`).
 - [x] Ürün kartlarındaki "Tasarla" butonunu Pastalar hariç diğer ürünlerde "Hızlı Ekle" yap (`ProductsClient.tsx`).
 - [x] Kendi Pastanı Tasarla takvimine "Pazar kapalı" ve "Cumartesi öğlen -> Pazartesi öğlen teslimat" kuralını ekle (`CakeBuilder.tsx`).

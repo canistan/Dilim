@@ -1,61 +1,72 @@
 import 'dotenv/config'
-import { getPayload } from 'payload'
-import configPromise from './payload.config'
-import fs from 'fs'
+import payload from 'payload'
+import config from '../src/payload.config'
 
-async function run() {
-  const payload = await getPayload({ config: configPromise })
-  const rawData = JSON.parse(fs.readFileSync('prices_dump.json', 'utf8'))
-  
-  // Extract all valid product - price pairs
-  const pricesMap: { name: string, price: number, unit: string }[] = []
-  
-  for (const row of rawData) {
-    // Check Col 0 & 3
-    if (row['0'] && row['3'] && typeof row['3'] === 'number') {
-      pricesMap.push({ name: String(row['0']).trim().toLowerCase(), price: row['3'], unit: String(row['2']).trim() })
-    }
-    // Check Col 5 & 7
-    if (row['5'] && row['7'] && typeof row['7'] === 'number') {
-      pricesMap.push({ name: String(row['5']).trim().toLowerCase(), price: row['7'], unit: String(row['6']).trim() })
-    }
-    // Check Col 9 & 11
-    if (row['9'] && row['11'] && typeof row['11'] === 'number') {
-      pricesMap.push({ name: String(row['9']).trim().toLowerCase(), price: row['11'], unit: String(row['10']).trim() })
-    }
-  }
+const run = async () => {
+  await payload.init({ config, local: true })
 
-  const products = await payload.find({ collection: 'products', limit: 1000 })
-  let updatedCount = 0
+  const priceMap: { [key: string]: number } = {
+    "PROFİTEROL": 350,
+    "ORMAN MEYVELİ MAGNOLYA": 375,
+    "MİLFÖY (SİPARİŞ ÜZERİNE)": 350,
+    "KROKANLI TEK PASTA": 360,
+    "MUZLU RULO PASTA": 360,
+    "IBIZA ÇİLEKLİ (BURÇAK BİSKÜVİLİ)": 360,
+    "IBIZA MUZLU (BURÇAK BİSKÜVİLİ)": 360,
+    "ÇİLEK ÇİKOLATALI TEK PASTA": 360,
+    "ÇİLEKLİ TEK PASTA": 360,
+    "KARIŞIK PETİFÜR": 1400,
+    "EKLER BEYAZ KREMA": 1400,
+    "EKLER ÇİKOLATA KREMA": 1400,
+    "MİNİ SÜT BURGERLER": 1400,
+    "MİNİ CHEESECAKE": 1400,
+    "MİNİ İBİZA MUZLU": 1400,
+    "MİNİ İBİZA ÇİLEKLİ": 1400,
+    "ÇİLEKLİ TARTOLET": 1400,
+    "MİNİ ÇİLEKLİ RULO": 1400,
+    "MİNİ KROKANLI RULO": 1400,
+    "MİNİ MUZLU RULO": 1400,
+    "MUZLU ÇİKOLATALI PETİFÜRLER": 1400,
+    "KROKANLI PETİFÜRLER": 1400
+  };
 
-  for (const product of products.docs) {
-    const prodName = product.title.toLowerCase()
+  const allProducts = await payload.find({
+    collection: 'products' as any,
+    limit: 1000,
+  });
+
+  let updatedCount = 0;
+
+  for (const [pName, price] of Object.entries(priceMap)) {
+    const targetNameLC = pName.toLowerCase('tr-TR');
     
-    // Find matching price
-    // Some logic to match e.g. "Kıymalı Kol Böreği (Kg)" with "KIYMALI KOL BÖREĞİ"
-    let match = pricesMap.find(p => {
-      const pName = p.name.replace(/\s+/g, '').replace('ı','i').replace('ş','s').replace('ç','c').replace('ö','o').replace('ü','u').replace('ğ','g')
-      const prodNameClean = prodName.replace(/\(.*\)/, '').replace(/\s+/g, '').replace('ı','i').replace('ş','s').replace('ç','c').replace('ö','o').replace('ü','u').replace('ğ','g')
-      return pName === prodNameClean || pName.includes(prodNameClean) || prodNameClean.includes(pName)
-    })
-    
-    if (match) {
-      if (product.price !== match.price && !product.hasSizes) {
-        console.log(`Güncelleniyor: ${product.title} (${product.price} -> ${match.price})`)
-        await payload.update({
-          collection: 'products',
-          id: product.id,
-          data: { price: match.price }
-        })
-        updatedCount++
-      }
+    // İsmi eşleşen veya içinde "MİLFÖY" geçen vb. 
+    // Tam isim eşleşmesi arıyoruz.
+    const existing = allProducts.docs.find(d => {
+       if (!d.title) return false;
+       const dbNameLC = d.title.toLowerCase('tr-TR');
+       // Milföy istisnası (isimde sipariş üzerine eklemiştik)
+       if (targetNameLC.includes('milföy') && dbNameLC.includes('milföy')) return true;
+       return dbNameLC === targetNameLC;
+    });
+
+    if (existing) {
+      await payload.update({
+        collection: 'products' as any,
+        id: existing.id,
+        data: {
+          price: price
+        }
+      });
+      console.log(`[FİYAT GÜNCELLENDİ] ${existing.title} -> ${price} TL`);
+      updatedCount++;
     } else {
-      console.log(`Eşleşme bulunamadı: ${product.title}`)
+      console.log(`[BULUNAMADI] ${pName}`);
     }
   }
-  
-  console.log(`Toplam ${updatedCount} ürün fiyatı güncellendi.`)
-  process.exit(0)
+
+  console.log(`\\nİşlem Tamamlandı: Toplam ${updatedCount} ürünün fiyatı güncellendi.`);
+  process.exit(0);
 }
 
-run().catch(console.error)
+run();
