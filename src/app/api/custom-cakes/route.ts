@@ -18,6 +18,8 @@ export async function POST(req: Request) {
     const filling = formData.get('filling') as string
     const frosting = formData.get('frosting') as string
     const note = formData.get('note') as string
+    const pat = formData.get('pat') as string
+    const sekil = formData.get('sekil') as string
     const requestedDate = formData.get('requestedDate') as string
     const timeSlotStr = formData.get('timeSlot') as string
     
@@ -103,9 +105,9 @@ export async function POST(req: Request) {
     console.log('Uploaded Media ID:', uploadedMediaId)
     console.log('Uploaded Media URL:', uploadedMediaUrl)
 
-    // Seçilen değerleri CakeSize numarasına çevir (örneğin '6-8' -> 8)
-    const sizeMatch = size ? size.match(/\d+/g) : null;
-    const cakeSizeNum = sizeMatch ? parseInt(sizeMatch[sizeMatch.length - 1], 10) : 10;
+    // Seçilen değerleri Payload'a uygun aktarıyoruz.
+    // Artık cakeSize alanı 'text' olduğu için formdan gelen string'i doğrudan kaydedebiliriz.
+    const cakeSizeStr = size || 'Belirtilmedi';
 
     // Müşteri oturumu var mı kontrol et
     const session = await getServerSession(authOptions);
@@ -152,9 +154,12 @@ export async function POST(req: Request) {
           address: customerAddress || 'Belirtilmedi',
         },
         customCakeDetails: {
-          cakeSize: cakeSizeNum,
-          spongeType: base.includes('cacao') ? 'kakaolu' : 'sade',
-          creamFlavor: filling.includes('choco') ? 'cikolata' : (filling.includes('raspberry') ? 'meyveli' : 'vanilya'),
+          cakeSize: cakeSizeStr,
+          spongeType: base,
+          creamFlavor: frosting,
+          filling: filling,
+          pat: pat,
+          sekil: sekil,
           referenceImage: uploadedMediaId,
           requestedDate: requestedDate ? new Date(requestedDate).toISOString() : undefined,
           note: note || '',
@@ -180,10 +185,12 @@ export async function POST(req: Request) {
             
             <h3 style="border-bottom: 1px solid #eee; padding-bottom: 5px;">Tasarım Detayları</h3>
             <p><strong>Teslimat Zamanı:</strong> ${requestedDate || 'Belirtilmedi'} (${timeSlotStr || 'Belirtilmedi'})</p>
-            <p><strong>Boyut:</strong> ${size}</p>
+            <p><strong>Kişi Sayısı:</strong> ${size}</p>
             <p><strong>Kek:</strong> ${base}</p>
             <p><strong>İç Dolgu:</strong> ${filling}</p>
             <p><strong>Dış Kaplama:</strong> ${frosting}</p>
+            <p><strong>Yapı (Katman):</strong> ${pat}</p>
+            <p><strong>Şekil:</strong> ${sekil}</p>
             <p><strong>Not:</strong> ${note || 'Yok'}</p>
             
             <p style="margin-top: 20px;">

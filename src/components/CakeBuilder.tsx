@@ -251,8 +251,9 @@ export default function CakeBuilder({ timeSlots = [], contactSettings }: { timeS
       formData.append('base', selections.kek)
       formData.append('filling', selections.icerik.join(', '))
       formData.append('frosting', selections.krema)
-      const fullNote = `Pat Sayısı: ${selections.pat} | Şekil: ${selections.sekil}\\nÖzel Not: ${selections.note}`
-      formData.append('note', fullNote)
+      formData.append('pat', selections.pat)
+      formData.append('sekil', selections.sekil)
+      formData.append('note', selections.note)
       formData.append('requestedDate', selections.requestedDate)
       formData.append('timeSlot', selections.timeSlot)
       

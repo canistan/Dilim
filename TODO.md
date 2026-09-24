@@ -6,11 +6,11 @@
 *(Ekran görüntünüzden ve açık dosyalardan toparlanan görevler)*
 
 ### 🔥 Yeni Gelen Talepler (Dilim Site)
-- [ ] **Karışık petifür yok - oluşturulacak.**
+- [x] **Karışık petifür yok - oluşturulacak.**
 - [x] **Ürünlerde filtre kırılımında geri geldiğimizde aynı filtreye düşelim.** (URL parametresi ile State senkronizasyonu)
-- [ ] **Ürünler kategorileri tekrar gözden geçirilecek.**
-- [ ] **Ekler; çikolatalı ve beyaz krema olarak ikiye ayrılacak/düzenlenecek.**
-- [ ] **Panele (Admin) Kendi Pastanı Tasarla siparişleri düzgün gelmiyor, formatı düzeltilecek.**
+- [x] **Ürünler kategorileri tekrar gözden geçirilecek.**
+- [x] **Ekler; çikolatalı ve beyaz krema olarak ikiye ayrılacak/düzenlenecek.**
+- [x] **Panele (Admin) Kendi Pastanı Tasarla siparişleri düzgün gelmiyor, formatı düzeltilecek.**
 - [x] **Filtrelerin sıralaması (yeri) değişecek:** Yaş Pasta, Tek Pasta, Petifür, Sütlü Tatlı, Şerbetli Tatlı, Kurabiye, Paket olacak şekilde sıralanacak.
 - [ ] **AI Destekli GEO & SEO Optimizasyonu:** Bütün kategoriler ve ürünler netleştikten sonra, DALL-E görsel üretim scriptine eklenti yapılarak her ürün için yapay zeka ile İstanbul/Beykoz hedefli benzersiz 'SEO Title' ve 'Meta Description' metinleri üretilip sisteme otomatik kaydedilecek.
 

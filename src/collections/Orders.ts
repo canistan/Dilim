@@ -490,7 +490,8 @@ export const Orders: CollectionConfig = {
                 condition: (data) => Boolean(data?.orderType === 'custom'),
               },
               fields: [
-                { type: 'row', fields: [{ name: 'cakeSize', type: 'number', label: 'Kişi Sayısı (Porsiyon)' }, { name: 'spongeType', type: 'text', label: 'Kek Tipi' }, { name: 'creamFlavor', type: 'text', label: 'Krema Aroması' }] },
+                { type: 'row', fields: [{ name: 'cakeSize', type: 'text', label: 'Kişi Sayısı (Porsiyon)' }, { name: 'spongeType', type: 'text', label: 'Kek Tipi' }, { name: 'creamFlavor', type: 'text', label: 'Krema Aroması' }, { name: 'filling', type: 'text', label: 'İçerik (Meyve vb.)' }] },
+                { type: 'row', fields: [{ name: 'pat', type: 'text', label: 'Yapı (Katman)' }, { name: 'sekil', type: 'text', label: 'Pasta Şekli' }] },
                 { name: 'requestedDate', type: 'date', label: 'İstenen Teslim Tarihi ve Saati', admin: { date: { pickerAppearance: 'dayAndTime' } } },
                 { name: 'note', type: 'textarea', label: 'Müşteri Notu' },
                 { name: 'referenceImage', type: 'upload', relationTo: 'media', label: 'Referans Görseli' },
