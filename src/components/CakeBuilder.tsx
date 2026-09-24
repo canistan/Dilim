@@ -73,6 +73,7 @@ export default function CakeBuilder({ timeSlots = [], contactSettings }: { timeS
   const [whatsappMessage, setWhatsappMessage] = useState('')
   const [orderId, setOrderId] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [showWeekendModal, setShowWeekendModal] = useState(false)
   const scrollRef = useRef<HTMLDivElement>(null)
 
   const [selections, setSelections] = useState<{
@@ -107,7 +108,7 @@ export default function CakeBuilder({ timeSlots = [], contactSettings }: { timeS
     const selectedDate = new Date(val);
     const day = selectedDate.getDay();
     if (day === 0 || day === 6) {
-      toast.error("Hafta sonları (Cumartesi ve Pazar) özel sipariş alamıyoruz. Lütfen hafta içi bir gün seçiniz.");
+      setShowWeekendModal(true);
       handleSelect('requestedDate', '');
       return;
     }
@@ -636,6 +637,62 @@ export default function CakeBuilder({ timeSlots = [], contactSettings }: { timeS
 
         </div>
       </div>
+      
+      {/* Weekend Modal */}
+      <AnimatePresence>
+        {showWeekendModal && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="bg-white rounded-[2rem] p-8 max-w-md w-full shadow-2xl relative overflow-hidden"
+            >
+              <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-dilim-portakal to-dilim-turuncu" />
+              
+              <div className="w-16 h-16 bg-orange-50 rounded-full flex items-center justify-center mb-6 mx-auto">
+                <MapPin className="w-8 h-8 text-dilim-portakal" />
+              </div>
+              
+              <h3 className="text-2xl font-bold text-center text-gray-900 mb-3">Hafta Sonu Siparişleri</h3>
+              <p className="text-center text-gray-600 mb-8 leading-relaxed">
+                Hafta sonu yoğunluğundan dolayı web üzerinden özel sipariş alamıyoruz. Lütfen detaylar için doğrudan şubelerimizle iletişime geçiniz.
+              </p>
+              
+              <div className="space-y-4 mb-8">
+                <a href="tel:+905059638021" className="flex items-center p-4 border border-gray-100 rounded-2xl hover:border-dilim-portakal hover:bg-orange-50/30 transition-all group">
+                  <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center mr-4 group-hover:bg-white group-hover:shadow-sm">
+                    <MessageCircle className="w-5 h-5 text-gray-600 group-hover:text-dilim-portakal" />
+                  </div>
+                  <div className="flex-1">
+                    <h4 className="font-semibold text-gray-900">Kavacık Şubesi</h4>
+                    <p className="text-sm text-gray-500 font-medium">+90 505 963 80 21</p>
+                  </div>
+                  <ChevronRight className="w-5 h-5 text-gray-300 group-hover:text-dilim-portakal transition-colors" />
+                </a>
+                
+                <a href="tel:+905059638024" className="flex items-center p-4 border border-gray-100 rounded-2xl hover:border-dilim-portakal hover:bg-orange-50/30 transition-all group">
+                  <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center mr-4 group-hover:bg-white group-hover:shadow-sm">
+                    <MessageCircle className="w-5 h-5 text-gray-600 group-hover:text-dilim-portakal" />
+                  </div>
+                  <div className="flex-1">
+                    <h4 className="font-semibold text-gray-900">Ümraniye Şubesi</h4>
+                    <p className="text-sm text-gray-500 font-medium">+90 505 963 80 24</p>
+                  </div>
+                  <ChevronRight className="w-5 h-5 text-gray-300 group-hover:text-dilim-portakal transition-colors" />
+                </a>
+              </div>
+              
+              <button 
+                onClick={() => setShowWeekendModal(false)}
+                className="w-full py-4 bg-gray-900 text-white rounded-xl font-semibold hover:bg-black transition-colors"
+              >
+                Anladım, Kapat
+              </button>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   )
 }

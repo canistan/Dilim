@@ -136,7 +136,7 @@ function ProductsClientInner({
       if (sub === turkishLower('Cheesecake Dilim')) {
         matchesSub = title.includes('cheesecake')
       } else if (sub === turkishLower('Cevizli Seçenekler')) {
-        matchesSub = title.includes('ceviz')
+        matchesSub = title.includes('ceviz') || title.includes('saray sarma') || title.includes('vezir parma')
       } else if (sub === turkishLower('Fıstıklı Seçenekler')) {
         matchesSub = title.includes('fıstık') || title.includes('havuç') || title.includes('şöbiyet') || title.includes('burma') || title.includes('midye')
       } else if (sub === turkishLower('Fındıklı Seçenekler')) {
