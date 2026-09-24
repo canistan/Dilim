@@ -129,11 +129,13 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
     crossSellDocs = extrasRes.docs
   }
 
-  const categoryName = typeof product.category === 'object' ? product.category.title : 'Kategori'
+  const categoryObj = typeof product.category === 'object' ? product.category : null
+  const categoryName = categoryObj ? categoryObj.title : 'Kategori'
+  const categorySlug = categoryObj && categoryObj.slug ? categoryObj.slug : 'tumu'
 
   const staticProd = STATIC_PRODUCTS.find(p => p.name === product.title)
-  const categoryFallbackImage = typeof product.category === 'object' && product.category?.image?.url 
-    ? product.category.image.url 
+  const categoryFallbackImage = categoryObj?.image?.url 
+    ? categoryObj.image.url 
     : '/placeholder.png'
     
   const imageToUse = (product.images && product.images.length > 0 && product.images[0].url) 
@@ -150,7 +152,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
             <ChevronRight className="w-4 h-4 mx-2" />
             <Link href="/urunler" className="hover:text-dilim-portakal transition-colors">Ürünler</Link>
             <ChevronRight className="w-4 h-4 mx-2" />
-            <Link href="/urunler" className="hover:text-dilim-portakal transition-colors whitespace-nowrap">{categoryName}</Link>
+            <Link href={`/urunler?kategori=${categorySlug}`} className="hover:text-dilim-portakal transition-colors whitespace-nowrap">{categoryName}</Link>
             <ChevronRight className="w-4 h-4 mx-2" />
             <span className="text-dilim-siyah font-bold truncate max-w-[200px] sm:max-w-none">{product.title}</span>
           </div>
