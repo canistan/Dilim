@@ -391,6 +391,17 @@ export const Orders: CollectionConfig = {
                   type: 'relationship',
                   relationTo: 'time-slots',
                   label: 'İstenen Teslimat Aralığı',
+                },
+                {
+                  name: 'deliveryDate',
+                  type: 'date',
+                  label: 'İstenen Teslim Tarihi',
+                  admin: { date: { pickerAppearance: 'dayOnly' } }
+                },
+                {
+                  name: 'deliveryTime',
+                  type: 'text',
+                  label: 'İstenen Teslim Saati (Metin)',
                 }
               ]
             },

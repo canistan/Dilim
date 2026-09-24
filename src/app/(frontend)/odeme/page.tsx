@@ -34,7 +34,9 @@ export default function OdemePage() {
     isCorporate: false,
     companyName: '',
     taxOffice: '',
-    taxNumber: ''
+    taxNumber: '',
+    deliveryDate: '',
+    deliveryTime: ''
   })
   
   const [savedAddresses, setSavedAddresses] = useState<any[]>([])
@@ -139,6 +141,16 @@ export default function OdemePage() {
     
     if (formData.isCorporate && (!formData.companyName || !formData.taxOffice || !formData.taxNumber)) {
       toast.error("Lütfen kurumsal fatura bilgilerinizi eksiksiz giriniz.")
+      return
+    }
+
+    if (!formData.deliveryDate) {
+      toast.error("Lütfen teslimat tarihi seçiniz.")
+      return
+    }
+
+    if (!formData.deliveryTime) {
+      toast.error("Lütfen teslimat saati seçiniz.")
       return
     }
 
@@ -386,6 +398,55 @@ export default function OdemePage() {
                     </div>
                   </div>
                 )}
+              </div>
+
+              {/* Teslimat Zamanı */}
+              <div className="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-gray-100 animate-in fade-in slide-in-from-bottom-4 duration-500 delay-100">
+                <h2 className="text-xl font-bold text-dilim-siyah mb-6 border-b pb-4">Teslimat Zamanı</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Teslimat Tarihi <span className="text-red-500">*</span></label>
+                    <input 
+                      type="date"
+                      min={(() => {
+                        let dt = new Date();
+                        dt.setDate(dt.getDate() + 1);
+                        if (dt.getDay() === 6) dt.setDate(dt.getDate() + 2);
+                        if (dt.getDay() === 0) dt.setDate(dt.getDate() + 1);
+                        return dt.toISOString().split('T')[0];
+                      })()}
+                      value={formData.deliveryDate}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        if (val) {
+                          const day = new Date(val).getDay();
+                          if (day === 0 || day === 6) {
+                            toast.error("Hafta sonları (Cumartesi ve Pazar) teslimatımız yoktur. Lütfen hafta içi bir gün seçiniz.");
+                            setFormData({...formData, deliveryDate: ''});
+                            return;
+                          }
+                        }
+                        setFormData({...formData, deliveryDate: val});
+                      }}
+                      className="w-full p-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-dilim-portakal focus:border-transparent outline-none transition-all cursor-pointer"
+                    />
+                    <p className="text-xs text-gray-500 mt-2 font-medium">Siparişleriniz en erken 1 gün sonra teslim edilebilir.</p>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Teslimat Saati <span className="text-red-500">*</span></label>
+                    <select
+                      value={formData.deliveryTime}
+                      onChange={(e) => setFormData({...formData, deliveryTime: e.target.value})}
+                      className="w-full p-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-dilim-portakal focus:border-transparent outline-none transition-all cursor-pointer"
+                    >
+                      <option value="">Saat Seçin...</option>
+                      <option value="10:00 - 12:00">10:00 - 12:00</option>
+                      <option value="12:00 - 14:00">12:00 - 14:00</option>
+                      <option value="14:00 - 16:00">14:00 - 16:00</option>
+                      <option value="16:00 - 18:00">16:00 - 18:00</option>
+                    </select>
+                  </div>
+                </div>
               </div>
             </div>
 

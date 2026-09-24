@@ -177,6 +177,8 @@ export async function POST(req: Request) {
           taxOffice: customerInfo.taxOffice,
           taxNumber: customerInfo.taxNumber,
         },
+        deliveryDate: customerInfo.deliveryDate,
+        deliveryTime: customerInfo.deliveryTime,
         orderItems: validatedItems.map((item) => ({
           product: item.productId,
           quantity: item.quantity,
