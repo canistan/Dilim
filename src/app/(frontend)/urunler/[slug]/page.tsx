@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { notFound } from 'next/navigation'
+import { notFound, redirect, RedirectType } from 'next/navigation'
 import { ChevronRight, Star, Truck, ShieldCheck, Check } from 'lucide-react'
 import { AddToCartButton } from '@/components/AddToCartButton'
 import { getPayload } from 'payload'
@@ -9,6 +9,20 @@ import STATIC_PRODUCTS from '@/data/products.json'
 
 // ISR - Generate Static Params (1 saatte bir güncellenir)
 export const revalidate = 3600
+
+// Helper to clean legacy or malformed slug strings
+const cleanSlug = (input: string): string => {
+  const trMap: { [key: string]: string } = {
+    'ç': 'c', 'Ç': 'c', 'ğ': 'g', 'Ğ': 'g', 'ı': 'i', 'I': 'i', 'İ': 'i', 'ö': 'o', 'Ö': 'o', 'ş': 's', 'Ş': 's', 'ü': 'u', 'Ü': 'u',
+  }
+  let str = decodeURIComponent(input || '')
+  for (const k in trMap) str = str.split(k).join(trMap[k])
+  return str.toLowerCase()
+    .replace(/\s+/g, '-')
+    .replace(/[^a-z0-9-]/g, '')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '')
+}
 
 export async function generateStaticParams() {
   try {
@@ -31,10 +45,19 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params
   try {
     const payload = await getPayload({ config: configPromise })
-    const { docs } = await payload.find({
+    let { docs } = await payload.find({
       collection: 'products' as any,
       where: { slug: { equals: slug } },
     })
+
+    if (!docs.length) {
+      const sanitized = cleanSlug(slug)
+      const res = await payload.find({
+        collection: 'products' as any,
+        where: { slug: { equals: sanitized } },
+      })
+      docs = res.docs
+    }
 
     const product = docs[0] as any
     if (!product) return { title: 'Ürün Bulunamadı' }
@@ -43,12 +66,12 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       title: product.meta?.title || `${product.title} | Dilim Pastaneleri`,
       description: product.meta?.description || product.description || `${product.title} siparişi - Kavacık ve Ümraniye'ye aynı gün teslimat. Günlük taze malzemelerle hazırlanan lüks pasta siparişi.`,
       alternates: {
-        canonical: `https://www.dilim.com.tr/urunler/${slug}`,
+        canonical: `https://www.dilim.com.tr/urunler/${product.slug}`,
       },
       openGraph: {
         title: `${product.title} | Dilim Pastaneleri`,
         description: product.meta?.description || `${product.title} siparişi. Kavacık ve Ümraniye'ye taze teslimat.`,
-        url: `https://www.dilim.com.tr/urunler/${slug}`,
+        url: `https://www.dilim.com.tr/urunler/${product.slug}`,
         images: product.images?.[0]?.url ? [{ url: `https://www.dilim.com.tr${product.images[0].url}` }] : [],
         type: 'website',
       },
@@ -63,7 +86,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
   const { slug } = await params
   const payload = await getPayload({ config: configPromise })
   
-  const { docs } = await payload.find({
+  let { docs } = await payload.find({
     collection: 'products' as any,
     where: { 
       and: [
@@ -74,6 +97,26 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
     },
     depth: 2,
   })
+
+  // 301 Fallback logic if exact slug is not found directly
+  if (!docs || docs.length === 0) {
+    const sanitized = cleanSlug(slug)
+    if (sanitized && sanitized !== slug) {
+      const fallbackRes = await payload.find({
+        collection: 'products' as any,
+        where: {
+          and: [
+            { slug: { equals: sanitized } },
+            { _status: { equals: 'published' } },
+            { isActive: { equals: 'active' } }
+          ]
+        },
+      })
+      if (fallbackRes.docs.length > 0) {
+        redirect(`/urunler/${fallbackRes.docs[0].slug}`, RedirectType.permanent)
+      }
+    }
+  }
 
   const product = docs[0] as any
   if (!product) {

@@ -3,8 +3,8 @@ import Link from 'next/link'
 import { MapPin, Phone, Clock, Navigation, Star, CheckCircle2 } from 'lucide-react'
 
 export const metadata = {
-  title: 'Dilim Pastaneleri Kavacık Şubesi | Pasta Siparişi Kavacık Beykoz',
-  description: 'Kavacık\'ta yaş pasta, doğum günü pastası, nişan pastası siparişi. Dilim Pastaneleri Kavacık şubesi adres, telefon ve çalışma saatleri.',
+  title: 'Dilim Pastaneleri Kavacık Şubesi | Pasta & Tatlı Siparişi Kavacık',
+  description: 'Kavacık\'ta yaş pasta, doğum günü pastası, nişan pastası siparişi. Dilim Pastaneleri Kavacık şubesi adres, telefon ve çalışma saatleri. Aynı gün teslimat.',
   alternates: {
     canonical: 'https://www.dilim.com.tr/subelerimiz/kavacik',
   },
@@ -35,7 +35,7 @@ export default function KavacikSubePage() {
             Dilim Pastaneleri Kavacık Şubesi
           </h1>
           <p className="text-gray-300 text-lg font-light leading-relaxed max-w-2xl mx-auto">
-            Kavacık ve Beykoz çevresine günlük, taze, lüks butik pastalar ve eşsiz tatlılar sunuyoruz. Yaş pasta, nişan pastası ve özel gün pastası siparişleriniz için hizmetinizdeyiz.
+            Kavacık ve çevresine günlük, taze, lüks butik pastalar ve eşsiz tatlılar sunuyoruz. Yaş pasta, nişan pastası ve özel gün pastası siparişleriniz için hizmetinizdeyiz.
           </p>
         </div>
       </section>
@@ -93,7 +93,7 @@ export default function KavacikSubePage() {
                   <ul className="mt-6 space-y-3">
                     <li className="flex items-center gap-3"><CheckCircle2 className="w-5 h-5 text-green-500" /> Aynı gün teslimat seçeneği</li>
                     <li className="flex items-center gap-3"><CheckCircle2 className="w-5 h-5 text-green-500" /> %100 doğal malzemeler</li>
-                    <li className="flex items-center gap-3"><CheckCircle2 className="w-5 h-5 text-green-500" /> Kavacık, Beykoz ve Acarkent bölgesine özel kurye</li>
+                    <li className="flex items-center gap-3"><CheckCircle2 className="w-5 h-5 text-green-500" /> Kavacık, Acarkent ve çevre bölgelere özel kurye</li>
                   </ul>
                 </div>
               </div>
@@ -110,7 +110,7 @@ export default function KavacikSubePage() {
                       </span>
                     </summary>
                     <div className="px-5 pb-5 text-gray-600 font-light text-sm leading-relaxed">
-                      Evet, Kavacık merkezli olmak üzere Beykoz'un geneline, Acarkent'e ve çevre bölgelere teslimat yapmaktayız. Ayrıca Ümraniye şubemiz üzerinden de teslimat ağımızı genişletiyoruz.
+                      Evet, Kavacık merkezli olmak üzere Acarkent'e ve çevre bölgelere teslimat yapmaktayız. Ayrıca Ümraniye şubemiz üzerinden de teslimat ağımızı genişletiyoruz.
                     </div>
                   </details>
                   <details className="group bg-gray-50 rounded-2xl border border-gray-100 [&_summary::-webkit-details-marker]:hidden">
@@ -154,7 +154,7 @@ export default function KavacikSubePage() {
               "address": {
                 "@type": "PostalAddress",
                 "streetAddress": "Rüzgarlıbahçe, Cumhuriyet Cd. No:10 (Acarlar Plaza)",
-                "addressLocality": "Beykoz",
+                "addressLocality": "Kavacık",
                 "postalCode": "34805",
                 "addressRegion": "İstanbul",
                 "addressCountry": "TR"
@@ -174,8 +174,8 @@ export default function KavacikSubePage() {
               ],
               "areaServed": [
                 { "@type": "City", "name": "Kavacık" },
-                { "@type": "City", "name": "Beykoz" },
                 { "@type": "City", "name": "Acarkent" },
+                { "@type": "City", "name": "Beykoz" },
                 { "@type": "City", "name": "İstanbul" }
               ]
             },
@@ -188,7 +188,7 @@ export default function KavacikSubePage() {
                   "name": "Kavacık dışına teslimatınız var mı?",
                   "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "Evet, Kavacık merkezli olmak üzere Beykoz'un geneline, Acarkent'e ve çevre bölgelere teslimat yapmaktayız."
+                    "text": "Evet, Kavacık merkezli olmak üzere Acarkent'e ve çevre bölgelere teslimat yapmaktayız."
                   }
                 },
                 {

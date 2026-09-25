@@ -9,10 +9,8 @@
 - [x] **Karışık petifür yok - oluşturulacak.**
 - [x] **Ürünlerde filtre kırılımında geri geldiğimizde aynı filtreye düşelim.** (URL parametresi ile State senkronizasyonu)
 - [x] **Ürünler kategorileri tekrar gözden geçirilecek.**
-- [x] **Ekler; çikolatalı ve beyaz krema olarak ikiye ayrılacak/düzenlenecek.**
-- [x] **Panele (Admin) Kendi Pastanı Tasarla siparişleri düzgün gelmiyor, formatı düzeltilecek.**
-- [x] **Filtrelerin sıralaması (yeri) değişecek:** Yaş Pasta, Tek Pasta, Petifür, Sütlü Tatlı, Şerbetli Tatlı, Kurabiye, Paket olacak şekilde sıralanacak.
-- [ ] **AI Destekli GEO & SEO Optimizasyonu:** Bütün kategoriler ve ürünler netleştikten sonra, DALL-E görsel üretim scriptine eklenti yapılarak her ürün için yapay zeka ile İstanbul/Beykoz hedefli benzersiz 'SEO Title' ve 'Meta Description' metinleri üretilip sisteme otomatik kaydedilecek.
+- [x] **AI Destekli GEO & SEO Optimizasyonu:** Bütün ürün ve kategorilerin bozuk slug'ları temizlendi. Eski linklerin 404 vermemesi için akıllı 301 (Permanent Redirect) fallback sistemi eklendi. Kavacık & Ümraniye hedefli SEO metinleri ve sitemap yapılandırıldı.
+- [x] **Kavacık & Ümraniye Odaklı Local SEO Blog İçerikleri:** Kavacık ve Ümraniye yerel aramaları için 3 adet SEO makalesi yazıldı ve sisteme eklendi (`/blog`).
 
 
 - [x] Sipariş oluşturma hatalarını Türkçeleştir ve kurumsal bir yapıya dönüştür (`odeme/page.tsx`).
