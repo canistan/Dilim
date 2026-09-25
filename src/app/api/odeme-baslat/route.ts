@@ -62,21 +62,45 @@ export async function POST(req: Request) {
 
         const quantity = parseInt(item.quantity) || 1;
         let unitPrice = product.price || 0;
+        let sizeLabel: string | null = null;
 
-        // Boyut seçilmişse fiyatı boyutlardan bul
-        if (selectedSizeSlug && product.hasSizes && product.sizes) {
-          // item.options içinde "Boyut: 6 Kişilik" gibi geçiyor olabilir, veya selectedSizeSlug "6-Kişilik" olabilir
-          // En güvenli yol, options stringi içinden boyutu eşleştirmek
-          const matchedSize = product.sizes.find((s: any) => 
-            item.options?.includes(s.size) || 
-            s.size.replace(/\s+/g, '-') === selectedSizeSlug
+        if (product.hasSizes && product.sizes && product.sizes.length > 0) {
+          // GÜVENLİK: Boyut SADECE ID'den gelen selectedSizeSlug'a göre eşleştirilir.
+          // item.options client'ın gönderdiği serbest metindir ve fiyatı belirlemek
+          // için ASLA kullanılmaz — aksi halde müşteri ucuz boyutun ID'sini gönderip
+          // options'a pahalı boyutun adını yazarak fark ödemeden büyük boy alabilir.
+          const matchedSize = product.sizes.find(
+            (s: any) => s.size.replace(/\s+/g, '-') === selectedSizeSlug
           );
-          if (matchedSize) {
-            unitPrice = matchedSize.price;
+
+          if (!matchedSize) {
+            // Boyutlu bir ürün için geçerli boyut bulunamadıysa isteği reddet.
+            // Sessizce product.price'a (temel fiyat) düşmek, ücretsiz/çok ucuz
+            // sipariş almaya açık kapı bırakır.
+            return NextResponse.json(
+              { success: false, error: `Geçersiz boyut seçimi: ${item.id}` },
+              { status: 400 }
+            );
           }
+
+          unitPrice = matchedSize.price;
+          sizeLabel = matchedSize.size;
         }
 
         calculatedTotal += unitPrice * quantity;
+
+        // Mutfağa/admin paneline giden "Boyut: ..." ifadesi client'tan değil,
+        // az önce doğrulanan sizeLabel'dan üretilir. Diğer segmentler (rakam
+        // seçimi, özel yazı, not) fiyatı etkilemediği için client'tan geldiği
+        // gibi bırakılabilir.
+        const otherSegments = (item.options || '')
+          .split('|')
+          .map((s: string) => s.trim())
+          .filter((s: string) => s && !s.startsWith('Boyut:'));
+
+        const safeOptions = [sizeLabel ? `Boyut: ${sizeLabel}` : null, ...otherSegments]
+          .filter(Boolean)
+          .join(' | ');
 
         validatedItems.push({
           id: item.id.toString(),
@@ -85,7 +109,7 @@ export async function POST(req: Request) {
           productId: productId,
           realUnitPrice: unitPrice,
           realLineTotal: unitPrice * quantity,
-          options: item.options || '',
+          options: safeOptions,
           note: item.note || undefined,
         });
       } catch (err) {
