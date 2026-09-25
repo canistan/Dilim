@@ -427,7 +427,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
                       "@type": "ShippingDeliveryTime",
                       "handlingTime": {
                         "@type": "QuantitativeValue",
-                        "minValue": 0,
+                        "minValue": 1,
                         "maxValue": 1,
                         "unitCode": "DAY"
                       },
