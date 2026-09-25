@@ -40,7 +40,13 @@
   - [x] Vercel projesine (`dilim`) iki alan adı da (`dilimpastaneleri.com` ve `dilimpastaneleri.com.tr`) başarıyla eklendi. DNS yayılımı sonrası Otomatik Let's Encrypt SSL sertifikaları tanımlanacak ve `https://www.dilim.com.tr` adresine sorunsuz yönlendirilecek.
 - [x] **İyzico Canlı Ortam Geçişi:** İyzico live (canlı) API anahtarları tanımlandı ve test edildi.
 - [x] **Facebook ile Giriş Hatası:** Facebook ile girişlerde (login) yaşanan problem yeni App oluşturularak ve Vercel env'leri güncellenerek tamamen çözüldü!
-- *(Hatırladığınız diğer park edilmiş konuları buraya ekleyelim)*
+- [ ] **İyzico Sandbox Anahtar Rotasyonu:** Git geçmişinde kalan eski sandbox (test) API anahtarlarının iyzico panelinden rotate (yenilenmesi) edilmesi gerekiyor. Güvenlik riski düşük (sandbox ortamı, gerçek ödeme işlemi yapılamaz) ama best practice olarak yapılmalıdır.
+
+## 🔒 Güvenlik & Uyumluluk
+- [x] **Kritik: Boyut/Fiyat Manipülasyonu Düzeltmesi:** Ödeme akışında (`odeme-baslat/route.ts`) client'ın gönderdiği serbest metin üzerinden boyut eşleştirmesi yapılıyordu — saldırgan ucuz boyutun ID'sini gönderip pahalı boyutun adını yazarak fark ödemeden büyük boy alabiliyordu. Sunucu tarafında boyut doğrulaması ve options üretimi güvenceye alındı.
+- [x] **Google Consent Mode v2 (KVKK Uyumu):** GA4 artık kullanıcı çerez onayını vermeden (`CookiePopup`) hiçbir analitik/reklam verisi toplamıyor. `analytics_storage`, `ad_storage`, `ad_user_data`, `ad_personalization` varsayılan olarak `denied` başlatılıyor.
+- [x] **Duplicate Content Koruması:** `dilimpastaneleri.com` ve `.com.tr` alan adları `middleware.ts` ile 301 kalıcı yönlendirmeye alındı.
+- [x] **Google Search Console Uyarıları:** `hasMerchantReturnPolicy` (gıda kanunlarına uygun iade yok) ve `shippingDetails` (1 gün teslimat, İstanbul) ürün sayfalarına eklendi.
 
 ## ✅ Tamamlananlar
 - 

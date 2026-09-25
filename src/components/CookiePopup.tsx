@@ -16,6 +16,11 @@ export function CookiePopup() {
       
       return () => clearTimeout(timer)
     }
+
+    // Restore consent state for returning visitors
+    if (consent === 'accepted') {
+      updateConsentMode(true)
+    }
   }, [])
 
   useEffect(() => {
@@ -28,13 +33,26 @@ export function CookiePopup() {
     return () => window.removeEventListener('openCookieSettings', handleOpenSettings)
   }, [])
 
+  const updateConsentMode = (granted: boolean) => {
+    if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
+      window.gtag('consent', 'update', {
+        'analytics_storage': granted ? 'granted' : 'denied',
+        'ad_storage': granted ? 'granted' : 'denied',
+        'ad_user_data': granted ? 'granted' : 'denied',
+        'ad_personalization': granted ? 'granted' : 'denied',
+      })
+    }
+  }
+
   const handleAccept = () => {
     localStorage.setItem('dilim_cookie_consent', 'accepted')
+    updateConsentMode(true)
     setShowPopup(false)
   }
 
   const handleReject = () => {
     localStorage.setItem('dilim_cookie_consent', 'rejected')
+    updateConsentMode(false)
     setShowPopup(false)
   }
 
