@@ -406,7 +406,48 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
                   "url": `https://www.dilim.com.tr/urunler/${product.slug}`,
                   "priceCurrency": "TRY",
                   "price": product.price > 0 ? product.price : 0,
-                  "availability": "https://schema.org/InStock"
+                  "availability": "https://schema.org/InStock",
+                  "seller": {
+                    "@type": "Organization",
+                    "name": "Dilim Pastaneleri"
+                  },
+                  "hasMerchantReturnPolicy": {
+                    "@type": "MerchantReturnPolicy",
+                    "applicableCountry": "TR",
+                    "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+                    "merchantReturnDays": 14,
+                    "returnMethod": "https://schema.org/ReturnByMail",
+                    "returnFees": "https://schema.org/FreeReturn",
+                    "returnPolicySeasonalOverride": []
+                  },
+                  "shippingDetails": {
+                    "@type": "OfferShippingDetails",
+                    "shippingRate": {
+                      "@type": "MonetaryAmount",
+                      "value": 0,
+                      "currency": "TRY"
+                    },
+                    "shippingDestination": {
+                      "@type": "DefinedRegion",
+                      "addressCountry": "TR",
+                      "addressRegion": "İstanbul"
+                    },
+                    "deliveryTime": {
+                      "@type": "ShippingDeliveryTime",
+                      "handlingTime": {
+                        "@type": "QuantitativeValue",
+                        "minValue": 0,
+                        "maxValue": 1,
+                        "unitCode": "DAY"
+                      },
+                      "transitTime": {
+                        "@type": "QuantitativeValue",
+                        "minValue": 0,
+                        "maxValue": 1,
+                        "unitCode": "DAY"
+                      }
+                    }
+                  }
                 }
               }
             ]
