@@ -61,6 +61,7 @@ export const metadata: Metadata = {
     other: {
       'facebook-domain-verification': 'xfv7dth6fk5lq98z5vnftzzro2a7st',
       'yandex-verification': 'f4f9f04c80efc8be',
+      'apple-domain-verification': 'SncrGRwVx0sB5fkc',
     },
   },
 };
