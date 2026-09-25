@@ -222,33 +222,75 @@ export default async function FrontendLayout({
               toastOptions={{ 
                 duration: 4000, 
                 style: { 
-                  background: '#ffffff', 
-                  color: '#1f2937', 
-                  borderRadius: '16px', 
+                  background: '#1a1a1a', 
+                  color: '#ffffff', 
+                  borderRadius: '12px', 
                   padding: '16px 24px',
-                  boxShadow: '0 10px 40px -10px rgba(0,0,0,0.08), 0 4px 10px -4px rgba(0,0,0,0.04)',
-                  border: '1px solid #f3f4f6',
+                  boxShadow: '0 20px 40px -10px rgba(0,0,0,0.3)',
+                  border: '1px solid rgba(255, 138, 0, 0.2)', // Subtle orange border
                   fontSize: '14px',
                   fontWeight: 500
                 },
                 success: {
                   iconTheme: {
-                    primary: '#f97316', // dilim-portakal
-                    secondary: '#ffffff',
+                    primary: '#FF8A00', 
+                    secondary: '#1a1a1a',
                   },
                 },
                 error: {
                   iconTheme: {
-                    primary: '#ef4444', 
-                    secondary: '#ffffff',
+                    primary: '#FF8A00', 
+                    secondary: '#1a1a1a',
                   },
-                  style: {
-                    border: '1px solid #fecaca',
-                    background: '#fef2f2'
-                  }
                 }
               }} 
             />
+            {/* SEO LocalBusiness Schema (Kavacık & Ümraniye) */}
+            <Script id="local-business-schema" type="application/ld+json" strategy="afterInteractive" dangerouslySetInnerHTML={{
+              __html: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "Bakery",
+                "name": "Dilim Pastaneleri",
+                "image": "https://www.dilim.com.tr/logo.png",
+                "@id": "https://www.dilim.com.tr",
+                "url": "https://www.dilim.com.tr",
+                "telephone": "+905059638021",
+                "priceRange": "$$",
+                "address": {
+                  "@type": "PostalAddress",
+                  "addressLocality": "Kavacık",
+                  "addressRegion": "İstanbul",
+                  "addressCountry": "TR"
+                },
+                "department": [
+                  {
+                    "@type": "Bakery",
+                    "name": "Dilim Pastaneleri - Kavacık Şubesi",
+                    "telephone": "+905059638021",
+                    "address": {
+                      "@type": "PostalAddress",
+                      "addressLocality": "Kavacık",
+                      "addressRegion": "İstanbul",
+                      "addressCountry": "TR"
+                    }
+                  },
+                  {
+                    "@type": "Bakery",
+                    "name": "Dilim Pastaneleri - Ümraniye Şubesi",
+                    "telephone": "+905059638024",
+                    "address": {
+                      "@type": "PostalAddress",
+                      "addressLocality": "Ümraniye",
+                      "addressRegion": "İstanbul",
+                      "addressCountry": "TR"
+                    }
+                  }
+                ],
+                "sameAs": [
+                  "https://www.instagram.com/dilimpastaneleri"
+                ]
+              })
+            }} />
           </CartProvider>
         </AuthProvider>
       </body>
