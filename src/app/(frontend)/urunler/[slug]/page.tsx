@@ -414,19 +414,10 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
                   "hasMerchantReturnPolicy": {
                     "@type": "MerchantReturnPolicy",
                     "applicableCountry": "TR",
-                    "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
-                    "merchantReturnDays": 14,
-                    "returnMethod": "https://schema.org/ReturnByMail",
-                    "returnFees": "https://schema.org/FreeReturn",
-                    "returnPolicySeasonalOverride": []
+                    "returnPolicyCategory": "https://schema.org/MerchantReturnNotPermitted"
                   },
                   "shippingDetails": {
                     "@type": "OfferShippingDetails",
-                    "shippingRate": {
-                      "@type": "MonetaryAmount",
-                      "value": 0,
-                      "currency": "TRY"
-                    },
                     "shippingDestination": {
                       "@type": "DefinedRegion",
                       "addressCountry": "TR",
