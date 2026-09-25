@@ -35,9 +35,9 @@
 
 ## 🅿️ Park Edilen Konular
 - [ ] **Apple Business Connect Doğrulaması:** Turhost'a eklenen TXT kaydı (`apple-domain-verification=SncrGRwVx0sB5fkc`) tüm DNS sunucularına yayıldığında Apple ekranındaki "Doğrula" butonuna basılıp "İnceleme İçin Gönder" yapılarak onaylanacak.
-- [ ] **IHS Yönlendirme & SSL Yapılandırması (`dilimpastaneleri.com` & `dilimpastaneleri.com.tr`):**
-  - IHS panelinde iki domain için de **DNS Zone** kısmından A Kaydı IP adresi `76.76.21.21` (Vercel IP) olarak ayarlanacak.
-  - Vercel panelinde iki alan adı eklenip `https://www.dilim.com.tr` adresine 301 Kalıcı SSL Yönlendirmesi yapılacak.
+- [x] **IHS Yönlendirme & SSL Yapılandırması (`dilimpastaneleri.com` & `dilimpastaneleri.com.tr`):**
+  - [x] IHS panelinde iki domain için de **DNS Zone** kısmından A Kaydı IP adresi `76.76.21.21` (Vercel IP) olarak ayarlandı.
+  - [x] Vercel projesine (`dilim`) iki alan adı da (`dilimpastaneleri.com` ve `dilimpastaneleri.com.tr`) başarıyla eklendi. DNS yayılımı sonrası Otomatik Let's Encrypt SSL sertifikaları tanımlanacak ve `https://www.dilim.com.tr` adresine sorunsuz yönlendirilecek.
 - [x] **İyzico Canlı Ortam Geçişi:** İyzico live (canlı) API anahtarları tanımlandı ve test edildi.
 - [x] **Facebook ile Giriş Hatası:** Facebook ile girişlerde (login) yaşanan problem yeni App oluşturularak ve Vercel env'leri güncellenerek tamamen çözüldü!
 - *(Hatırladığınız diğer park edilmiş konuları buraya ekleyelim)*
