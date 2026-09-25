@@ -34,7 +34,7 @@
   - Sepete eklenen ürüne göre mantıklı tamamlayıcı ürünler sunan (Çapraz Satış) sisteminin iyileştirilmesi (Örn: Tatlı alanlara dondurma önermek).
 
 ## 🅿️ Park Edilen Konular
-- [ ] **Apple Business Connect Doğrulaması:** Turhost'a eklenen TXT kaydı (`apple-domain-verification=SncrGRwVx0sB5fkc`) tüm DNS sunucularına yayıldığında Apple ekranındaki "Doğrula" butonuna basılıp "İnceleme İçin Gönder" yapılarak onaylanacak.
+- [x] **Apple Business Connect Doğrulaması:** Turhost cPanel'e eklenen TXT kaydı (`apple-domain-verification=SncrGRwVx0sB5fkc`) dünya genelindeki DNS sunucularında başarıyla doğrulandı. Apple ekranındaki "Doğrula" butonuna basılıp "İnceleme İçin Gönder" onayına sunuldu.
 - [x] **IHS Yönlendirme & SSL Yapılandırması (`dilimpastaneleri.com` & `dilimpastaneleri.com.tr`):**
   - [x] IHS panelinde iki domain için de **DNS Zone** kısmından A Kaydı IP adresi `76.76.21.21` (Vercel IP) olarak ayarlandı.
   - [x] Vercel projesine (`dilim`) iki alan adı da (`dilimpastaneleri.com` ve `dilimpastaneleri.com.tr`) başarıyla eklendi. DNS yayılımı sonrası Otomatik Let's Encrypt SSL sertifikaları tanımlanacak ve `https://www.dilim.com.tr` adresine sorunsuz yönlendirilecek.
