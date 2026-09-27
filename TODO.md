@@ -11,6 +11,7 @@
 - [x] **Ürünler kategorileri tekrar gözden geçirilecek.**
 - [x] **AI Destekli GEO & SEO Optimizasyonu:** Bütün ürün ve kategorilerin bozuk slug'ları temizlendi. Eski linklerin 404 vermemesi için akıllı 301 (Permanent Redirect) fallback sistemi eklendi. Kavacık & Ümraniye hedefli SEO metinleri ve sitemap yapılandırıldı.
 - [x] **Kavacık & Ümraniye Odaklı Local SEO Blog İçerikleri:** Kavacık ve Ümraniye yerel aramaları için 3 adet SEO makalesi yazıldı ve sisteme eklendi (`/blog`).
+- [x] **Haritalar & Yerel İşletme Vitrin SEO'su:** Apple Business Connect ve Yandex Business (Haritalar) üzerinden Kavacık ve Ümraniye şubeleri yapılandırıldı. Kapak fotoğrafları, menüler ve işletme kategorileri mükemmel şekilde düzenlendi. Yeni adresler onaylandı.
 
 
 - [x] Sipariş oluşturma hatalarını Türkçeleştir ve kurumsal bir yapıya dönüştür (`odeme/page.tsx`).
@@ -25,9 +26,9 @@
 - [x] `PayloadLogo.tsx`: Admin panelindeki logonun özelleştirilmesi.
 - [x] `iptal-iade/page.tsx`: İptal ve İade politikasının sayfaya eklenmesi/düzenlenmesi.
 - [x] **Menü İçin Logolu QR Kod:** Menüye yönlendirecek ve ortasında Dilim Pastaneleri logosu bulunan bir QR kod oluşturulacak.
-- [/] **Eksik Ürün Görsellerinin Üretilmesi:** (Kota sıfırlandığında devam edilecek)
+- [ ] **Eksik Ürün Görsellerinin Üretilmesi:** (Kota sıfırlandı, doğrudan devam edilecek)
   - [x] 56 eksik görsel kategorilere ayrılacak.
-  - [/] Sitedeki diğer görseller standardında, yüksek kaliteli ve düşük boyutlu (WEBP formatında) yapay zeka ile görseller üretilecek. (23/65 görsel tamamlandı — Kota ~18:44'te sıfırlanacak)
+  - [ ] Sitedeki diğer görseller standardında, yüksek kaliteli ve düşük boyutlu (WEBP formatında) yapay zeka ile görseller üretilecek. (23/65 görsel tamamlandı, kalın yerden devam edilecek)
   - [/] Üretilen görseller sisteme yüklenecek.
   - 📝 **Not (Görsel Üretimi Nasıl Çalışır):** Görsel üretimi `scripts/generate_all_images.ts` üzerinden Payload CMS'in `products` koleksiyonundan görseli olmayan (veya test/default görseli olan) ürünleri otomatik olarak çekerek DALL-E 3 ile yüksek kaliteli (WEBP) görsel üretip sisteme yükler. Komutu `npx tsx scripts/generate_all_images.ts` şeklinde çalıştırarak üretimi yapıyoruz.
 - [ ] **Birlikte İyi Gider (Cross-Sell) Optimizasyonu:**
@@ -39,6 +40,7 @@
   - [x] IHS panelinde iki domain için de **DNS Zone** kısmından A Kaydı IP adresi `76.76.21.21` (Vercel IP) olarak ayarlandı.
   - [x] Vercel projesine (`dilim`) iki alan adı da (`dilimpastaneleri.com` ve `dilimpastaneleri.com.tr`) başarıyla eklendi. DNS yayılımı sonrası Otomatik Let's Encrypt SSL sertifikaları tanımlanacak ve `https://www.dilim.com.tr` adresine sorunsuz yönlendirilecek.
 - [x] **İyzico Canlı Ortam Geçişi:** İyzico live (canlı) API anahtarları tanımlandı ve test edildi.
+- [x] **Vercel Build (ETIMEDOUT) Kontrolü:** Veritabanı uykuya daldığı için Next.js build'i ETIMEDOUT vermişti. Redeploy ile veritabanı uyandırılarak sorunsuz deploy edildi.
 - [x] **Facebook ile Giriş Hatası:** Facebook ile girişlerde (login) yaşanan problem yeni App oluşturularak ve Vercel env'leri güncellenerek tamamen çözüldü!
 - [ ] **İyzico Sandbox Anahtar Rotasyonu:** Git geçmişinde kalan eski sandbox (test) API anahtarlarının iyzico panelinden rotate (yenilenmesi) edilmesi gerekiyor. Güvenlik riski düşük (sandbox ortamı, gerçek ödeme işlemi yapılamaz) ama best practice olarak yapılmalıdır.
 
