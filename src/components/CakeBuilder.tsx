@@ -44,14 +44,14 @@ const OPTIONS = {
     { id: 'Lotus Bisküvili', name: 'Lotus Bisküvili', color: 'bg-orange-600' },
   ],
   pat: [
-    { id: 'Standart Pat', name: 'Standart Pat (Normal)' },
-    { id: 'Yüksek Pat', name: 'Yüksek Pat (Gösterişli)' },
+    { id: 'Standart Pat (Normal)', name: 'Standart Pat (Normal)' },
+    { id: 'Yüksek Pat (Gösterişli)', name: 'Yüksek Pat (Gösterişli)' },
   ],
   sekil: [
-    { id: 'Yuvarlak', name: 'Yuvarlak (Klasik)' },
-    { id: 'Kare', name: 'Kare (Modern)' },
-    { id: 'Kalp', name: 'Kalp (Romantik)' },
-    { id: 'Diğer', name: 'Özel Şekil (Notlarda)' },
+    { id: 'Yuvarlak (Klasik)', name: 'Yuvarlak (Klasik)' },
+    { id: 'Kare (Modern)', name: 'Kare (Modern)' },
+    { id: 'Kalp (Romantik)', name: 'Kalp (Romantik)' },
+    { id: 'Özel Şekil (Notlarda)', name: 'Özel Şekil (Notlarda)' },
   ],
   kisi: [
     { id: '10 Kişilik', name: '10 Kişilik' },
