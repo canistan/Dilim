@@ -17,7 +17,7 @@
 - [x] Sipariş oluşturma hatalarını Türkçeleştir ve kurumsal bir yapıya dönüştür (`odeme/page.tsx`).
 - [x] Ürün kartlarındaki "Tasarla" butonunu Pastalar hariç diğer ürünlerde "Hızlı Ekle" yap (`ProductsClient.tsx`).
 - [x] Kendi Pastanı Tasarla takvimine "Pazar kapalı" ve "Cumartesi öğlen -> Pazartesi öğlen teslimat" kuralını ekle (`CakeBuilder.tsx`).
-- [ ] **Ürün Görselleri Üretimi:** Hazırlanan `generate_all_images.ts` scriptini çalıştırarak tüm dummy ürünler için yapay zeka ile görsel üret (Yaklaşık 110 ürün).
+- [x] **Özel Tasarım Pasta Hatalarının Giderilmesi:** Kendi Pastanı Tasarla sayfasında seçilen uzun metinli özelliklerin (örn. "Yuvarlak (Klasik)") admin paneline sadece "Diğer" veya "Yuvarlak" gibi kısa kodlarla düşme sorunu `CakeBuilder.tsx` tarafında ID'ler tam adlarıyla eşleştirilerek çözüldü.
 - [x] **Ana Sayfa CMS Entegrasyonu:**
   - [x] `scripts/seed_homepage.ts` scriptini çalıştırıp sabit metinleri/görselleri veritabanına aktarmak.
   - [x] Ön yüzde (frontend) değişikliklerin sorunsuz çalıştığını doğrulamak.
@@ -26,11 +26,11 @@
 - [x] `PayloadLogo.tsx`: Admin panelindeki logonun özelleştirilmesi.
 - [x] `iptal-iade/page.tsx`: İptal ve İade politikasının sayfaya eklenmesi/düzenlenmesi.
 - [x] **Menü İçin Logolu QR Kod:** Menüye yönlendirecek ve ortasında Dilim Pastaneleri logosu bulunan bir QR kod oluşturulacak.
-- [ ] **Eksik Ürün Görsellerinin Üretilmesi:** (Kota sıfırlandı, doğrudan devam edilecek)
-  - [x] 56 eksik görsel kategorilere ayrılacak.
-  - [ ] Sitedeki diğer görseller standardında, yüksek kaliteli ve düşük boyutlu (WEBP formatında) yapay zeka ile görseller üretilecek. (23/65 görsel tamamlandı, kalın yerden devam edilecek)
-  - [/] Üretilen görseller sisteme yüklenecek.
-  - 📝 **Not (Görsel Üretimi Nasıl Çalışır):** Görsel üretimi `scripts/generate_all_images.ts` üzerinden Payload CMS'in `products` koleksiyonundan görseli olmayan (veya test/default görseli olan) ürünleri otomatik olarak çekerek DALL-E 3 ile yüksek kaliteli (WEBP) görsel üretip sisteme yükler. Komutu `npx tsx scripts/generate_all_images.ts` şeklinde çalıştırarak üretimi yapıyoruz.
+- [x] **Blog Görselleri Kırık Link Çözümü:** Bloglara admin panelinden yüklenen resimler Vercel'in geçici (tmp) dizininde kaybolduğu için sitedeki varsayılan görselleri bozuyordu. Veritabanındaki hayalet (`image_id`) kayıtları temizlenerek site standart görselleriyle tekrar aktif edildi. Yeni eklenecek görseller artık sorunsuz çalışacaktır.
+- [ ] **Eksik Ürün Görsellerinin Yapay Zeka ile Üretilmesi (Mevcut Odak Noktası):** 
+  - [x] "KURABİYE VE BÖREKLER" kategorisi için deneme görselleri üretildi, Cüneyd Bey için masaüstündeki onay klasörüne aktarıldı. "Sakallı" görselindeki yapay zeka çeviri hatası düzeltildi.
+  - [ ] **Sıradaki Adım:** KURABİYE VE BÖREKLER görselleri sisteme yüklenmeli ve ardından sıradaki kategoriye (Örn: Şerbetli Tatlılar) geçilerek yapay zeka scripti çalıştırılmalı.
+  - 📝 **Not:** Komutu `npx tsx scripts/generate_category_preview.ts "KATEGORİ ADI"` şeklinde çalıştırarak onay klasörüne üretiyoruz.
 - [ ] **Birlikte İyi Gider (Cross-Sell) Optimizasyonu:**
   - Sepete eklenen ürüne göre mantıklı tamamlayıcı ürünler sunan (Çapraz Satış) sisteminin iyileştirilmesi (Örn: Tatlı alanlara dondurma önermek).
 
