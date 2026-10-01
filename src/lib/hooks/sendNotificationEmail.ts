@@ -43,7 +43,7 @@ export const sendNotificationEmail = (subjectPrefix: string): CollectionAfterCha
       `
 
       await payload.sendEmail({
-        to: toEmail,
+        to: `${toEmail}, cuneydsahin@dilim.com.tr`,
         subject: `Yeni Bildirim: ${subjectPrefix} - Dilim Pastaneleri`,
         html: htmlContent,
       })

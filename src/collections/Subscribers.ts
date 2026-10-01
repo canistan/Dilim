@@ -1,5 +1,7 @@
 import { isAdmin } from '../access/isAdmin'
 import type { CollectionConfig } from 'payload'
+import { sendNotificationEmail } from '../lib/hooks/sendNotificationEmail'
+
 
 export const Subscribers: CollectionConfig = {
   access: {
@@ -16,6 +18,11 @@ export const Subscribers: CollectionConfig = {
   admin: {
     useAsTitle: 'email',
     group: 'Yönetim',
+  },
+  hooks: {
+    afterChange: [
+      sendNotificationEmail('Bülten Aboneliği')
+    ]
   },
   fields: [
     {
