@@ -1,5 +1,7 @@
 import { isAdmin } from '../access/isAdmin'
 import type { CollectionConfig } from 'payload'
+import { sendNotificationEmail } from '../lib/hooks/sendNotificationEmail'
+
 
 export const Returns: CollectionConfig = {
   access: {
@@ -17,6 +19,11 @@ export const Returns: CollectionConfig = {
     useAsTitle: 'returnNumber',
     group: 'Kullanıcı Bilgi Deposu',
     defaultColumns: ['returnNumber', 'status', 'order', 'createdAt'],
+  },
+  hooks: {
+    afterChange: [
+      sendNotificationEmail('İade / Hasar Talebi')
+    ]
   },
   fields: [
     {
@@ -49,11 +56,11 @@ export const Returns: CollectionConfig = {
               name: 'reason',
               type: 'select',
               options: [
-                { label: 'Ürün Hasarlı Geldi', value: 'damaged' },
-                { label: 'Yanlış Ürün Gönderildi', value: 'wrong_item' },
-                { label: 'Teslimat Çok Gecikti', value: 'late_delivery' },
-                { label: 'Kalite/Lezzet Şikayeti', value: 'quality' },
-                { label: 'Diğer', value: 'other' },
+                { label: 'Ürün Hasarlı Geldi', value: 'Ürün Hasarlı Geldi' },
+                { label: 'Yanlış Ürün Gönderildi', value: 'Yanlış Ürün Gönderildi' },
+                { label: 'Teslimat Çok Gecikti', value: 'Teslimat Çok Gecikti' },
+                { label: 'Kalite/Lezzet Şikayeti', value: 'Kalite/Lezzet Şikayeti' },
+                { label: 'Diğer', value: 'Diğer' },
               ],
               required: true,
               label: 'Talep Nedeni',

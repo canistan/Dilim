@@ -56,12 +56,12 @@ export const JobApplications: CollectionConfig = {
               label: 'Başvurulan Pozisyon',
               admin: { readOnly: true },
               options: [
-                { label: 'Servis Elemanı (Garson)', value: 'garson' },
-                { label: 'Barista', value: 'barista' },
-                { label: 'Tezgah Satış Temsilcisi', value: 'tezgah' },
-                { label: 'Mutfak / İmalat Personeli', value: 'mutfak' },
-                { label: 'Kurye', value: 'kurye' },
-                { label: 'Genel Başvuru (Diğer)', value: 'genel' },
+                { label: 'Servis Elemanı (Garson)', value: 'Servis Elemanı (Garson)' },
+                { label: 'Barista', value: 'Barista' },
+                { label: 'Tezgah Satış Temsilcisi', value: 'Tezgah Satış Temsilcisi' },
+                { label: 'Mutfak / İmalat Personeli', value: 'Mutfak / İmalat Personeli' },
+                { label: 'Kurye', value: 'Kurye' },
+                { label: 'Genel Başvuru (Diğer)', value: 'Genel Başvuru (Diğer)' },
               ],
             },
           ]

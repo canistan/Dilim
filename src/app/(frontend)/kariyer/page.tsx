@@ -169,12 +169,12 @@ export default function KariyerPage() {
                     <label className="block text-sm font-semibold text-gray-700 mb-1">Başvurulan Pozisyon</label>
                     <select name="position" required className="w-full p-3.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-dilim-portakal focus:border-transparent outline-none transition-all bg-white">
                       <option value="">Lütfen seçiniz</option>
-                      <option value="garson">Servis Elemanı (Garson)</option>
-                      <option value="barista">Barista</option>
-                      <option value="tezgah">Tezgah Satış Temsilcisi</option>
-                      <option value="mutfak">Mutfak / İmalat Personeli</option>
-                      <option value="kurye">Kurye</option>
-                      <option value="genel">Genel Başvuru (Diğer)</option>
+                      <option value="Servis Elemanı (Garson)">Servis Elemanı (Garson)</option>
+                      <option value="Barista">Barista</option>
+                      <option value="Tezgah Satış Temsilcisi">Tezgah Satış Temsilcisi</option>
+                      <option value="Mutfak / İmalat Personeli">Mutfak / İmalat Personeli</option>
+                      <option value="Kurye">Kurye</option>
+                      <option value="Genel Başvuru (Diğer)">Genel Başvuru (Diğer)</option>
                     </select>
                   </div>
                   <div>

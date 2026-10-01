@@ -12,6 +12,7 @@ export default function IletisimClient({ contactSettings, branches }: { contactS
   const [formData, setFormData] = useState({
     name: '',
     email: '',
+    phone: '',
     subject: '',
     message: ''
   })
@@ -40,6 +41,7 @@ export default function IletisimClient({ contactSettings, branches }: { contactS
         body: JSON.stringify({
           name: formData.name,
           email: formData.email,
+          phone: formData.phone,
           subject: formData.subject, // Even if there is no subject in schema, Payload ignores extra or we can append it
           message: formData.subject ? `Konu: ${formData.subject}\n\n${formData.message}` : formData.message,
         })
@@ -47,7 +49,7 @@ export default function IletisimClient({ contactSettings, branches }: { contactS
 
       if (res.ok) {
         setIsSuccess(true)
-        setFormData({ name: '', email: '', subject: '', message: '' })
+        setFormData({ name: '', email: '', phone: '', subject: '', message: '' })
       } else {
         alert('Mesajınız gönderilirken bir hata oluştu.')
       }
@@ -133,15 +135,27 @@ export default function IletisimClient({ contactSettings, branches }: { contactS
                   </div>
                 </div>
                 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Konu</label>
-                  <input 
-                    type="text" 
-                    value={formData.subject}
-                    onChange={(e) => setFormData({...formData, subject: e.target.value})}
-                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-dilim-portakal focus:border-transparent outline-none transition-all"
-                    placeholder="Örn: Özel Gün Pastası Siparişi"
-                  />
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Cep Telefonu</label>
+                    <input 
+                      type="tel" 
+                      value={formData.phone}
+                      onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-dilim-portakal focus:border-transparent outline-none transition-all"
+                      placeholder="Örn: 0505 123 45 67"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Konu</label>
+                    <input 
+                      type="text" 
+                      value={formData.subject}
+                      onChange={(e) => setFormData({...formData, subject: e.target.value})}
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-dilim-portakal focus:border-transparent outline-none transition-all"
+                      placeholder="Örn: Özel Gün Pastası Siparişi"
+                    />
+                  </div>
                 </div>
 
                 <div>

@@ -28,18 +28,66 @@ export const sendNotificationEmail = (subjectPrefix: string): CollectionAfterCha
         // ignore
       }
 
+      const keyMap: Record<string, string> = {
+        name: 'Ad Soyad',
+        email: 'E-posta Adresi',
+        phone: 'Telefon Numarası',
+        subject: 'Konu',
+        message: 'Mesaj İçeriği',
+        position: 'Başvurulan Pozisyon',
+        experience: 'Tecrübe / Kapak Yazısı',
+        resume: 'CV Dosyası (ID)',
+        location: 'Düşünülen Lokasyon',
+        background: 'Ticari Geçmiş / Bütçe',
+        hasStore: 'Hazır Mağaza Var Mı?',
+        source: 'Kayıt Kaynağı'
+      }
+
+      const formatValue = (key: string, value: any) => {
+        if (typeof value === 'boolean') return value ? 'Evet' : 'Hayır'
+        if (typeof value === 'object' && value !== null) {
+          if (value.filename) return value.url || value.filename
+          return JSON.stringify(value)
+        }
+        return escapeHTML(value)
+      }
+
+      const personalKeys = ['name', 'email', 'phone', 'location']
+      
+      const personalInfoHtml = personalKeys.filter(k => doc[k]).map(k => `
+        <tr>
+          <td style="font-weight: bold; width: 35%; padding: 8px; border-bottom: 1px solid #eee;">${keyMap[k] || k}</td>
+          <td style="padding: 8px; border-bottom: 1px solid #eee;">${formatValue(k, doc[k])}</td>
+        </tr>
+      `).join('')
+
+      const otherKeys = Object.keys(doc).filter(k => !personalKeys.includes(k) && !['id', 'createdAt', 'updatedAt', 'globalType'].includes(k) && doc[k] !== undefined && doc[k] !== null && doc[k] !== '')
+
+      const detailsHtml = otherKeys.map(k => `
+        <tr>
+          <td style="font-weight: bold; width: 35%; padding: 8px; border-bottom: 1px solid #eee;">${keyMap[k] || k}</td>
+          <td style="padding: 8px; border-bottom: 1px solid #eee;">${formatValue(k, doc[k])}</td>
+        </tr>
+      `).join('')
+
       const htmlContent = `
-        <h2>Yeni ${escapeHTML(subjectPrefix)}</h2>
-        <table border="1" cellpadding="10" cellspacing="0" style="border-collapse: collapse; width: 100%; max-width: 600px;">
-          ${Object.entries(doc)
-            .filter(([key]) => !['id', 'createdAt', 'updatedAt', 'globalType'].includes(key))
-            .map(([key, value]) => `
-              <tr>
-                <td style="font-weight: bold; width: 30%;">${escapeHTML(key)}</td>
-                <td>${escapeHTML(value)}</td>
-              </tr>
-            `).join('')}
-        </table>
+        <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; color: #333;">
+          <h2 style="color: #d35400; border-bottom: 2px solid #f39c12; padding-bottom: 10px;">Yeni ${escapeHTML(subjectPrefix)}</h2>
+          
+          ${personalInfoHtml ? `
+          <h3 style="background-color: #f8f9fa; padding: 10px; margin-top: 20px; border-radius: 4px;">Gönderen / Kişisel Bilgiler</h3>
+          <table style="width: 100%; border-collapse: collapse;">
+            ${personalInfoHtml}
+          </table>
+          ` : ''}
+
+          ${detailsHtml ? `
+          <h3 style="background-color: #f8f9fa; padding: 10px; margin-top: 20px; border-radius: 4px;">İçerik / Detaylar</h3>
+          <table style="width: 100%; border-collapse: collapse;">
+            ${detailsHtml}
+          </table>
+          ` : ''}
+        </div>
       `
 
       await payload.sendEmail({
