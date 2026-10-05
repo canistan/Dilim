@@ -562,7 +562,7 @@ export default function CakeBuilder({ timeSlots = [], contactSettings }: { timeS
       
       {/* Clean Header */}
       <div className="text-center max-w-2xl mx-auto px-4 mb-10">
-        <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Kendi Pastanı Tasarla</h1>
+        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Kendi Pastanı Tasarla</h2>
         <p className="text-sm md:text-base text-gray-500">Adım adım seçimlerini yap, ustalarımız hayallerini gerçeğe dönüştürsün.</p>
       </div>
 

@@ -63,7 +63,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     if (!product) return { title: 'Ürün Bulunamadı' }
 
     return {
-      title: product.meta?.title || `${product.title} | Dilim Pastaneleri`,
+      title: product.meta?.title || `${product.title} Siparişi | Kavacık & Ümraniye - Dilim`,
       description: product.meta?.description || product.description || `${product.title} siparişi - Kavacık ve Ümraniye'ye aynı gün teslimat. Günlük taze malzemelerle hazırlanan lüks pasta siparişi.`,
       alternates: {
         canonical: `https://www.dilim.com.tr/urunler/${product.slug}`,

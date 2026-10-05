@@ -21,9 +21,6 @@ const montserrat = Montserrat({
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.dilim.com.tr'),
-  alternates: {
-    canonical: '/',
-  },
   title: "Dilim Pastaneleri | Kavacık & Ümraniye Pasta Siparişi",
   description: "Kavacık ve Ümraniye'de yaş pasta, doğum günü pastası, özel tasarım pasta siparişi. 1977'den beri taze ve doğal malzemelerle üretim. Aynı gün teslimat.",
   icons: {
@@ -109,120 +106,120 @@ export default async function FrontendLayout({
             gtag('config', 'G-VZT513Y4FP');
           `}
         </Script>
-        <Script id="schema-org" type="application/ld+json" strategy="afterInteractive">
-          {`
-            {
-              "@context": "https://schema.org",
-              "@graph": [
-                {
-                  "@type": "Organization",
-                  "@id": "https://www.dilim.com.tr/#organization",
-                  "name": "Dilim Pastaneleri",
-                  "url": "https://www.dilim.com.tr",
-                  "logo": "https://www.dilim.com.tr/DilimPastLogo-final.png",
-                  "sameAs": [
-                    "https://www.instagram.com/dilimpastaneleri",
-                    "https://www.facebook.com/share/1BQ7yRqh6n/?mibextid=wwXIfr",
-                    "https://x.com/dilimpastanesi",
-                    "https://www.tiktok.com/@dilimpastaneleri"
-                  ]
-                },
-                {
-                  "@type": "Bakery",
-                  "@id": "https://www.dilim.com.tr/#bakery-kavacik",
-                  "name": "Dilim Pastaneleri - Kavacık",
-                  "alternateName": "Dilim Pasta Cafe Restoran",
-                  "url": "https://www.dilim.com.tr",
-                  "hasMap": "https://maps.google.com/?cid=16198642051939109480",
-                  "image": "https://www.dilim.com.tr/dilim-kavacik-sube.jpg",
-                  "telephone": "+902164256114",
-                  "priceRange": "₺₺",
-                  "servesCuisine": ["Pasta", "Yaş Pasta", "Tatlı", "Börek", "Cafe"],
-                  "menu": "https://www.dilim.com.tr/urunler",
-                  "acceptsReservations": false,
-                  "address": {
-                    "@type": "PostalAddress",
-                    "streetAddress": "Rüzgarlıbahçe, Cumhuriyet Cd. No:10 (Acarlar Plaza)",
-                    "addressLocality": "Beykoz",
-                    "postalCode": "34805",
-                    "addressRegion": "İstanbul",
-                    "addressCountry": "TR"
-                  },
-                  "geo": {
-                    "@type": "GeoCoordinates",
-                    "latitude": 41.0948546,
-                    "longitude": 29.0985319
-                  },
-                  "openingHoursSpecification": [
-                    {
-                      "@type": "OpeningHoursSpecification",
-                      "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],
-                      "opens": "08:00",
-                      "closes": "23:30"
-                    }
-                  ],
-                  "areaServed": [
-                    { "@type": "City", "name": "Kavacık" },
-                    { "@type": "City", "name": "Beykoz" },
-                    { "@type": "City", "name": "Acarkent" }
-                  ]
-                },
-                {
-                  "@type": "Bakery",
-                  "@id": "https://www.dilim.com.tr/#bakery-umraniye",
-                  "name": "Dilim Pastaneleri - Ümraniye",
-                  "alternateName": "Dilim Pasta & Cafe",
-                  "url": "https://www.dilim.com.tr",
-                  "hasMap": "https://maps.google.com/?cid=5071191567119623373",
-                  "image": "https://www.dilim.com.tr/dilim-umraniye-sube.jpg",
-                  "telephone": "+902166325731",
-                  "priceRange": "₺₺",
-                  "servesCuisine": ["Pasta", "Yaş Pasta", "Tatlı", "Börek", "Cafe"],
-                  "menu": "https://www.dilim.com.tr/urunler",
-                  "acceptsReservations": false,
-                  "address": {
-                    "@type": "PostalAddress",
-                    "streetAddress": "İnkılap, Adem Yavuz Cd. 1/4",
-                    "addressLocality": "Ümraniye",
-                    "postalCode": "34766",
-                    "addressRegion": "İstanbul",
-                    "addressCountry": "TR"
-                  },
-                  "geo": {
-                    "@type": "GeoCoordinates",
-                    "latitude": 41.032473,
-                    "longitude": 29.103323
-                  },
-                  "openingHoursSpecification": [
-                    {
-                      "@type": "OpeningHoursSpecification",
-                      "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],
-                      "opens": "08:00",
-                      "closes": "23:30"
-                    }
-                  ],
-                  "areaServed": [
-                    { "@type": "City", "name": "Ümraniye" }
-                  ]
-                },
-                {
-                  "@type": "Bakery",
-                  "@id": "https://www.dilim.com.tr/#bakery-beykoz",
-                  "name": "Dilim Pastaneleri - Beykoz",
-                  "url": "https://www.dilim.com.tr",
-                  "image": "https://www.dilim.com.tr/urunler_yas_pasta.png",
-                  "telephone": "+905059638021",
-                  "address": {
-                    "@type": "PostalAddress",
-                    "addressLocality": "Beykoz",
-                    "addressRegion": "İstanbul",
-                    "addressCountry": "TR"
+        <script type="application/ld+json" dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@graph": [
+              {
+                "@type": "Organization",
+                "@id": "https://www.dilim.com.tr/#organization",
+                "name": "Dilim Pastaneleri",
+                "url": "https://www.dilim.com.tr",
+                "logo": "https://www.dilim.com.tr/DilimPastLogo-final.png",
+                "sameAs": [
+                  "https://www.instagram.com/dilimpastaneleri",
+                  "https://www.facebook.com/share/1BQ7yRqh6n/?mibextid=wwXIfr",
+                  "https://x.com/dilimpastanesi",
+                  "https://www.tiktok.com/@dilimpastaneleri"
+                ]
+              },
+              {
+                "@type": "Bakery",
+                "@id": "https://www.dilim.com.tr/#bakery-kavacik",
+                "name": "Dilim Pastaneleri - Kavacık",
+                "alternateName": "Dilim Pasta Cafe Restoran",
+                "url": "https://www.dilim.com.tr",
+                "hasMap": "https://maps.google.com/?cid=16198642051939109480",
+                "image": "https://www.dilim.com.tr/dilim-kavacik-sube.jpg",
+                "telephone": "+905059638021",
+                "contactPoint": [
+                  {
+                    "@type": "ContactPoint",
+                    "telephone": "+902164256114",
+                    "contactType": "customer service",
+                    "availableLanguage": "Turkish"
                   }
-                }
-              ]
-            }
-          `}
-        </Script>
+                ],
+                "priceRange": "₺₺",
+                "servesCuisine": ["Pasta", "Yaş Pasta", "Tatlı", "Börek", "Cafe"],
+                "menu": "https://www.dilim.com.tr/urunler",
+                "acceptsReservations": false,
+                "address": {
+                  "@type": "PostalAddress",
+                  "streetAddress": "Rüzgarlıbahçe, Cumhuriyet Cd. No:10 (Acarlar Plaza)",
+                  "addressLocality": "Beykoz",
+                  "postalCode": "34805",
+                  "addressRegion": "İstanbul",
+                  "addressCountry": "TR"
+                },
+                "geo": {
+                  "@type": "GeoCoordinates",
+                  "latitude": 41.0948546,
+                  "longitude": 29.0985319
+                },
+                "openingHoursSpecification": [
+                  {
+                    "@type": "OpeningHoursSpecification",
+                    "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],
+                    "opens": "08:00",
+                    "closes": "23:30"
+                  }
+                ],
+                "areaServed": [
+                  { "@type": "City", "name": "Kavacık" },
+                  { "@type": "City", "name": "Beykoz" },
+                  { "@type": "City", "name": "Acarkent" }
+                ]
+              },
+              {
+                "@type": "Bakery",
+                "@id": "https://www.dilim.com.tr/#bakery-umraniye",
+                "name": "Dilim Pastaneleri - Ümraniye",
+                "alternateName": "Dilim Pasta & Cafe",
+                "url": "https://www.dilim.com.tr",
+                "hasMap": "https://maps.google.com/?cid=5071191567119623373",
+                "image": "https://www.dilim.com.tr/dilim-umraniye-sube.jpg",
+                "telephone": "+905059638024",
+                "contactPoint": [
+                  {
+                    "@type": "ContactPoint",
+                    "telephone": "+902166325731",
+                    "contactType": "customer service",
+                    "availableLanguage": "Turkish"
+                  }
+                ],
+                "priceRange": "₺₺",
+                "servesCuisine": ["Pasta", "Yaş Pasta", "Tatlı", "Börek", "Cafe"],
+                "menu": "https://www.dilim.com.tr/urunler",
+                "acceptsReservations": false,
+                "address": {
+                  "@type": "PostalAddress",
+                  "streetAddress": "İnkılap, Adem Yavuz Cd. 1/4",
+                  "addressLocality": "Ümraniye",
+                  "postalCode": "34766",
+                  "addressRegion": "İstanbul",
+                  "addressCountry": "TR"
+                },
+                "geo": {
+                  "@type": "GeoCoordinates",
+                  "latitude": 41.032473,
+                  "longitude": 29.103323
+                },
+                "openingHoursSpecification": [
+                  {
+                    "@type": "OpeningHoursSpecification",
+                    "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],
+                    "opens": "08:00",
+                    "closes": "23:30"
+                  }
+                ],
+                "areaServed": [
+                  { "@type": "City", "name": "Ümraniye" }
+                ]
+              }
+            ]
+          })
+        }} />
       </head>
       <body className="min-h-full flex flex-col">
         <AuthProvider>
@@ -262,52 +259,7 @@ export default async function FrontendLayout({
                 }
               }} 
             />
-            {/* SEO LocalBusiness Schema (Kavacık & Ümraniye) */}
-            <Script id="local-business-schema" type="application/ld+json" strategy="afterInteractive" dangerouslySetInnerHTML={{
-              __html: JSON.stringify({
-                "@context": "https://schema.org",
-                "@type": "Bakery",
-                "name": "Dilim Pastaneleri",
-                "image": "https://www.dilim.com.tr/logo.png",
-                "@id": "https://www.dilim.com.tr",
-                "url": "https://www.dilim.com.tr",
-                "telephone": "+905059638021",
-                "priceRange": "$$",
-                "address": {
-                  "@type": "PostalAddress",
-                  "addressLocality": "Kavacık",
-                  "addressRegion": "İstanbul",
-                  "addressCountry": "TR"
-                },
-                "department": [
-                  {
-                    "@type": "Bakery",
-                    "name": "Dilim Pastaneleri - Kavacık Şubesi",
-                    "telephone": "+905059638021",
-                    "address": {
-                      "@type": "PostalAddress",
-                      "addressLocality": "Kavacık",
-                      "addressRegion": "İstanbul",
-                      "addressCountry": "TR"
-                    }
-                  },
-                  {
-                    "@type": "Bakery",
-                    "name": "Dilim Pastaneleri - Ümraniye Şubesi",
-                    "telephone": "+905059638024",
-                    "address": {
-                      "@type": "PostalAddress",
-                      "addressLocality": "Ümraniye",
-                      "addressRegion": "İstanbul",
-                      "addressCountry": "TR"
-                    }
-                  }
-                ],
-                "sameAs": [
-                  "https://www.instagram.com/dilimpastaneleri"
-                ]
-              })
-            }} />
+
           </CartProvider>
         </AuthProvider>
       </body>

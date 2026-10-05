@@ -34,12 +34,11 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const generatedExcerpt = rawText.length > 150 ? rawText.substring(0, 150) + '...' : rawText;
   
   return {
-    title: post.seo?.metaTitle || `${post.title} | Dilim Blog`,
-    description: post.seo?.metaDescription || generatedExcerpt,
-    keywords: post.seo?.metaKeywords || '',
+    title: post.meta?.title || `${post.title} | Dilim Blog`,
+    description: post.meta?.description || generatedExcerpt,
     openGraph: {
-      title: post.seo?.metaTitle || post.title,
-      description: post.seo?.metaDescription || generatedExcerpt,
+      title: post.meta?.title || post.title,
+      description: post.meta?.description || generatedExcerpt,
     }
   }
 }
@@ -174,6 +173,22 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
             <p className="text-gray-500 text-sm">Dilim Pastaneleri bünyesinde özel gün pastaları ve geleneksel tatlılar konusunda uzman içerik üreticisi.</p>
           </div>
         </div>
+
+        {/* CTA (Internal Links for SEO) */}
+        <div className="mt-8 p-8 bg-dilim-siyah rounded-3xl flex flex-col md:flex-row items-center justify-between gap-6">
+          <div>
+            <h4 className="text-xl font-serif font-bold text-white mb-2">Özel Günlerinizi Taçlandırın</h4>
+            <p className="text-gray-400 text-sm max-w-lg">Hayalinizdeki pastayı hemen tasarlayabilir veya taze ürün koleksiyonumuzdan sipariş verebilirsiniz. Kavacık ve Ümraniye şubelerimizden aynı gün teslimat!</p>
+          </div>
+          <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto shrink-0">
+            <Link href="/urunler" className="px-6 py-3 bg-white text-dilim-siyah font-bold rounded-xl text-center hover:bg-gray-100 transition-colors text-sm">
+              Pasta Çeşitleri
+            </Link>
+            <Link href="/tasarla" className="px-6 py-3 bg-dilim-portakal text-white font-bold rounded-xl text-center hover:bg-dilim-turuncu transition-colors text-sm shadow-lg shadow-orange-500/20">
+              Özel Pasta Tasarla
+            </Link>
+          </div>
+        </div>
       </div>
 
 
@@ -191,7 +206,7 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
             "datePublished": post.createdAt,
             "dateModified": post.updatedAt,
             "author": [{
-              "@type": "Person",
+              "@type": staticBlog?.author && staticBlog.author !== 'Dilim Pastaneleri' ? "Person" : "Organization",
               "name": staticBlog?.author || 'Dilim Pastaneleri',
               "url": "https://www.dilim.com.tr"
             }],
