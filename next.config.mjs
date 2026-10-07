@@ -15,6 +15,18 @@ const nextConfig = {
       './node_modules/postman-request/**/*'
     ],
   },
+  // Eski (PHP) siteden kalan ve Search Console'da 404 görünen adresler → kalıcı (308) yönlendirme
+  async redirects() {
+    return [
+      { source: '/urunler.php', destination: '/urunler', permanent: true },
+      { source: '/siparis.php', destination: '/urunler', permanent: true },
+      { source: '/subelerimiz.php', destination: '/iletisim', permanent: true },
+      { source: '/subelerimiz', destination: '/iletisim', permanent: true },
+      { source: '/index.php', destination: '/', permanent: true },
+      { source: '/iletisim.php', destination: '/iletisim', permanent: true },
+      { source: '/hakkimizda.php', destination: '/hakkimizda', permanent: true },
+    ]
+  },
   images: {
     remotePatterns: [
       {

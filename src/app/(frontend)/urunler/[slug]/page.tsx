@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { notFound, redirect, RedirectType } from 'next/navigation'
+import { notFound, permanentRedirect } from 'next/navigation'
 import { ChevronRight, Star, Truck, ShieldCheck, Check } from 'lucide-react'
 import { AddToCartButton } from '@/components/AddToCartButton'
 import { getPayload } from 'payload'
@@ -22,6 +22,61 @@ const cleanSlug = (input: string): string => {
     .replace(/[^a-z0-9-]/g, '')
     .replace(/-+/g, '-')
     .replace(/^-|-$/g, '')
+}
+
+const PUBLISHED_ACTIVE = [
+  { _status: { equals: 'published' } },
+  { isActive: { equals: 'active' } },
+]
+
+/**
+ * Eski / değişmiş bir ürün slug'ını güncel slug'a çözer.
+ * 1) Türkçe karakter temizliği yapılmış hali güncel bir ürüne denk geliyor mu?
+ * 2) Değilse Payload sürüm geçmişinde (_products_v) bu slug daha önce kullanılmış mı?
+ *    (ör. "muzlu-rulo-pasta-807" → "muzlu-rulo-pasta", "f-st-k-ikolatal" → "fistik-cikolatali")
+ * Sadece yayında ve aktif bir ürün bulunursa slug döner; aksi halde null (→ 404).
+ */
+async function resolveLegacySlug(payload: any, rawSlug: string): Promise<string | null> {
+  let decoded = rawSlug
+  try { decoded = decodeURIComponent(rawSlug) } catch { /* zaten decode edilmiş */ }
+  const sanitized = cleanSlug(rawSlug)
+
+  try {
+    // 1) Temizlenmiş slug doğrudan güncel bir ürüne mi ait?
+    if (sanitized && sanitized !== rawSlug) {
+      const direct = await payload.find({
+        collection: 'products',
+        where: { and: [{ slug: { equals: sanitized } }, ...PUBLISHED_ACTIVE] },
+        limit: 1,
+        depth: 0,
+      })
+      if (direct.docs.length > 0) return direct.docs[0].slug
+    }
+
+    // 2) Sürüm geçmişinde bu slug'ı taşımış bir ürün var mı?
+    const candidates = Array.from(new Set([rawSlug, decoded, sanitized].filter(Boolean)))
+    const versions = await payload.findVersions({
+      collection: 'products',
+      where: { 'version.slug': { in: candidates } },
+      sort: '-updatedAt',
+      limit: 1,
+      depth: 0,
+    })
+    const parent = versions.docs[0]?.parent
+    const parentId = typeof parent === 'object' && parent !== null ? parent.id : parent
+    if (!parentId) return null
+
+    const current = await payload.find({
+      collection: 'products',
+      where: { and: [{ id: { equals: parentId } }, ...PUBLISHED_ACTIVE] },
+      limit: 1,
+      depth: 0,
+    })
+    return current.docs[0]?.slug ?? null
+  } catch (error) {
+    console.error('resolveLegacySlug error:', error)
+    return null
+  }
 }
 
 export async function generateStaticParams() {
@@ -98,23 +153,12 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
     depth: 2,
   })
 
-  // 301 Fallback logic if exact slug is not found directly
+  // Kalıcı (308) yönlendirme: slug doğrudan bulunamazsa eski/bozuk adresleri güncel adrese taşı.
+  // Not: permanentRedirect() bir hata fırlattığı için try/catch içine ALINMAMALIDIR.
   if (!docs || docs.length === 0) {
-    const sanitized = cleanSlug(slug)
-    if (sanitized && sanitized !== slug) {
-      const fallbackRes = await payload.find({
-        collection: 'products' as any,
-        where: {
-          and: [
-            { slug: { equals: sanitized } },
-            { _status: { equals: 'published' } },
-            { isActive: { equals: 'active' } }
-          ]
-        },
-      })
-      if (fallbackRes.docs.length > 0) {
-        redirect(`/urunler/${fallbackRes.docs[0].slug}`, RedirectType.permanent)
-      }
+    const redirectSlug = await resolveLegacySlug(payload, slug)
+    if (redirectSlug && redirectSlug !== slug) {
+      permanentRedirect(`/urunler/${redirectSlug}`)
     }
   }
 
