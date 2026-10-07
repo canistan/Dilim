@@ -2,13 +2,13 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
 /**
- * Middleware: Canonical domain redirect
+ * Proxy (eski adıyla Middleware): Canonical domain redirect
  * 
  * Redirects all traffic from legacy domains (dilimpastaneleri.com, dilimpastaneleri.com.tr)
  * to the canonical domain (www.dilim.com.tr) with a 301 permanent redirect.
  * This prevents duplicate content SEO penalties from Google/Bing/Yandex.
  */
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const hostname = request.headers.get('host') || ''
 
   // List of legacy/non-canonical domains that should redirect
@@ -30,7 +30,7 @@ export function middleware(request: NextRequest) {
   return NextResponse.next()
 }
 
-// Run middleware on all routes except static files and API
+// Run proxy on all routes except static files and API
 export const config = {
   matcher: [
     '/((?!_next/static|_next/image|favicon.ico|icon.png|api/media).*)',
