@@ -3,6 +3,9 @@ import { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'Franchise Başvurusu | Dilim Pastaneleri',
   description: 'Dilim Pastaneleri franchise başvuru formu. Yılların getirdiği ustalık ve marka güvencesiyle kârlı bir işletmeye sahip olun.',
+  alternates: {
+    canonical: 'https://www.dilim.com.tr/franchise',
+  },
 }
 
 export default function FranchiseLayout({

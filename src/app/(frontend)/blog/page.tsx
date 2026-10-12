@@ -8,6 +8,9 @@ import STATIC_BLOGS from '@/data/blog.json'
 export const metadata = {
   title: 'Pasta & Tatlı Blogu | Pastacılık Rehberi - Dilim Pastaneleri',
   description: 'Pastacılık sırları, doğum günü partisi tavsiyeleri, nişan pastası trendleri ve en lezzetli tatlıların arkasındaki hikayeler.',
+  alternates: {
+    canonical: 'https://www.dilim.com.tr/blog',
+  },
 }
 
 export const revalidate = 3600

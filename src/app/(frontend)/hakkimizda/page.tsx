@@ -7,6 +7,9 @@ import configPromise from '@payload-config'
 export const metadata = {
   title: 'Hakkımızda | 1977\'den Beri Kavacık & Ümraniye Pastanesi - Dilim',
   description: '1977\'den bu yana Kuzguncuk\'tan Kavacık ve Ümraniye\'ye uzanan lezzet yolculuğu. İstanbul Anadolu Yakası\'nın en köklü pastanesi Dilim Pastaneleri\'nin hikayesi.',
+  alternates: {
+    canonical: 'https://www.dilim.com.tr/hakkimizda',
+  },
 }
 
 export const revalidate = 3600 // ISR

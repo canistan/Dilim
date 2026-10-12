@@ -7,6 +7,9 @@ import configPromise from '@/payload.config'
 export const metadata = {
   title: 'Kendi Pastanı Tasarla | Kavacık & Ümraniye Özel Tasarım Pasta - Dilim',
   description: 'Hayalinizdeki doğum günü pastasını, nişan pastasını veya özel gün pastasını adım adım tasarlayın. Kavacık ve Ümraniye\'ye aynı gün teslimat.',
+  alternates: {
+    canonical: 'https://www.dilim.com.tr/tasarla',
+  },
 }
 
 export default async function TasarlaPage() {

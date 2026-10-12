@@ -4,6 +4,9 @@ import { ChevronRight } from 'lucide-react'
 export const metadata = {
   title: 'Teslimat Koşulları | Dilim Pastaneleri',
   description: 'Dilim Pastaneleri siparişlerinizin teslimat koşulları ve bölgeleri hakkında detaylı bilgi.',
+  alternates: {
+    canonical: 'https://www.dilim.com.tr/teslimat-kosullari',
+  },
 }
 
 export default function TeslimatKosullariPage() {

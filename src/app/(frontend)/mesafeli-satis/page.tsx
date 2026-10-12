@@ -4,6 +4,9 @@ import { ChevronRight } from 'lucide-react'
 export const metadata = {
   title: 'Mesafeli Satış Sözleşmesi | Dilim Pastaneleri',
   description: 'Dilim Pastaneleri Mesafeli Satış Sözleşmesi',
+  alternates: {
+    canonical: 'https://www.dilim.com.tr/mesafeli-satis',
+  },
 }
 
 export default function MesafeliSatisPage() {

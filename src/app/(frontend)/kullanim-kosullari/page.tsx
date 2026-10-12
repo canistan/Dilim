@@ -1,3 +1,13 @@
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Kullanım Koşulları | Dilim Pastaneleri',
+  description: 'Dilim Pastaneleri web sitesi kullanım koşulları ve yasal şartlar.',
+  alternates: {
+    canonical: 'https://www.dilim.com.tr/kullanim-kosullari',
+  },
+}
+
 export default function KullanimKosullari() {
   return (
     <div className="container mx-auto px-4 py-20 max-w-4xl min-h-screen">

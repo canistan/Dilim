@@ -36,9 +36,13 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   return {
     title: post.meta?.title || `${post.title} | Dilim Blog`,
     description: post.meta?.description || generatedExcerpt,
+    alternates: {
+      canonical: `https://www.dilim.com.tr/blog/${post.slug}`,
+    },
     openGraph: {
       title: post.meta?.title || post.title,
       description: post.meta?.description || generatedExcerpt,
+      url: `https://www.dilim.com.tr/blog/${post.slug}`,
     }
   }
 }

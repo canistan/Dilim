@@ -5,6 +5,9 @@ import IletisimClient from './IletisimClient'
 export const metadata = {
   title: 'İletişim & Şubelerimiz | Kavacık, Ümraniye Pastane - Dilim Pastaneleri',
   description: 'Dilim Pastaneleri Kavacık ve Ümraniye şube adresleri, telefon numaraları, çalışma saatleri ve yol tarifi. Pasta siparişi için bize ulaşın.',
+  alternates: {
+    canonical: 'https://www.dilim.com.tr/iletisim',
+  },
 }
 
 export const revalidate = 3600 // ISR

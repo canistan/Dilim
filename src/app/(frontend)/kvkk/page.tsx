@@ -4,6 +4,9 @@ import { ChevronRight } from 'lucide-react'
 export const metadata = {
   title: 'Gizlilik ve KVKK Politikası | Dilim Pastaneleri',
   description: 'Kişisel Verilerin Korunması ve Gizlilik Politikası',
+  alternates: {
+    canonical: 'https://www.dilim.com.tr/kvkk',
+  },
 }
 
 export default function KvkkPage() {

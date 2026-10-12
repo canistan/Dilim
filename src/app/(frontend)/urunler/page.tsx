@@ -6,6 +6,9 @@ import { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'Pasta Çeşitleri | Kavacık & Ümraniye Pasta Siparişi - Dilim Pastaneleri',
   description: 'Yaş pasta, doğum günü pastası, nişan pastası, çikolatalı pasta ve tüm tatlı çeşitleri. Kavacık ve Ümraniye\'ye aynı gün teslimat.',
+  alternates: {
+    canonical: 'https://www.dilim.com.tr/urunler',
+  },
 }
 
 // Next.js ISR (Incremental Static Regeneration) - 1 saatte bir yenile

@@ -1,3 +1,13 @@
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Aydınlatma Metni | Dilim Pastaneleri',
+  description: 'Dilim Pastaneleri KVKK ve Aydınlatma Metni',
+  alternates: {
+    canonical: 'https://www.dilim.com.tr/aydinlatma-metni',
+  },
+}
+
 export default function AydinlatmaMetni() {
   return (
     <div className="container mx-auto px-4 py-20 max-w-4xl min-h-screen">

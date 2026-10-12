@@ -4,6 +4,9 @@ import { ChevronRight } from 'lucide-react'
 export const metadata = {
   title: 'İptal ve İade Koşulları | Dilim Pastaneleri',
   description: 'Dilim Pastaneleri İptal ve İade Koşulları',
+  alternates: {
+    canonical: 'https://www.dilim.com.tr/iptal-iade',
+  },
 }
 
 export default function IptalIadePage() {
