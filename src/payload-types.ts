@@ -64,36 +64,89 @@ export type SupportedTimezones =
 export interface Config {
   auth: {
     users: UserAuthOperations;
+    customers: CustomerAuthOperations;
   };
   blocks: {};
   collections: {
+    branches: Branch;
+    'delivery-zones': DeliveryZone;
+    'time-slots': TimeSlot;
     users: User;
+    customers: Customer;
+    products: Product;
+    'custom-cakes': CustomCake;
+    categories: Category;
+    orders: Order;
+    blog: Blog;
+    'contact-messages': ContactMessage;
     media: Media;
+    subscribers: Subscriber;
+    'audit-logs': AuditLog;
+    coupons: Coupon;
+    returns: Return;
+    resumes: Resume;
+    'franchise-applications': FranchiseApplication;
+    'job-applications': JobApplication;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
   };
-  collectionsJoins: {};
+  collectionsJoins: {
+    customers: {
+      pastOrders: 'orders';
+    };
+  };
   collectionsSelect: {
+    branches: BranchesSelect<false> | BranchesSelect<true>;
+    'delivery-zones': DeliveryZonesSelect<false> | DeliveryZonesSelect<true>;
+    'time-slots': TimeSlotsSelect<false> | TimeSlotsSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
+    customers: CustomersSelect<false> | CustomersSelect<true>;
+    products: ProductsSelect<false> | ProductsSelect<true>;
+    'custom-cakes': CustomCakesSelect<false> | CustomCakesSelect<true>;
+    categories: CategoriesSelect<false> | CategoriesSelect<true>;
+    orders: OrdersSelect<false> | OrdersSelect<true>;
+    blog: BlogSelect<false> | BlogSelect<true>;
+    'contact-messages': ContactMessagesSelect<false> | ContactMessagesSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
+    subscribers: SubscribersSelect<false> | SubscribersSelect<true>;
+    'audit-logs': AuditLogsSelect<false> | AuditLogsSelect<true>;
+    coupons: CouponsSelect<false> | CouponsSelect<true>;
+    returns: ReturnsSelect<false> | ReturnsSelect<true>;
+    resumes: ResumesSelect<false> | ResumesSelect<true>;
+    'franchise-applications': FranchiseApplicationsSelect<false> | FranchiseApplicationsSelect<true>;
+    'job-applications': JobApplicationsSelect<false> | JobApplicationsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
   };
   db: {
-    defaultIDType: string;
+    defaultIDType: number;
   };
   fallbackLocale: null;
-  globals: {};
-  globalsSelect: {};
+  globals: {
+    homepage: Homepage;
+    'birthday-campaign': BirthdayCampaign;
+    'about-settings': AboutSetting;
+    'custom-cake-options': CustomCakeOption;
+    'contact-settings': ContactSetting;
+    'instagram-feed': InstagramFeed;
+  };
+  globalsSelect: {
+    homepage: HomepageSelect<false> | HomepageSelect<true>;
+    'birthday-campaign': BirthdayCampaignSelect<false> | BirthdayCampaignSelect<true>;
+    'about-settings': AboutSettingsSelect<false> | AboutSettingsSelect<true>;
+    'custom-cake-options': CustomCakeOptionsSelect<false> | CustomCakeOptionsSelect<true>;
+    'contact-settings': ContactSettingsSelect<false> | ContactSettingsSelect<true>;
+    'instagram-feed': InstagramFeedSelect<false> | InstagramFeedSelect<true>;
+  };
   locale: null;
   widgets: {
     collections: CollectionsWidget;
   };
-  user: User;
+  user: User | Customer;
   jobs: {
     tasks: unknown;
     workflows: unknown;
@@ -117,12 +170,129 @@ export interface UserAuthOperations {
     password: string;
   };
 }
+export interface CustomerAuthOperations {
+  forgotPassword: {
+    email: string;
+    password: string;
+  };
+  login: {
+    email: string;
+    password: string;
+  };
+  registerFirstUser: {
+    email: string;
+    password: string;
+  };
+  unlock: {
+    email: string;
+    password: string;
+  };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "branches".
+ */
+export interface Branch {
+  id: number;
+  name: string;
+  isFranchise?: boolean | null;
+  image?: (number | null) | Media;
+  address: string;
+  phone?: string | null;
+  workingHours?: string | null;
+  googleMapsUrl?: string | null;
+  mapEmbedUrl?: string | null;
+  coordinates?: {
+    lat?: number | null;
+    lng?: number | null;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "media".
+ */
+export interface Media {
+  id: number;
+  alt?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  url?: string | null;
+  thumbnailURL?: string | null;
+  filename?: string | null;
+  mimeType?: string | null;
+  filesize?: number | null;
+  width?: number | null;
+  height?: number | null;
+  focalX?: number | null;
+  focalY?: number | null;
+  sizes?: {
+    thumbnail?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    hero?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+  };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "delivery-zones".
+ */
+export interface DeliveryZone {
+  id: number;
+  name: string;
+  deliveryFee: number;
+  isActive?: boolean | null;
+  branch: number | Branch;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "time-slots".
+ */
+export interface TimeSlot {
+  id: number;
+  timeRange: string;
+  /**
+   * Bu saat aralığı için mutfağın alabileceği maksimum sipariş sayısı.
+   */
+  capacity: number;
+  /**
+   * Örn: 12:00. Bu saatten sonra bu slot aynı gün için kapanır.
+   */
+  cutoffTime?: string | null;
+  isActive?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users".
  */
 export interface User {
-  id: string;
+  id: number;
+  name?: string | null;
+  /**
+   * Kullanıcının sistem üzerindeki yetkilerini belirler.
+   */
+  role: 'admin' | 'editor' | 'kitchen' | 'branch';
+  /**
+   * Sadece "Şube Yöneticisi" rolü seçiliyse görünür ve çalışır.
+   */
+  branch?: (number | null) | Branch;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -144,11 +314,366 @@ export interface User {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "media".
+ * via the `definition` "customers".
  */
-export interface Media {
-  id: string;
-  alt: string;
+export interface Customer {
+  id: number;
+  name: string;
+  surname?: string | null;
+  gender?: ('female' | 'male' | 'other') | null;
+  birthDate?: string | null;
+  phone?: string | null;
+  provider?: ('google' | 'facebook' | 'credentials') | null;
+  providerAccountId?: string | null;
+  addresses?:
+    | {
+        title: string;
+        district: string;
+        address: string;
+        isCorporate?: boolean | null;
+        companyName?: string | null;
+        taxOffice?: string | null;
+        taxNumber?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  pastOrders?: {
+    docs?: (number | Order)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
+  updatedAt: string;
+  createdAt: string;
+  email: string;
+  resetPasswordToken?: string | null;
+  resetPasswordExpiration?: string | null;
+  salt?: string | null;
+  hash?: string | null;
+  loginAttempts?: number | null;
+  lockUntil?: string | null;
+  sessions?:
+    | {
+        id: string;
+        createdAt?: string | null;
+        expiresAt: string;
+      }[]
+    | null;
+  password?: string | null;
+  collection: 'customers';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "orders".
+ */
+export interface Order {
+  id: number;
+  customer?: (number | null) | Customer;
+  orderType?: ('standard' | 'custom') | null;
+  customerInfo: {
+    firstName: string;
+    lastName: string;
+    email: string;
+    phone: string;
+    district: string;
+    address: string;
+    isCorporate?: boolean | null;
+    companyName?: string | null;
+    taxOffice?: string | null;
+    taxNumber?: string | null;
+  };
+  deliveryType?: ('delivery' | 'pickup') | null;
+  timeSlot?: (number | null) | TimeSlot;
+  deliveryDate?: string | null;
+  deliveryTime?: string | null;
+  deliveryZone?: (number | null) | DeliveryZone;
+  pickupBranch?: (number | null) | Branch;
+  isGift?: boolean | null;
+  giftRecipientName?: string | null;
+  giftRecipientPhone?: string | null;
+  orderItems?:
+    | {
+        product?: (number | null) | Product;
+        quantity?: number | null;
+        price?: number | null;
+        options?: string | null;
+        note?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  customCakeDetails?: {
+    cakeSize?: string | null;
+    spongeType?: string | null;
+    creamFlavor?: string | null;
+    filling?: string | null;
+    pat?: string | null;
+    sekil?: string | null;
+    requestedDate?: string | null;
+    note?: string | null;
+    referenceImage?: (number | null) | Media;
+  };
+  status?: ('pending' | 'preparing' | 'shipped' | 'delivered' | 'cancelled') | null;
+  paymentStatus?: ('unpaid' | 'paid' | 'failed') | null;
+  totalAmount: number;
+  iyzicoPaymentId?: string | null;
+  iyzicoTransactions?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  refundStatus?: ('none' | 'pending' | 'success' | 'failed') | null;
+  cancellationRequest?: {
+    requested?: boolean | null;
+    requestedAt?: string | null;
+    decision?: ('pending' | 'approved' | 'rejected') | null;
+  };
+  usedCoupon?: string | null;
+  orderNumber?: string | null;
+  iyzicoToken?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "products".
+ */
+export interface Product {
+  id: number;
+  title: string;
+  searchTitle?: string | null;
+  slug?: string | null;
+  /**
+   * Pasif seçilirse ürün müşterilere gösterilmez.
+   */
+  isActive?: ('active' | 'passive') | null;
+  /**
+   * İşaretlenirse müşteri sepete eklerken rakam seçmek zorunda kalır.
+   */
+  hasNumberSelection?: boolean | null;
+  /**
+   * İşaretlenirse müşteri sepete eklerken özel yazı (İyi ki doğdun vb.) seçmek zorunda kalır.
+   */
+  hasTextSelection?: boolean | null;
+  /**
+   * İşaretlenirse tek bir fiyat yerine boyutlara veya birimlere göre ayrı fiyatlar girilir.
+   */
+  hasSizes?: boolean | null;
+  sizes?:
+    | {
+        size: '0 Numara' | '1 Numara' | '2 Numara' | 'Paket' | '1 Kilogram' | '500 Gram' | '250 Gram' | 'Porsiyon';
+        price: number;
+        id?: string | null;
+      }[]
+    | null;
+  price?: number | null;
+  description?: string | null;
+  images?: (number | Media)[] | null;
+  /**
+   * Stok 0 olduğunda ürün "Tükenmiş" olarak gösterilir.
+   */
+  stock?: number | null;
+  /**
+   * Bu ürün aynı gün teslimat siparişleri için uygun mu?
+   */
+  isSameDayEligible?: boolean | null;
+  /**
+   * Bu ürünün hazırlanması için gereken minimum süre.
+   */
+  leadTime?: number | null;
+  /**
+   * Boş bırakılırsa stok alanına göre sınırlandırılır.
+   */
+  dailyProductionLimit?: number | null;
+  /**
+   * Örn: Süt, Yumurta, Fıstık içerir.
+   */
+  allergens?: string | null;
+  ingredients?: string | null;
+  category?: (number | null) | Category;
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (number | null) | Media;
+  };
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "categories".
+ */
+export interface Category {
+  id: number;
+  isActive?: boolean | null;
+  title: string;
+  image?: (number | null) | Media;
+  slug?: string | null;
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (number | null) | Media;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "custom-cakes".
+ */
+export interface CustomCake {
+  id: number;
+  title: string;
+  image?: (number | null) | Media;
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (number | null) | Media;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "blog".
+ */
+export interface Blog {
+  id: number;
+  title: string;
+  slug?: string | null;
+  content?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  image?: (number | null) | Media;
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (number | null) | Media;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contact-messages".
+ */
+export interface ContactMessage {
+  id: number;
+  name: string;
+  email: string;
+  phone?: string | null;
+  subject?: string | null;
+  message: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "subscribers".
+ */
+export interface Subscriber {
+  id: number;
+  email: string;
+  source?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "audit-logs".
+ */
+export interface AuditLog {
+  id: number;
+  action: string;
+  user?: (number | null) | User;
+  details?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "coupons".
+ */
+export interface Coupon {
+  id: number;
+  code: string;
+  discountType: 'percentage' | 'fixed';
+  discountValue: number;
+  isActive?: boolean | null;
+  expiryDate?: string | null;
+  minimumCartValue?: number | null;
+  /**
+   * Boş bırakılırsa sınırsız kullanılır.
+   */
+  totalUsageLimit?: number | null;
+  /**
+   * Boş bırakılırsa sınırsız kullanılır.
+   */
+  usageLimitPerUser?: number | null;
+  usedCount?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "returns".
+ */
+export interface Return {
+  id: number;
+  order: number | Order;
+  customer?: (number | null) | Customer;
+  reason: 'Ürün Hasarlı Geldi' | 'Yanlış Ürün Gönderildi' | 'Teslimat Çok Gecikti' | 'Kalite/Lezzet Şikayeti' | 'Diğer';
+  description: string;
+  photos?: (number | Media)[] | null;
+  returnNumber?: string | null;
+  status?: ('pending' | 'approved' | 'partial' | 'rejected') | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Kariyer başvurularında yüklenen CV ve özgeçmiş dosyaları.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "resumes".
+ */
+export interface Resume {
+  id: number;
+  alt?: string | null;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -163,10 +688,45 @@ export interface Media {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "franchise-applications".
+ */
+export interface FranchiseApplication {
+  id: number;
+  name: string;
+  email: string;
+  phone: string;
+  location: string;
+  background: string;
+  hasStore?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "job-applications".
+ */
+export interface JobApplication {
+  id: number;
+  name: string;
+  phone: string;
+  position:
+    | 'Servis Elemanı (Garson)'
+    | 'Barista'
+    | 'Tezgah Satış Temsilcisi'
+    | 'Mutfak / İmalat Personeli'
+    | 'Kurye'
+    | 'Genel Başvuru (Diğer)';
+  experience: string;
+  resume?: (number | null) | Resume;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
-  id: string;
+  id: number;
   key: string;
   data:
     | {
@@ -183,21 +743,94 @@ export interface PayloadKv {
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
-  id: string;
+  id: number;
   document?:
     | ({
+        relationTo: 'branches';
+        value: number | Branch;
+      } | null)
+    | ({
+        relationTo: 'delivery-zones';
+        value: number | DeliveryZone;
+      } | null)
+    | ({
+        relationTo: 'time-slots';
+        value: number | TimeSlot;
+      } | null)
+    | ({
         relationTo: 'users';
-        value: string | User;
+        value: number | User;
+      } | null)
+    | ({
+        relationTo: 'customers';
+        value: number | Customer;
+      } | null)
+    | ({
+        relationTo: 'products';
+        value: number | Product;
+      } | null)
+    | ({
+        relationTo: 'custom-cakes';
+        value: number | CustomCake;
+      } | null)
+    | ({
+        relationTo: 'categories';
+        value: number | Category;
+      } | null)
+    | ({
+        relationTo: 'orders';
+        value: number | Order;
+      } | null)
+    | ({
+        relationTo: 'blog';
+        value: number | Blog;
+      } | null)
+    | ({
+        relationTo: 'contact-messages';
+        value: number | ContactMessage;
       } | null)
     | ({
         relationTo: 'media';
-        value: string | Media;
+        value: number | Media;
+      } | null)
+    | ({
+        relationTo: 'subscribers';
+        value: number | Subscriber;
+      } | null)
+    | ({
+        relationTo: 'audit-logs';
+        value: number | AuditLog;
+      } | null)
+    | ({
+        relationTo: 'coupons';
+        value: number | Coupon;
+      } | null)
+    | ({
+        relationTo: 'returns';
+        value: number | Return;
+      } | null)
+    | ({
+        relationTo: 'resumes';
+        value: number | Resume;
+      } | null)
+    | ({
+        relationTo: 'franchise-applications';
+        value: number | FranchiseApplication;
+      } | null)
+    | ({
+        relationTo: 'job-applications';
+        value: number | JobApplication;
       } | null);
   globalSlug?: string | null;
-  user: {
-    relationTo: 'users';
-    value: string | User;
-  };
+  user:
+    | {
+        relationTo: 'users';
+        value: number | User;
+      }
+    | {
+        relationTo: 'customers';
+        value: number | Customer;
+      };
   updatedAt: string;
   createdAt: string;
 }
@@ -206,11 +839,16 @@ export interface PayloadLockedDocument {
  * via the `definition` "payload-preferences".
  */
 export interface PayloadPreference {
-  id: string;
-  user: {
-    relationTo: 'users';
-    value: string | User;
-  };
+  id: number;
+  user:
+    | {
+        relationTo: 'users';
+        value: number | User;
+      }
+    | {
+        relationTo: 'customers';
+        value: number | Customer;
+      };
   key?: string | null;
   value?:
     | {
@@ -229,7 +867,7 @@ export interface PayloadPreference {
  * via the `definition` "payload-migrations".
  */
 export interface PayloadMigration {
-  id: string;
+  id: number;
   name?: string | null;
   batch?: number | null;
   updatedAt: string;
@@ -237,9 +875,58 @@ export interface PayloadMigration {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "branches_select".
+ */
+export interface BranchesSelect<T extends boolean = true> {
+  name?: T;
+  isFranchise?: T;
+  image?: T;
+  address?: T;
+  phone?: T;
+  workingHours?: T;
+  googleMapsUrl?: T;
+  mapEmbedUrl?: T;
+  coordinates?:
+    | T
+    | {
+        lat?: T;
+        lng?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "delivery-zones_select".
+ */
+export interface DeliveryZonesSelect<T extends boolean = true> {
+  name?: T;
+  deliveryFee?: T;
+  isActive?: T;
+  branch?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "time-slots_select".
+ */
+export interface TimeSlotsSelect<T extends boolean = true> {
+  timeRange?: T;
+  capacity?: T;
+  cutoffTime?: T;
+  isActive?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
+  name?: T;
+  role?: T;
+  branch?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;
@@ -259,6 +946,228 @@ export interface UsersSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "customers_select".
+ */
+export interface CustomersSelect<T extends boolean = true> {
+  name?: T;
+  surname?: T;
+  gender?: T;
+  birthDate?: T;
+  phone?: T;
+  provider?: T;
+  providerAccountId?: T;
+  addresses?:
+    | T
+    | {
+        title?: T;
+        district?: T;
+        address?: T;
+        isCorporate?: T;
+        companyName?: T;
+        taxOffice?: T;
+        taxNumber?: T;
+        id?: T;
+      };
+  pastOrders?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  email?: T;
+  resetPasswordToken?: T;
+  resetPasswordExpiration?: T;
+  salt?: T;
+  hash?: T;
+  loginAttempts?: T;
+  lockUntil?: T;
+  sessions?:
+    | T
+    | {
+        id?: T;
+        createdAt?: T;
+        expiresAt?: T;
+      };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "products_select".
+ */
+export interface ProductsSelect<T extends boolean = true> {
+  title?: T;
+  searchTitle?: T;
+  slug?: T;
+  isActive?: T;
+  hasNumberSelection?: T;
+  hasTextSelection?: T;
+  hasSizes?: T;
+  sizes?:
+    | T
+    | {
+        size?: T;
+        price?: T;
+        id?: T;
+      };
+  price?: T;
+  description?: T;
+  images?: T;
+  stock?: T;
+  isSameDayEligible?: T;
+  leadTime?: T;
+  dailyProductionLimit?: T;
+  allergens?: T;
+  ingredients?: T;
+  category?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "custom-cakes_select".
+ */
+export interface CustomCakesSelect<T extends boolean = true> {
+  title?: T;
+  image?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "categories_select".
+ */
+export interface CategoriesSelect<T extends boolean = true> {
+  isActive?: T;
+  title?: T;
+  image?: T;
+  slug?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "orders_select".
+ */
+export interface OrdersSelect<T extends boolean = true> {
+  customer?: T;
+  orderType?: T;
+  customerInfo?:
+    | T
+    | {
+        firstName?: T;
+        lastName?: T;
+        email?: T;
+        phone?: T;
+        district?: T;
+        address?: T;
+        isCorporate?: T;
+        companyName?: T;
+        taxOffice?: T;
+        taxNumber?: T;
+      };
+  deliveryType?: T;
+  timeSlot?: T;
+  deliveryDate?: T;
+  deliveryTime?: T;
+  deliveryZone?: T;
+  pickupBranch?: T;
+  isGift?: T;
+  giftRecipientName?: T;
+  giftRecipientPhone?: T;
+  orderItems?:
+    | T
+    | {
+        product?: T;
+        quantity?: T;
+        price?: T;
+        options?: T;
+        note?: T;
+        id?: T;
+      };
+  customCakeDetails?:
+    | T
+    | {
+        cakeSize?: T;
+        spongeType?: T;
+        creamFlavor?: T;
+        filling?: T;
+        pat?: T;
+        sekil?: T;
+        requestedDate?: T;
+        note?: T;
+        referenceImage?: T;
+      };
+  status?: T;
+  paymentStatus?: T;
+  totalAmount?: T;
+  iyzicoPaymentId?: T;
+  iyzicoTransactions?: T;
+  refundStatus?: T;
+  cancellationRequest?:
+    | T
+    | {
+        requested?: T;
+        requestedAt?: T;
+        decision?: T;
+      };
+  usedCoupon?: T;
+  orderNumber?: T;
+  iyzicoToken?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "blog_select".
+ */
+export interface BlogSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  content?: T;
+  image?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contact-messages_select".
+ */
+export interface ContactMessagesSelect<T extends boolean = true> {
+  name?: T;
+  email?: T;
+  phone?: T;
+  subject?: T;
+  message?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "media_select".
  */
 export interface MediaSelect<T extends boolean = true> {
@@ -274,6 +1183,128 @@ export interface MediaSelect<T extends boolean = true> {
   height?: T;
   focalX?: T;
   focalY?: T;
+  sizes?:
+    | T
+    | {
+        thumbnail?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        hero?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+      };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "subscribers_select".
+ */
+export interface SubscribersSelect<T extends boolean = true> {
+  email?: T;
+  source?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "audit-logs_select".
+ */
+export interface AuditLogsSelect<T extends boolean = true> {
+  action?: T;
+  user?: T;
+  details?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "coupons_select".
+ */
+export interface CouponsSelect<T extends boolean = true> {
+  code?: T;
+  discountType?: T;
+  discountValue?: T;
+  isActive?: T;
+  expiryDate?: T;
+  minimumCartValue?: T;
+  totalUsageLimit?: T;
+  usageLimitPerUser?: T;
+  usedCount?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "returns_select".
+ */
+export interface ReturnsSelect<T extends boolean = true> {
+  order?: T;
+  customer?: T;
+  reason?: T;
+  description?: T;
+  photos?: T;
+  returnNumber?: T;
+  status?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "resumes_select".
+ */
+export interface ResumesSelect<T extends boolean = true> {
+  alt?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  url?: T;
+  thumbnailURL?: T;
+  filename?: T;
+  mimeType?: T;
+  filesize?: T;
+  width?: T;
+  height?: T;
+  focalX?: T;
+  focalY?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "franchise-applications_select".
+ */
+export interface FranchiseApplicationsSelect<T extends boolean = true> {
+  name?: T;
+  email?: T;
+  phone?: T;
+  location?: T;
+  background?: T;
+  hasStore?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "job-applications_select".
+ */
+export interface JobApplicationsSelect<T extends boolean = true> {
+  name?: T;
+  phone?: T;
+  position?: T;
+  experience?: T;
+  resume?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -314,6 +1345,332 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   batch?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "homepage".
+ */
+export interface Homepage {
+  id: number;
+  heroTitle?: string | null;
+  heroSubtitle?: string | null;
+  heroImage?: (number | null) | Media;
+  heroButton1Text?: string | null;
+  heroButton1Link?: string | null;
+  heroButton2Text?: string | null;
+  heroButton2Link?: string | null;
+  featuredSectionEyebrow?: string | null;
+  featuredSectionTitle?: string | null;
+  featuredProducts?: (number | Product)[] | null;
+  fallbackCards?:
+    | {
+        title: string;
+        link: string;
+        buttonText: string;
+        image: number | Media;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "birthday-campaign".
+ */
+export interface BirthdayCampaign {
+  id: number;
+  isActive?: boolean | null;
+  emailSubject: string;
+  emailContent: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "about-settings".
+ */
+export interface AboutSetting {
+  id: number;
+  heroImage: number | Media;
+  heroSubtitle: string;
+  heroTitle: string;
+  storyTitle: string;
+  storySubtitle: string;
+  storyContent?:
+    | {
+        paragraph: string;
+        id?: string | null;
+      }[]
+    | null;
+  storyImage1: number | Media;
+  storyImage2: number | Media;
+  storyImage3: number | Media;
+  storyImage4: number | Media;
+  founderImage: number | Media;
+  founderQuote: string;
+  founderName: string;
+  founderTitle: string;
+  valuesTitle: string;
+  values?:
+    | {
+        icon: 'star' | 'heart' | 'award' | 'coffee';
+        title: string;
+        description: string;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * Kendi pastanı tasarla sayfasındaki dinamik seçenekleri (Boyut, Kek türü vb.) buradan yönetebilirsiniz.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "custom-cake-options".
+ */
+export interface CustomCakeOption {
+  id: number;
+  sizeOptions?:
+    | {
+        slugId: string;
+        name: string;
+        desc: string;
+        price: string;
+        image?: (number | null) | Media;
+        id?: string | null;
+      }[]
+    | null;
+  baseOptions?:
+    | {
+        slugId: string;
+        name: string;
+        desc: string;
+        id?: string | null;
+      }[]
+    | null;
+  fillingOptions?:
+    | {
+        slugId: string;
+        name: string;
+        desc: string;
+        id?: string | null;
+      }[]
+    | null;
+  frostingOptions?:
+    | {
+        slugId: string;
+        name: string;
+        desc: string;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * Sitedeki tüm iletişim, adres ve sosyal medya bilgilerini buradan değiştirebilirsiniz.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contact-settings".
+ */
+export interface ContactSetting {
+  id: number;
+  address?: string | null;
+  phone?: string | null;
+  email?: string | null;
+  instagram?: string | null;
+  tiktok?: string | null;
+  facebook?: string | null;
+  twitter?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * Ana sayfanın en altındaki Instagram vitrininde (6 adet) görünecek fotoğrafları buradan belirleyebilirsiniz.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "instagram-feed".
+ */
+export interface InstagramFeed {
+  id: number;
+  posts?:
+    | {
+        image: number | Media;
+        link: string;
+        isReel?: boolean | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "homepage_select".
+ */
+export interface HomepageSelect<T extends boolean = true> {
+  heroTitle?: T;
+  heroSubtitle?: T;
+  heroImage?: T;
+  heroButton1Text?: T;
+  heroButton1Link?: T;
+  heroButton2Text?: T;
+  heroButton2Link?: T;
+  featuredSectionEyebrow?: T;
+  featuredSectionTitle?: T;
+  featuredProducts?: T;
+  fallbackCards?:
+    | T
+    | {
+        title?: T;
+        link?: T;
+        buttonText?: T;
+        image?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "birthday-campaign_select".
+ */
+export interface BirthdayCampaignSelect<T extends boolean = true> {
+  isActive?: T;
+  emailSubject?: T;
+  emailContent?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "about-settings_select".
+ */
+export interface AboutSettingsSelect<T extends boolean = true> {
+  heroImage?: T;
+  heroSubtitle?: T;
+  heroTitle?: T;
+  storyTitle?: T;
+  storySubtitle?: T;
+  storyContent?:
+    | T
+    | {
+        paragraph?: T;
+        id?: T;
+      };
+  storyImage1?: T;
+  storyImage2?: T;
+  storyImage3?: T;
+  storyImage4?: T;
+  founderImage?: T;
+  founderQuote?: T;
+  founderName?: T;
+  founderTitle?: T;
+  valuesTitle?: T;
+  values?:
+    | T
+    | {
+        icon?: T;
+        title?: T;
+        description?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "custom-cake-options_select".
+ */
+export interface CustomCakeOptionsSelect<T extends boolean = true> {
+  sizeOptions?:
+    | T
+    | {
+        slugId?: T;
+        name?: T;
+        desc?: T;
+        price?: T;
+        image?: T;
+        id?: T;
+      };
+  baseOptions?:
+    | T
+    | {
+        slugId?: T;
+        name?: T;
+        desc?: T;
+        id?: T;
+      };
+  fillingOptions?:
+    | T
+    | {
+        slugId?: T;
+        name?: T;
+        desc?: T;
+        id?: T;
+      };
+  frostingOptions?:
+    | T
+    | {
+        slugId?: T;
+        name?: T;
+        desc?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contact-settings_select".
+ */
+export interface ContactSettingsSelect<T extends boolean = true> {
+  address?: T;
+  phone?: T;
+  email?: T;
+  instagram?: T;
+  tiktok?: T;
+  facebook?: T;
+  twitter?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "instagram-feed_select".
+ */
+export interface InstagramFeedSelect<T extends boolean = true> {
+  posts?:
+    | T
+    | {
+        image?: T;
+        link?: T;
+        isReel?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
