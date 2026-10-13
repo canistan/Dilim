@@ -69,9 +69,23 @@ export async function POST(req: Request) {
           // item.options client'ın gönderdiği serbest metindir ve fiyatı belirlemek
           // için ASLA kullanılmaz — aksi halde müşteri ucuz boyutun ID'sini gönderip
           // options'a pahalı boyutun adını yazarak fark ödemeden büyük boy alabilir.
-          const matchedSize = product.sizes.find(
-            (s: any) => s.size.replace(/\s+/g, '-') === selectedSizeSlug
-          );
+          //
+          // ID formatı: "<ürünId>-<boyut-slug>[-<ek>...]". Boyut slug'ından sonra
+          // ekler gelebilir: CartContext seçenek metnini ekler (örn. "-Boyut2Numara"),
+          // rakam/yazı/not seçimleri "-num-", "-txt-", "-note-" ekler. Bu yüzden
+          // tam eşleşme veya "<slug>-" ile başlama kabul edilir. Birden fazla boyut
+          // eşleşirse en uzun olan seçilir ("2 Numara" ile "2 Numara Büyük" karışmasın).
+          const toSlug = (size: string) => size.replace(/\s+/g, '-');
+          const sizeSlug: string | null = selectedSizeSlug;
+          const matchedSize = sizeSlug
+            ? product.sizes
+                .filter((s: any) => {
+                  if (!s?.size) return false;
+                  const slug = toSlug(s.size);
+                  return sizeSlug === slug || sizeSlug.startsWith(`${slug}-`);
+                })
+                .sort((a: any, b: any) => toSlug(b.size).length - toSlug(a.size).length)[0]
+            : undefined;
 
           if (!matchedSize) {
             // Boyutlu bir ürün için geçerli boyut bulunamadıysa isteği reddet.
