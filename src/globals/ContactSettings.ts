@@ -24,6 +24,15 @@ export const ContactSettings: GlobalConfig = {
       defaultValue: '+90 505 963 80 21',
     },
     {
+      name: 'whatsapp',
+      type: 'text',
+      label: 'WhatsApp Numarası',
+      defaultValue: '+90 505 963 80 21',
+      admin: {
+        description: 'Boş bırakılırsa genel telefon numarası kullanılır.',
+      },
+    },
+    {
       name: 'email',
       type: 'text',
       label: 'E-Posta Adresi',

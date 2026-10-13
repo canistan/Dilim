@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
-import { MapPin, Phone, Mail, Send, Clock, ChevronRight, Navigation } from 'lucide-react'
+import { MapPin, Phone, Mail, Send, Clock, ChevronRight, Navigation, Smartphone, MessageCircle } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { useSession } from 'next-auth/react'
 
@@ -18,11 +18,12 @@ export default function IletisimClient({ contactSettings, branches }: { contactS
   })
 
   useEffect(() => {
-    if (session?.user) {
+    const user = session?.user
+    if (user) {
       setFormData(prev => ({
         ...prev,
-        name: session.user.name || '',
-        email: session.user.email || ''
+        name: user.name || '',
+        email: user.email || ''
       }))
     }
   }, [session])
@@ -185,23 +186,46 @@ export default function IletisimClient({ contactSettings, branches }: { contactS
               {/* Quick Actions */}
               <div className="pt-8 border-t border-gray-100">
                 <h3 className="text-lg font-bold text-dilim-siyah mb-6">Daha Hızlı İletişim İçin</h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <a href={`tel:${contactSettings?.phone?.replace(/\s/g, '') || '+905059638021'}`} className="flex items-center gap-4 p-4 rounded-2xl bg-orange-50 hover:bg-orange-100 border border-orange-100 transition-colors group">
-                    <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center shadow-sm text-dilim-portakal group-hover:scale-110 transition-transform">
-                      <Phone className="w-5 h-5" />
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <a href={`tel:${contactSettings?.phone?.replace(/\s/g, '') || '+905059638021'}`} className="flex items-center gap-3 p-3.5 rounded-2xl bg-orange-50 hover:bg-orange-100 border border-orange-100 transition-colors group">
+                    <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-sm text-dilim-portakal group-hover:scale-110 transition-transform shrink-0">
+                      <Phone className="w-4 h-4" />
                     </div>
-                    <div>
-                      <div className="text-xs text-gray-500 font-medium">Hemen Arayın</div>
-                      <div className="font-bold text-dilim-siyah">{contactSettings?.phone || '0505 963 80 21'}</div>
+                    <div className="min-w-0">
+                      <div className="text-xs text-gray-500 font-medium">Telefon</div>
+                      <div className="font-bold text-dilim-siyah text-xs truncate">{contactSettings?.phone || '0505 963 80 21'}</div>
                     </div>
                   </a>
-                  <a href={contactSettings?.instagram ? `https://ig.me/m/${contactSettings.instagram.split('/').filter(Boolean).pop()}` : "https://ig.me/m/bi_dilimpasta"} target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 p-4 rounded-2xl bg-pink-50 hover:bg-pink-100 border border-pink-100 transition-colors group">
-                    <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center shadow-sm text-pink-500 group-hover:scale-110 transition-transform">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
+
+                  {(() => {
+                    const rawWa = contactSettings?.whatsapp || contactSettings?.phone || '905059638021';
+                    const digits = rawWa.replace(/[^0-9]/g, '');
+                    const waNum = digits.startsWith('0') ? `9${digits}` : (digits.startsWith('90') ? digits : `90${digits}`);
+                    return (
+                      <a 
+                        href={`https://wa.me/${waNum}?text=${encodeURIComponent('Merhaba, bilgi almak istiyorum.')}`} 
+                        target="_blank" 
+                        rel="noopener noreferrer" 
+                        className="flex items-center gap-3 p-3.5 rounded-2xl bg-emerald-50 hover:bg-emerald-100 border border-emerald-100 transition-colors group"
+                      >
+                        <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-sm text-emerald-600 group-hover:scale-110 transition-transform shrink-0">
+                          <MessageCircle className="w-4 h-4" />
+                        </div>
+                        <div className="min-w-0">
+                          <div className="text-xs text-gray-500 font-medium">WhatsApp</div>
+                          <div className="font-bold text-dilim-siyah text-xs truncate">Hemen Yazın</div>
+                        </div>
+                      </a>
+                    );
+                  })()}
+
+                  <a href={contactSettings?.instagram ? `https://ig.me/m/${contactSettings.instagram.split('/').filter(Boolean).pop()}` : "https://ig.me/m/bi_dilimpasta"} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-3.5 rounded-2xl bg-pink-50 hover:bg-pink-100 border border-pink-100 transition-colors group">
+                    <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-sm text-pink-500 group-hover:scale-110 transition-transform shrink-0">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
                     </div>
-                    <div>
-                      <div className="text-xs text-gray-500 font-medium">Instagram'dan</div>
-                      <div className="font-bold text-dilim-siyah">Direkt Mesaj Atın</div>
+                    <div className="min-w-0">
+                      <div className="text-xs text-gray-500 font-medium">Instagram</div>
+                      <div className="font-bold text-dilim-siyah text-xs truncate">Direkt Mesaj</div>
                     </div>
                   </a>
                 </div>
@@ -220,7 +244,7 @@ export default function IletisimClient({ contactSettings, branches }: { contactS
                 <h2 className="text-2xl font-serif font-bold text-dilim-siyah mb-8">Şubelerimiz</h2>
                 
                 <div className="space-y-8">
-                  {branches?.length > 0 ? branches.map((branch: any) => (
+                  {branches && branches.length > 0 ? branches.map((branch: any) => (
                     <div key={branch.id} className="relative pl-8 border-l-2 border-dilim-portakal">
                       <div className="absolute -left-[11px] top-0 w-5 h-5 rounded-full bg-white border-4 border-dilim-portakal"></div>
                       <div className="flex flex-col sm:flex-row gap-6 mb-6">
@@ -231,23 +255,56 @@ export default function IletisimClient({ contactSettings, branches }: { contactS
                               <span className="text-xs font-semibold px-2 py-1 bg-dilim-portakal/10 text-dilim-portakal rounded-full">FRANCHISE</span>
                             )}
                           </h3>
-                          <ul className="space-y-3 text-gray-600">
+                          <ul className="space-y-3.5 text-gray-600">
                             <li className="flex items-start gap-3">
                               <MapPin className="w-5 h-5 text-dilim-yaldiz shrink-0 mt-0.5" />
-                              <span className="whitespace-pre-line">{branch.address}</span>
+                              <span className="whitespace-pre-line text-sm">{branch.address}</span>
                             </li>
+
                             {branch.phone && (
                               <li className="flex items-center gap-3">
                                 <Phone className="w-5 h-5 text-dilim-yaldiz shrink-0" />
-                                <a href={`tel:${branch.phone.replace(/\\s/g, '')}`} className="hover:text-dilim-portakal transition-colors">{branch.phone}</a>
+                                <div>
+                                  <span className="text-[11px] text-gray-400 block font-medium leading-none mb-1">Sabit Hat</span>
+                                  <a href={`tel:${branch.phone.replace(/[^0-9+]/g, '')}`} className="hover:text-dilim-portakal transition-colors text-sm font-medium">
+                                    {branch.phone}
+                                  </a>
+                                </div>
                               </li>
                             )}
-                            {branch.workingHours && (
-                              <li className="flex items-center gap-3">
-                                <Clock className="w-5 h-5 text-dilim-yaldiz shrink-0" />
-                                <span>{branch.workingHours}</span>
-                              </li>
-                            )}
+
+                            {branch.mobilePhone && (() => {
+                              const digits = branch.mobilePhone.replace(/[^0-9]/g, '');
+                              const waNum = digits.startsWith('0') ? `9${digits}` : (digits.startsWith('90') ? digits : `90${digits}`);
+                              return (
+                                <li className="flex items-center justify-between flex-wrap gap-2 pt-1 border-t border-gray-50">
+                                  <div className="flex items-center gap-3">
+                                    <Smartphone className="w-5 h-5 text-dilim-portakal shrink-0" />
+                                    <div>
+                                      <span className="text-[11px] text-gray-400 block font-medium leading-none mb-1">Cep Telefonu</span>
+                                      <a href={`tel:${branch.mobilePhone.replace(/[^0-9+]/g, '')}`} className="hover:text-dilim-portakal transition-colors text-sm font-semibold">
+                                        {branch.mobilePhone}
+                                      </a>
+                                    </div>
+                                  </div>
+                                  <a 
+                                    href={`https://wa.me/${waNum}?text=${encodeURIComponent(`Merhaba, ${branch.name} şubeniz hakkında bilgi almak istiyorum.`)}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 hover:bg-emerald-600 hover:text-white border border-emerald-200 transition-all shadow-xs"
+                                    title="WhatsApp ile mesaj gönderin"
+                                  >
+                                    <MessageCircle className="w-3.5 h-3.5" />
+                                    <span>WhatsApp</span>
+                                  </a>
+                                </li>
+                              );
+                            })()}
+
+                            <li className="flex items-center gap-3">
+                              <Clock className="w-5 h-5 text-dilim-yaldiz shrink-0" />
+                              <span className="text-sm font-medium">{branch.workingHours || '05:00 - 23:30 (Haftanın Her Günü)'}</span>
+                            </li>
                           </ul>
                         </div>
                         {branch.image && (

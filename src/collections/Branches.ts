@@ -38,13 +38,21 @@ export const Branches: CollectionConfig = {
     {
       name: 'phone',
       type: 'text',
-      label: 'Şube Telefonu',
+      label: 'Şube Sabit Telefonu',
+    },
+    {
+      name: 'mobilePhone',
+      type: 'text',
+      label: 'Şube Cep Telefonu / WhatsApp',
+      admin: {
+        description: 'Hızlı arama ve WhatsApp bağlantısı için kullanılır.',
+      },
     },
     {
       name: 'workingHours',
       type: 'text',
       label: 'Çalışma Saatleri',
-      defaultValue: '08:00 - 22:00 (Haftanın Her Günü)',
+      defaultValue: '05:00 - 23:30 (Haftanın Her Günü)',
     },
     {
       name: 'googleMapsUrl',

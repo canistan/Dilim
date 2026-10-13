@@ -161,7 +161,7 @@ export default async function FrontendLayout({
                   {
                     "@type": "OpeningHoursSpecification",
                     "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],
-                    "opens": "08:00",
+                    "opens": "05:00",
                     "closes": "23:30"
                   }
                 ],
@@ -209,7 +209,7 @@ export default async function FrontendLayout({
                   {
                     "@type": "OpeningHoursSpecification",
                     "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],
-                    "opens": "08:00",
+                    "opens": "05:00",
                     "closes": "23:30"
                   }
                 ],

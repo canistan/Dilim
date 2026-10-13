@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { MapPin, Phone, Clock, Navigation, Star, CheckCircle2 } from 'lucide-react'
+import { MapPin, Phone, Clock, Navigation, Star, CheckCircle2, Smartphone, MessageCircle } from 'lucide-react'
 
 export const metadata = {
   title: 'Dilim Pastaneleri Kavacık Şubesi | Pasta & Tatlı Siparişi Kavacık',
@@ -60,15 +60,33 @@ export default function KavacikSubePage() {
                   <li className="flex items-start gap-4">
                     <Phone className="w-6 h-6 text-dilim-portakal shrink-0 mt-1" />
                     <div>
-                      <strong className="block text-dilim-siyah mb-1">Telefon</strong>
+                      <strong className="block text-dilim-siyah mb-1">Sabit Telefon</strong>
                       <a href="tel:02164256114" className="hover:text-dilim-portakal transition-colors">(0216) 425 61 14</a>
+                    </div>
+                  </li>
+                  <li className="flex items-start gap-4">
+                    <Smartphone className="w-6 h-6 text-dilim-portakal shrink-0 mt-1" />
+                    <div className="flex-1">
+                      <strong className="block text-dilim-siyah mb-1">Cep Telefonu / WhatsApp</strong>
+                      <div className="flex items-center gap-3 flex-wrap">
+                        <a href="tel:+905059638021" className="hover:text-dilim-portakal font-semibold transition-colors">0505 963 80 21</a>
+                        <a 
+                          href={`https://wa.me/905059638021?text=${encodeURIComponent('Merhaba, Kavacık şubeniz hakkında bilgi almak istiyorum.')}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 hover:bg-emerald-600 hover:text-white border border-emerald-200 transition-all shadow-xs"
+                        >
+                          <MessageCircle className="w-3.5 h-3.5" />
+                          <span>WhatsApp</span>
+                        </a>
+                      </div>
                     </div>
                   </li>
                   <li className="flex items-start gap-4">
                     <Clock className="w-6 h-6 text-dilim-portakal shrink-0 mt-1" />
                     <div>
                       <strong className="block text-dilim-siyah mb-1">Çalışma Saatleri</strong>
-                      <span>Her Gün: 08:00 - 23:30</span>
+                      <span>Her Gün: 05:00 - 23:30</span>
                     </div>
                   </li>
                 </ul>
@@ -168,7 +186,7 @@ export default function KavacikSubePage() {
                 {
                   "@type": "OpeningHoursSpecification",
                   "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],
-                  "opens": "08:00",
+                  "opens": "05:00",
                   "closes": "23:30"
                 }
               ],
